@@ -16,57 +16,71 @@ export function HeroSection() {
             <section
                 id="hero"
                 aria-label="Hero"
-                className="relative flex flex-col pt-28 sm:pt-32 pb-10 sm:pb-14 lg:min-h-screen lg:justify-center lg:pt-32 lg:pb-32 xl:pt-36 xl:pb-36 overflow-hidden"
+                className="relative flex flex-col pt-24 sm:pt-28 pb-10 sm:pb-12 lg:min-h-screen lg:justify-center lg:pt-28 lg:pb-24 xl:pt-32 xl:pb-28 overflow-hidden"
             >
                 <HeroAmbience edge="bottom" />
                 <Container className="relative z-10">
-                    <div className="flex items-start lg:items-center gap-8 lg:gap-16 xl:gap-20">
-                        {/* Text Content — left */}
-                        <div className="w-full lg:max-w-[52%] lg:shrink-0">
-                            <h1
-                                className="text-[2.375rem] font-bold leading-[1.1] tracking-tight text-text-primary sm:text-[2.75rem] md:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
-                                style={{ fontFamily: 'var(--font-display)' }}
-                            >
-                                Patent Operations That Replace Your{' '}
-                                <span className="text-primary italic">
-                                    Spreadsheets, Scattered Searches, and Drafting Tools
-                                </span>
-                            </h1>
-                            <p
-                                className="mt-5 text-[17px] leading-relaxed text-text-secondary sm:mt-6 sm:text-lg sm:max-w-2xl"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                Patent docketing, prior art search, and AI-powered drafting
-                                in one audited platform, built for law firms and IP
-                                teams. Manage PCT/PRV/NPE cases, track fees and deadlines,
-                                and maintain FDA 21 CFR Part 11 compliance.
-                            </p>
-                            <div className="mt-7 flex flex-col items-center gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-start sm:gap-4">
-                                <BookDemoButton size="lg" className="w-[88%] whitespace-nowrap px-5 sm:w-auto sm:px-8">
-                                    Book a Product Demo
-                                    <ArrowRight className="w-5 h-5" />
-                                </BookDemoButton>
-                                <WatchDemoButton variant="secondary" size="lg" className="w-[88%] whitespace-nowrap px-5 sm:w-auto sm:px-8">
-                                    <Play className="w-5 h-5 fill-current" />
-                                    Watch 4-Min Demo
-                                </WatchDemoButton>
+                    <div className="flex items-start lg:items-stretch gap-8 lg:gap-16 xl:gap-28">
+                        {/* Text Content — left. On lg+ the column stretches to
+                            the tree visual's height and distributes its content
+                            top-to-bottom (heading group up, CTA group down) so
+                            both columns occupy the same vertical extent and
+                            read as one uniform block. */}
+                        <div className="w-full lg:max-w-[52%] xl:max-w-[44%] lg:shrink-0 flex flex-col lg:justify-between">
+                            <div>
+                                <h1
+                                    className="text-[2.25rem] font-bold leading-[1.12] tracking-tight text-text-primary sm:text-[2.75rem] md:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
+                                    style={{ fontFamily: 'var(--font-display)' }}
+                                >
+                                    Patent Operations That Replace Your{' '}
+                                    <span className="text-primary italic">
+                                        Spreadsheets, Scattered Searches, and Drafting Tools
+                                    </span>
+                                </h1>
+                                <p
+                                    className="mt-4 text-[15px] leading-relaxed text-text-secondary sm:mt-5 sm:text-base sm:max-w-2xl"
+                                    style={{ fontFamily: 'var(--font-body)' }}
+                                >
+                                    Patent docketing, prior art search, and AI-powered drafting
+                                    in one audited platform, built for law firms and IP
+                                    teams. Manage PCT/PRV/NPE cases, track fees and deadlines,
+                                    and maintain FDA 21 CFR Part 11 compliance.
+                                </p>
                             </div>
-                            {/* Enterprise trust pill: shield icon + supporting copy
-                                in a soft-bordered capsule. Translucent white over
-                                a backdrop blur so the hero ambience hue still
-                                shows through subtly without diluting legibility. */}
-                            <p
-                                className="mt-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/70 px-3.5 py-1.5 text-xs text-text-secondary shadow-sm backdrop-blur-sm sm:mt-6"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                <ShieldCheck
-                                    aria-hidden="true"
-                                    className="h-3.5 w-3.5 shrink-0 text-primary"
-                                />
-                                <span>
-                                    Built for confidential invention workflows across all patent-filing sectors
-                                </span>
-                            </p>
+                            <div>
+                                {/* CTA row. Buttons shrink at xl: that is the only
+                                    breakpoint where the tree's left-side annotation
+                                    overlays render (hidden xl:flex), and they bleed
+                                    out of the tree column toward this row. Smaller
+                                    buttons + the wider xl column gap keep the two
+                                    clear of each other. */}
+                                <div className="mt-6 flex flex-col items-stretch gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center lg:mt-0">
+                                    <BookDemoButton size="md" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-4 xl:py-2 xl:text-sm">
+                                        Book a Product Demo
+                                        <ArrowRight className="w-4 h-4" />
+                                    </BookDemoButton>
+                                    <WatchDemoButton variant="secondary" size="md" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-4 xl:py-2 xl:text-sm">
+                                        <Play className="w-4 h-4 fill-current" />
+                                        Watch 4-Min Demo
+                                    </WatchDemoButton>
+                                </div>
+                                {/* Enterprise trust pill: shield icon + supporting copy
+                                    in a soft-bordered capsule. Translucent white over
+                                    a backdrop blur so the hero ambience hue still
+                                    shows through subtly without diluting legibility. */}
+                                <p
+                                    className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/70 px-3.5 py-1.5 text-xs text-text-secondary shadow-sm backdrop-blur-sm sm:mt-5"
+                                    style={{ fontFamily: 'var(--font-body)' }}
+                                >
+                                    <ShieldCheck
+                                        aria-hidden="true"
+                                        className="h-3.5 w-3.5 shrink-0 text-primary"
+                                    />
+                                    <span>
+                                        Built for confidential invention workflows across all patent-filing sectors
+                                    </span>
+                                </p>
+                            </div>
                         </div>
 
                         {/* Family Tree Visual — right, hidden below lg */}
