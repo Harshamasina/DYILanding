@@ -324,7 +324,7 @@ export default function AiPatentDraftingPage() {
                             className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
-                            From Prior Art to First Draft, With{' '}
+                            AI Patent Drafting With{' '}
                             <span className="text-primary italic">Attorney Review Built In</span>
                         </h1>
                         <p

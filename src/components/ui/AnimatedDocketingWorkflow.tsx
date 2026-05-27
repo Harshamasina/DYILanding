@@ -361,7 +361,7 @@ export function AnimatedDocketingWorkflow() {
             className={`relative flex overflow-hidden rounded-2xl border border-card-border bg-[#f4f5f7] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
         >
             <motion.div
-                className="grid h-full w-full grid-cols-1 overflow-hidden sm:grid-cols-[170px_minmax(0,1fr)] lg:grid-cols-[190px_minmax(0,1fr)]"
+                className="grid h-full w-full grid-cols-1 grid-rows-[minmax(0,1fr)] overflow-hidden sm:grid-cols-[170px_minmax(0,1fr)] lg:grid-cols-[190px_minmax(0,1fr)]"
                 initial={false}
                 animate={{ opacity: visible ? 1 : 0.18 }}
                 transition={{ duration: 0.3, ease: EASE }}
@@ -521,7 +521,7 @@ function DashboardFrame() {
         <FrameShell>
             <div className="flex h-full flex-col overflow-hidden">
                 <ActionStrip />
-                <div className="mt-3 grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1fr)_320px]">
+                <div className="mt-3 grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1fr)_320px] lg:grid-rows-[minmax(0,1fr)]">
                     <div className="flex min-w-0 flex-col overflow-hidden">
                         <div className="grid shrink-0 grid-cols-2 gap-2 lg:grid-cols-4">
                         <KpiCard label="Total Families" value="48" sub="As of 2026-05-27" icon={<Folder className="h-4 w-4" />} tone="purple" />
@@ -529,7 +529,7 @@ function DashboardFrame() {
                         <KpiCard label="Overdue Items" value="11" sub="Requires attention" icon={<AlertTriangle className="h-4 w-4" />} tone="red" />
                         <KpiCard label="Fees Due" value="72" sub="Current cycle" icon={<CircleDollarSign className="h-4 w-4" />} tone="amber" />
                     </div>
-                        <div className="mt-3 grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(240px,0.9fr)]">
+                        <div className="mt-3 grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(240px,0.9fr)] lg:grid-rows-[minmax(0,1fr)]">
                             <Panel title="Recent Family Activity" action="View all families" className="min-h-0" bodyClassName="min-h-0 flex-1 p-3">
                                 <div className="h-full overflow-hidden">
                                 {ACTIVITY.map((row, index) => (
@@ -788,10 +788,11 @@ function DonutChart() {
     }
 
     return (
-        <div className="flex h-full w-full flex-col items-center justify-center">
+        <div className="flex h-full w-full flex-col items-center">
+            <div className="flex min-h-0 w-full flex-1 items-center justify-center">
             <div className="relative h-32 w-32 sm:h-36 sm:w-36">
                 <svg width="100%" height="100%" viewBox={`0 0 ${size} ${size}`}>
-                    {/* Donut arcs — rotated so arcs start from 12 o'clock */}
+                    {/* Donut arcs - rotated so arcs start from 12 o'clock */}
                     <g transform={`rotate(-90, ${size / 2}, ${size / 2})`}>
                         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#eef2ff" strokeWidth={sw} />
                         {segments.map((seg, i) => {
@@ -816,7 +817,7 @@ function DonutChart() {
                             );
                         })}
                     </g>
-                    {/* On-segment labels — outside the rotated group so text stays upright */}
+                    {/* On-segment labels - outside the rotated group so text stays upright */}
                     {segments.map((seg) => {
                         const angle = (seg.midPct / 100) * 2 * Math.PI - Math.PI / 2;
                         const lx = Math.round((size / 2 + r * Math.cos(angle)) * 100) / 100;
@@ -839,7 +840,8 @@ function DonutChart() {
                     })}
                 </svg>
             </div>
-            <div className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1">
+            </div>
+            <div className="mt-2 flex shrink-0 flex-wrap justify-center gap-x-3 gap-y-1">
                 {NPE_BY_COUNTRY.map((item) => (
                     <span key={item.country} className="inline-flex items-center gap-1 text-[9px] font-medium text-slate-600">
                         <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: item.color }} />

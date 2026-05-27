@@ -290,8 +290,8 @@ export default function DocketingPage() {
                             className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
-                            Never Miss a Patent Deadline,{' '}
-                            <span className="text-primary italic">Computed Automatically</span>
+                            Patent Docketing That{' '}
+                            <span className="text-primary italic">Never Misses a Deadline</span>
                         </h1>
                         <p
                             className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"

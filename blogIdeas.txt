@@ -1,0 +1,32 @@
+Questions that should be standalone blog articles, not FAQs
+The bulk of the ~120 topics are top-of-funnel / informational / cost / hiring questions where the honest answer isn't "our product does X." Those rank better as articles that then internally link to the feature pages. Grouped by the page they'd funnel to:
+
+→ AI Patent Drafting (highest priority, strong keyword fit)
+
+Can I Use ChatGPT to Write My Patent Application? (full article and the FAQ)
+Will AI Replace Patent Lawyers and Agents?
+Is Patent Drafting Becoming Automated? / How AI Is Changing Patent Drafting in India
+AI Patent Drafting Tools: Which Ones Actually Work?
+How AI Helps With Patent Office Action Responses
+Independent vs Dependent Claims Explained / How to Write a Strong Claims Section
+→ Patent Docketing (strong buyer-intent)
+
+How to Choose Patent Docketing Software for Your Firm
+What Features to Look For in Patent Docketing Software
+How to Manage Patent Deadlines Automatically
+Patent Docketing Software for Small Firms / Solo / Startups
+Cloud vs On-Premise Patent Software
+Maintenance Fees and Long-Term Patent Costs / What Happens After Your Patent Is Approved
+→ Patent Search
+
+Prior Art Search: Why It Matters Before Filing
+Freedom to Operate: Checking Existing Patents
+The Role of Prior Art in Patent Drafting
+→ Pricing / general (commercial intent, India angle)
+
+How Much Does Patent Drafting Cost in India? / Hidden Costs of a Patent / 20-Year Patent Cost
+Patent Docketing Software ROI
+Patent Drafting Software: Free vs Paid
+Educational explainers (broad SEO top-of-funnel)
+
+Provisional vs Utility Patents · Patent Prosecution Process Explained · What Is the 20-Year Patent Rule · Why Do Patents Get Rejected / What Examiners Look For · Patent vs Trade Secret · How to Manage Multiple Jurisdictions · Patent Drafting for Pharma in India (Section 3(d))
