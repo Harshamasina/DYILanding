@@ -1,17 +1,12 @@
 import {
-    Search,
-    BookmarkPlus,
-    FileSearch,
     Brain,
     GitCompare,
     Lock,
     Shield,
     UserCheck,
     ClipboardList,
-    Globe,
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
-import { AnimatedPriorArtSearch } from '@/components/ui/AnimatedPriorArtSearch';
 import { AnimatedAiDraftGeneration } from '@/components/ui/AnimatedAiDraftGeneration';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
@@ -57,46 +52,20 @@ export function AiDraftingSection() {
                             className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
-                            AI-Assisted Prior Art Search &{' '}
+                            AI-Powered{' '}
                             <span className="italic">Patent Drafting</span>
                         </h2>
                         <p
                             className="mt-4 text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
-                            Access 200M+ patent records across major jurisdictions without leaving your portfolio. Jurisdiction-aware draft generation in under 5 minutes. Every step audited.
+                            Turn the prior art you have selected into a jurisdiction-compliant first draft in under 5 minutes. Every draft is jurisdiction-aware, requires attorney review, and is captured in a complete audit trail.
                         </p>
                     </div>
                 </FadeIn>
 
                 {/* ── Sub-sections ── */}
                 <div className="space-y-20 lg:space-y-28">
-                    {/* ─── Prior Art Search: Text left, Mockup right ─── */}
-                    <div>
-                        {/* Desktop */}
-                        <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center">
-                            <FadeIn delay={0.1}>
-                                <PriorArtContent />
-                            </FadeIn>
-                            <FadeIn delay={0.2}>
-                                <MockupHalo>
-                                    <AnimatedPriorArtSearch />
-                                </MockupHalo>
-                            </FadeIn>
-                        </div>
-                        {/* Mobile */}
-                        <div className="lg:hidden space-y-8">
-                            <FadeIn>
-                                <PriorArtContent />
-                            </FadeIn>
-                            <FadeIn delay={0.15}>
-                                <MockupHalo>
-                                    <AnimatedPriorArtSearch />
-                                </MockupHalo>
-                            </FadeIn>
-                        </div>
-                    </div>
-
                     {/* ─── AI Draft Generation: Mockup left, Text right ─── */}
                     <div>
                         {/* Desktop */}
@@ -165,29 +134,6 @@ export function AiDraftingSection() {
 
 /* ── Sub-section card data (icon + title + description, same as Features/Compliance) ── */
 
-const PRIOR_ART_CARDS: { icon: React.ElementType; title: string; description: string }[] = [
-    {
-        icon: Globe,
-        title: '100+ Jurisdictions, One Search Bar',
-        description: 'Search the entire global patent database without leaving your portfolio or switching tools.',
-    },
-    {
-        icon: Search,
-        title: 'Six Search Modes',
-        description: 'Keywords(Full Text), Inventor, Applicant, IPC, CPC, and Patent Number. Each handles edge cases like hyphens, suffixes, and kind codes automatically.',
-    },
-    {
-        icon: BookmarkPlus,
-        title: 'One-Click Save With Relevance Scoring',
-        description: 'Save relevant patents to your family with relevance scoring, attorney notes, and full audit trail.',
-    },
-    {
-        icon: FileSearch,
-        title: 'Deep Patent Detail',
-        description: 'Bibliographic data, abstracts, claims, Cited By, Status,and family members, all accessible from every search result.',
-    },
-];
-
 const DRAFTING_CARDS: { icon: React.ElementType; title: string; description: string }[] = [
     {
         icon: Brain,
@@ -232,24 +178,6 @@ function AiCard({ icon: Icon, title, description }: { icon: React.ElementType; t
                 </p>
             </div>
         </article>
-    );
-}
-
-function PriorArtContent() {
-    return (
-        <div>
-            <h3
-                className="text-2xl font-bold text-text-primary sm:text-3xl mb-4"
-                style={{ fontFamily: 'var(--font-display)' }}
-            >
-                Search 100+ Patent Jurisdictions From One Place
-            </h3>
-            <div className="flex flex-col gap-1">
-                {PRIOR_ART_CARDS.map((card) => (
-                    <AiCard key={card.title} {...card} />
-                ))}
-            </div>
-        </div>
     );
 }
 

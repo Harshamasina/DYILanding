@@ -1,0 +1,82 @@
+import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import type { FaqItem } from '@/lib/faq-data';
+
+/**
+ * Page-level structured data for /docketing/:
+ *   - SoftwareApplication (the docketing + deadline engine and its capabilities)
+ *   - BreadcrumbList (Home > Patent Docketing)
+ *   - FAQPage
+ *
+ * Mirrors the dangerouslySetInnerHTML JSON-LD pattern used elsewhere.
+ */
+const PAGE_URL = `${SITE_URL}/docketing/`;
+
+const softwareApplicationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: `${SITE_NAME} Patent Docketing`,
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    url: PAGE_URL,
+    description:
+        'Audit-first patent docketing and deadline management. A unified engine derives every statutory and procedural deadline from your case data, scores each one by risk, and pushes proactive email digests so nothing is missed.',
+    offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+        description: 'Contact us for pricing tailored to your team size and portfolio.',
+    },
+    featureList: [
+        'Unified deadline engine deriving seven deadline types across the case hierarchy',
+        'Risk scoring with green / amber / red traffic lights and portfolio roll-up',
+        'Timezone-correct deadlines with annuity grace-period handling',
+        'Proactive daily, reminder-due, and weekly stale-alert email digests',
+        'Stale-alert hygiene report surfacing silent risks before they lapse',
+        'Multi-currency fee and annuity tracking with date-accurate FX conversion',
+        'Office action tracking and outside-counsel firm assignments',
+        'Family completeness scoring across 0 to 100',
+        'Bulk CSV import and CSV export of deadlines, fees, and entities',
+        'Append-only audit trail, reason-for-change enforcement, RLS tenant isolation, and RBAC',
+    ],
+};
+
+const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Patent Docketing', item: PAGE_URL },
+    ],
+};
+
+export function DocketingJsonLd({ faq }: { faq: FaqItem[] }) {
+    const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faq.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: item.answer,
+            },
+        })),
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+        </>
+    );
+}

@@ -20,7 +20,10 @@ interface ButtonAsButton extends ButtonBaseProps {
 interface ButtonAsLink extends ButtonBaseProps {
     href: string;
     type?: undefined;
-    onClick?: undefined;
+    /** Optional click handler, e.g. to close a mobile menu on navigation. */
+    onClick?: () => void;
+    /** Open the link in a new tab (adds a secure rel). For external handoffs. */
+    newTab?: boolean;
     disabled?: undefined;
 }
 
@@ -54,8 +57,14 @@ export function Button({
     const classes = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
 
     if ('href' in props && props.href) {
+        const { href, onClick, newTab } = props as ButtonAsLink;
         return (
-            <Link href={props.href} className={classes}>
+            <Link
+                href={href}
+                className={classes}
+                onClick={onClick}
+                {...(newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
                 {children}
             </Link>
         );

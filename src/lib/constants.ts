@@ -34,17 +34,29 @@ export const BRAND = {
     ] as readonly string[],
 } as const;
 
+/* Top-level nav links. The two flagship product pages (Patent Search,
+ * AI Patent Drafting) live in the Header's "Features" mega-menu instead
+ * of here, see FEATURE_MENU in Header.tsx. */
 export const NAV_LINKS = [
-    { label: 'Features', href: '/#features' },
-    { label: 'AI Drafting', href: '/#ai-drafting' },
     { label: 'Compliance', href: '/#compliance' },
-    { label: 'Security', href: '/#security' },
     { label: 'Pricing', href: '/#pricing' },
     { label: 'Contact', href: '/#contact' },
 ] as const;
 
 export const CTA_SIGNUP_URL = '/#get-started';
 export const CTA_DEMO_URL = '/#contact';
+
+/* ── Patent Search handoff ──
+ * The free public patent search tool lives on its own subdomain. The
+ * landing page promotes it (Patent Search section + nav/hero CTAs) and
+ * hands traffic off to it. The dedicated /patent-search/ marketing page
+ * is planned but not built yet; PATENT_SEARCH_PAGE_URL points at its
+ * future route so "View More" is wired once the page lands. */
+export const SEARCH_APP_URL = 'https://search.designyourinvention.com';
+export const FEATURES_SECTION_URL = '/#features';
+export const PATENT_SEARCH_PAGE_URL = '/patent-search/';
+export const AI_DRAFTING_PAGE_URL = '/ai-patent-drafting/';
+export const DOCKETING_PAGE_URL = '/docketing/';
 
 /* ── Shared form enums (must match backend validation) ── */
 

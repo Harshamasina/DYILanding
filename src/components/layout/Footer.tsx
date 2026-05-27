@@ -49,10 +49,11 @@ const TRUST_BADGES = [
 const STATIC_FOOTER_LINKS = {
     Product: [
         { label: 'Features', href: '/#features' },
-        { label: 'AI Patent Drafting', href: '/#ai-drafting' },
+        { label: 'Patent Search', href: '/patent-search/' },
+        { label: 'AI Patent Drafting', href: '/ai-patent-drafting/' },
+        { label: 'Patent Docketing', href: '/docketing/' },
         { label: 'Compliance', href: '/#compliance' },
         { label: 'Pricing', href: '/#pricing' },
-        { label: 'FAQ', href: '/#faq' },
     ],
     Company: [
         { label: 'Contact', href: '/#contact' },

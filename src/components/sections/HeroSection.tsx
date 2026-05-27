@@ -1,10 +1,12 @@
 import { Container } from '@/components/ui/Container';
+import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { HeroTreeVisual } from '@/components/ui/HeroTreeVisual';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { AnimatedDashboard } from '@/components/ui/AnimatedDashboard';
 import { ArrowRight, Play, ShieldCheck } from 'lucide-react';
+import { SEARCH_APP_URL } from '@/lib/constants';
 
 export function HeroSection() {
     return (
@@ -55,14 +57,13 @@ export function HeroSection() {
                                     buttons + the wider xl column gap keep the two
                                     clear of each other. */}
                                 <div className="mt-6 flex flex-col items-stretch gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center lg:mt-0">
-                                    <BookDemoButton size="md" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-4 xl:py-2 xl:text-sm">
-                                        Book a Product Demo
+                                    <Button href={SEARCH_APP_URL} newTab size="md" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-4 xl:py-2 xl:text-sm">
+                                        Try Patent Search Free
                                         <ArrowRight className="w-4 h-4" />
+                                    </Button>
+                                    <BookDemoButton variant="secondary" size="md" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-4 xl:py-2 xl:text-sm">
+                                        Book a Product Demo
                                     </BookDemoButton>
-                                    <WatchDemoButton variant="secondary" size="md" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-4 xl:py-2 xl:text-sm">
-                                        <Play className="w-4 h-4 fill-current" />
-                                        Watch 4-Min Demo
-                                    </WatchDemoButton>
                                 </div>
                                 {/* Enterprise trust pill: shield icon + supporting copy
                                     in a soft-bordered capsule. Translucent white over
@@ -111,6 +112,13 @@ export function HeroSection() {
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">
                     <AnimatedDashboard />
+                    {/* Demo video CTA, centered beneath the dashboard mockup. */}
+                    <div className="mt-8 flex justify-center">
+                        <WatchDemoButton size="md" className="whitespace-nowrap">
+                            <Play className="w-4 h-4 fill-current" />
+                            Watch 4-Min Demo
+                        </WatchDemoButton>
+                    </div>
                 </Container>
             </section>
         </>
