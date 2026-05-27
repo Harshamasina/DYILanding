@@ -43,7 +43,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'Free Patent Search With Chemical Structure and Clinical Trial Data',
     description:
-        'Search 120M+ patents across every jurisdiction for free. Detect disclosed compounds with 2D structures, run substructure search, and see linked clinical trials. No account needed to start.',
+        'Free patent search across 120M+ patents in every jurisdiction. Detect disclosed compounds, run substructure search, and see linked clinical trials.',
     path: '/patent-search/',
 });
 
@@ -441,7 +441,7 @@ export default function PatentSearchPage() {
 
                     {/* Powered by */}
                     <FadeIn delay={0.1}>
-                        <div className="mt-12 flex flex-col gap-3 rounded-2xl border border-card-border bg-page-bg-alt px-6 py-5 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.06] sm:flex-row sm:items-center sm:gap-5">
+                        <div className="mt-12 flex flex-col gap-3 rounded-2xl border border-card-border bg-page-bg-alt px-6 py-5 shadow-sm transition-all duration-300 hover:border-primary/15 hover:shadow-md hover:shadow-primary/[0.04] sm:flex-row sm:items-center sm:gap-5">
                             <span className="inline-flex items-center gap-2 text-sm font-semibold text-text-primary">
                                 <Database className="h-4 w-4 text-primary" />
                                 Powered by
@@ -675,7 +675,7 @@ export default function PatentSearchPage() {
 function TrustPill({ label }: { label: string }) {
     return (
         <span
-            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08]"
+            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05]"
             style={{ fontFamily: 'var(--font-mono)' }}
         >
             <span className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary" />
@@ -687,7 +687,7 @@ function TrustPill({ label }: { label: string }) {
 function FilterChip({ label, active }: { label: string; active?: boolean }) {
     return (
         <span
-            className={`group inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08] ${
+            className={`group inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05] ${
                 active
                     ? 'border-primary/25 bg-primary/[0.07] text-primary'
                     : 'border-card-border bg-card-bg text-text-secondary'
@@ -711,7 +711,7 @@ function WorkflowStep({
 }) {
     return (
         <span
-            className="group inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08] sm:text-sm"
+            className="group inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05] sm:text-sm"
             style={{ fontFamily: 'var(--font-body)' }}
         >
             <span
@@ -727,9 +727,9 @@ function WorkflowStep({
 
 function IconCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="group flex gap-4 rounded-2xl border border-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-card-border hover:bg-card-bg hover:shadow-xl hover:shadow-primary/[0.07]">
-            <div className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+        <article className="group flex gap-4 rounded-2xl border border-transparent p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-card-border hover:bg-card-bg hover:shadow-lg hover:shadow-primary/[0.04]">
+            <div className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
             </div>
             <div className="min-w-0">
                 <h3
@@ -751,13 +751,13 @@ function IconCard({ icon: Icon, title, description }: IconItem) {
 
 function FeatureCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
             </div>
             <h3
                 className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
@@ -777,9 +777,9 @@ function FeatureCard({ icon: Icon, title, description }: IconItem) {
 
 function MiniFeatureCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="group rounded-2xl border border-card-border bg-page-bg-alt p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:bg-card-bg hover:shadow-lg hover:shadow-primary/[0.07]">
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+        <article className="group rounded-2xl border border-card-border bg-page-bg-alt p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-card-bg hover:shadow-md hover:shadow-primary/[0.05]">
+            <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
             </div>
             <h3
                 className="mt-3 text-[15px] font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
@@ -800,7 +800,7 @@ function MiniFeatureCard({ icon: Icon, title, description }: IconItem) {
 function SourceBadge({ label }: { label: string }) {
     return (
         <span
-            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08]"
+            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05]"
             style={{ fontFamily: 'var(--font-mono)' }}
         >
             <span className="h-1.5 w-1.5 rounded-full bg-success/80 transition-colors duration-300 group-hover:bg-success" />
@@ -828,10 +828,10 @@ function AccessPlanCard({
 
     return (
         <div
-            className={`group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card-bg p-7 transition-all duration-300 hover:-translate-y-1 ${
+            className={`group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card-bg p-7 transition-all duration-300 hover:-translate-y-0.5 ${
                 recommended
-                    ? 'border-2 border-primary shadow-xl shadow-primary/10 hover:shadow-2xl hover:shadow-primary/[0.16]'
-                    : 'border border-card-border shadow-sm hover:border-primary/20 hover:shadow-xl hover:shadow-primary/[0.08]'
+                    ? 'border-2 border-primary shadow-md shadow-primary/[0.06] hover:shadow-lg hover:shadow-primary/[0.06]'
+                    : 'border border-card-border shadow-sm hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]'
             }`}
         >
             <div
@@ -849,7 +849,7 @@ function AccessPlanCard({
                 </span>
             )}
             <div className="relative flex items-center gap-2.5">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/15 bg-primary/[0.08] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:shadow-md group-hover:shadow-primary/20">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/15 bg-primary/[0.08] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:shadow-sm group-hover:shadow-primary/15">
                     <Icon className="h-5 w-5" />
                 </span>
                 <h3

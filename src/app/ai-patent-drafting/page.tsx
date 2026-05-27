@@ -43,7 +43,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'AI Patent Drafting Software With Attorney Review',
     description:
-        'Turn invention details and saved prior art into a filing-ready first draft, claims, abstract, description, and novelty analysis, tailored to US, EP, IN, and PCT. Attorney-in-the-loop, with a tamper-resistant audit trail.',
+        'Attorney-in-the-loop AI patent drafting: turn saved prior art into filing-ready claims, abstract, and novelty analysis for US, EP, IN, and PCT.',
     path: '/ai-patent-drafting/',
 });
 
@@ -889,7 +889,7 @@ export default function AiPatentDraftingPage() {
 function PoweredByChip({ label, delay }: { label: string; delay: number }) {
     return (
         <span
-            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08]"
+            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05]"
             style={{ fontFamily: 'var(--font-mono)' }}
         >
             <span
@@ -912,7 +912,7 @@ function WorkflowStep({
 }) {
     return (
         <span
-            className="group inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08] sm:text-sm"
+            className="group inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05] sm:text-sm"
             style={{ fontFamily: 'var(--font-body)' }}
         >
             <span
@@ -928,7 +928,7 @@ function WorkflowStep({
 
 function JurisdictionCard({ jurisdiction }: { jurisdiction: Jurisdiction }) {
     return (
-        <article className="group relative flex h-full gap-4 overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+        <article className="group relative flex h-full gap-4 overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -974,13 +974,13 @@ function JurisdictionCard({ jurisdiction }: { jurisdiction: Jurisdiction }) {
 
 function CapabilityCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
             </div>
             <h3
                 className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
@@ -1000,13 +1000,13 @@ function CapabilityCard({ icon: Icon, title, description }: IconItem) {
 
 function SecurityCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary-light/35 hover:bg-navy-light/60 hover:shadow-2xl hover:shadow-primary/15">
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-navy-light/55 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary-light/[0.12] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/30 group-hover:bg-white/10">
-                <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-110" />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-white/10">
+                <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-105" />
             </div>
             <h3
                 className="relative mt-4 text-lg font-semibold text-white"

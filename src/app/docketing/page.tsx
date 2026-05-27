@@ -41,7 +41,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'Patent Docketing and Deadline Management Software',
     description:
-        'An audit-first patent docketing system that derives every statutory and procedural deadline from your case data, scores each by risk, and pushes proactive digests so a single annuity or office-action deadline is never missed.',
+        'Audit-first patent docketing that derives every statutory deadline from your case data, scores each by risk, and emails proactive reminders so none is missed.',
     path: '/docketing/',
 });
 
@@ -690,7 +690,7 @@ export default function DocketingPage() {
 function TrackChip({ label, delay }: { label: string; delay: number }) {
     return (
         <span
-            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08]"
+            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05]"
             style={{ fontFamily: 'var(--font-mono)' }}
         >
             <span
@@ -708,14 +708,9 @@ function DeadlineTypeRow({ row }: { row: DeadlineType }) {
     return (
         <tr className="group border-b border-card-border/60 transition-colors duration-200 last:border-b-0 hover:bg-white">
             <td
-                className="relative px-5 py-4 text-sm font-semibold text-text-primary"
+                className="px-5 py-4 text-sm font-semibold text-text-primary"
                 style={{ fontFamily: 'var(--font-body)' }}
             >
-                <span
-                    aria-hidden="true"
-                    className="absolute left-0 top-0 h-full w-1 opacity-80 transition-opacity duration-200 group-hover:opacity-100"
-                    style={{ backgroundColor: row.accent }}
-                />
                 <span className="flex items-center gap-3">
                     <span
                         className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-all duration-200 group-hover:scale-105 group-hover:shadow-sm"
@@ -750,13 +745,13 @@ function DeadlineTypeRow({ row }: { row: DeadlineType }) {
 
 function CapabilityCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
             </div>
             <h3
                 className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
@@ -776,7 +771,7 @@ function CapabilityCard({ icon: Icon, title, description }: IconItem) {
 
 function RiskSignalCard({ signal }: { signal: RiskSignal }) {
     return (
-        <article className="group flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+        <article className="group flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div className="flex items-start justify-between gap-4">
                 <span
                     className="text-2xl font-bold"
@@ -825,7 +820,7 @@ function RiskScorePanel() {
     ];
 
     return (
-        <aside className="group flex h-full flex-col rounded-2xl border border-primary/15 bg-linear-to-br from-white via-white to-indigo-50/60 p-6 shadow-lg shadow-primary/[0.08] transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.12]">
+        <aside className="group flex h-full flex-col rounded-2xl border border-primary/15 bg-linear-to-br from-white via-white to-indigo-50/60 p-6 shadow-md shadow-primary/[0.05] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.06]">
             <div className="flex items-center justify-between gap-4">
                 <div>
                     <p
@@ -903,13 +898,13 @@ function RiskScorePanel() {
 
 function SecurityCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary-light/30 hover:bg-white/[0.06] hover:shadow-xl hover:shadow-primary/10">
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-white/[0.05] hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary-light/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/30 group-hover:bg-primary-light/10 group-hover:shadow-lg group-hover:shadow-primary/10">
-                <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-110" />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-primary-light/10 group-hover:shadow-sm group-hover:shadow-primary/[0.05]">
+                <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-105" />
             </div>
             <h3
                 className="relative mt-4 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-primary-light"

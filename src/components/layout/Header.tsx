@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Search, PenLine, CalendarClock, ArrowRight } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, PenLine, CalendarClock, ArrowRight, BookOpen, LifeBuoy, Briefcase } from 'lucide-react';
 import {
     NAV_LINKS,
     SITE_NAME,
@@ -43,12 +43,36 @@ const FEATURE_MENU = [
     },
 ] as const;
 
+/* Secondary links surfaced in the "Company" mega-menu. */
+const COMPANY_MENU = [
+    {
+        label: 'Blog',
+        href: '/blog/',
+        description: 'Guides on patent search, drafting, docketing, and compliance.',
+        icon: BookOpen,
+    },
+    {
+        label: 'Support',
+        href: '/support/',
+        description: 'Help getting set up and answers to common questions.',
+        icon: LifeBuoy,
+    },
+    {
+        label: 'Careers',
+        href: '/careers/',
+        description: 'Open roles building the future of IP management software.',
+        icon: Briefcase,
+    },
+] as const;
+
 export function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [featuresOpen, setFeaturesOpen] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [companyOpen, setCompanyOpen] = useState(false);
+    const companyCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => setMounted(true), []);
 
@@ -74,6 +98,15 @@ export function Header() {
     const closeFeatures = () => {
         if (closeTimer.current) clearTimeout(closeTimer.current);
         closeTimer.current = setTimeout(() => setFeaturesOpen(false), 120);
+    };
+
+    const openCompany = () => {
+        if (companyCloseTimer.current) clearTimeout(companyCloseTimer.current);
+        setCompanyOpen(true);
+    };
+    const closeCompany = () => {
+        if (companyCloseTimer.current) clearTimeout(companyCloseTimer.current);
+        companyCloseTimer.current = setTimeout(() => setCompanyOpen(false), 120);
     };
 
     return (
@@ -217,6 +250,83 @@ export function Header() {
                                     </Link>
                                 </li>
                             ))}
+
+                            {/* Company mega-menu */}
+                            <li
+                                className="relative"
+                                onMouseEnter={openCompany}
+                                onMouseLeave={closeCompany}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Escape') setCompanyOpen(false);
+                                }}
+                            >
+                                <button
+                                    type="button"
+                                    aria-haspopup="menu"
+                                    aria-expanded={companyOpen}
+                                    onClick={() => setCompanyOpen((v) => !v)}
+                                    className="flex items-center gap-0.5 whitespace-nowrap rounded text-text-primary/70 hover:text-primary transition-colors duration-200 text-[14px] 2xl:text-[15px] font-semibold cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                    style={{ fontFamily: 'var(--font-body)' }}
+                                >
+                                    Company
+                                    <motion.span
+                                        className="inline-flex"
+                                        animate={{ rotate: companyOpen ? 180 : 0 }}
+                                        transition={{ duration: 0.25, ease: EASE }}
+                                    >
+                                        <ChevronDown className="h-4 w-4" />
+                                    </motion.span>
+                                </button>
+
+                                <AnimatePresence>
+                                    {companyOpen && (
+                                        <motion.div
+                                            role="menu"
+                                            aria-label="Company"
+                                            initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                                            transition={{ duration: 0.18, ease: EASE }}
+                                            style={{ transformOrigin: 'top left' }}
+                                            className="absolute left-0 top-full z-60 mt-3 w-80 rounded-xl border border-card-border bg-white p-2 shadow-xl shadow-black/10"
+                                        >
+                                            {COMPANY_MENU.map((item, i) => (
+                                                <motion.div
+                                                    key={item.href}
+                                                    initial={{ opacity: 0, y: 6 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.2, delay: 0.05 + i * 0.05, ease: EASE }}
+                                                >
+                                                    <Link
+                                                        href={item.href}
+                                                        role="menuitem"
+                                                        onClick={() => setCompanyOpen(false)}
+                                                        className="flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-page-bg-alt focus:outline-none focus-visible:bg-page-bg-alt"
+                                                    >
+                                                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
+                                                            <item.icon className="h-4.5 w-4.5 text-primary" />
+                                                        </span>
+                                                        <span className="min-w-0">
+                                                            <span
+                                                                className="block text-sm font-semibold text-text-primary"
+                                                                style={{ fontFamily: 'var(--font-display)' }}
+                                                            >
+                                                                {item.label}
+                                                            </span>
+                                                            <span
+                                                                className="mt-0.5 block text-xs leading-relaxed text-text-secondary"
+                                                                style={{ fontFamily: 'var(--font-body)' }}
+                                                            >
+                                                                {item.description}
+                                                            </span>
+                                                        </span>
+                                                    </Link>
+                                                </motion.div>
+                                            ))}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </li>
                         </ul>
 
                         {/* Desktop CTA */}
@@ -326,6 +436,28 @@ export function Header() {
                                     </li>
                                 ))}
                             </ul>
+
+                            {/* Company group */}
+                            <div className="flex flex-col items-center gap-4">
+                                <span
+                                    className="text-xs font-bold uppercase tracking-[0.15em] text-text-muted"
+                                    style={{ fontFamily: 'var(--font-mono)' }}
+                                >
+                                    Company
+                                </span>
+                                {COMPANY_MENU.map((item) => (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className="flex items-center gap-2 text-xl font-medium text-text-primary transition-colors hover:text-primary"
+                                        style={{ fontFamily: 'var(--font-display)' }}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        <item.icon className="h-5 w-5 text-primary" />
+                                        {item.label}
+                                    </Link>
+                                ))}
+                            </div>
 
                             <div className="flex w-full max-w-xs flex-col items-stretch gap-3">
                                 <BookDemoButton size="lg" className="w-full justify-center" />

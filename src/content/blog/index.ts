@@ -8,6 +8,8 @@ import { post as portfolioAnalytics } from './patent-portfolio-analytics-roi';
 import { post as aiPatentDrafting } from './ai-patent-drafting-guide';
 import { post as patentDataMigration } from './patent-data-migration-csv-import';
 import { post as npeCaseManagement } from './npe-case-management-guide';
+import { post as freePriorArtSearch } from './free-prior-art-search-guide';
+import { post as chatgptForPatents } from './can-i-use-chatgpt-to-write-a-patent';
 
 const allPosts: BlogPost[] = [
     whatIsIpManagement,
@@ -18,6 +20,8 @@ const allPosts: BlogPost[] = [
     aiPatentDrafting,
     patentDataMigration,
     npeCaseManagement,
+    freePriorArtSearch,
+    chatgptForPatents,
 ];
 
 /** All posts sorted by publishedAt descending (newest first) */

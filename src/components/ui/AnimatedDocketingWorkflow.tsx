@@ -566,7 +566,7 @@ function DashboardFrame() {
                                 ))}
                             </div>
                         </Panel>
-                            <Panel title="Active NPE Cases by Country" className="min-h-0" bodyClassName="flex min-h-0 flex-1 flex-col justify-center p-3">
+                            <Panel title="Active NPE Cases by Country" className="hidden min-h-0 lg:flex" bodyClassName="flex min-h-0 flex-1 flex-col justify-center p-3">
                                 <DonutChart />
                         </Panel>
                     </div>
