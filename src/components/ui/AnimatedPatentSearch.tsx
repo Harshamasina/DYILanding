@@ -23,6 +23,7 @@ import {
     User,
     XCircle,
 } from 'lucide-react';
+import { BrowserMockupChrome } from './BrowserMockupChrome';
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 const SEARCH_QUERY = 'CRISPR diagnostics';
@@ -134,9 +135,9 @@ const SEARCH_RESULTS_DATA: ResultItem[] = [
 ];
 
 const PORTFOLIO_ITEMS = [
-    { title: 'COMPOSITIONS, METHODS AND ARTICLES CONCERNING...', pub: 'WO2012034089A1', saved: '21 May 2026' },
-    { title: 'COMPOSITIONS AND METHODS FOR TREATMENT...', pub: 'JP2020100623A', saved: '20 May 2026' },
-    { title: 'PHARMACEUTICAL FORMULATIONS AND THEIR...', pub: 'US2025186435A1', saved: '20 May 2026' },
+    { title: 'COMPOSITIONS, METHODS AND ARTICLES CONCERNING...', pub: 'WO2012034089A1', savedDaysAgo: 0 },
+    { title: 'COMPOSITIONS AND METHODS FOR TREATMENT...', pub: 'JP2020100623A', savedDaysAgo: 1 },
+    { title: 'PHARMACEUTICAL FORMULATIONS AND THEIR...', pub: 'US2025186435A1', savedDaysAgo: 2 },
 ];
 
 const FILTERS = ['Jurisdiction', 'Filing date', 'IPC / CPC', 'Assignee', 'Inventor', 'Scope'];
@@ -274,6 +275,7 @@ const COMPOUNDS: CompoundItem[] = [
 export function AnimatedPatentSearch() {
     const [typedText, setTypedText] = useState('');
     const [phase, setPhase] = useState<Phase>('idle');
+    const [reducedMotion, setReducedMotion] = useState(false);
 
     const runCycle = useCallback(() => {
         setTypedText('');
@@ -315,6 +317,21 @@ export function AnimatedPatentSearch() {
     }, []);
 
     useEffect(() => {
+        const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const updateMotionPreference = () => setReducedMotion(media.matches);
+
+        updateMotionPreference();
+        media.addEventListener('change', updateMotionPreference);
+        return () => media.removeEventListener('change', updateMotionPreference);
+    }, []);
+
+    useEffect(() => {
+        if (reducedMotion) {
+            setTypedText(SEARCH_QUERY);
+            setPhase('overview');
+            return;
+        }
+
         let timers = runCycle();
         const interval = setInterval(() => {
             timers.forEach(clearTimeout);
@@ -325,52 +342,56 @@ export function AnimatedPatentSearch() {
             timers.forEach(clearTimeout);
             clearInterval(interval);
         };
-    }, [runCycle]);
+    }, [runCycle, reducedMotion]);
 
     const showSearch = ['idle', 'typing', 'submitted', 'loadingResults', 'results', 'hoverResult'].includes(phase);
     const showDetail = ['loadingDetail', 'overview', 'claims', 'compounds', 'rest'].includes(phase);
     const activeTab = phase === 'claims' ? 'Claims' : phase === 'compounds' || phase === 'rest' ? 'Compounds' : 'Overview';
+    const browserUrl = getPatentBrowserUrl(phase);
 
     return (
         <div
             aria-hidden="true"
             role="img"
-            className={`relative overflow-hidden rounded-2xl border border-card-border bg-white shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
+            className={`relative flex flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
         >
-            <AnimatePresence mode="wait">
-                {showSearch && (
-                    <motion.div
-                        key="search"
-                        className="absolute inset-0"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: phase === 'fadeout' ? 0 : 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.35, ease: EASE }}
-                    >
-                        <SearchScreen
-                            typedText={typedText}
-                            showCursor={phase === 'idle' || phase === 'typing'}
-                            submitted={phase === 'submitted'}
-                            loading={phase === 'loadingResults'}
-                            showResults={phase === 'results' || phase === 'hoverResult'}
-                            hoverTop={phase === 'hoverResult'}
-                        />
-                    </motion.div>
-                )}
+            <BrowserMockupChrome url={browserUrl} />
+            <div className="relative min-h-0 flex-1 overflow-hidden bg-white">
+                <AnimatePresence mode="wait">
+                    {showSearch && (
+                        <motion.div
+                            key="search"
+                            className="absolute inset-0"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: phase === 'fadeout' ? 0 : 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.35, ease: EASE }}
+                        >
+                            <SearchScreen
+                                typedText={typedText}
+                                showCursor={phase === 'idle' || phase === 'typing'}
+                                submitted={phase === 'submitted'}
+                                loading={phase === 'loadingResults'}
+                                showResults={phase === 'results' || phase === 'hoverResult'}
+                                hoverTop={phase === 'hoverResult'}
+                            />
+                        </motion.div>
+                    )}
 
-                {showDetail && (
-                    <motion.div
-                        key="detail"
-                        className="absolute inset-0"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.35, ease: EASE }}
-                    >
-                        {phase === 'loadingDetail' ? <DetailSkeleton /> : <DetailScreen activeTab={activeTab} />}
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                    {showDetail && (
+                        <motion.div
+                            key="detail"
+                            className="absolute inset-0"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.35, ease: EASE }}
+                        >
+                            {phase === 'loadingDetail' ? <DetailSkeleton /> : <DetailScreen activeTab={activeTab} />}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
 
             <style>{`
                 @keyframes patent-cursor-blink { 0%, 100% { opacity: 1 } 50% { opacity: 0 } }
@@ -391,6 +412,22 @@ export function AnimatedPatentSearch() {
             `}</style>
         </div>
     );
+}
+
+function getPatentBrowserUrl(phase: Phase) {
+    if (phase === 'loadingDetail' || phase === 'overview') {
+        return 'search.designyourinvention.com/US20220017883A1/overview';
+    }
+    if (phase === 'claims') {
+        return 'search.designyourinvention.com/US20220017883A1/claims';
+    }
+    if (phase === 'compounds' || phase === 'rest') {
+        return 'search.designyourinvention.com/US20220017883A1/compounds';
+    }
+    if (phase === 'submitted' || phase === 'loadingResults' || phase === 'results' || phase === 'hoverResult') {
+        return 'search.designyourinvention.com/?q=CRISPR%20diagnostics';
+    }
+    return 'search.designyourinvention.com/';
 }
 
 function SearchScreen({
@@ -553,7 +590,7 @@ function PortfolioPanel({ loading }: { loading: boolean }) {
                               <div key={item.pub} className="rounded-md border border-card-border bg-slate-50 p-2.5">
                                   <p className="truncate text-[9px] font-semibold uppercase leading-snug text-primary">{item.title}</p>
                                   <p className="mt-1 text-[7px] text-text-primary" style={{ fontFamily: 'var(--font-mono)' }}>{item.pub}</p>
-                                  <p className="mt-1 text-[7px] text-slate-500">Saved {item.saved}</p>
+                                  <p className="mt-1 text-[7px] text-slate-500">Saved {formatSavedDate(item.savedDaysAgo)}</p>
                               </div>
                           ))}
                 </div>
@@ -565,6 +602,12 @@ function PortfolioPanel({ loading }: { loading: boolean }) {
             </div>
         </aside>
     );
+}
+
+function formatSavedDate(daysAgo: number) {
+    if (daysAgo === 0) return 'today';
+    if (daysAgo === 1) return 'yesterday';
+    return `${daysAgo} days ago`;
 }
 
 function SearchResultCard({ result, index, highlighted }: { result: ResultItem; index: number; highlighted: boolean }) {

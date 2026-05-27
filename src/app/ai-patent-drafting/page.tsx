@@ -32,6 +32,7 @@ import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
+import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedClaimsWorkflow } from '@/components/ui/AnimatedClaimsWorkflow';
@@ -54,9 +55,12 @@ interface IconItem {
     description: string;
 }
 
+const GENERATION_MODEL = 'Claude Sonnet 4.6';
+const REVIEW_MODEL = 'Claude Opus 4.7';
+
 const POWERED_BY = [
-    'Claude Sonnet 4.6 (generation)',
-    'Claude Opus 4.7 (review)',
+    `${GENERATION_MODEL} (generation)`,
+    `${REVIEW_MODEL} (review)`,
     'EPO Open Patent Services',
     'PostgreSQL RLS',
     'Append-only audit',
@@ -76,7 +80,7 @@ const CAPABILITIES: IconItem[] = [
     {
         icon: Sparkles,
         title: 'AI Draft Generation',
-        description: 'Feed invention details and saved prior art to Claude to generate jurisdiction-specific claims, abstract, description, and novelty analysis, asynchronously.',
+        description: `Feed invention details and saved prior art to ${GENERATION_MODEL} to generate jurisdiction-specific claims, abstract, description, and novelty analysis, asynchronously.`,
     },
 ];
 
@@ -260,8 +264,7 @@ const PAGE_FAQ: FaqItem[] = [
     },
     {
         question: 'What models power it?',
-        answer:
-            'Claude Sonnet 4.6 generates the draft, and a separate background review runs Claude Opus 4.7 as a judge to assign high / medium / low confidence to the claims, abstract, description, and novelty analysis.',
+        answer: `${GENERATION_MODEL} generates the draft, and a separate background review runs ${REVIEW_MODEL} as a judge to assign high / medium / low confidence to the claims, abstract, description, and novelty analysis.`,
     },
     {
         question: 'Can paralegals trigger AI generation?',
@@ -280,8 +283,7 @@ const PAGE_FAQ: FaqItem[] = [
     },
     {
         question: 'Can the AI spot claim-support issues or weaknesses before filing?',
-        answer:
-            'Yes. Generation produces a novelty analysis that flags potential overlaps with the prior art on record, and a separate model (Claude Opus 4.7) reviews each claim, the abstract, the description, and the novelty analysis, assigning high, medium, or low confidence with a cited rationale. You see the weakest sections first. It assists the review; the attorney makes the call.',
+        answer: `Yes. Generation produces a novelty analysis that flags potential overlaps with the prior art on record, and a separate model (${REVIEW_MODEL}) reviews each claim, the abstract, the description, and the novelty analysis, assigning high, medium, or low confidence with a cited rationale. You see the weakest sections first. It assists the review; the attorney makes the call.`,
     },
     {
         question: 'Can it draft patent applications for India?',
@@ -294,10 +296,11 @@ const PAGE_FAQ: FaqItem[] = [
 
 export default function AiPatentDraftingPage() {
     return (
-        <main id="main-content">
+        <main id="main-content" className="min-w-0 overflow-x-hidden">
             {/* ── 1. Hero ── */}
-            <section className="pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
-                <Container>
+            <section className="relative overflow-hidden bg-page-bg-alt pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
+                <HeroAmbience edge="bottom" />
+                <Container className="relative z-10">
                     <nav aria-label="Breadcrumb" className="mb-8">
                         <ol
                             className="flex items-center gap-2 text-sm text-text-muted"
@@ -350,16 +353,14 @@ export default function AiPatentDraftingPage() {
                     </div>
                 </Container>
 
-                <Container className="mt-12 sm:mt-16">
-                    <FadeIn>
-                        <MockupHalo>
-                            <AnimatedClaimsWorkflow />
-                        </MockupHalo>
-                    </FadeIn>
+                <Container className="relative z-10 mt-12 sm:mt-16">
+                    <MockupHalo>
+                        <AnimatedClaimsWorkflow />
+                    </MockupHalo>
                 </Container>
 
                 {/* Powered by */}
-                <Container className="mt-8 sm:mt-10">
+                <Container className="relative z-10 mt-8 sm:mt-10">
                     <FadeIn delay={0.1}>
                         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-3">
                             <span
@@ -369,14 +370,8 @@ export default function AiPatentDraftingPage() {
                                 Powered by
                             </span>
                             <div className="flex flex-wrap justify-center gap-2">
-                                {POWERED_BY.map((p) => (
-                                    <span
-                                        key={p}
-                                        className="rounded-lg border border-card-border bg-card-bg px-3 py-1.5 text-xs font-medium text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-mono)' }}
-                                    >
-                                        {p}
-                                    </span>
+                                {POWERED_BY.map((p, i) => (
+                                    <PoweredByChip key={p} label={p} delay={i * 120} />
                                 ))}
                             </div>
                         </div>
@@ -385,8 +380,9 @@ export default function AiPatentDraftingPage() {
             </section>
 
             {/* ── 2. How it works ── */}
-            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
-                <Container>
+            <section className="relative overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28">
+                <HeroAmbience edge="top" />
+                <Container className="relative z-10">
                     <FadeIn>
                         <div className="max-w-3xl">
                             <h2
@@ -415,13 +411,7 @@ export default function AiPatentDraftingPage() {
                                     {i > 0 && (
                                         <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-text-muted/50" />
                                     )}
-                                    <span
-                                        className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm sm:text-sm"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
-                                        <step.icon className="h-4 w-4 text-primary" />
-                                        {step.label}
-                                    </span>
+                                    <WorkflowStep icon={step.icon} label={step.label} delay={i * 120} />
                                 </span>
                             ))}
                         </div>
@@ -468,28 +458,7 @@ export default function AiPatentDraftingPage() {
                     <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16">
                         {JURISDICTIONS.map((j, i) => (
                             <FadeIn key={j.code} delay={i * 0.06}>
-                                <article className="flex h-full gap-4 rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm">
-                                    <span
-                                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white"
-                                        style={{ backgroundColor: j.color, fontFamily: 'var(--font-mono)' }}
-                                    >
-                                        {j.code}
-                                    </span>
-                                    <div className="min-w-0">
-                                        <h3
-                                            className="text-lg font-semibold text-text-primary"
-                                            style={{ fontFamily: 'var(--font-display)' }}
-                                        >
-                                            {j.authority}
-                                        </h3>
-                                        <p
-                                            className="mt-1.5 text-sm leading-relaxed text-text-secondary"
-                                            style={{ fontFamily: 'var(--font-body)' }}
-                                        >
-                                            {j.rules}
-                                        </p>
-                                    </div>
-                                </article>
+                                <JurisdictionCard jurisdiction={j} />
                             </FadeIn>
                         ))}
                     </div>
@@ -526,10 +495,10 @@ export default function AiPatentDraftingPage() {
 
                     {/* Coverage table */}
                     <FadeIn delay={0.05}>
-                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm lg:mt-12">
+                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm ring-1 ring-white/70 lg:mt-12">
                             <table className="w-full min-w-125 border-collapse text-left">
                                 <thead>
-                                    <tr className="border-b border-card-border">
+                                    <tr className="border-b border-card-border bg-white/60">
                                         <th
                                             className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-text-muted"
                                             style={{ fontFamily: 'var(--font-mono)' }}
@@ -549,7 +518,7 @@ export default function AiPatentDraftingPage() {
                                 </thead>
                                 <tbody>
                                     {COVERAGE_ROWS.map((row) => (
-                                        <tr key={row.label} className="border-b border-card-border/60 last:border-b-0">
+                                        <tr key={row.label} className="group border-b border-card-border/60 transition-colors duration-200 last:border-b-0 hover:bg-white">
                                             <td
                                                 className="px-5 py-4 text-sm text-text-primary"
                                                 style={{ fontFamily: 'var(--font-body)' }}
@@ -674,8 +643,8 @@ export default function AiPatentDraftingPage() {
                                 className="mt-4 text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
-                                After Claude Sonnet 4.6 generates the draft, a background review runs
-                                Claude Opus 4.7 as a judge over the claims, abstract, description, and
+                                After {GENERATION_MODEL} generates the draft, a background review runs
+                                {REVIEW_MODEL} as a judge over the claims, abstract, description, and
                                 novelty analysis, so you can spend review time where it matters.
                             </p>
                         </div>
@@ -700,8 +669,12 @@ export default function AiPatentDraftingPage() {
             </section>
 
             {/* ── 7. Security & compliance (dark moat) ── */}
-            <section className="bg-navy py-20 sm:py-24 lg:py-28">
-                <Container>
+            <section className="relative overflow-hidden bg-navy py-20 sm:py-24 lg:py-28">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-b from-primary/15 to-transparent"
+                />
+                <Container className="relative z-10">
                     <FadeIn>
                         <div className="max-w-3xl">
                             <span
@@ -730,23 +703,7 @@ export default function AiPatentDraftingPage() {
                     <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-3">
                         {SECURITY.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.08}>
-                                <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-navy-light/40 p-6">
-                                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5">
-                                        <item.icon className="h-5 w-5 text-primary-light" />
-                                    </div>
-                                    <h3
-                                        className="mt-4 text-lg font-semibold text-white"
-                                        style={{ fontFamily: 'var(--font-display)' }}
-                                    >
-                                        {item.title}
-                                    </h3>
-                                    <p
-                                        className="mt-2 text-sm leading-relaxed text-text-on-dark"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
-                                        {item.description}
-                                    </p>
-                                </article>
+                                <SecurityCard {...item} />
                             </FadeIn>
                         ))}
                     </div>
@@ -782,10 +739,10 @@ export default function AiPatentDraftingPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.05}>
-                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm lg:mt-12">
+                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm ring-1 ring-white/70 lg:mt-12">
                             <table className="w-full min-w-150 border-collapse text-left">
                                 <thead>
-                                    <tr className="border-b border-card-border">
+                                    <tr className="border-b border-card-border bg-white/60">
                                         <th
                                             className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-text-muted"
                                             style={{ fontFamily: 'var(--font-mono)' }}
@@ -805,7 +762,7 @@ export default function AiPatentDraftingPage() {
                                 </thead>
                                 <tbody>
                                     {RBAC_ROWS.map((row) => (
-                                        <tr key={row.action} className="border-b border-card-border/60 last:border-b-0">
+                                        <tr key={row.action} className="group border-b border-card-border/60 transition-colors duration-200 last:border-b-0 hover:bg-white">
                                             <td
                                                 className="px-5 py-3.5 text-sm text-text-primary"
                                                 style={{ fontFamily: 'var(--font-body)' }}
@@ -929,20 +886,136 @@ export default function AiPatentDraftingPage() {
 
 /* ── Helpers ── */
 
+function PoweredByChip({ label, delay }: { label: string; delay: number }) {
+    return (
+        <span
+            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08]"
+            style={{ fontFamily: 'var(--font-mono)' }}
+        >
+            <span
+                className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary group-hover:animate-pulse"
+                style={{ animationDelay: `${delay}ms` }}
+            />
+            {label}
+        </span>
+    );
+}
+
+function WorkflowStep({
+    icon: Icon,
+    label,
+    delay,
+}: {
+    icon: React.ElementType;
+    label: string;
+    delay: number;
+}) {
+    return (
+        <span
+            className="group inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08] sm:text-sm"
+            style={{ fontFamily: 'var(--font-body)' }}
+        >
+            <span
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/[0.08] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:animate-pulse"
+                style={{ animationDelay: `${delay}ms` }}
+            >
+                <Icon className="h-3.5 w-3.5" />
+            </span>
+            {label}
+        </span>
+    );
+}
+
+function JurisdictionCard({ jurisdiction }: { jurisdiction: Jurisdiction }) {
+    return (
+        <article className="group relative flex h-full gap-4 overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                style={{
+                    background: `linear-gradient(to bottom, ${jurisdiction.color}14, transparent)`,
+                }}
+            />
+            <span
+                className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow-sm transition-transform duration-300 group-hover:scale-105"
+                style={{ backgroundColor: jurisdiction.color, fontFamily: 'var(--font-mono)' }}
+            >
+                {jurisdiction.code}
+            </span>
+            <div className="relative min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                    <h3
+                        className="text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
+                        style={{ fontFamily: 'var(--font-display)' }}
+                    >
+                        {jurisdiction.authority}
+                    </h3>
+                    <span
+                        className="rounded-md px-2 py-0.5 text-[11px] font-semibold"
+                        style={{
+                            color: jurisdiction.color,
+                            backgroundColor: `${jurisdiction.color}14`,
+                            fontFamily: 'var(--font-mono)',
+                        }}
+                    >
+                        Rules applied
+                    </span>
+                </div>
+                <p
+                    className="mt-1.5 text-sm leading-relaxed text-text-secondary"
+                    style={{ fontFamily: 'var(--font-body)' }}
+                >
+                    {jurisdiction.rules}
+                </p>
+            </div>
+        </article>
+    );
+}
+
 function CapabilityCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
-            <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
-                <Icon className="h-5 w-5 text-primary" />
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
             </div>
             <h3
-                className="mt-4 text-lg font-semibold text-text-primary"
+                className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
                 style={{ fontFamily: 'var(--font-display)' }}
             >
                 {title}
             </h3>
             <p
-                className="mt-2 text-sm leading-relaxed text-text-secondary"
+                className="relative mt-2 text-sm leading-relaxed text-text-secondary"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                {description}
+            </p>
+        </article>
+    );
+}
+
+function SecurityCard({ icon: Icon, title, description }: IconItem) {
+    return (
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary-light/35 hover:bg-navy-light/60 hover:shadow-2xl hover:shadow-primary/15">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary-light/[0.12] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/30 group-hover:bg-white/10">
+                <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-110" />
+            </div>
+            <h3
+                className="relative mt-4 text-lg font-semibold text-white"
+                style={{ fontFamily: 'var(--font-display)' }}
+            >
+                {title}
+            </h3>
+            <p
+                className="relative mt-2 text-sm leading-relaxed text-text-on-dark"
                 style={{ fontFamily: 'var(--font-body)' }}
             >
                 {description}
@@ -953,12 +1026,16 @@ function CapabilityCard({ icon: Icon, title, description }: IconItem) {
 
 function CoverageCell({ value }: { value: string }) {
     if (value === 'yes') {
-        return <Check className="mx-auto h-4.5 w-4.5 text-success" aria-label="Available" />;
+        return (
+            <span className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-success/10 text-success transition-transform duration-200 group-hover:scale-105">
+                <Check className="h-4.5 w-4.5" aria-label="Available" />
+            </span>
+        );
     }
     const isEpo = value === 'EPO';
     return (
         <span
-            className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold ${
+            className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold transition-transform duration-200 group-hover:scale-105 ${
                 isEpo ? 'bg-success/10 text-success' : 'bg-compliance/10 text-compliance'
             }`}
             style={{ fontFamily: 'var(--font-mono)' }}
@@ -970,9 +1047,13 @@ function CoverageCell({ value }: { value: string }) {
 
 function RbacCell({ ok }: { ok: boolean }) {
     return ok ? (
-        <Check className="mx-auto h-4.5 w-4.5 text-success" aria-label="Allowed" />
+        <span className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-success/10 text-success transition-transform duration-200 group-hover:scale-105">
+            <Check className="h-4.5 w-4.5" aria-label="Allowed" />
+        </span>
     ) : (
-        <Minus className="mx-auto h-4 w-4 text-text-muted/50" aria-label="Not allowed" />
+        <span className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-text-muted/60">
+            <Minus className="h-4 w-4" aria-label="Not allowed" />
+        </span>
     );
 }
 

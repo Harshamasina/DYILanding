@@ -1,10 +1,10 @@
-/* ── Docketing "Deadline Center" mockup ── PLACEHOLDER.
-   A static, on-brand product mockup that stands in for the eventual animated
-   walkthrough (deadline derivation -> risk scoring -> digest send). Built as a
-   presentational component with no client hooks so it renders on the server.
-   Swap the internals for an animated version later; the export name and the
-   MockupHalo wrapper in the page stay the same so nothing else has to change.
-*/
+'use client';
+
+import { useEffect, useState } from 'react';
+import { BrowserMockupChrome } from './BrowserMockupChrome';
+
+/* ── Docketing "Deadline Center" mockup ──
+   Browser-framed product mockup with a lightweight deadline-view loop. */
 
 interface FilterRow {
     label: string;
@@ -25,7 +25,8 @@ interface DeadlineRow {
     title: string;
     family: string;
     assignee: string;
-    due: string;
+    dueInDays: number;
+    dueTime?: string;
     amount?: string;
     risk: 'red' | 'amber' | 'green';
     score: number;
@@ -39,14 +40,15 @@ interface Bucket {
 
 const BUCKETS: Bucket[] = [
     {
-        label: 'Overdue',
+        label: 'High risk',
         accent: '#dc2626',
         rows: [
             {
                 title: 'Office Action response',
                 family: 'CRSP-2023-0142',
                 assignee: 'A. Mehta',
-                due: '3 days ago',
+                dueInDays: 0,
+                dueTime: '5:00 PM',
                 risk: 'red',
                 score: 96,
             },
@@ -54,7 +56,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Annuity fee (year 7)',
                 family: 'ONCO-2019-0088',
                 assignee: 'Unassigned',
-                due: '1 day ago',
+                dueInDays: 1,
                 amount: 'EUR 1,420',
                 risk: 'red',
                 score: 91,
@@ -63,7 +65,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Missing response instructions',
                 family: 'SOLR-2022-0044',
                 assignee: 'E. Caldwell',
-                due: '2 days ago',
+                dueInDays: 2,
                 risk: 'red',
                 score: 89,
             },
@@ -77,7 +79,8 @@ const BUCKETS: Bucket[] = [
                 title: 'PCT Chapter I (Rule 22)',
                 family: 'NEURO-2024-0031',
                 assignee: 'R. Iyer',
-                due: 'Today, 5:00 PM',
+                dueInDays: 0,
+                dueTime: '5:00 PM',
                 risk: 'amber',
                 score: 68,
             },
@@ -85,7 +88,8 @@ const BUCKETS: Bucket[] = [
                 title: 'Client sign-off for EP validation',
                 family: 'AERO-2025-0009',
                 assignee: 'P. Menon',
-                due: 'Today, noon',
+                dueInDays: 0,
+                dueTime: 'noon',
                 amount: 'EUR 620',
                 risk: 'amber',
                 score: 62,
@@ -100,7 +104,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Request for Examination',
                 family: 'CRSP-2023-0142',
                 assignee: 'A. Mehta',
-                due: 'in 3 days',
+                dueInDays: 3,
                 risk: 'amber',
                 score: 54,
             },
@@ -108,7 +112,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Maintenance fee (US)',
                 family: 'IMMU-2021-0203',
                 assignee: 'S. Park',
-                due: 'in 5 days',
+                dueInDays: 5,
                 amount: 'USD 1,600',
                 risk: 'green',
                 score: 28,
@@ -117,7 +121,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Custom reminder: inventor sign-off',
                 family: 'NEURO-2024-0031',
                 assignee: 'R. Iyer',
-                due: 'in 6 days',
+                dueInDays: 6,
                 risk: 'green',
                 score: 19,
             },
@@ -125,7 +129,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Foreign associate filing packet',
                 family: 'VACC-2024-0017',
                 assignee: 'M. Rao',
-                due: 'in 7 days',
+                dueInDays: 7,
                 risk: 'green',
                 score: 22,
             },
@@ -133,7 +137,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Examiner interview summary',
                 family: 'SOLR-2022-0044',
                 assignee: 'E. Caldwell',
-                due: 'in 8 days',
+                dueInDays: 8,
                 risk: 'green',
                 score: 24,
             },
@@ -147,7 +151,7 @@ const BUCKETS: Bucket[] = [
                 title: 'EP validation country list',
                 family: 'AERO-2025-0009',
                 assignee: 'P. Menon',
-                due: 'in 12 days',
+                dueInDays: 12,
                 amount: 'EUR 620',
                 risk: 'green',
                 score: 18,
@@ -156,7 +160,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Outside counsel budget review',
                 family: 'BIOC-2024-0028',
                 assignee: 'N. Kim',
-                due: 'in 15 days',
+                dueInDays: 15,
                 risk: 'green',
                 score: 16,
             },
@@ -164,7 +168,7 @@ const BUCKETS: Bucket[] = [
                 title: 'Local agent renewal estimate',
                 family: 'THER-2025-0018',
                 assignee: 'M. Rao',
-                due: 'in 18 days',
+                dueInDays: 18,
                 amount: 'GBP 380',
                 risk: 'green',
                 score: 14,
@@ -185,33 +189,40 @@ const RISK_DOT: Record<DeadlineRow['risk'], string> = {
     green: '#059669',
 };
 
+const DOCKET_FRAMES = [
+    { label: 'All deadlines', bucket: null, url: 'app.designyourinvention.com/docketing/deadlines' },
+    { label: 'High risk', bucket: 'High risk', url: 'app.designyourinvention.com/docketing/deadlines/high-risk' },
+    { label: 'Due today', bucket: 'Due today', url: 'app.designyourinvention.com/docketing/deadlines/today' },
+    { label: 'Due this week', bucket: 'Due this week', url: 'app.designyourinvention.com/docketing/deadlines/this-week' },
+    { label: 'Upcoming', bucket: 'Upcoming', url: 'app.designyourinvention.com/docketing/deadlines/upcoming' },
+] as const;
+
 const MOCKUP_HEIGHT = 'h-[480px] sm:h-[560px] lg:h-[620px]';
 
 export function AnimatedDocketing() {
+    const [frameIndex, setFrameIndex] = useState(0);
+    const [today, setToday] = useState<Date | null>(null);
+    const frame = DOCKET_FRAMES[frameIndex];
+
+    useEffect(() => {
+        setToday(new Date());
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setFrameIndex((current) => (current + 1) % DOCKET_FRAMES.length);
+        }, 1800);
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div
             aria-hidden="true"
             role="img"
             className={`relative flex select-none flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 ${MOCKUP_HEIGHT}`}
         >
-            {/* ── Chrome bar ── */}
-            <div className="flex shrink-0 items-center gap-2 border-b border-card-border bg-white px-3 py-1.5 sm:px-4 sm:py-2">
-                <div className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-[#FF5F57] sm:h-2.5 sm:w-2.5" />
-                    <span className="h-2 w-2 rounded-full bg-[#FFBD2E] sm:h-2.5 sm:w-2.5" />
-                    <span className="h-2 w-2 rounded-full bg-[#28C840] sm:h-2.5 sm:w-2.5" />
-                </div>
-                <div className="flex min-w-0 flex-1 justify-center">
-                    <div
-                        className="flex min-w-0 max-w-full items-center gap-1 rounded-md border border-card-border bg-page-bg-alt px-2 py-0.5 text-[7px] text-text-muted sm:px-3 sm:text-[10px]"
-                        style={{ fontFamily: 'var(--font-dashboard-mono)' }}
-                    >
-                        <svg className="hidden h-2 w-2 text-success sm:block sm:h-2.5 sm:w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                        <span className="truncate">app.designyourinvention.com/docketing</span>
-                    </div>
-                </div>
-                <div className="w-6 sm:w-10" />
-            </div>
+            <BrowserMockupChrome url={frame.url} />
 
             {/* ── Workspace header ── */}
             <div className="flex shrink-0 items-center justify-between gap-2 border-b border-card-border bg-white px-2.5 py-1.5 sm:px-3 sm:py-2">
@@ -238,7 +249,7 @@ export function AnimatedDocketing() {
                 <div className="flex shrink-0 items-center gap-1.5 rounded-lg border border-card-border bg-white px-2 py-2 shadow-md shadow-black/8 sm:hidden">
                     <div className="min-w-0 flex-1">
                         <p className="truncate text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>
-                            All deadlines
+                            {frame.label}
                         </p>
                         <p className="mt-0.5 truncate text-[7px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                             44 items · Mine only · Risk sorted
@@ -308,8 +319,15 @@ export function AnimatedDocketing() {
                     </div>
 
                     <div className="flex-1 overflow-hidden px-2 py-2 sm:px-3">
-                        {BUCKETS.map((bucket) => (
-                            <div key={bucket.label} className="mb-1.5 last:mb-0 sm:mb-2">
+                        {BUCKETS.map((bucket) => {
+                            const activeBucket = frame.bucket === bucket.label;
+                            return (
+                            <div
+                                key={bucket.label}
+                                className={`mb-1.5 rounded-lg border p-1 transition-colors last:mb-0 sm:mb-2 ${
+                                    activeBucket ? 'border-primary/25 bg-primary/[0.04]' : 'border-transparent'
+                                }`}
+                            >
                                 <div className="mb-1 flex items-center gap-1.5">
                                     <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: bucket.accent }} />
                                     <span className="text-[6px] font-bold uppercase tracking-wider sm:text-[8px]" style={{ color: bucket.accent, fontFamily: 'var(--font-dashboard)' }}>
@@ -341,7 +359,7 @@ export function AnimatedDocketing() {
                                                 </span>
                                             )}
                                             <span className="shrink-0 text-right text-[7px] font-medium text-text-secondary sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
-                                                {row.due}
+                                                {formatDue(row, today)}
                                             </span>
                                             <span
                                                 className="hidden shrink-0 rounded px-1 py-0.5 text-[6px] font-bold sm:inline-block sm:text-[8px]"
@@ -357,7 +375,8 @@ export function AnimatedDocketing() {
                                     ))}
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -395,6 +414,31 @@ export function AnimatedDocketing() {
             </div>
         </div>
     );
+}
+
+const DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+});
+
+function formatDue(row: DeadlineRow, today: Date | null) {
+    const relative =
+        row.dueInDays === 0
+            ? 'Today'
+            : row.dueInDays === 1
+              ? 'Tomorrow'
+              : `in ${row.dueInDays} days`;
+
+    if (!today) {
+        return row.dueTime ? `${relative}, ${row.dueTime}` : relative;
+    }
+
+    const dueDate = new Date(today);
+    dueDate.setHours(12, 0, 0, 0);
+    dueDate.setDate(dueDate.getDate() + row.dueInDays);
+
+    const label = row.dueInDays <= 1 ? relative : DATE_FORMATTER.format(dueDate);
+    return row.dueTime ? `${label}, ${row.dueTime}` : label;
 }
 
 function RiskPill({ color, bg, label }: { color: string; bg: string; label: string }) {

@@ -34,6 +34,7 @@ import {
     Users,
     X,
 } from 'lucide-react';
+import { BrowserMockupChrome } from './BrowserMockupChrome';
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 const MOCKUP_HEIGHT = 'h-[540px] sm:h-[640px] lg:h-[720px]';
@@ -353,15 +354,17 @@ export function AnimatedDocketingWorkflow() {
 
     const activeNav = getActiveNav(phase);
     const visible = phase !== 'idle' && phase !== 'fadeout';
+    const browserUrl = getDocketingWorkflowBrowserUrl(phase);
 
     return (
         <div
             aria-hidden="true"
             role="img"
-            className={`relative flex overflow-hidden rounded-2xl border border-card-border bg-[#f4f5f7] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
+            className={`relative flex flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
         >
+            <BrowserMockupChrome url={browserUrl} />
             <motion.div
-                className="grid h-full w-full grid-cols-1 grid-rows-[minmax(0,1fr)] overflow-hidden sm:grid-cols-[170px_minmax(0,1fr)] lg:grid-cols-[190px_minmax(0,1fr)]"
+                className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)] overflow-hidden sm:grid-cols-[170px_minmax(0,1fr)] lg:grid-cols-[190px_minmax(0,1fr)]"
                 initial={false}
                 animate={{ opacity: visible ? 1 : 0.18 }}
                 transition={{ duration: 0.3, ease: EASE }}
@@ -392,6 +395,19 @@ export function AnimatedDocketingWorkflow() {
             <AnimatePresence>{phase === 'npeModal' && <ReasonModal />}</AnimatePresence>
         </div>
     );
+}
+
+function getDocketingWorkflowBrowserUrl(phase: Phase) {
+    if (phase === 'dashboard') return 'app.designyourinvention.com/docketing/dashboard';
+    if (phase === 'notifications') return 'app.designyourinvention.com/docketing/deadlines';
+    if (phase === 'npeSelect' || phase === 'npeDropdown') return 'app.designyourinvention.com/docketing/npe-cases/bulk-status';
+    if (phase === 'npeModal') return 'app.designyourinvention.com/docketing/npe-cases/change-status';
+    if (phase === 'npeUpdated') return 'app.designyourinvention.com/docketing/npe-cases?status=updated';
+    if (phase === 'npeTable') return 'app.designyourinvention.com/docketing/npe-cases';
+    if (phase === 'officeActions') return 'app.designyourinvention.com/docketing/office-actions';
+    if (phase === 'annuities') return 'app.designyourinvention.com/docketing/annuity-fees';
+    if (phase === 'audit') return 'app.designyourinvention.com/docketing/audit-log';
+    return 'app.designyourinvention.com/docketing';
 }
 
 function getActiveNav(phase: Phase): NavId {

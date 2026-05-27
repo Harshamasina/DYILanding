@@ -58,37 +58,40 @@ export const PATENT_SEARCH_PAGE_URL = '/patent-search/';
 export const AI_DRAFTING_PAGE_URL = '/ai-patent-drafting/';
 export const DOCKETING_PAGE_URL = '/docketing/';
 
-/* ── Shared form enums (must match backend validation) ── */
+/* Shared form enums. The `value` of role and inquiry_type MUST exactly
+ * match the backend's strict Zod enums, since both are submitted as
+ * structured fields and rejected with a validation_error otherwise. See
+ * DYISearchBackend: src/schemas/contactMessage.ts (CONTACT_ROLE_VALUES,
+ * CONTACT_INQUIRY_TYPE_VALUES) and src/schemas/demoRequest.ts (which reuse
+ * the same role enum). Keep these in sync when the backend enums change. */
 
 export const ROLE_OPTIONS = [
     { value: '', label: 'Select your role' },
-    { value: 'Patent Attorney', label: 'Patent Attorney' },
-    { value: 'IP Manager', label: 'IP Manager' },
-    { value: 'Paralegal / Docketing Specialist', label: 'Paralegal / Docketing Specialist' },
-    { value: 'Pharma / Biotech IP Team', label: 'Pharma / Biotech IP Team' },
-    { value: 'Law Firm Partner', label: 'Law Firm Partner' },
-    { value: 'Founder / Inventor', label: 'Founder / Inventor' },
+    { value: 'IP Attorney', label: 'IP Attorney' },
+    { value: 'Patent Paralegal', label: 'Patent Paralegal' },
+    { value: 'IP Director', label: 'IP Director' },
+    { value: 'CTO / VP Engineering', label: 'CTO / VP Engineering' },
+    { value: 'Legal Operations', label: 'Legal Operations' },
     { value: 'Other', label: 'Other' },
 ] as const;
 
 export const INQUIRY_TYPE_OPTIONS = [
     { value: '', label: 'What can we help with?' },
-    { value: 'Book a product demo', label: 'Book a product demo' },
-    { value: 'Discuss pricing', label: 'Discuss pricing' },
-    { value: 'Migrate existing portfolio', label: 'Migrate existing portfolio' },
-    { value: 'AI drafting workflow', label: 'AI drafting workflow' },
-    { value: 'Compliance / Part 11 controls', label: 'Compliance / Part 11 controls' },
+    { value: 'General Inquiry', label: 'General Inquiry' },
+    { value: 'Product Question', label: 'Product Question' },
+    { value: 'Pricing', label: 'Pricing' },
+    { value: 'Partnership', label: 'Partnership' },
+    { value: 'Technical Support', label: 'Technical Support' },
     { value: 'Other', label: 'Other' },
 ] as const;
 
-/* Portfolio Size — used for lead qualification. Submitted to the backend
- * as a structured field via ContactMessagePayload; also folded into the
- * message body so existing backends that don't yet know about the field
- * still surface it to the recipient. */
+/* Portfolio Size - lead-qualification hint. NOT submitted as a structured
+ * field; both forms fold it into the free-text message body, so these
+ * values are display/context only and do not need to match a backend enum. */
 export const PORTFOLIO_SIZE_OPTIONS = [
     { value: '', label: 'Select portfolio size' },
-    { value: '1-50 families', label: '1–50 families' },
-    { value: '51-250 families', label: '51–250 families' },
-    { value: '251-1,000 families', label: '251–1,000 families' },
+    { value: '1-50 families', label: '1-50 families' },
+    { value: '51-250 families', label: '51-250 families' },
+    { value: '251-1,000 families', label: '251-1,000 families' },
     { value: '1,000+ families', label: '1,000+ families' },
 ] as const;

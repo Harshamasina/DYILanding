@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Search, PenLine, CalendarClock } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, PenLine, CalendarClock, ArrowRight } from 'lucide-react';
 import {
     NAV_LINKS,
     SITE_NAME,
@@ -13,7 +13,9 @@ import {
     PATENT_SEARCH_PAGE_URL,
     AI_DRAFTING_PAGE_URL,
     DOCKETING_PAGE_URL,
+    SEARCH_APP_URL,
 } from '@/lib/constants';
+import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { BrandLogoLink } from '@/components/ui/BrandLogoLink';
 
@@ -218,7 +220,17 @@ export function Header() {
                         </ul>
 
                         {/* Desktop CTA */}
-                        <div className="hidden xl:flex shrink-0 items-center">
+                        <div className="hidden xl:flex shrink-0 items-center gap-2">
+                            <Button
+                                href={SEARCH_APP_URL}
+                                newTab
+                                variant="outline"
+                                size="sm"
+                                className="whitespace-nowrap px-3.5 hover:-translate-y-0.5 active:translate-y-0"
+                            >
+                                Login
+                                <ArrowRight className="h-4 w-4" />
+                            </Button>
                             <BookDemoButton size="sm" />
                         </div>
 
@@ -315,7 +327,20 @@ export function Header() {
                                 ))}
                             </ul>
 
-                            <BookDemoButton size="lg" className="min-w-50" />
+                            <div className="flex w-full max-w-xs flex-col items-stretch gap-3">
+                                <BookDemoButton size="lg" className="w-full justify-center" />
+                                <Button
+                                    href={SEARCH_APP_URL}
+                                    newTab
+                                    variant="outline"
+                                    size="lg"
+                                    className="w-full justify-center whitespace-nowrap hover:-translate-y-0.5 active:translate-y-0"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    Try Patent Search Free
+                                    <ArrowRight className="h-4 w-4" />
+                                </Button>
+                            </div>
                         </div>
                     </div>,
                     document.body,

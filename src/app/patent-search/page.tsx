@@ -32,6 +32,7 @@ import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
+import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedPatentSearch } from '@/components/ui/AnimatedPatentSearch';
@@ -265,8 +266,9 @@ export default function PatentSearchPage() {
     return (
         <main id="main-content">
             {/* ── 1. Hero ── */}
-            <section className="pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
-                <Container>
+            <section className="relative overflow-hidden bg-page-bg-alt pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
+                <HeroAmbience edge="bottom" />
+                <Container className="relative z-10">
                     <nav aria-label="Breadcrumb" className="mb-8">
                         <ol
                             className="flex items-center gap-2 text-sm text-text-muted"
@@ -318,32 +320,18 @@ export default function PatentSearchPage() {
                 </Container>
 
                 {/* Big animation (placeholder for now) */}
-                <Container className="mt-12 sm:mt-16">
-                    <FadeIn>
-                        <MockupHalo>
-                            <AnimatedPatentSearch />
-                        </MockupHalo>
-                    </FadeIn>
+                <Container className="relative z-10 mt-12 sm:mt-16">
+                    <MockupHalo>
+                        <AnimatedPatentSearch />
+                    </MockupHalo>
                 </Container>
 
                 {/* Credibility strip */}
-                <Container className="mt-8 sm:mt-10">
+                <Container className="relative z-10 mt-8 sm:mt-10">
                     <FadeIn delay={0.1}>
-                        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 sm:gap-x-4">
-                            {TRUST_STRIP.map((item, i) => (
-                                <Fragment key={item}>
-                                    {i > 0 && (
-                                        <span aria-hidden="true" className="text-text-muted/40">
-                                            &middot;
-                                        </span>
-                                    )}
-                                    <span
-                                        className="text-xs font-medium text-text-secondary sm:text-sm"
-                                        style={{ fontFamily: 'var(--font-mono)' }}
-                                    >
-                                        {item}
-                                    </span>
-                                </Fragment>
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {TRUST_STRIP.map((item) => (
+                                <TrustPill key={item} label={item} />
                             ))}
                         </div>
                     </FadeIn>
@@ -351,8 +339,9 @@ export default function PatentSearchPage() {
             </section>
 
             {/* ── 2. Universal search ── */}
-            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
-                <Container>
+            <section className="relative overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28">
+                <HeroAmbience edge="top" />
+                <Container className="relative z-10">
                     <FadeIn>
                         <div className="max-w-3xl">
                             <h2
@@ -388,14 +377,8 @@ export default function PatentSearchPage() {
                                 Filter results by
                             </span>
                             <div className="flex flex-wrap gap-2">
-                                {FILTERS.map((f) => (
-                                    <span
-                                        key={f}
-                                        className="rounded-lg border border-card-border bg-card-bg px-3 py-1.5 text-xs font-medium text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-mono)' }}
-                                    >
-                                        {f}
-                                    </span>
+                                {FILTERS.map((f, i) => (
+                                    <FilterChip key={f} label={f} active={i === 0} />
                                 ))}
                             </div>
                         </div>
@@ -439,16 +422,10 @@ export default function PatentSearchPage() {
                                     {i > 0 && (
                                         <ChevronRight
                                             aria-hidden="true"
-                                            className="h-4 w-4 shrink-0 text-text-muted/50"
+                                            className="h-4 w-4 shrink-0 text-primary/35"
                                         />
                                     )}
-                                    <span
-                                        className="inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm sm:text-sm"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
-                                        <step.icon className="h-4 w-4 text-primary" />
-                                        {step.label}
-                                    </span>
+                                    <WorkflowStep icon={step.icon} label={step.label} delay={i * 140} />
                                 </Fragment>
                             ))}
                         </div>
@@ -457,43 +434,21 @@ export default function PatentSearchPage() {
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
                         {ENRICHMENT.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.08}>
-                                <article className="flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
-                                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
-                                        <item.icon className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <h3
-                                        className="mt-4 text-lg font-semibold text-text-primary"
-                                        style={{ fontFamily: 'var(--font-display)' }}
-                                    >
-                                        {item.title}
-                                    </h3>
-                                    <p
-                                        className="mt-2 text-sm leading-relaxed text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
-                                        {item.description}
-                                    </p>
-                                </article>
+                                <FeatureCard {...item} />
                             </FadeIn>
                         ))}
                     </div>
 
                     {/* Powered by */}
                     <FadeIn delay={0.1}>
-                        <div className="mt-12 flex flex-col gap-3 rounded-2xl border border-card-border bg-page-bg-alt px-6 py-5 sm:flex-row sm:items-center sm:gap-5">
+                        <div className="mt-12 flex flex-col gap-3 rounded-2xl border border-card-border bg-page-bg-alt px-6 py-5 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.06] sm:flex-row sm:items-center sm:gap-5">
                             <span className="inline-flex items-center gap-2 text-sm font-semibold text-text-primary">
                                 <Database className="h-4 w-4 text-primary" />
                                 Powered by
                             </span>
                             <div className="flex flex-wrap gap-2">
                                 {DATA_SOURCES.map((s) => (
-                                    <span
-                                        key={s}
-                                        className="rounded-lg border border-card-border bg-white px-3 py-1.5 text-xs font-medium text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-mono)' }}
-                                    >
-                                        {s}
-                                    </span>
+                                    <SourceBadge key={s} label={s} />
                                 ))}
                             </div>
                         </div>
@@ -523,98 +478,26 @@ export default function PatentSearchPage() {
                     </FadeIn>
 
                     <div className="mx-auto mt-12 grid max-w-4xl gap-6 lg:mt-16 lg:grid-cols-2">
-                        {/* Free */}
                         <FadeIn>
-                            <div className="flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-7 shadow-sm">
-                                <div className="flex items-center gap-2.5">
-                                    <Search className="h-5 w-5 text-primary" />
-                                    <h3
-                                        className="text-xl font-bold text-text-primary"
-                                        style={{ fontFamily: 'var(--font-display)' }}
-                                    >
-                                        Start Free
-                                    </h3>
-                                </div>
-                                <p
-                                    className="mt-1 text-sm text-text-muted"
-                                    style={{ fontFamily: 'var(--font-body)' }}
-                                >
-                                    No account required
-                                </p>
-                                <ul className="mt-6 flex flex-col gap-3">
-                                    {FREE_FEATURES.map((f) => (
-                                        <li key={f} className="flex items-start gap-2.5">
-                                            <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 shrink-0 text-success" />
-                                            <span
-                                                className="text-sm text-text-secondary"
-                                                style={{ fontFamily: 'var(--font-body)' }}
-                                            >
-                                                {f}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <div className="mt-auto pt-7">
-                                    <Button href={SEARCH_APP_URL} newTab variant="secondary" size="md" className="w-full justify-center">
-                                        Search Free
-                                        <ArrowRight className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            </div>
+                            <AccessPlanCard
+                                icon={Search}
+                                title="Start Free"
+                                subtitle="No account required"
+                                features={FREE_FEATURES}
+                                cta="Search Free"
+                                variant="quiet"
+                            />
                         </FadeIn>
 
-                        {/* Work email */}
                         <FadeIn delay={0.08}>
-                            <div className="flex h-full flex-col rounded-2xl border-2 border-primary bg-card-bg p-7 shadow-md shadow-primary/10">
-                                <span
-                                    className="mb-4 inline-flex w-fit items-center rounded-full bg-primary px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
-                                    style={{ fontFamily: 'var(--font-mono)' }}
-                                >
-                                    Recommended for IP and R&D teams
-                                </span>
-                                <div className="flex items-center gap-2.5">
-                                    <Mail className="h-5 w-5 text-primary" />
-                                    <h3
-                                        className="text-xl font-bold text-text-primary"
-                                        style={{ fontFamily: 'var(--font-display)' }}
-                                    >
-                                        Unlock Professional Access
-                                    </h3>
-                                </div>
-                                <p
-                                    className="mt-1 text-sm text-text-muted"
-                                    style={{ fontFamily: 'var(--font-body)' }}
-                                >
-                                    Free to create, unlocks the full tool
-                                </p>
-                                <ul className="mt-6 flex flex-col gap-3">
-                                    {WORK_FEATURES.map((f, i) => (
-                                        <li key={f} className="flex items-start gap-2.5">
-                                            {i === 1 ? (
-                                                <Lock className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />
-                                            ) : i === 2 ? (
-                                                <Download className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />
-                                            ) : i === 4 ? (
-                                                <Bookmark className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />
-                                            ) : (
-                                                <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 shrink-0 text-success" />
-                                            )}
-                                            <span
-                                                className="text-sm text-text-secondary"
-                                                style={{ fontFamily: 'var(--font-body)' }}
-                                            >
-                                                {f}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <div className="mt-auto pt-7">
-                                    <Button href={SEARCH_APP_URL} newTab size="md" className="w-full justify-center">
-                                        Get Full Access
-                                        <ArrowRight className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            </div>
+                            <AccessPlanCard
+                                icon={Mail}
+                                title="Unlock Professional Access"
+                                subtitle="Free to create, unlocks the full tool"
+                                features={WORK_FEATURES}
+                                cta="Get Full Access"
+                                variant="recommended"
+                            />
                         </FadeIn>
                     </div>
                 </Container>
@@ -683,26 +566,7 @@ export default function PatentSearchPage() {
                         <FadeIn delay={0.1}>
                             <div className="grid gap-4 sm:grid-cols-2">
                                 {PLATFORM_CAPS.map((cap) => (
-                                    <article
-                                        key={cap.title}
-                                        className="rounded-2xl border border-card-border bg-page-bg-alt p-5"
-                                    >
-                                        <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
-                                            <cap.icon className="h-5 w-5 text-primary" />
-                                        </div>
-                                        <h3
-                                            className="mt-3 text-[15px] font-semibold text-text-primary"
-                                            style={{ fontFamily: 'var(--font-display)' }}
-                                        >
-                                            {cap.title}
-                                        </h3>
-                                        <p
-                                            className="mt-1 text-[13px] leading-relaxed text-text-secondary"
-                                            style={{ fontFamily: 'var(--font-body)' }}
-                                        >
-                                            {cap.description}
-                                        </p>
-                                    </article>
+                                    <MiniFeatureCard key={cap.title} {...cap} />
                                 ))}
                             </div>
                         </FadeIn>
@@ -739,23 +603,7 @@ export default function PatentSearchPage() {
                     <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
                         {USE_CASES.map((uc, i) => (
                             <FadeIn key={uc.title} delay={i * 0.06}>
-                                <article className="flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm">
-                                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
-                                        <uc.icon className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <h3
-                                        className="mt-4 text-lg font-semibold text-text-primary"
-                                        style={{ fontFamily: 'var(--font-display)' }}
-                                    >
-                                        {uc.title}
-                                    </h3>
-                                    <p
-                                        className="mt-2 text-sm leading-relaxed text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
-                                        {uc.description}
-                                    </p>
-                                </article>
+                                <FeatureCard {...uc} />
                             </FadeIn>
                         ))}
                     </div>
@@ -824,15 +672,68 @@ export default function PatentSearchPage() {
 
 /* ── Helpers ── */
 
+function TrustPill({ label }: { label: string }) {
+    return (
+        <span
+            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08]"
+            style={{ fontFamily: 'var(--font-mono)' }}
+        >
+            <span className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary" />
+            {label}
+        </span>
+    );
+}
+
+function FilterChip({ label, active }: { label: string; active?: boolean }) {
+    return (
+        <span
+            className={`group inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08] ${
+                active
+                    ? 'border-primary/25 bg-primary/[0.07] text-primary'
+                    : 'border-card-border bg-card-bg text-text-secondary'
+            }`}
+            style={{ fontFamily: 'var(--font-mono)' }}
+        >
+            <SlidersHorizontal className="h-3.5 w-3.5 text-primary/75 transition-transform duration-300 group-hover:scale-110" />
+            {label}
+        </span>
+    );
+}
+
+function WorkflowStep({
+    icon: Icon,
+    label,
+    delay,
+}: {
+    icon: React.ElementType;
+    label: string;
+    delay: number;
+}) {
+    return (
+        <span
+            className="group inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08] sm:text-sm"
+            style={{ fontFamily: 'var(--font-body)' }}
+        >
+            <span
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/[0.08] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:animate-pulse"
+                style={{ animationDelay: `${delay}ms` }}
+            >
+                <Icon className="h-3.5 w-3.5" />
+            </span>
+            {label}
+        </span>
+    );
+}
+
 function IconCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="flex gap-4 items-start">
-            <div className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
-                <Icon className="h-5 w-5 text-primary" />
+        <article className="group flex gap-4 rounded-2xl border border-transparent p-4 transition-all duration-300 hover:-translate-y-1 hover:border-card-border hover:bg-card-bg hover:shadow-xl hover:shadow-primary/[0.07]">
+            <div className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
             </div>
             <div className="min-w-0">
                 <h3
-                    className="text-[15px] font-semibold leading-snug text-text-primary"
+                    className="text-[15px] font-semibold leading-snug text-text-primary transition-colors duration-300 group-hover:text-primary"
                     style={{ fontFamily: 'var(--font-display)' }}
                 >
                     {title}
@@ -846,4 +747,162 @@ function IconCard({ icon: Icon, title, description }: IconItem) {
             </div>
         </article>
     );
+}
+
+function FeatureCard({ icon: Icon, title, description }: IconItem) {
+    return (
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+            </div>
+            <h3
+                className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
+                style={{ fontFamily: 'var(--font-display)' }}
+            >
+                {title}
+            </h3>
+            <p
+                className="relative mt-2 text-sm leading-relaxed text-text-secondary"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                {description}
+            </p>
+        </article>
+    );
+}
+
+function MiniFeatureCard({ icon: Icon, title, description }: IconItem) {
+    return (
+        <article className="group rounded-2xl border border-card-border bg-page-bg-alt p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:bg-card-bg hover:shadow-lg hover:shadow-primary/[0.07]">
+            <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+            </div>
+            <h3
+                className="mt-3 text-[15px] font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
+                style={{ fontFamily: 'var(--font-display)' }}
+            >
+                {title}
+            </h3>
+            <p
+                className="mt-1 text-[13px] leading-relaxed text-text-secondary"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                {description}
+            </p>
+        </article>
+    );
+}
+
+function SourceBadge({ label }: { label: string }) {
+    return (
+        <span
+            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08]"
+            style={{ fontFamily: 'var(--font-mono)' }}
+        >
+            <span className="h-1.5 w-1.5 rounded-full bg-success/80 transition-colors duration-300 group-hover:bg-success" />
+            {label}
+        </span>
+    );
+}
+
+function AccessPlanCard({
+    icon: Icon,
+    title,
+    subtitle,
+    features,
+    cta,
+    variant,
+}: {
+    icon: React.ElementType;
+    title: string;
+    subtitle: string;
+    features: readonly string[];
+    cta: string;
+    variant: 'quiet' | 'recommended';
+}) {
+    const recommended = variant === 'recommended';
+
+    return (
+        <div
+            className={`group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card-bg p-7 transition-all duration-300 hover:-translate-y-1 ${
+                recommended
+                    ? 'border-2 border-primary shadow-xl shadow-primary/10 hover:shadow-2xl hover:shadow-primary/[0.16]'
+                    : 'border border-card-border shadow-sm hover:border-primary/20 hover:shadow-xl hover:shadow-primary/[0.08]'
+            }`}
+        >
+            <div
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-x-0 top-0 h-22 bg-linear-to-b from-primary/[0.08] to-transparent transition-opacity duration-300 ${
+                    recommended ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}
+            />
+            {recommended && (
+                <span
+                    className="relative mb-4 inline-flex w-fit items-center rounded-full bg-primary px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
+                    style={{ fontFamily: 'var(--font-mono)' }}
+                >
+                    Recommended for IP and R&D teams
+                </span>
+            )}
+            <div className="relative flex items-center gap-2.5">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/15 bg-primary/[0.08] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:shadow-md group-hover:shadow-primary/20">
+                    <Icon className="h-5 w-5" />
+                </span>
+                <h3
+                    className="text-xl font-bold text-text-primary transition-colors duration-300 group-hover:text-primary"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                >
+                    {title}
+                </h3>
+            </div>
+            <p
+                className="relative mt-2 text-sm text-text-muted"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                {subtitle}
+            </p>
+            <ul className="relative mt-6 flex flex-col gap-3">
+                {features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2.5">
+                        <AccessFeatureIcon feature={feature} />
+                        <span
+                            className="text-sm text-text-secondary"
+                            style={{ fontFamily: 'var(--font-body)' }}
+                        >
+                            {feature}
+                        </span>
+                    </li>
+                ))}
+            </ul>
+            <div className="relative mt-auto pt-7">
+                <Button
+                    href={SEARCH_APP_URL}
+                    newTab
+                    variant={recommended ? 'primary' : 'secondary'}
+                    size="md"
+                    className="w-full justify-center"
+                >
+                    {cta}
+                    <ArrowRight className="h-4 w-4" />
+                </Button>
+            </div>
+        </div>
+    );
+}
+
+function AccessFeatureIcon({ feature }: { feature: string }) {
+    if (feature.includes('claims')) {
+        return <Lock className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />;
+    }
+    if (feature.includes('CSV') || feature.includes('export')) {
+        return <Download className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />;
+    }
+    if (feature.includes('Save patents')) {
+        return <Bookmark className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />;
+    }
+    return <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 shrink-0 text-success" />;
 }

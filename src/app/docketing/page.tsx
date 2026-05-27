@@ -30,6 +30,7 @@ import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
+import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedDocketingWorkflow } from '@/components/ui/AnimatedDocketingWorkflow';
@@ -64,19 +65,22 @@ const TRACKS = [
 ];
 
 interface DeadlineType {
+    icon: React.ElementType;
     type: string;
     derivedFrom: string;
     subTypes: string;
+    accent: string;
+    tint: string;
 }
 
 const DEADLINE_TYPES: DeadlineType[] = [
-    { type: 'Office Action Response', derivedFrom: 'NPE office actions (due date)', subTypes: 'Non-final, Final, Advisory' },
-    { type: 'Annuity / Renewal Fee', derivedFrom: 'NPE annuity fees (due date + grace period)', subTypes: 'On-time, In-grace window' },
-    { type: 'PCT Deadlines', derivedFrom: 'PCT filings', subTypes: 'Chapter I (Rule 22), Chapter II (Rule 30/31)' },
-    { type: 'PRV Deadlines', derivedFrom: 'Provisional applications', subTypes: 'Expiry, Conversion deadline' },
-    { type: 'Patent Fees', derivedFrom: 'Fees on any entity', subTypes: 'Across 8 fee categories' },
-    { type: 'NPE Deadlines', derivedFrom: 'NPE cases', subTypes: 'Patent expiry, Request for Examination (RFE)' },
-    { type: 'Custom Reminders', derivedFrom: 'User-created reminders', subTypes: 'One-time or recurring' },
+    { icon: FileWarning, type: 'Office Action Response', derivedFrom: 'NPE office actions (due date)', subTypes: 'Non-final, Final, Advisory', accent: '#dc2626', tint: 'rgba(220,38,38,0.08)' },
+    { icon: Coins, type: 'Annuity / Renewal Fee', derivedFrom: 'NPE annuity fees (due date + grace period)', subTypes: 'On-time, In-grace window', accent: '#d97706', tint: 'rgba(217,119,6,0.09)' },
+    { icon: Globe, type: 'PCT Deadlines', derivedFrom: 'PCT filings', subTypes: 'Chapter I (Rule 22), Chapter II (Rule 30/31)', accent: '#4f46e5', tint: 'rgba(79,70,229,0.08)' },
+    { icon: CalendarX2, type: 'PRV Deadlines', derivedFrom: 'Provisional applications', subTypes: 'Expiry, Conversion deadline', accent: '#6366f1', tint: 'rgba(99,102,241,0.08)' },
+    { icon: Database, type: 'Patent Fees', derivedFrom: 'Fees on any entity', subTypes: 'Across 8 fee categories', accent: '#059669', tint: 'rgba(5,150,105,0.08)' },
+    { icon: Layers, type: 'NPE Deadlines', derivedFrom: 'NPE cases', subTypes: 'Patent expiry, Request for Examination (RFE)', accent: '#4338ca', tint: 'rgba(67,56,202,0.08)' },
+    { icon: AlarmClock, type: 'Custom Reminders', derivedFrom: 'User-created reminders', subTypes: 'One-time or recurring', accent: '#64748b', tint: 'rgba(100,116,139,0.10)' },
 ];
 
 const ENGINE_BEHAVIORS: IconItem[] = [
@@ -101,13 +105,15 @@ interface RiskSignal {
     weight: string;
     title: string;
     description: string;
+    accent: string;
+    tint: string;
 }
 
 const RISK_SIGNALS: RiskSignal[] = [
-    { weight: '40%', title: 'Time pressure', description: 'How close, or how far past, the deadline is. Overdue items spike toward 100.' },
-    { weight: '25%', title: 'Type severity', description: 'Office actions (90) and annuities (80) outrank routine reminders (20).' },
-    { weight: '25%', title: 'Overdue cascade', description: 'Already-overdue or open past-due items escalate sharply rather than plateauing.' },
-    { weight: '10%', title: 'Assignment gap', description: 'Unassigned deadlines are penalized. An orphaned deadline is a dangerous deadline.' },
+    { weight: '40%', title: 'Time pressure', description: 'How close, or how far past, the deadline is. Overdue items spike toward 100.', accent: '#dc2626', tint: 'rgba(220,38,38,0.10)' },
+    { weight: '25%', title: 'Type severity', description: 'Office actions (90) and annuities (80) outrank routine reminders (20).', accent: '#d97706', tint: 'rgba(217,119,6,0.12)' },
+    { weight: '25%', title: 'Overdue cascade', description: 'Already-overdue or open past-due items escalate sharply rather than plateauing.', accent: '#4f46e5', tint: 'rgba(79,70,229,0.10)' },
+    { weight: '10%', title: 'Assignment gap', description: 'Unassigned deadlines are penalized. An orphaned deadline is a dangerous deadline.', accent: '#059669', tint: 'rgba(5,150,105,0.10)' },
 ];
 
 const DIGESTS: IconItem[] = [
@@ -262,8 +268,9 @@ export default function DocketingPage() {
     return (
         <main id="main-content" className="min-w-0 overflow-x-hidden">
             {/* ── 1. Hero ── */}
-            <section className="pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
-                <Container>
+            <section className="relative overflow-hidden bg-page-bg-alt pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
+                <HeroAmbience edge="bottom" />
+                <Container className="relative z-10">
                     <nav aria-label="Breadcrumb" className="mb-8">
                         <ol
                             className="flex items-center gap-2 text-sm text-text-muted"
@@ -316,16 +323,14 @@ export default function DocketingPage() {
                     </div>
                 </Container>
 
-                <Container className="mt-12 sm:mt-16">
-                    <FadeIn>
-                        <MockupHalo>
-                            <AnimatedDocketingWorkflow />
-                        </MockupHalo>
-                    </FadeIn>
+                <Container className="relative z-10 mt-12 sm:mt-16">
+                    <MockupHalo>
+                        <AnimatedDocketingWorkflow />
+                    </MockupHalo>
                 </Container>
 
                 {/* Tracks across the case hierarchy */}
-                <Container className="mt-8 sm:mt-10">
+                <Container className="relative z-10 mt-8 sm:mt-10">
                     <FadeIn delay={0.1}>
                         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-3">
                             <span
@@ -335,14 +340,8 @@ export default function DocketingPage() {
                                 Tracks across your case hierarchy
                             </span>
                             <div className="flex flex-wrap justify-center gap-2">
-                                {TRACKS.map((t) => (
-                                    <span
-                                        key={t}
-                                        className="rounded-lg border border-card-border bg-card-bg px-3 py-1.5 text-xs font-medium text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-mono)' }}
-                                    >
-                                        {t}
-                                    </span>
+                                {TRACKS.map((t, i) => (
+                                    <TrackChip key={t} label={t} delay={i * 120} />
                                 ))}
                             </div>
                         </div>
@@ -351,8 +350,9 @@ export default function DocketingPage() {
             </section>
 
             {/* ── 2. The unified deadline engine ── */}
-            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
-                <Container>
+            <section className="relative overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28">
+                <HeroAmbience edge="top" />
+                <Container className="relative z-10">
                     <FadeIn>
                         <div className="max-w-3xl">
                             <span
@@ -381,10 +381,10 @@ export default function DocketingPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.05}>
-                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm lg:mt-12">
+                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm ring-1 ring-white/70 lg:mt-12">
                             <table className="w-full min-w-150 border-collapse text-left">
                                 <thead>
-                                    <tr className="border-b border-card-border">
+                                    <tr className="border-b border-card-border bg-white/60">
                                         {['Deadline Type', 'Derived From', 'Sub-types'].map((h) => (
                                             <th
                                                 key={h}
@@ -398,28 +398,7 @@ export default function DocketingPage() {
                                 </thead>
                                 <tbody>
                                     {DEADLINE_TYPES.map((row) => (
-                                        <tr key={row.type} className="border-b border-card-border/60 last:border-b-0">
-                                            <td
-                                                className="px-5 py-4 text-sm font-semibold text-text-primary"
-                                                style={{ fontFamily: 'var(--font-body)' }}
-                                            >
-                                                {row.type}
-                                            </td>
-                                            <td
-                                                className="px-5 py-4 text-sm text-text-secondary"
-                                                style={{ fontFamily: 'var(--font-body)' }}
-                                            >
-                                                {row.derivedFrom}
-                                            </td>
-                                            <td className="px-5 py-4">
-                                                <span
-                                                    className="inline-flex rounded-md bg-primary/[0.07] px-2 py-0.5 text-[12px] font-medium text-primary"
-                                                    style={{ fontFamily: 'var(--font-mono)' }}
-                                                >
-                                                    {row.subTypes}
-                                                </span>
-                                            </td>
-                                        </tr>
+                                        <DeadlineTypeRow key={row.type} row={row} />
                                     ))}
                                 </tbody>
                             </table>
@@ -479,31 +458,17 @@ export default function DocketingPage() {
                         </div>
                     </FadeIn>
 
-                    <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
-                        {RISK_SIGNALS.map((s, i) => (
-                            <FadeIn key={s.title} delay={i * 0.06}>
-                                <article className="flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm">
-                                    <span
-                                        className="text-2xl font-bold text-primary"
-                                        style={{ fontFamily: 'var(--font-mono)' }}
-                                    >
-                                        {s.weight}
-                                    </span>
-                                    <h3
-                                        className="mt-2 text-base font-semibold text-text-primary"
-                                        style={{ fontFamily: 'var(--font-display)' }}
-                                    >
-                                        {s.title}
-                                    </h3>
-                                    <p
-                                        className="mt-1.5 text-sm leading-relaxed text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
-                                        {s.description}
-                                    </p>
-                                </article>
-                            </FadeIn>
-                        ))}
+                    <div className="mt-10 grid gap-6 lg:mt-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-stretch">
+                        <div className="grid gap-6 sm:grid-cols-2">
+                            {RISK_SIGNALS.map((s, i) => (
+                                <FadeIn key={s.title} delay={i * 0.06}>
+                                    <RiskSignalCard signal={s} />
+                                </FadeIn>
+                            ))}
+                        </div>
+                        <FadeIn delay={0.18}>
+                            <RiskScorePanel />
+                        </FadeIn>
                     </div>
                 </Container>
             </section>
@@ -653,23 +618,7 @@ export default function DocketingPage() {
                     <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
                         {SECURITY.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.08}>
-                                <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-navy-light/40 p-6">
-                                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5">
-                                        <item.icon className="h-5 w-5 text-primary-light" />
-                                    </div>
-                                    <h3
-                                        className="mt-4 text-lg font-semibold text-white"
-                                        style={{ fontFamily: 'var(--font-display)' }}
-                                    >
-                                        {item.title}
-                                    </h3>
-                                    <p
-                                        className="mt-2 text-sm leading-relaxed text-text-on-dark"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
-                                        {item.description}
-                                    </p>
-                                </article>
+                                <SecurityCard {...item} />
                             </FadeIn>
                         ))}
                     </div>
@@ -738,20 +687,238 @@ export default function DocketingPage() {
 
 /* ── Helpers ── */
 
+function TrackChip({ label, delay }: { label: string; delay: number }) {
+    return (
+        <span
+            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-md hover:shadow-primary/[0.08]"
+            style={{ fontFamily: 'var(--font-mono)' }}
+        >
+            <span
+                className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary group-hover:animate-pulse"
+                style={{ animationDelay: `${delay}ms` }}
+            />
+            {label}
+        </span>
+    );
+}
+
+function DeadlineTypeRow({ row }: { row: DeadlineType }) {
+    const Icon = row.icon;
+
+    return (
+        <tr className="group border-b border-card-border/60 transition-colors duration-200 last:border-b-0 hover:bg-white">
+            <td
+                className="relative px-5 py-4 text-sm font-semibold text-text-primary"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                <span
+                    aria-hidden="true"
+                    className="absolute left-0 top-0 h-full w-1 opacity-80 transition-opacity duration-200 group-hover:opacity-100"
+                    style={{ backgroundColor: row.accent }}
+                />
+                <span className="flex items-center gap-3">
+                    <span
+                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-all duration-200 group-hover:scale-105 group-hover:shadow-sm"
+                        style={{ borderColor: `${row.accent}33`, backgroundColor: row.tint }}
+                    >
+                        <Icon className="h-4 w-4" style={{ color: row.accent }} />
+                    </span>
+                    {row.type}
+                </span>
+            </td>
+            <td
+                className="px-5 py-4 text-sm text-text-secondary"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                {row.derivedFrom}
+            </td>
+            <td className="px-5 py-4">
+                <span
+                    className="inline-flex rounded-md px-2 py-0.5 text-[12px] font-medium transition-colors duration-200"
+                    style={{
+                        color: row.accent,
+                        backgroundColor: row.tint,
+                        fontFamily: 'var(--font-mono)',
+                    }}
+                >
+                    {row.subTypes}
+                </span>
+            </td>
+        </tr>
+    );
+}
+
 function CapabilityCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
-            <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
-                <Icon className="h-5 w-5 text-primary" />
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:shadow-md group-hover:shadow-primary/[0.12]">
+                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-110" />
             </div>
             <h3
-                className="mt-4 text-lg font-semibold text-text-primary"
+                className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
                 style={{ fontFamily: 'var(--font-display)' }}
             >
                 {title}
             </h3>
             <p
-                className="mt-2 text-sm leading-relaxed text-text-secondary"
+                className="relative mt-2 text-sm leading-relaxed text-text-secondary"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                {description}
+            </p>
+        </article>
+    );
+}
+
+function RiskSignalCard({ signal }: { signal: RiskSignal }) {
+    return (
+        <article className="group flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.08]">
+            <div className="flex items-start justify-between gap-4">
+                <span
+                    className="text-2xl font-bold"
+                    style={{ color: signal.accent, fontFamily: 'var(--font-mono)' }}
+                >
+                    {signal.weight}
+                </span>
+                <span
+                    className="rounded-full px-2 py-0.5 text-[11px] font-semibold"
+                    style={{
+                        color: signal.accent,
+                        backgroundColor: signal.tint,
+                        fontFamily: 'var(--font-mono)',
+                    }}
+                >
+                    weighted
+                </span>
+            </div>
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-page-bg-alt">
+                <div
+                    className="h-full rounded-full transition-all duration-500 group-hover:opacity-90"
+                    style={{ width: signal.weight, backgroundColor: signal.accent }}
+                />
+            </div>
+            <h3
+                className="mt-4 text-base font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
+                style={{ fontFamily: 'var(--font-display)' }}
+            >
+                {signal.title}
+            </h3>
+            <p
+                className="mt-1.5 text-sm leading-relaxed text-text-secondary"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                {signal.description}
+            </p>
+        </article>
+    );
+}
+
+function RiskScorePanel() {
+    const rows = [
+        { label: 'Red', count: 4, width: '18%', color: '#dc2626' },
+        { label: 'Amber', count: 9, width: '38%', color: '#d97706' },
+        { label: 'Green', count: 31, width: '88%', color: '#059669' },
+    ];
+
+    return (
+        <aside className="group flex h-full flex-col rounded-2xl border border-primary/15 bg-linear-to-br from-white via-white to-indigo-50/60 p-6 shadow-lg shadow-primary/[0.08] transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.12]">
+            <div className="flex items-center justify-between gap-4">
+                <div>
+                    <p
+                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
+                        style={{ fontFamily: 'var(--font-mono)' }}
+                    >
+                        Portfolio rollup
+                    </p>
+                    <h3
+                        className="mt-2 text-xl font-semibold text-text-primary"
+                        style={{ fontFamily: 'var(--font-display)' }}
+                    >
+                        Risk health at a glance
+                    </h3>
+                </div>
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/15 bg-white text-primary shadow-sm">
+                    <TrendingUp className="h-5 w-5" />
+                </span>
+            </div>
+
+            <div className="mt-7 flex justify-center">
+                <div
+                    className="relative flex h-38 w-38 items-center justify-center rounded-full p-3 shadow-inner"
+                    style={{
+                        background:
+                            'conic-gradient(#dc2626 0 18%, #d97706 18% 56%, #059669 56% 100%)',
+                    }}
+                >
+                    <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-white shadow-sm">
+                        <span
+                            className="text-3xl font-bold text-text-primary"
+                            style={{ fontFamily: 'var(--font-mono)' }}
+                        >
+                            41
+                        </span>
+                        <span
+                            className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted"
+                            style={{ fontFamily: 'var(--font-mono)' }}
+                        >
+                            avg score
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="mt-7 space-y-3">
+                {rows.map((row) => (
+                    <div key={row.label}>
+                        <div className="mb-1.5 flex items-center justify-between">
+                            <span
+                                className="text-xs font-semibold text-text-secondary"
+                                style={{ fontFamily: 'var(--font-mono)' }}
+                            >
+                                {row.label}
+                            </span>
+                            <span
+                                className="text-xs font-bold"
+                                style={{ color: row.color, fontFamily: 'var(--font-mono)' }}
+                            >
+                                {row.count}
+                            </span>
+                        </div>
+                        <div className="h-2 overflow-hidden rounded-full bg-white shadow-inner">
+                            <div
+                                className="h-full rounded-full transition-all duration-500 group-hover:opacity-90"
+                                style={{ width: row.width, backgroundColor: row.color }}
+                            />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </aside>
+    );
+}
+
+function SecurityCard({ icon: Icon, title, description }: IconItem) {
+    return (
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary-light/30 hover:bg-white/[0.06] hover:shadow-xl hover:shadow-primary/10">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary-light/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/30 group-hover:bg-primary-light/10 group-hover:shadow-lg group-hover:shadow-primary/10">
+                <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-110" />
+            </div>
+            <h3
+                className="relative mt-4 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-primary-light"
+                style={{ fontFamily: 'var(--font-display)' }}
+            >
+                {title}
+            </h3>
+            <p
+                className="relative mt-2 text-sm leading-relaxed text-text-on-dark"
                 style={{ fontFamily: 'var(--font-body)' }}
             >
                 {description}

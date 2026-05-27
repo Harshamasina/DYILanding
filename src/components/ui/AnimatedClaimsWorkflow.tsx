@@ -27,6 +27,7 @@ import {
     WandSparkles,
     X,
 } from 'lucide-react';
+import { BrowserMockupChrome } from './BrowserMockupChrome';
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 const MOCKUP_HEIGHT = 'h-[520px] sm:h-[620px] lg:h-[700px]';
@@ -275,10 +276,11 @@ const NOVELTY_SECTIONS = [
 ];
 
 export function AnimatedClaimsWorkflow() {
-    const [phase, setPhase] = useState<Phase>('idle');
+    const [phase, setPhase] = useState<Phase>('claimsReview');
+    const [reducedMotion, setReducedMotion] = useState(false);
 
     const runCycle = useCallback(() => {
-        setPhase('idle');
+        setPhase('claimsReview');
         const timers: ReturnType<typeof setTimeout>[] = [];
         timers.push(setTimeout(() => setPhase('claimsReview'), T_REVIEW));
         timers.push(setTimeout(() => setPhase('claimRefineMenu'), T_REFINE_MENU));
@@ -295,6 +297,20 @@ export function AnimatedClaimsWorkflow() {
     }, []);
 
     useEffect(() => {
+        const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const updateMotionPreference = () => setReducedMotion(media.matches);
+
+        updateMotionPreference();
+        media.addEventListener('change', updateMotionPreference);
+        return () => media.removeEventListener('change', updateMotionPreference);
+    }, []);
+
+    useEffect(() => {
+        if (reducedMotion) {
+            setPhase('claimsReview');
+            return;
+        }
+
         let timers = runCycle();
         const interval = setInterval(() => {
             timers.forEach(clearTimeout);
@@ -305,23 +321,25 @@ export function AnimatedClaimsWorkflow() {
             timers.forEach(clearTimeout);
             clearInterval(interval);
         };
-    }, [runCycle]);
+    }, [runCycle, reducedMotion]);
 
-    const visible = phase !== 'idle' && phase !== 'fadeout';
+    const visible = true;
     const selectedUnit = getSelectedUnit(phase);
     const claims = isRefinedPhase(phase) ? REFINED_CLAIMS : BASE_CLAIMS;
     const showWarnings = ['claimHistory', 'descriptionHistory', 'noveltyStale', 'staleModal'].includes(phase);
+    const browserUrl = getClaimsBrowserUrl(phase);
 
     return (
         <div
             aria-hidden="true"
             role="img"
-            className={`relative flex flex-col overflow-hidden rounded-2xl border border-card-border bg-[#eef1f5] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
+            className={`relative flex flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
         >
+            <BrowserMockupChrome url={browserUrl} />
             <motion.div
-                className="flex h-full flex-col"
+                className="flex min-h-0 flex-1 flex-col"
                 initial={false}
-                animate={{ opacity: visible ? 1 : 0.16 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 0.35, ease: EASE }}
             >
                 <TopBar showWarnings={showWarnings} />
@@ -340,6 +358,18 @@ export function AnimatedClaimsWorkflow() {
             </AnimatePresence>
         </div>
     );
+}
+
+function getClaimsBrowserUrl(phase: Phase) {
+    const matter = 'DEMO-AI-042';
+    if (phase === 'abstractReview') return `app.designyourinvention.com/ai-patent-drafting/${matter}/abstract`;
+    if (phase === 'descriptionHistory') return `app.designyourinvention.com/ai-patent-drafting/${matter}/description/history`;
+    if (phase === 'noveltyStale' || phase === 'staleModal') return `app.designyourinvention.com/ai-patent-drafting/${matter}/novelty/stale`;
+    if (phase === 'noveltyClean') return `app.designyourinvention.com/ai-patent-drafting/${matter}/novelty`;
+    if (phase === 'claimRefineMenu' || phase === 'claimRefineModal') return `app.designyourinvention.com/ai-patent-drafting/${matter}/claims/refine`;
+    if (phase === 'claimHistory') return `app.designyourinvention.com/ai-patent-drafting/${matter}/claims/history`;
+    if (phase === 'claimsReview') return `app.designyourinvention.com/ai-patent-drafting/${matter}/claims`;
+    return 'app.designyourinvention.com/ai-patent-drafting';
 }
 
 function getSelectedUnit(phase: Phase): UnitId {
@@ -365,7 +395,7 @@ function TopBar({ showWarnings }: { showWarnings: boolean }) {
                         </p>
                     </div>
                     <p className="mt-0.5 hidden truncate text-[8px] text-slate-500 sm:block">
-                        Draft · US · AI Review: Medium · Updated 23 days ago
+                        Draft · US · AI Review: Medium · Review ready
                     </p>
                 </div>
                 <div className="flex min-w-0 flex-1 items-center justify-end gap-1 sm:flex-none sm:gap-1.5">

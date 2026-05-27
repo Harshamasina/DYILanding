@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonBaseProps {
@@ -34,6 +34,8 @@ const variantStyles: Record<ButtonVariant, string> = {
         'bg-primary text-white hover:bg-primary-dark shadow-lg shadow-primary/25 hover:shadow-primary/40',
     secondary:
         'bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white',
+    outline:
+        'bg-transparent text-primary border-2 border-primary hover:bg-primary hover:text-white',
     ghost:
         'bg-transparent text-text-secondary hover:text-primary hover:bg-page-bg-alt',
 };
