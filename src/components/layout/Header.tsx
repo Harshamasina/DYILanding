@@ -22,6 +22,12 @@ const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 /* The two flagship product pages, surfaced in the "Features" mega-menu. */
 const FEATURE_MENU = [
     {
+        label: 'Patent Docketing',
+        href: DOCKETING_PAGE_URL,
+        description: 'Auto-derive every deadline, score it by risk, and never miss a date.',
+        icon: CalendarClock,
+    },
+    {
         label: 'Patent Search',
         href: PATENT_SEARCH_PAGE_URL,
         description: 'Search 120M+ patents free, with compound and clinical-trial intelligence.',
@@ -32,12 +38,6 @@ const FEATURE_MENU = [
         href: AI_DRAFTING_PAGE_URL,
         description: 'Turn selected prior art into jurisdiction-compliant drafts in minutes.',
         icon: PenLine,
-    },
-    {
-        label: 'Patent Docketing',
-        href: DOCKETING_PAGE_URL,
-        description: 'Auto-derive every deadline, score it by risk, and never miss a date.',
-        icon: CalendarClock,
     },
 ] as const;
 

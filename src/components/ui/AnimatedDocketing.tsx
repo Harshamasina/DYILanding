@@ -59,6 +59,14 @@ const BUCKETS: Bucket[] = [
                 risk: 'red',
                 score: 91,
             },
+            {
+                title: 'Missing response instructions',
+                family: 'SOLR-2022-0044',
+                assignee: 'E. Caldwell',
+                due: '2 days ago',
+                risk: 'red',
+                score: 89,
+            },
         ],
     },
     {
@@ -72,6 +80,15 @@ const BUCKETS: Bucket[] = [
                 due: 'Today, 5:00 PM',
                 risk: 'amber',
                 score: 68,
+            },
+            {
+                title: 'Client sign-off for EP validation',
+                family: 'AERO-2025-0009',
+                assignee: 'P. Menon',
+                due: 'Today, noon',
+                amount: 'EUR 620',
+                risk: 'amber',
+                score: 62,
             },
         ],
     },
@@ -103,6 +120,54 @@ const BUCKETS: Bucket[] = [
                 due: 'in 6 days',
                 risk: 'green',
                 score: 19,
+            },
+            {
+                title: 'Foreign associate filing packet',
+                family: 'VACC-2024-0017',
+                assignee: 'M. Rao',
+                due: 'in 7 days',
+                risk: 'green',
+                score: 22,
+            },
+            {
+                title: 'Examiner interview summary',
+                family: 'SOLR-2022-0044',
+                assignee: 'E. Caldwell',
+                due: 'in 8 days',
+                risk: 'green',
+                score: 24,
+            },
+        ],
+    },
+    {
+        label: 'Upcoming',
+        accent: '#059669',
+        rows: [
+            {
+                title: 'EP validation country list',
+                family: 'AERO-2025-0009',
+                assignee: 'P. Menon',
+                due: 'in 12 days',
+                amount: 'EUR 620',
+                risk: 'green',
+                score: 18,
+            },
+            {
+                title: 'Outside counsel budget review',
+                family: 'BIOC-2024-0028',
+                assignee: 'N. Kim',
+                due: 'in 15 days',
+                risk: 'green',
+                score: 16,
+            },
+            {
+                title: 'Local agent renewal estimate',
+                family: 'THER-2025-0018',
+                assignee: 'M. Rao',
+                due: 'in 18 days',
+                amount: 'GBP 380',
+                risk: 'green',
+                score: 14,
             },
         ],
     },
@@ -136,13 +201,13 @@ export function AnimatedDocketing() {
                     <span className="h-2 w-2 rounded-full bg-[#FFBD2E] sm:h-2.5 sm:w-2.5" />
                     <span className="h-2 w-2 rounded-full bg-[#28C840] sm:h-2.5 sm:w-2.5" />
                 </div>
-                <div className="flex flex-1 justify-center">
+                <div className="flex min-w-0 flex-1 justify-center">
                     <div
-                        className="flex items-center gap-1 rounded-md border border-card-border bg-page-bg-alt px-2 py-0.5 text-[7px] text-text-muted sm:px-3 sm:text-[10px]"
+                        className="flex min-w-0 max-w-full items-center gap-1 rounded-md border border-card-border bg-page-bg-alt px-2 py-0.5 text-[7px] text-text-muted sm:px-3 sm:text-[10px]"
                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}
                     >
                         <svg className="hidden h-2 w-2 text-success sm:block sm:h-2.5 sm:w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                        app.designyourinvention.com/docketing
+                        <span className="truncate">app.designyourinvention.com/docketing</span>
                     </div>
                 </div>
                 <div className="w-6 sm:w-10" />
@@ -167,10 +232,29 @@ export function AnimatedDocketing() {
             </div>
 
             {/* ── Body ── */}
-            <div className="flex min-h-0 flex-1 flex-row gap-2 overflow-hidden bg-[#e9ecf1] p-2 sm:gap-2.5 sm:p-2.5">
+            <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden bg-[#e9ecf1] p-2 sm:flex-row sm:gap-2.5 sm:p-2.5">
+
+                {/* ── Mobile filter dropdown summary ── */}
+                <div className="flex shrink-0 items-center gap-1.5 rounded-lg border border-card-border bg-white px-2 py-2 shadow-md shadow-black/8 sm:hidden">
+                    <div className="min-w-0 flex-1">
+                        <p className="truncate text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                            All deadlines
+                        </p>
+                        <p className="mt-0.5 truncate text-[7px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                            44 items · Mine only · Risk sorted
+                        </p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 rounded-md border border-primary/25 bg-primary/8 px-2 py-1 text-[7px] font-bold text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        Filters
+                        <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                    </span>
+                    <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-card-border bg-page-bg-alt text-[8px] font-bold text-danger" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                        96
+                    </span>
+                </div>
 
                 {/* ── Left rail - filters ── */}
-                <div className="flex w-24 shrink-0 flex-col overflow-hidden rounded-lg border border-card-border bg-white shadow-md shadow-black/8 sm:w-30 lg:w-36">
+                <div className="hidden w-32 shrink-0 flex-col overflow-hidden rounded-lg border border-card-border bg-white shadow-md shadow-black/8 sm:flex lg:w-36">
                     <div className="shrink-0 border-b border-card-border/60 px-2 py-2 sm:px-2.5">
                         <p className="text-[8px] font-bold leading-tight text-text-primary sm:text-[10px]" style={{ fontFamily: 'var(--font-dashboard)' }}>Deadlines</p>
                         <p className="mt-0.5 text-[6px] leading-tight text-text-muted sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard)' }}>Derived on read</p>
@@ -208,23 +292,24 @@ export function AnimatedDocketing() {
                 <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-lg border border-card-border bg-white shadow-md shadow-black/8">
                     <div className="flex shrink-0 items-center justify-between gap-2 border-b border-card-border/60 px-2.5 py-1.5 sm:px-3 sm:py-2">
                         <div className="flex items-center gap-1">
-                            <span className="inline-flex items-center gap-0.5 rounded border border-card-border bg-white px-1.5 py-0.5 text-[6px] font-medium text-text-secondary sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                            <span className="hidden items-center gap-0.5 rounded border border-card-border bg-white px-1.5 py-0.5 text-[6px] font-medium text-text-secondary sm:inline-flex sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                 All types
                                 <svg className="h-1.5 w-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                             </span>
                             <span className="inline-flex items-center gap-0.5 rounded border border-card-border bg-white px-1.5 py-0.5 text-[6px] font-medium text-text-secondary sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
-                                Sort: Risk
+                                Risk sorted
                             </span>
                         </div>
                         <span className="inline-flex items-center gap-0.5 rounded border border-card-border bg-white px-1.5 py-0.5 text-[6px] font-medium text-text-secondary sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             <svg className="h-1.5 w-1.5 sm:h-2 sm:w-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                            Export CSV
+                            <span className="hidden sm:inline">Export CSV</span>
+                            <span className="sm:hidden">CSV</span>
                         </span>
                     </div>
 
-                    <div className="flex-1 overflow-hidden px-2.5 py-2 sm:px-3">
+                    <div className="flex-1 overflow-hidden px-2 py-2 sm:px-3">
                         {BUCKETS.map((bucket) => (
-                            <div key={bucket.label} className="mb-2 last:mb-0">
+                            <div key={bucket.label} className="mb-1.5 last:mb-0 sm:mb-2">
                                 <div className="mb-1 flex items-center gap-1.5">
                                     <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: bucket.accent }} />
                                     <span className="text-[6px] font-bold uppercase tracking-wider sm:text-[8px]" style={{ color: bucket.accent, fontFamily: 'var(--font-dashboard)' }}>
@@ -238,14 +323,14 @@ export function AnimatedDocketing() {
                                     {bucket.rows.map((row) => (
                                         <div
                                             key={row.title + row.family}
-                                            className="flex items-center gap-1.5 rounded border border-card-border bg-white px-1.5 py-1.5 sm:gap-2 sm:px-2"
+                                            className="grid grid-cols-[8px_minmax(0,1fr)_auto] items-center gap-1.5 rounded border border-card-border bg-white px-1.5 py-1.5 sm:flex sm:gap-2 sm:px-2"
                                         >
                                             <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: RISK_DOT[row.risk] }} />
                                             <div className="min-w-0 flex-1">
-                                                <p className="truncate text-[7px] font-semibold text-text-primary sm:text-[9px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                                                <p className="truncate text-[8px] font-semibold text-text-primary sm:text-[9px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                                     {row.title}
                                                 </p>
-                                                <p className="truncate text-[6px] text-text-muted sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                                                <p className="truncate text-[7px] text-text-muted sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                                     {row.family}
                                                     <span className={row.assignee === 'Unassigned' ? 'text-danger' : ''}> · {row.assignee}</span>
                                                 </p>
@@ -255,7 +340,7 @@ export function AnimatedDocketing() {
                                                     {row.amount}
                                                 </span>
                                             )}
-                                            <span className="shrink-0 text-[6px] font-medium text-text-secondary sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                                            <span className="shrink-0 text-right text-[7px] font-medium text-text-secondary sm:text-[8px]" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                                 {row.due}
                                             </span>
                                             <span

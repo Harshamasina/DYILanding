@@ -247,6 +247,16 @@ const PATENT_SEARCH_FAQ: FaqItem[] = [
         answer:
             'Compound and trial data is drawn from established scientific sources: PubChem and SureChEMBL for compound chemistry, UniChem for cross-database identifiers, RDKit for structure depiction, and ClinicalTrials.gov for the trial landscape.',
     },
+    {
+        question: 'How do I run a prior art search before drafting an application?',
+        answer:
+            'Start with a free keyword, assignee, inventor, patent-number, or chemical-structure search to map the existing art, then save the relevant patents. Those saved references carry into the full Design Your Invention platform, where AI drafting generates claims positioned to be novel over exactly that prior art, against a frozen, auditable snapshot of what was reviewed.',
+    },
+    {
+        question: 'Can I search Indian patents and other international jurisdictions?',
+        answer:
+            'Yes. The corpus spans every jurisdiction, including Indian (IN) patents alongside US, EP, WO, CN, JP, KR, and the rest, sourced from the Google Patents public dataset via BigQuery. You can filter any query by jurisdiction, and a free anonymous search already covers titles and abstracts worldwide; signing in with a work email adds full-text claims and CSV export.',
+    },
 ];
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */

@@ -32,7 +32,7 @@ import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
-import { AnimatedDocketing } from '@/components/ui/AnimatedDocketing';
+import { AnimatedDocketingWorkflow } from '@/components/ui/AnimatedDocketingWorkflow';
 import { DocketingJsonLd } from '@/components/seo/DocketingJsonLd';
 import { PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
@@ -70,13 +70,13 @@ interface DeadlineType {
 }
 
 const DEADLINE_TYPES: DeadlineType[] = [
-    { type: 'Office Action Response', derivedFrom: 'NPE office actions (due date)', subTypes: 'None' },
-    { type: 'Annuity / Renewal Fee', derivedFrom: 'NPE annuity fees (due date + grace period)', subTypes: 'None' },
+    { type: 'Office Action Response', derivedFrom: 'NPE office actions (due date)', subTypes: 'Non-final, Final, Advisory' },
+    { type: 'Annuity / Renewal Fee', derivedFrom: 'NPE annuity fees (due date + grace period)', subTypes: 'On-time, In-grace window' },
     { type: 'PCT Deadlines', derivedFrom: 'PCT filings', subTypes: 'Chapter I (Rule 22), Chapter II (Rule 30/31)' },
     { type: 'PRV Deadlines', derivedFrom: 'Provisional applications', subTypes: 'Expiry, Conversion deadline' },
-    { type: 'Patent Fees', derivedFrom: 'Fees on any entity', subTypes: 'None' },
+    { type: 'Patent Fees', derivedFrom: 'Fees on any entity', subTypes: 'Across 8 fee categories' },
     { type: 'NPE Deadlines', derivedFrom: 'NPE cases', subTypes: 'Patent expiry, Request for Examination (RFE)' },
-    { type: 'Custom Reminders', derivedFrom: 'User-created reminders', subTypes: 'None' },
+    { type: 'Custom Reminders', derivedFrom: 'User-created reminders', subTypes: 'One-time or recurring' },
 ];
 
 const ENGINE_BEHAVIORS: IconItem[] = [
@@ -234,13 +234,33 @@ const PAGE_FAQ: FaqItem[] = [
         answer:
             'Every create, update, and delete on reminders, fees, and cases is logged with actor, before and after state, timestamp, IP, and request ID. Edits to sensitive fields require a typed reason, deletions always do, and tenant data is isolated with PostgreSQL Row-Level Security. Read versus write is enforced server-side per module.',
     },
+    {
+        question: 'How does it track renewal and annuity fee dates?',
+        answer:
+            'Annuity and renewal fees are tracked with amount, currency, due date, fee year, renewal year, and a grace-period end date. The engine derives each renewal deadline automatically from the case data, buckets it by urgency, and the daily digest surfaces it before it comes due, distinguishing "overdue but still payable in grace" from "truly lapsed."',
+    },
+    {
+        question: 'How does it reduce the risk of a missed deadline or human error?',
+        answer:
+            'Deadlines are computed on read from the case records rather than typed into a calendar, so they cannot be forgotten or entered wrong. Unassigned deadlines are penalized in the risk score, abandoned or paid items drop out automatically, and three automated digests push what is due to the responsible owner. The weekly stale-alert report catches cases that are silently going wrong without generating a hard deadline.',
+    },
+    {
+        question: 'How hard is it to migrate our existing docket from spreadsheets or another tool?',
+        answer:
+            'Most teams start with a bulk CSV import. You upload your existing portfolio and the system validates every row before anything touches the database, then creates families with their PRV, PCT, and NPE child records and key dates in a single atomic transaction with a full audit trail. Because deadlines are derived on read, every dependent deadline appears automatically the moment the dates are imported.',
+    },
+    {
+        question: 'Does it integrate with our existing tools, and is it cloud-based?',
+        answer:
+            'It is a cloud web application with nothing to install. Every list view (deadlines, fees, families, PRV, PCT, NPE, and audit logs) supports one-click CSV export, bulk CSV import handles onboarding, and a REST API is available for custom integrations with existing firm systems.',
+    },
 ];
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export default function DocketingPage() {
     return (
-        <main id="main-content">
+        <main id="main-content" className="min-w-0 overflow-x-hidden">
             {/* ── 1. Hero ── */}
             <section className="pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
                 <Container>
@@ -299,7 +319,7 @@ export default function DocketingPage() {
                 <Container className="mt-12 sm:mt-16">
                     <FadeIn>
                         <MockupHalo>
-                            <AnimatedDocketing />
+                            <AnimatedDocketingWorkflow />
                         </MockupHalo>
                     </FadeIn>
                 </Container>
@@ -392,18 +412,12 @@ export default function DocketingPage() {
                                                 {row.derivedFrom}
                                             </td>
                                             <td className="px-5 py-4">
-                                                {row.subTypes === 'None' ? (
-                                                    <span className="text-sm text-text-muted/60" style={{ fontFamily: 'var(--font-body)' }}>
-                                                        &mdash;
-                                                    </span>
-                                                ) : (
-                                                    <span
-                                                        className="inline-flex rounded-md bg-primary/[0.07] px-2 py-0.5 text-[12px] font-medium text-primary"
-                                                        style={{ fontFamily: 'var(--font-mono)' }}
-                                                    >
-                                                        {row.subTypes}
-                                                    </span>
-                                                )}
+                                                <span
+                                                    className="inline-flex rounded-md bg-primary/[0.07] px-2 py-0.5 text-[12px] font-medium text-primary"
+                                                    style={{ fontFamily: 'var(--font-mono)' }}
+                                                >
+                                                    {row.subTypes}
+                                                </span>
                                             </td>
                                         </tr>
                                     ))}

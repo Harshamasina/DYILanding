@@ -273,6 +273,21 @@ const PAGE_FAQ: FaqItem[] = [
         answer:
             'Yes. The append-only audit trail, electronic records, and access controls mirror 21 CFR Part 11 patterns for GxP readiness, and the India Section 3(d) enhanced-efficacy rule is enforced for pharma claims. The structured, versioned record is built to stand up in enterprise procurement and regulatory review.',
     },
+    {
+        question: 'Can I just use ChatGPT to write my patent application?',
+        answer:
+            'A general chatbot writes generic claims with no access to the prior art on record, no jurisdiction-specific statutory rules, no version history, and no audit trail. This assistant grounds every draft in the actual prior art saved to the family (including pasted claim text), applies US, EP, IN, and PCT rules and section structure, runs a second-model confidence review, and keeps an append-only audit trail with mandatory attorney review before filing. The attorney is the author; the AI is the assistant.',
+    },
+    {
+        question: 'Can the AI spot claim-support issues or weaknesses before filing?',
+        answer:
+            'Yes. Generation produces a novelty analysis that flags potential overlaps with the prior art on record, and a separate model (Claude Opus 4.7) reviews each claim, the abstract, the description, and the novelty analysis, assigning high, medium, or low confidence with a cited rationale. You see the weakest sections first. It assists the review; the attorney makes the call.',
+    },
+    {
+        question: 'Can it draft patent applications for India?',
+        answer:
+            'Yes. India (IN) is in the production jurisdiction set. Drafts apply Indian Patent Office rules, including the Section 3(d) enhanced-efficacy requirement that is decisive for pharma claims, plus the mandatory section structure, with US, EP, and PCT supported alongside it. A missing required section is flagged rather than silently omitted.',
+    },
 ];
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
