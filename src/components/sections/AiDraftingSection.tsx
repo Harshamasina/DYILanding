@@ -6,7 +6,9 @@ import {
     UserCheck,
     ClipboardList,
 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
+import { Button } from '@/components/ui/Button';
 import { AnimatedAiDraftGeneration } from '@/components/ui/AnimatedAiDraftGeneration';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
@@ -118,13 +120,22 @@ export function AiDraftingSection() {
 
                 {/* ── CTA ── */}
                 <FadeIn delay={0.15}>
-                    <div className="mt-10 flex justify-center">
-                        <BookDemoButton size="lg">
+                    <div className="mt-10 mx-auto flex w-full max-w-md flex-col justify-center gap-4 sm:max-w-none sm:flex-row">
+                        <BookDemoButton size="md" className="w-full justify-center sm:w-auto">
                             Book a Drafting Demo
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
                         </BookDemoButton>
+                        <Button
+                            href="/ai-patent-drafting/"
+                            variant="outline"
+                            size="md"
+                            className="group/cta w-full justify-center sm:w-auto"
+                        >
+                            View AI Drafting Features
+                            <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
+                        </Button>
                     </div>
                 </FadeIn>
             </Container>

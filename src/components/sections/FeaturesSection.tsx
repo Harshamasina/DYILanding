@@ -7,8 +7,10 @@ import {
     AlertCircle,
     CalendarDays,
     DollarSign,
+    ArrowRight,
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
+import { Button } from '@/components/ui/Button';
 import { AnimatedFamiliesTable } from '@/components/ui/AnimatedFamiliesTable';
 import { AnimatedCalendar } from '@/components/ui/AnimatedCalendar';
 import { MockupHalo } from '@/components/ui/MockupHalo';
@@ -28,6 +30,8 @@ interface FeatureRow {
     features: Feature[];
     mockup: MockupType;
     mockupSide: 'left' | 'right';
+    ctaLabel: string;
+    ctaHref: string;
 }
 
 const FEATURE_ROWS: FeatureRow[] = [
@@ -36,6 +40,8 @@ const FEATURE_ROWS: FeatureRow[] = [
         mockup: 'families',
         heading: 'See Every Patent Family, From Provisional to National Phase',
         headingAccent: '',
+        ctaLabel: 'View patent docketing features',
+        ctaHref: '/docketing/',
         features: [
             {
                 icon: FileText,
@@ -68,6 +74,8 @@ const FEATURE_ROWS: FeatureRow[] = [
         mockup: 'calendar',
         heading: 'Never Miss a Patent Deadline Again',
         headingAccent: '',
+        ctaLabel: 'View deadline and fee tracking',
+        ctaHref: '/docketing/',
         features: [
             {
                 icon: Briefcase,
@@ -143,6 +151,19 @@ function FeatureRowBlock({ row, index }: { row: FeatureRow; index: number }) {
                     </FadeIn>
                 ))}
             </div>
+            <FadeIn delay={index * 0.15 + row.features.length * 0.08}>
+                <div className="mt-6 pl-5">
+                    <Button
+                        href={row.ctaHref}
+                        variant="outline"
+                        size="sm"
+                        className="group/cta"
+                    >
+                        {row.ctaLabel}
+                        <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
+                    </Button>
+                </div>
+            </FadeIn>
         </div>
     );
 
