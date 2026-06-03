@@ -1,5 +1,4 @@
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, BRAND } from '@/lib/constants';
-import { FAQ_ITEMS } from '@/lib/faq-data';
 
 type OrganizationSchema = {
     '@context': 'https://schema.org';
@@ -88,16 +87,12 @@ const softwareSchema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: SITE_NAME,
+    alternateName: 'DYI',
     applicationCategory: 'BusinessApplication',
+    applicationSubCategory: 'Intellectual Property Management Software',
     operatingSystem: 'Web',
     description:
         'Multi-tenant IP management software for patent docketing, PCT/PRV/NPE case management, and FDA 21 CFR Part 11 compliance.',
-    offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-        description: 'Contact us for pricing tailored to your team size and needs.',
-    },
     featureList: [
         'Patent Docketing',
         'Application Family Management',
@@ -123,56 +118,14 @@ const softwareSchema = {
     ],
 };
 
-const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-        {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: SITE_URL,
-        },
-        {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'Features',
-            item: `${SITE_URL}/#features`,
-        },
-        {
-            '@type': 'ListItem',
-            position: 3,
-            name: 'Compliance',
-            item: `${SITE_URL}/#compliance`,
-        },
-        {
-            '@type': 'ListItem',
-            position: 4,
-            name: 'Pricing',
-            item: `${SITE_URL}/#pricing`,
-        },
-        {
-            '@type': 'ListItem',
-            position: 5,
-            name: 'FAQ',
-            item: `${SITE_URL}/#faq`,
-        },
-    ],
-};
-
-const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: FAQ_ITEMS.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: {
-            '@type': 'Answer',
-            text: item.answer,
-        },
-    })),
-};
-
+/**
+ * Site-wide entity graph rendered on every page via the root layout.
+ *
+ * Only sitewide schemas live here (Organization, WebSite, SoftwareApplication).
+ * Page-specific schemas (homepage breadcrumb + FAQPage, per-feature pages,
+ * etc.) are emitted by their own page-level components so structured data
+ * always matches the content actually visible on that URL. See HomeJsonLd.
+ */
 export function JsonLd() {
     return (
         <>
@@ -192,18 +145,6 @@ export function JsonLd() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: JSON.stringify(websiteSchema),
-                }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(breadcrumbSchema),
-                }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(faqSchema),
                 }}
             />
         </>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { BookOpen } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
-import { BlogCard } from '@/components/blog/BlogCard';
+import { BlogPostsPaginated } from '@/components/blog/BlogPostsPaginated';
 import { BlogListJsonLd } from '@/components/blog/BlogJsonLd';
 import { HexCubeIllustration } from '@/components/illustrations/HexCubeIllustration';
 import { getAllPosts } from '@/content/blog';
@@ -33,7 +33,9 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-    const posts = getAllPosts();
+    // Strip the `content` component: function-valued fields cannot be passed
+    // to the BlogPostsPaginated Client Component. Cards only need the metadata.
+    const posts = getAllPosts().map(({ content: _content, ...meta }) => meta);
 
     return (
         <main id="main-content">
@@ -86,11 +88,7 @@ export default function BlogPage() {
             <section className="pb-24 lg:pb-32">
                 <Container>
                     <div className="max-w-4xl mx-auto">
-                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                            {posts.map((post) => (
-                                <BlogCard key={post.slug} post={post} />
-                            ))}
-                        </div>
+                        <BlogPostsPaginated posts={posts} />
                     </div>
                 </Container>
             </section>

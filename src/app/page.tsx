@@ -9,10 +9,12 @@ import { SecuritySection } from '@/components/sections/SecuritySection';
 import { PricingSection } from '@/components/sections/PricingSection';
 import { FaqSection } from '@/components/sections/FaqSection';
 import { CtaSection } from '@/components/sections/CtaSection';
+import { HomeJsonLd } from '@/components/seo/HomeJsonLd';
 
 export default function HomePage() {
     return (
         <main id="main-content">
+            <HomeJsonLd />
             <HeroSection />
             <StatsSection stats={HERO_STATS} variant="cards" />
             <FeaturesSection />

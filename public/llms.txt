@@ -1,0 +1,26 @@
+# Design Your Invention (DYI)
+
+> Design Your Invention is an intellectual property management software (IPMS)
+> platform for pharma companies and IP boutique law firms. It combines
+> multi-jurisdiction patent docketing, prior art search across 100+ jurisdictions
+> (EPO), and AI-assisted patent drafting for 6 jurisdictions (US, EP, IN, WO, JP, CN),
+> on a compliance-ready architecture that mirrors FDA 21 CFR Part 11 standards.
+
+## Core pages
+- [What is DYI](https://designyourinvention.com/): Overview, category, and who it is for.
+- [Patent Docketing](https://designyourinvention.com/docketing/): Multi-jurisdiction docketing, PCT/PRV/NPE case management, fees, and deadlines.
+- [Patent Search](https://designyourinvention.com/patent-search/): Prior art search across 100+ jurisdictions via EPO.
+- [AI Patent Drafting](https://designyourinvention.com/ai-patent-drafting/): AI-assisted first drafts for attorney review across 6 jurisdictions.
+- [DYI vs legacy IPMS](https://designyourinvention.com/compare/): Positioning against incumbent IP management platforms.
+- [FAQ](https://designyourinvention.com/faq/): Common questions about the platform, jurisdictions, and compliance.
+
+## About
+- For: pharma companies and IP boutique law firms.
+- Filing coverage: US and PCT first, then EU, JP, CN; India as a primary customer geography.
+- Compliance: compliance-ready architecture mirroring 21 CFR Part 11 standards (not certified).
+- Architecture: multi-tenant with per-tenant data isolation.
+
+## Notes for citation
+- AI-generated patent drafts are a starting point for attorney review, not filing-ready output.
+- Pricing is not public yet; contact the company for current pricing.
+- No customer logos, testimonials, or third-party certifications are claimed at this time.

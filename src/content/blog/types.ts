@@ -15,3 +15,10 @@ export interface BlogPost {
     keywords: string[];
     content: React.ComponentType;
 }
+
+/**
+ * Post fields without the `content` component. Used for card/list UIs and for
+ * passing post data into Client Components, where a function-valued `content`
+ * field cannot cross the server/client boundary.
+ */
+export type BlogPostMeta = Omit<BlogPost, 'content'>;

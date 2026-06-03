@@ -236,9 +236,12 @@ export function FeaturesSection() {
                             className="mt-4 text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
-                            Everything patent attorneys, IP managers, and pharma
-                            teams need to manage their intellectual property
-                            portfolio, from filing to grant.
+                            Design Your Invention covers the full patent lifecycle:
+                            docketing, application family management, PCT/PRV/NPE case
+                            management, fee and deadline tracking, prior art search, and
+                            AI-assisted drafting. Patent attorneys, IP managers, and
+                            pharma teams run their entire patent portfolio in one place,
+                            from filing to grant.
                         </p>
                     </div>
                 </FadeIn>

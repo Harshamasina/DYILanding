@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { CalendarDays, Clock } from 'lucide-react';
-import type { BlogPost } from '@/content/blog/types';
+import type { BlogPostMeta } from '@/content/blog/types';
 
-export function BlogCard({ post }: { post: BlogPost }) {
+export function BlogCard({ post }: { post: BlogPostMeta }) {
     return (
-        <article className="group rounded-xl border border-card-border bg-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <Link href={`/blog/${post.slug}/`} className="block p-6">
+        <article className="group flex h-full flex-col rounded-xl border border-card-border bg-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <Link href={`/blog/${post.slug}/`} className="flex flex-1 flex-col p-6">
                 <span
-                    className="inline-block text-[10px] font-bold uppercase tracking-widest text-primary mb-3 px-2 py-1 rounded bg-primary/5"
+                    className="self-start inline-block text-[10px] font-bold uppercase tracking-widest text-primary mb-3 px-2 py-1 rounded bg-primary/5"
                     style={{ fontFamily: 'var(--font-mono)' }}
                 >
                     {post.category}
@@ -28,7 +28,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
                 </p>
 
                 <div
-                    className="flex items-center gap-4 text-xs text-text-muted"
+                    className="mt-auto flex items-center gap-4 text-xs text-text-muted"
                     style={{ fontFamily: 'var(--font-mono)' }}
                 >
                     <span className="flex items-center gap-1.5">

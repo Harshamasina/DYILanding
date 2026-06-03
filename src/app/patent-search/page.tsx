@@ -36,6 +36,7 @@ import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedPatentSearch } from '@/components/ui/AnimatedPatentSearch';
+import { PatentSearchHeroSvg } from '@/components/illustrations/PatentSearchHeroSvg';
 import { PatentSearchJsonLd } from '@/components/seo/PatentSearchJsonLd';
 import { SEARCH_APP_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
@@ -264,7 +265,7 @@ const PATENT_SEARCH_FAQ: FaqItem[] = [
 
 export default function PatentSearchPage() {
     return (
-        <main id="main-content">
+        <main id="main-content" className="min-w-0 overflow-x-hidden">
             {/* ── 1. Hero ── */}
             <section className="relative overflow-hidden bg-page-bg-alt pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
                 <HeroAmbience edge="bottom" />
@@ -284,37 +285,43 @@ export default function PatentSearchPage() {
                         </ol>
                     </nav>
 
-                    <div className="max-w-3xl">
-                        <span
-                            className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
-                            Patent Search
-                        </span>
-                        <h1
-                            className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
-                            style={{ fontFamily: 'var(--font-display)' }}
-                        >
-                            Search 120M+ Patents, From Keyword to{' '}
-                            <span className="text-primary italic">Chemical Structure</span>
-                        </h1>
-                        <p
-                            className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
-                            style={{ fontFamily: 'var(--font-body)' }}
-                        >
-                            Search global patents, chemical structures, clinical-trial data, and
-                            ownership records from one intelligent workspace, built for invention
-                            teams, IP analysts, and R&D professionals.
-                        </p>
+                    <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(430px,1.05fr)] lg:gap-8 xl:gap-12">
+                        <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
+                            <span
+                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
+                                style={{ fontFamily: 'var(--font-mono)' }}
+                            >
+                                Patent Search
+                            </span>
+                            <h1
+                                className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+                                style={{ fontFamily: 'var(--font-display)' }}
+                            >
+                                Search 120M+ Patents, From Keyword to{' '}
+                                <span className="text-primary italic">Chemical Structure</span>
+                            </h1>
+                            <p
+                                className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
+                                style={{ fontFamily: 'var(--font-body)' }}
+                            >
+                                Search global patents, chemical structures, clinical-trial data, and
+                                ownership records from one intelligent workspace, built for invention
+                                teams, IP analysts, and R&D professionals.
+                            </p>
 
-                        <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                            <Button href={SEARCH_APP_URL} newTab size="lg" className="justify-center">
-                                Search Free
-                                <ArrowRight className="h-5 w-5" />
-                            </Button>
-                            <BookDemoButton variant="secondary" size="lg" className="justify-center">
-                                Book a Demo
-                            </BookDemoButton>
+                            <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+                                <Button href={SEARCH_APP_URL} newTab size="lg" className="justify-center">
+                                    Search Free
+                                    <ArrowRight className="h-5 w-5" />
+                                </Button>
+                                <BookDemoButton variant="secondary" size="lg" className="justify-center">
+                                    Book a Demo
+                                </BookDemoButton>
+                            </div>
+                        </div>
+
+                        <div className="pointer-events-none hidden lg:flex lg:w-full lg:justify-end">
+                            <PatentSearchHeroSvg />
                         </div>
                     </div>
                 </Container>

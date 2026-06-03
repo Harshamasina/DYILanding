@@ -10,6 +10,8 @@ import { post as patentDataMigration } from './patent-data-migration-csv-import'
 import { post as npeCaseManagement } from './npe-case-management-guide';
 import { post as freePriorArtSearch } from './free-prior-art-search-guide';
 import { post as chatgptForPatents } from './can-i-use-chatgpt-to-write-a-patent';
+import { post as section3dIndianPharma } from './section-3d-patentability-indian-pharma';
+import { post as form27WorkingStatement } from './form-27-working-statement-compliance';
 
 const allPosts: BlogPost[] = [
     whatIsIpManagement,
@@ -22,6 +24,8 @@ const allPosts: BlogPost[] = [
     npeCaseManagement,
     freePriorArtSearch,
     chatgptForPatents,
+    section3dIndianPharma,
+    form27WorkingStatement,
 ];
 
 /** All posts sorted by publishedAt descending (newest first) */

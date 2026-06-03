@@ -36,6 +36,7 @@ import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedClaimsWorkflow } from '@/components/ui/AnimatedClaimsWorkflow';
+import { AiDraftingHeroSvg } from '@/components/illustrations/AiDraftingHeroSvg';
 import { AiDraftingJsonLd } from '@/components/seo/AiDraftingJsonLd';
 import { PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
@@ -298,10 +299,10 @@ export default function AiPatentDraftingPage() {
     return (
         <main id="main-content" className="min-w-0 overflow-x-hidden">
             {/* ── 1. Hero ── */}
-            <section className="relative overflow-hidden bg-page-bg-alt pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
+            <section className="relative overflow-hidden bg-page-bg-alt pt-28 pb-14 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24">
                 <HeroAmbience edge="bottom" />
                 <Container className="relative z-10">
-                    <nav aria-label="Breadcrumb" className="mb-8">
+                    <nav aria-label="Breadcrumb" className="mb-8 lg:mb-10">
                         <ol
                             className="flex items-center gap-2 text-sm text-text-muted"
                             style={{ fontFamily: 'var(--font-body)' }}
@@ -316,39 +317,45 @@ export default function AiPatentDraftingPage() {
                         </ol>
                     </nav>
 
-                    <div className="max-w-3xl">
-                        <span
-                            className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
-                            AI Patent Drafting
-                        </span>
-                        <h1
-                            className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
-                            style={{ fontFamily: 'var(--font-display)' }}
-                        >
-                            AI Patent Drafting With{' '}
-                            <span className="text-primary italic">Attorney Review Built In</span>
-                        </h1>
-                        <p
-                            className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
-                            style={{ fontFamily: 'var(--font-body)' }}
-                        >
-                            An attorney-in-the-loop drafting assistant that turns invention details and
-                            saved prior art into a filing-ready first draft, claims, abstract,
-                            description, and novelty analysis, tailored to the target jurisdiction. AI
-                            drafts are dramatically better when they know the art on record.
-                        </p>
+                    <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:gap-8 xl:gap-12">
+                        <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
+                            <span
+                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
+                                style={{ fontFamily: 'var(--font-mono)' }}
+                            >
+                                AI Patent Drafting
+                            </span>
+                            <h1
+                                className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+                                style={{ fontFamily: 'var(--font-display)' }}
+                            >
+                                AI Patent Drafting With{' '}
+                                <span className="text-primary italic">Attorney Review Built In</span>
+                            </h1>
+                            <p
+                                className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
+                                style={{ fontFamily: 'var(--font-body)' }}
+                            >
+                                An attorney-in-the-loop drafting assistant that turns invention details and
+                                saved prior art into a filing-ready first draft, claims, abstract,
+                                description, and novelty analysis, tailored to the target jurisdiction. AI
+                                drafts are dramatically better when they know the art on record.
+                            </p>
 
-                        <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                            <BookDemoButton size="lg" className="justify-center">
-                                Book a Demo
-                                <ArrowRight className="h-5 w-5" />
-                            </BookDemoButton>
-                            <WatchDemoButton variant="secondary" size="lg" className="justify-center">
-                                <Play className="h-5 w-5 fill-current" />
-                                Watch Demo
-                            </WatchDemoButton>
+                            <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+                                <BookDemoButton size="lg" className="justify-center">
+                                    Book a Demo
+                                    <ArrowRight className="h-5 w-5" />
+                                </BookDemoButton>
+                                <WatchDemoButton variant="secondary" size="lg" className="justify-center">
+                                    <Play className="h-5 w-5 fill-current" />
+                                    Watch Demo
+                                </WatchDemoButton>
+                            </div>
+                        </div>
+
+                        <div className="pointer-events-none hidden lg:flex lg:w-full lg:justify-end">
+                            <AiDraftingHeroSvg />
                         </div>
                     </div>
                 </Container>

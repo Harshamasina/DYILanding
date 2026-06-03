@@ -1,7 +1,9 @@
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
-import { FAQ_ITEMS } from '@/lib/faq-data';
+import { HOME_FAQ_ITEMS } from '@/lib/faq-data';
 
 export function FaqSection() {
     return (
@@ -43,7 +45,21 @@ export function FaqSection() {
 
                 {/* Accordion in card */}
                 <FadeIn treeNode="tree-faq" delay={0.1}>
-                    <FaqAccordion items={FAQ_ITEMS} />
+                    <FaqAccordion items={HOME_FAQ_ITEMS} />
+                </FadeIn>
+
+                {/* Link to the full FAQ page (the homepage shows a curated subset) */}
+                <FadeIn treeNode="tree-faq" delay={0.15}>
+                    <div className="mt-8 flex justify-center">
+                        <Link
+                            href="/faq/"
+                            className="group inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
+                            style={{ fontFamily: 'var(--font-body)' }}
+                        >
+                            View all frequently asked questions
+                            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                        </Link>
+                    </div>
                 </FadeIn>
             </Container>
         </section>

@@ -52,12 +52,14 @@ const STATIC_FOOTER_LINKS = {
         { label: 'Patent Search', href: '/patent-search/' },
         { label: 'AI Patent Drafting', href: '/ai-patent-drafting/' },
         { label: 'Patent Docketing', href: '/docketing/' },
+        { label: 'Compare vs Legacy IPMS', href: '/compare/' },
         { label: 'Compliance', href: '/#compliance' },
         { label: 'Pricing', href: '/#pricing' },
     ],
     Company: [
         { label: 'Contact', href: '/#contact' },
         { label: 'Careers', href: '/careers/' },
+        { label: 'FAQ', href: '/faq/' },
         { label: 'Support', href: '/support/' },
     ],
     Legal: [

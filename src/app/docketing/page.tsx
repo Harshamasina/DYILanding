@@ -34,6 +34,7 @@ import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedDocketingWorkflow } from '@/components/ui/AnimatedDocketingWorkflow';
+import { DocketingHeroSvg } from '@/components/illustrations/DocketingHeroSvg';
 import { DocketingJsonLd } from '@/components/seo/DocketingJsonLd';
 import { PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
@@ -268,10 +269,10 @@ export default function DocketingPage() {
     return (
         <main id="main-content" className="min-w-0 overflow-x-hidden">
             {/* ── 1. Hero ── */}
-            <section className="relative overflow-hidden bg-page-bg-alt pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-20">
+            <section className="relative overflow-hidden bg-page-bg-alt pt-28 pb-14 sm:pt-32 sm:pb-16 lg:pt-40 lg:pb-24">
                 <HeroAmbience edge="bottom" />
                 <Container className="relative z-10">
-                    <nav aria-label="Breadcrumb" className="mb-8">
+                    <nav aria-label="Breadcrumb" className="mb-8 lg:mb-10">
                         <ol
                             className="flex items-center gap-2 text-sm text-text-muted"
                             style={{ fontFamily: 'var(--font-body)' }}
@@ -286,39 +287,45 @@ export default function DocketingPage() {
                         </ol>
                     </nav>
 
-                    <div className="max-w-3xl">
-                        <span
-                            className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
-                            Patent Docketing and Deadline Management
-                        </span>
-                        <h1
-                            className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
-                            style={{ fontFamily: 'var(--font-display)' }}
-                        >
-                            Patent Docketing That{' '}
-                            <span className="text-primary italic">Never Misses a Deadline</span>
-                        </h1>
-                        <p
-                            className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
-                            style={{ fontFamily: 'var(--font-body)' }}
-                        >
-                            One missed annuity payment or office-action response can cost a client an
-                            entire patent. Docketing is built as an audit-first, never-miss-a-date engine
-                            that derives every statutory and procedural deadline from your case data,
-                            scores each one by risk, and pushes it to the right person before it comes due.
-                        </p>
+                    <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:gap-8 xl:gap-12">
+                        <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
+                            <span
+                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
+                                style={{ fontFamily: 'var(--font-mono)' }}
+                            >
+                                Patent Docketing and Deadline Management
+                            </span>
+                            <h1
+                                className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+                                style={{ fontFamily: 'var(--font-display)' }}
+                            >
+                                Patent Docketing That{' '}
+                                <span className="text-primary italic">Never Misses a Deadline</span>
+                            </h1>
+                            <p
+                                className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
+                                style={{ fontFamily: 'var(--font-body)' }}
+                            >
+                                One missed annuity payment or office-action response can cost a client an
+                                entire patent. Docketing is built as an audit-first, never-miss-a-date engine
+                                that derives every statutory and procedural deadline from your case data,
+                                scores each one by risk, and pushes it to the right person before it comes due.
+                            </p>
 
-                        <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                            <BookDemoButton size="lg" className="justify-center">
-                                Book a Demo
-                                <ArrowRight className="h-5 w-5" />
-                            </BookDemoButton>
-                            <WatchDemoButton variant="secondary" size="lg" className="justify-center">
-                                <Play className="h-5 w-5 fill-current" />
-                                Watch Demo
-                            </WatchDemoButton>
+                            <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+                                <BookDemoButton size="lg" className="justify-center">
+                                    Book a Demo
+                                    <ArrowRight className="h-5 w-5" />
+                                </BookDemoButton>
+                                <WatchDemoButton variant="secondary" size="lg" className="justify-center">
+                                    <Play className="h-5 w-5 fill-current" />
+                                    Watch Demo
+                                </WatchDemoButton>
+                            </div>
+                        </div>
+
+                        <div className="pointer-events-none hidden lg:flex lg:w-full lg:justify-end">
+                            <DocketingHeroSvg />
                         </div>
                     </div>
                 </Container>
