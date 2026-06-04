@@ -2,7 +2,7 @@
 
 > **Status:** Active reference · **Owner:** Mani · **Last updated:** June 2026
 > **Scope:** Marketing site (designyourinvention.com). Not the authenticated app.
-> **Stack assumptions:** Next.js 16 static export (`output: 'export'`), React 19, Tailwind v4, next-sitemap. Hosted on Vercel or Cloudflare Pages.
+> **Stack assumptions:** Next.js 16 static export (`output: 'export'`), React 19, Tailwind v4, next-sitemap. Served by AWS CloudFront with an S3 origin (no WAF WebACL attached).
 
 ---
 
@@ -56,13 +56,17 @@ robotsTxtOptions: {
 
 > **No `Disallow: /app/` or `/api/` here.** The authenticated app lives on `app.designyourinvention.com` and the API on a separate origin (see CLAUDE.md "Relationship to Dashboard App"). This static marketing site has no `/app/` or `/api/` routes to exclude. `next-sitemap` appends the `Sitemap:` line automatically.
 
-### 1.3 Check the CDN/host isn't silently blocking bots (Vercel or Cloudflare Pages)
+### 1.3 Host is not blocking bots (AWS CloudFront) - VERIFIED June 2026
 
-The common 2026 gotcha is a CDN blocking AI bot user-agents by default. This app deploys to **Vercel or Cloudflare Pages**, not AWS, so the check is host-specific:
+The host is **AWS CloudFront with an S3 origin**, not Vercel or Cloudflare (an earlier draft of this doc assumed Vercel/Cloudflare from CLAUDE.md; the live deployment is CloudFront/AWS). The common 2026 gotcha is a CDN/WAF blocking AI bot user-agents by default. Checked and clear:
 
-- **Cloudflare Pages:** confirm **Bot Fight Mode** / Super Bot Fight Mode is not challenging `GPTBot`, `ClaudeBot`, `PerplexityBot`, `OAI-SearchBot`, `Google-Extended`. If on, add a WAF skip rule (or "Verified Bots" allowance) for legitimate AI crawler UAs.
-- **Vercel:** confirm the project **Firewall** / Attack Challenge Mode and any bot-management rule isn't blocking those UAs.
-- Confirm bots actually reach the site by checking the host's request logs (Cloudflare Analytics/Logs or Vercel logs) for those user-agent strings. There are no S3/CloudFront access logs to grep on this stack.
+- **No WAF WebACL is attached** to the distribution, so no managed rules can block or rate-limit bot user-agents.
+- **robots.txt explicitly allows** GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, anthropic-ai, PerplexityBot, Google-Extended, and Applebot-Extended, plus `User-agent: * Allow: /`.
+- **A live user-agent probe returned HTTP 200 for every bot tested**, none blocked: GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-User, PerplexityBot, Google-Extended, Applebot-Extended, Bytespider, meta-externalagent, CCBot.
+
+Result: this check is green. Re-run after any CloudFront behavior or WAF change.
+
+> **Minor note (not a blocker):** some UAs (notably Applebot-Extended, Bytespider) received a smaller compressed payload (about 8.2 KB vs the 16.9 KB baseline). This is almost certainly CloudFront content-compression keying on the UA shape (browser-shaped UAs get gzip/br, raw bot tokens get identity encoding), not truncation, since every response was a clean 200 with the full HTML. To pin it down, fetch the payload with a specific UA and diff it against the baseline.
 
 ### 1.4 Sitemap + fundamentals
 
@@ -216,7 +220,7 @@ An AI scraper indexing a false claim is a liability, and a real buyer who verifi
 
 **Now (cheap, owned, compounds):**
 1. Verify static-export HTML passes the source-view test (§1.1); no SPA fix needed on this app.
-2. robots.txt AI-crawler allowlist via next-sitemap + sitemap; confirm Vercel/Cloudflare isn't blocking bots (§1.2 to 1.4).
+2. robots.txt AI-crawler allowlist via next-sitemap + sitemap; CloudFront/WAF confirmed not blocking bots (§1.2 to 1.4, verified June 2026).
 3. Homepage keyword anchors + concrete copy; JSON-LD; FAQ + comparison pages (§2).
 4. llms.txt (§2.4).
 5. Make the public search tool crawlable; start 1–2 vertical articles (§3).
@@ -231,7 +235,7 @@ An AI scraper indexing a false claim is a liability, and a real buyer who verifi
 ## 7. Measurement (verify it actually worked)
 
 - **Source-view test:** raw HTML of each marketing page shows real content (§1.1 acceptance test).
-- **Bot-reach test:** AI crawler user-agents appear in the host's request logs (Vercel logs or Cloudflare Analytics/Logs).
+- **Bot-reach test:** AI crawler user-agents appear in the CloudFront/S3 access logs. (June 2026: a live UA probe already confirmed every AI bot gets HTTP 200, see 1.3.)
 - **Citation test:** ask ChatGPT / Claude / Perplexity "tell me about Design Your Invention" and "IPMS alternatives for pharma" — check whether you're named, and whether the description is accurate. Re-run monthly.
 - **Search Console:** index coverage and impressions for the target IPMS queries.
 - **Reality check:** expect small absolute numbers. Success here is *accurate representation and presence*, not traffic volume — the traffic lever is the LOI-driven sales motion, not this.

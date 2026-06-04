@@ -27,7 +27,7 @@ export const BRAND = {
     /** Add public profile URLs as you create them. Each entry must be a
      * fully-qualified, working URL — Google penalizes broken sameAs. */
     socialUrls: [
-        // 'https://www.linkedin.com/company/design-your-invention/',
+        'https://www.linkedin.com/company/design-your-invention/',
         // 'https://twitter.com/<handle>',
         // 'https://github.com/<org>',
         // 'https://www.crunchbase.com/organization/design-your-invention',

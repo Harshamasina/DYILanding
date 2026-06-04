@@ -20,12 +20,6 @@ const softwareApplicationSchema = {
     url: PAGE_URL,
     description:
         'Audit-first patent docketing and deadline management. A unified engine derives every statutory and procedural deadline from your case data, scores each one by risk, and pushes proactive email digests so nothing is missed.',
-    offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-        description: 'Contact us for pricing tailored to your team size and portfolio.',
-    },
     featureList: [
         'Unified deadline engine deriving seven deadline types across the case hierarchy',
         'Risk scoring with green / amber / red traffic lights and portfolio roll-up',

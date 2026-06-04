@@ -69,7 +69,7 @@ const STATIC_FOOTER_LINKS = {
 } as const;
 
 const SOCIAL_LINKS = [
-    { label: 'LinkedIn', href: '#', icon: LinkedInIcon },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/company/design-your-invention/', icon: LinkedInIcon },
     { label: 'X', href: '#', icon: XSocialIcon },
     { label: 'YouTube', href: '#', icon: YouTubeIcon },
 ] as const;

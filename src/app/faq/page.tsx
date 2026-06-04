@@ -80,7 +80,7 @@ export default function FaqPage() {
             </section>
 
             {/* ── 3. Final CTA ── */}
-            <section className="bg-page-bg-alt py-16 sm:py-20 lg:py-24">
+            <section className="py-16 sm:py-20 lg:py-24">
                 <Container>
                     <div className="mx-auto max-w-2xl text-center">
                         <h2

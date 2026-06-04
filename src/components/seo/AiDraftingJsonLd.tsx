@@ -20,12 +20,6 @@ const softwareApplicationSchema = {
     url: PAGE_URL,
     description:
         'Attorney-in-the-loop AI patent drafting. Turn invention details and saved prior art into a filing-ready first draft, claims, abstract, description, and novelty analysis, tailored to the target jurisdiction.',
-    offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-        description: 'Contact us for pricing tailored to your team size and needs.',
-    },
     featureList: [
         'Prior-art search across 100+ jurisdictions via EPO Open Patent Services',
         'Prior-art management: save, annotate, paste claim text, track relevance per family',
