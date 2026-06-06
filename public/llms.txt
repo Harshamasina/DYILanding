@@ -1,3 +1,5 @@
+# https://designyourinvention.com/ llms.txt
+
 # Design Your Invention (DYI)
 
 > Design Your Invention is an intellectual property management software (IPMS)
@@ -24,3 +26,26 @@
 - AI-generated patent drafts are a starting point for attorney review, not filing-ready output.
 - Pricing is not public yet; contact the company for current pricing.
 - No customer logos, testimonials, or third-party certifications are claimed at this time.
+
+- [Patent Management Solutions](https://designyourinvention.com/): Streamline patent operations with comprehensive management solutions.
+- [FDA Compliance Guide](https://designyourinvention.com/blog/fda-21-cfr-part-11-compliance-guide): Guide to FDA 21 CFR Part 11 compliance for patents.
+- [AI in Patent Drafting](https://designyourinvention.com/blog/ai-patent-drafting-guide): Explore AI's transformative role in patent drafting processes.
+- [Patent Drafting Resources](https://designyourinvention.com/sitemap.xml): Comprehensive resources for patent drafting and management.
+- [Using AI for Patents](https://designyourinvention.com/blog/can-i-use-chatgpt-to-write-a-patent): Learn how to effectively use AI to draft patents.
+- [Form 27 Compliance Guide](https://designyourinvention.com/blog/form-27-working-statement-compliance): Essential guide to Form 27 compliance for Indian patents.
+- [Prior Art Search Guide](https://designyourinvention.com/blog/free-prior-art-search-guide): Free guide for conducting effective prior art searches online.
+- [Patent Data Migration Guide](https://designyourinvention.com/blog/patent-data-migration-csv-import): Guide for migrating patent data using a structured CSV process.
+- [NPE Case Management Guide](https://designyourinvention.com/blog/npe-case-management-guide): Guide for managing non-provisional patent application cases effectively.
+- [Patent Docketing Best Practices](https://designyourinvention.com/blog/patent-docketing-best-practices): Essential strategies for effective patent docketing management and practices.
+- [Patent Analytics Insights](https://designyourinvention.com/blog/patent-portfolio-analytics-roi): Utilizing patent analytics to maximize business value efficiently.
+- [PCT Filing Management Tips](https://designyourinvention.com/blog/pct-filing-management-tips): Essential tips for managing PCT filing deadlines effectively.
+- [Indian Pharma Patent Insights](https://designyourinvention.com/blog/section-3d-patentability-indian-pharma): Guidance on navigating Section 3(d) patentability in India.
+- [IP Management Software](https://designyourinvention.com/blog/what-is-ip-management-software): Essential software for managing intellectual property portfolios efficiently.
+- [IP Management Insights](https://designyourinvention.com/blog): Insights on patent management, compliance, and industry best practices.
+- [Founding Engineer Role](https://designyourinvention.com/careers/founding-engineer): Join as a founding engineer for innovative patent solutions.
+- [Careers at Design Your Invention](https://designyourinvention.com/careers): Join a pioneering team in patent management innovation.
+- [IP Management Comparison](https://designyourinvention.com/compare): Compare unified IP management platform features and benefits.
+- [IP Management FAQs](https://designyourinvention.com/faq): Explore essential FAQs about intellectual property management software.
+- [Privacy Policy](https://designyourinvention.com/privacy): Comprehensive guide on data privacy and security practices.
+- [IP Management Support](https://designyourinvention.com/support): Get support and resources for your IP management needs.
+- [Service Terms Overview](https://designyourinvention.com/terms): Terms and conditions for using Design Your Invention service.
