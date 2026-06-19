@@ -21,12 +21,16 @@ export const ibmPlexMono = IBM_Plex_Mono({
     weight: ['400', '500', '600'],
 });
 
-/* Dashboard fonts — used only in animated UI mockups to match the real product */
+/* Dashboard fonts — used only in the below-the-fold animated UI mockups that
+   mirror the real product. preload: false keeps them out of the initial font
+   preload set so they never compete with the hero's LCP fonts; they load on
+   demand (display: swap) when their mockups paint. */
 export const dmSans = DM_Sans({
     subsets: ['latin'],
     display: 'swap',
     variable: '--font-dashboard',
     weight: ['400', '500', '600', '700'],
+    preload: false,
 });
 
 export const jetbrainsMono = JetBrains_Mono({
@@ -34,4 +38,5 @@ export const jetbrainsMono = JetBrains_Mono({
     display: 'swap',
     variable: '--font-dashboard-mono',
     weight: ['400', '500', '600'],
+    preload: false,
 });

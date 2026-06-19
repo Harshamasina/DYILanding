@@ -527,14 +527,18 @@ function TreeCard({
                 ))}
             </div>
 
-            {/* Dynamic annotation overlay (xl+ only) */}
+            {/* Dynamic annotation overlay (xl+ only). The left/middle bottom-row
+                NPE cards (EP, US) drop their callout below so it never bleeds
+                sideways into the hero copy / CTA column; the right-edge JP card
+                keeps a side callout (extends toward the page edge, away from the
+                copy). All upper cards keep their side placement. */}
             {side && (
                 <AnimatePresence>
                     {active && (
                         <AnnotationOverlay
                             key={active.id}
                             annotation={active.annotation}
-                            side={side}
+                            placement={isGrandchild ? (cardId === 'npe-jp' ? 'right' : 'below') : side}
                         />
                     )}
                 </AnimatePresence>
@@ -599,15 +603,32 @@ const cardVariants: Variants = {
     exit: (custom: number) => ({ opacity: 0, x: custom, transition: { duration: 0.3, ease: EASE } }),
 };
 
+/* Vertical connector + drop-in card, used when the callout sits below its
+   card instead of to the side (bottom-row NPE cards, so they never bleed
+   sideways into the hero copy / CTA column). */
+const lineVariantsV: Variants = {
+    initial: { scaleY: 0 },
+    animate: { scaleY: 1, transition: { duration: 0.4, ease: EASE } },
+    exit: { scaleY: 0, transition: { duration: 0.3, ease: EASE } },
+};
+
+const cardVariantsBelow: Variants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
+    exit: { opacity: 0, y: 10, transition: { duration: 0.3, ease: EASE } },
+};
+
 function AnnotationOverlay({
     annotation,
-    side,
+    placement,
 }: {
     annotation: Annotation;
-    side: Side;
+    placement: Side | 'below';
 }) {
     const HeaderIcon = annotation.icon;
-    const fromX = side === 'right' ? 12 : -12;
+    const isBelow = placement === 'below';
+    const isRight = placement === 'right';
+    const fromX = isRight ? 12 : -12;
 
     return (
         <motion.div
@@ -615,29 +636,48 @@ function AnnotationOverlay({
             initial="initial"
             animate="animate"
             exit="exit"
-            className={`hidden xl:flex absolute top-1/2 -translate-y-1/2 z-10 items-center ${
-                side === 'right' ? 'left-full ml-1' : 'right-full mr-1 flex-row-reverse'
+            className={`hidden xl:flex absolute z-10 ${
+                isBelow
+                    ? 'top-full left-1/2 -translate-x-1/2 mt-1 flex-col items-center'
+                    : `top-1/2 -translate-y-1/2 items-center ${
+                          isRight ? 'left-full ml-1' : 'right-full mr-1 flex-row-reverse'
+                      }`
             }`}
         >
-            {/* Dashed connector */}
-            <div className="flex items-center w-9 shrink-0">
-                <motion.div
-                    variants={lineVariants}
-                    className="flex-1 border-t-[1.5px] border-dashed border-primary/40"
-                    style={{ transformOrigin: side === 'right' ? 'left' : 'right' }}
-                />
-                <motion.div
-                    variants={dotVariants}
-                    className={`w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_0_2px_rgba(99,102,241,0.18)] ${
-                        side === 'right' ? '-ml-[3px]' : '-mr-[3px] order-first'
-                    }`}
-                />
-            </div>
+            {/* Dashed connector: vertical when the callout drops below the card,
+                horizontal when it sits to the side. */}
+            {isBelow ? (
+                <div className="flex flex-col items-center h-7 shrink-0">
+                    <motion.div
+                        variants={lineVariantsV}
+                        className="flex-1 border-l-[1.5px] border-dashed border-primary/40"
+                        style={{ transformOrigin: 'top' }}
+                    />
+                    <motion.div
+                        variants={dotVariants}
+                        className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_0_2px_rgba(99,102,241,0.18)] -mt-[3px]"
+                    />
+                </div>
+            ) : (
+                <div className="flex items-center w-9 shrink-0">
+                    <motion.div
+                        variants={lineVariants}
+                        className="flex-1 border-t-[1.5px] border-dashed border-primary/40"
+                        style={{ transformOrigin: isRight ? 'left' : 'right' }}
+                    />
+                    <motion.div
+                        variants={dotVariants}
+                        className={`w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_0_2px_rgba(99,102,241,0.18)] ${
+                            isRight ? '-ml-[3px]' : '-mr-[3px] order-first'
+                        }`}
+                    />
+                </div>
+            )}
 
             {/* Annotation card (neutral white, theme via colored pill) */}
             <motion.div
-                variants={cardVariants}
-                custom={fromX}
+                variants={isBelow ? cardVariantsBelow : cardVariants}
+                custom={isBelow ? undefined : fromX}
                 className="bg-white rounded-[10px] border border-card-border shadow-md shadow-black/[0.06] p-3 min-w-[170px] max-w-[190px]"
             >
                 {/* Type pill (top) */}

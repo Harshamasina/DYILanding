@@ -42,7 +42,7 @@ export function AiDraftingHeroSvg() {
             viewBox="0 0 728 560"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="ai-drafting-svg h-auto w-full opacity-95"
+            className="ai-drafting-svg h-auto w-full opacity-95 select-none"
             aria-hidden="true"
             focusable="false"
         >

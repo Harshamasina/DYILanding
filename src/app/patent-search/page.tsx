@@ -26,6 +26,7 @@ import {
     Scale,
     CheckCircle2,
     ArrowRight,
+    FileSearch,
 } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
 import { Container } from '@/components/ui/Container';
@@ -310,9 +311,9 @@ export default function PatentSearchPage() {
                             </p>
 
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                                <Button href={SEARCH_APP_URL} newTab size="lg" className="justify-center">
-                                    Search Free
-                                    <ArrowRight className="h-5 w-5" />
+                                <Button href={SEARCH_APP_URL} newTab size="lg" className="justify-center whitespace-nowrap">
+                                    <FileSearch className="h-5 w-5" />
+                                    Try Patent Search Free
                                 </Button>
                                 <BookDemoButton variant="secondary" size="lg" className="justify-center">
                                     Book a Demo
@@ -660,9 +661,9 @@ export default function PatentSearchPage() {
                             intelligence on every result.
                         </p>
                         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-                            <Button href={SEARCH_APP_URL} newTab size="lg" className="w-full justify-center sm:w-auto">
-                                Search Free
-                                <ArrowRight className="h-5 w-5" />
+                            <Button href={SEARCH_APP_URL} newTab size="lg" className="w-full justify-center sm:w-auto whitespace-nowrap">
+                                <FileSearch className="h-5 w-5" />
+                                Try Patent Search Free
                             </Button>
                             <BookDemoButton variant="secondary" size="lg" className="w-full justify-center sm:w-auto">
                                 Book a Demo

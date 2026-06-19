@@ -9,6 +9,7 @@ import {
 import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { AnimatedAuditTable } from '@/components/ui/AnimatedAuditTable';
+import { DeferredMount } from '@/components/motion/DeferredMount';
 
 const COMPLIANCE_ITEMS = [
     {
@@ -131,7 +132,9 @@ export function ComplianceSection() {
 
                         {/* Right: Animated Audit Table */}
                         <FadeIn treeNode="tree-compliance" delay={0.1}>
-                            <AnimatedAuditTable />
+                            <DeferredMount className="w-full h-120 sm:h-135 lg:h-150">
+                                <AnimatedAuditTable />
+                            </DeferredMount>
                         </FadeIn>
                     </div>
 
@@ -145,7 +148,9 @@ export function ComplianceSection() {
                             ))}
                         </div>
                         <FadeIn delay={0.2}>
-                            <AnimatedAuditTable />
+                            <DeferredMount className="w-full h-120 sm:h-135 lg:h-150">
+                                <AnimatedAuditTable />
+                            </DeferredMount>
                         </FadeIn>
                     </div>
                 </div>

@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/Button';
 import { AnimatedFamiliesTable } from '@/components/ui/AnimatedFamiliesTable';
 import { AnimatedCalendar } from '@/components/ui/AnimatedCalendar';
 import { MockupHalo } from '@/components/ui/MockupHalo';
+import { DeferredMount } from '@/components/motion/DeferredMount';
 import { FadeIn } from '@/components/motion/FadeIn';
 
 interface Feature {
@@ -170,9 +171,17 @@ function FeatureRowBlock({ row, index }: { row: FeatureRow; index: number }) {
     const mockup = (
         <FadeIn delay={index * 0.15 + 0.1} className="h-full">
             <div className="flex items-center justify-center h-full">
-                <MockupHalo>
-                    {row.mockup === 'families' ? <AnimatedFamiliesTable /> : <AnimatedCalendar />}
-                </MockupHalo>
+                <DeferredMount
+                    className={
+                        row.mockup === 'families'
+                            ? 'w-full h-[440px] sm:h-[480px] lg:h-[520px]'
+                            : 'w-full h-[520px] sm:h-[540px] lg:h-[560px]'
+                    }
+                >
+                    <MockupHalo>
+                        {row.mockup === 'families' ? <AnimatedFamiliesTable /> : <AnimatedCalendar />}
+                    </MockupHalo>
+                </DeferredMount>
             </div>
         </FadeIn>
     );

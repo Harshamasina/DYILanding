@@ -13,7 +13,7 @@ import {
 import { submitDemoRequest, type ApiError } from '@/lib/api';
 import { validateContactForm, hasErrors } from '@/lib/validation';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface BookDemoButtonProps {

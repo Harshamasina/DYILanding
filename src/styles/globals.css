@@ -55,6 +55,19 @@ h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display), 'Georgia', serif;
 }
 
+/* Chrome is deprecating the user-agent font-size for an <h1> nested inside
+   <article>/<aside>/<nav>/<section> and flags any such heading that relies on
+   it (including Tailwind Preflight's font-size: inherit). Per MDN's guidance we
+   set an explicit, concrete font-size on the h1 element itself. It lives in
+   @layer base so every Tailwind text-* utility still overrides it per element
+   (no visual change), and a plain element selector (not :where()) so Chrome
+   registers it as an author-specified size. */
+@layer base {
+    h1 {
+        font-size: 2.25rem;
+    }
+}
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;

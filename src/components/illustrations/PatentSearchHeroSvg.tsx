@@ -54,7 +54,7 @@ export function PatentSearchHeroSvg() {
             viewBox="0 0 736 620"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="h-auto w-full max-w-[736px] opacity-95"
+            className="h-auto w-full max-w-[736px] opacity-95 select-none"
             aria-hidden="true"
             focusable="false"
         >

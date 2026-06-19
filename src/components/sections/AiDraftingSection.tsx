@@ -11,6 +11,7 @@ import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { AnimatedAiDraftGeneration } from '@/components/ui/AnimatedAiDraftGeneration';
 import { MockupHalo } from '@/components/ui/MockupHalo';
+import { DeferredMount } from '@/components/motion/DeferredMount';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { FadeIn } from '@/components/motion/FadeIn';
 
@@ -73,9 +74,11 @@ export function AiDraftingSection() {
                         {/* Desktop */}
                         <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center">
                             <FadeIn delay={0.1}>
-                                <MockupHalo>
-                                    <AnimatedAiDraftGeneration />
-                                </MockupHalo>
+                                <DeferredMount className="w-full h-[440px] sm:h-[480px] lg:h-[520px]">
+                                    <MockupHalo>
+                                        <AnimatedAiDraftGeneration />
+                                    </MockupHalo>
+                                </DeferredMount>
                             </FadeIn>
                             <FadeIn delay={0.2}>
                                 <DraftingContent />
@@ -87,9 +90,11 @@ export function AiDraftingSection() {
                                 <DraftingContent />
                             </FadeIn>
                             <FadeIn delay={0.15}>
-                                <MockupHalo>
-                                    <AnimatedAiDraftGeneration />
-                                </MockupHalo>
+                                <DeferredMount className="w-full h-[440px] sm:h-[480px] lg:h-[520px]">
+                                    <MockupHalo>
+                                        <AnimatedAiDraftGeneration />
+                                    </MockupHalo>
+                                </DeferredMount>
                             </FadeIn>
                         </div>
                     </div>

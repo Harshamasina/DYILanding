@@ -1,7 +1,8 @@
-import { Globe, Search, FileText, ArrowRight } from 'lucide-react';
+import { Globe, Search, FileText, FileSearch } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { AnimatedPriorArtSearch } from '@/components/ui/AnimatedPriorArtSearch';
 import { MockupHalo } from '@/components/ui/MockupHalo';
+import { DeferredMount } from '@/components/motion/DeferredMount';
 import { Button } from '@/components/ui/Button';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SEARCH_APP_URL, PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
@@ -75,9 +76,11 @@ export function SearchSection() {
                 {/* ── Mockup (left) + Copy (right) ── */}
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <FadeIn delay={0.1}>
-                        <MockupHalo>
-                            <AnimatedPriorArtSearch />
-                        </MockupHalo>
+                        <DeferredMount className="w-full h-[440px] sm:h-[480px] lg:h-[520px]">
+                            <MockupHalo>
+                                <AnimatedPriorArtSearch />
+                            </MockupHalo>
+                        </DeferredMount>
                     </FadeIn>
                     <FadeIn delay={0.2}>
                         <div>
@@ -136,8 +139,8 @@ export function SearchSection() {
                                     size="md"
                                     className="justify-center"
                                 >
-                                    Get Free Access
-                                    <ArrowRight className="w-4 h-4" />
+                                    <FileSearch className="w-4 h-4" />
+                                    Try Patent Search Free
                                 </Button>
                                 <Button
                                     href={PATENT_SEARCH_PAGE_URL}

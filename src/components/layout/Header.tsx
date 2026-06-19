@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown, Search, PenLine, CalendarClock, ArrowRight, BookOpen, LifeBuoy, Briefcase } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, FileSearch, PenLine, CalendarClock, BookOpen, LifeBuoy, Briefcase } from 'lucide-react';
 import {
     NAV_LINKS,
     SITE_NAME,
@@ -338,8 +338,8 @@ export function Header() {
                                 size="sm"
                                 className="whitespace-nowrap px-3.5 hover:-translate-y-0.5 active:translate-y-0"
                             >
-                                Login
-                                <ArrowRight className="h-4 w-4" />
+                                <FileSearch className="h-4 w-4" />
+                                Search Patents
                             </Button>
                             <BookDemoButton size="sm" />
                         </div>
@@ -469,8 +469,8 @@ export function Header() {
                                     className="w-full justify-center whitespace-nowrap hover:-translate-y-0.5 active:translate-y-0"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
+                                    <FileSearch className="h-5 w-5" />
                                     Try Patent Search Free
-                                    <ArrowRight className="h-4 w-4" />
                                 </Button>
                             </div>
                         </div>

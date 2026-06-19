@@ -5,7 +5,7 @@ import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { HeroTreeVisual } from '@/components/ui/HeroTreeVisual';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { AnimatedDashboard } from '@/components/ui/AnimatedDashboard';
-import { ArrowRight, Play, ShieldCheck } from 'lucide-react';
+import { FileSearch, Play } from 'lucide-react';
 import { SEARCH_APP_URL } from '@/lib/constants';
 
 export function HeroSection() {
@@ -24,11 +24,10 @@ export function HeroSection() {
                 <Container className="relative z-10">
                     <div className="flex items-start lg:items-stretch gap-8 lg:gap-16 xl:gap-28">
                         {/* Text Content — left. On lg+ the column stretches to
-                            the tree visual's height and distributes its content
-                            top-to-bottom (heading group up, CTA group down) so
-                            both columns occupy the same vertical extent and
-                            read as one uniform block. */}
-                        <div className="w-full lg:max-w-[52%] xl:max-w-[44%] lg:shrink-0 flex flex-col lg:justify-between">
+                            the tree visual's height and centers its content
+                            vertically so the heading and CTA block sit balanced
+                            against the tree visual. */}
+                        <div className="w-full lg:max-w-[52%] xl:max-w-[44%] lg:shrink-0 flex flex-col lg:justify-center">
                             <div>
                                 <h1
                                     className="text-[2.25rem] font-bold leading-[1.12] tracking-tight text-text-primary sm:text-[2.75rem] md:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
@@ -50,37 +49,21 @@ export function HeroSection() {
                                 </p>
                             </div>
                             <div>
-                                {/* CTA row. Buttons shrink at xl: that is the only
-                                    breakpoint where the tree's left-side annotation
-                                    overlays render (hidden xl:flex), and they bleed
-                                    out of the tree column toward this row. Smaller
-                                    buttons + the wider xl column gap keep the two
-                                    clear of each other. */}
-                                <div className="mt-6 flex flex-col items-stretch gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center lg:mt-0">
-                                    <Button href={SEARCH_APP_URL} newTab size="md" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-4 xl:py-2 xl:text-sm">
+                                {/* CTA row. Buttons ease down a step at xl: that is
+                                    the only breakpoint where the tree's left-side
+                                    annotation overlays render (hidden xl:flex) and
+                                    bleed out of the tree column toward this row. The
+                                    slightly smaller xl size plus the wider xl column
+                                    gap keep the two clear of each other. */}
+                                <div className="mt-6 flex flex-col items-stretch gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center">
+                                    <Button href={SEARCH_APP_URL} newTab size="lg" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-6 xl:py-3 xl:text-base">
+                                        <FileSearch className="w-5 h-5" />
                                         Try Patent Search Free
-                                        <ArrowRight className="w-4 h-4" />
                                     </Button>
-                                    <BookDemoButton variant="secondary" size="md" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-4 xl:py-2 xl:text-sm">
+                                    <BookDemoButton variant="outline" size="lg" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-6 xl:py-3 xl:text-base">
                                         Book a Product Demo
                                     </BookDemoButton>
                                 </div>
-                                {/* Enterprise trust pill: shield icon + supporting copy
-                                    in a soft-bordered capsule. Translucent white over
-                                    a backdrop blur so the hero ambience hue still
-                                    shows through subtly without diluting legibility. */}
-                                <p
-                                    className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/70 px-3.5 py-1.5 text-xs text-text-secondary shadow-sm backdrop-blur-sm sm:mt-5"
-                                    style={{ fontFamily: 'var(--font-body)' }}
-                                >
-                                    <ShieldCheck
-                                        aria-hidden="true"
-                                        className="h-3.5 w-3.5 shrink-0 text-primary"
-                                    />
-                                    <span>
-                                        Built for confidential invention workflows across all patent-filing sectors
-                                    </span>
-                                </p>
                             </div>
                         </div>
 
