@@ -347,7 +347,7 @@ function VideoModal({
 
                     {/* Video well */}
                     <div
-                        className="relative mt-1 overflow-hidden rounded-2xl bg-navy cursor-pointer group ring-1 ring-black/5"
+                        className="relative mt-1 overflow-hidden rounded-2xl bg-page-bg-alt cursor-pointer group ring-1 ring-black/5"
                         onMouseMove={resetControlsTimer}
                         onMouseLeave={() => isPlaying && setShowControls(false)}
                     >
