@@ -13,6 +13,7 @@ interface TreeNodeConfig {
 
 const TREE_NODE_IDS: TreeNodeConfig[] = [
     { elementId: 'tree-features', label: 'Features' },
+    { elementId: 'tree-demo', label: 'Live Demo' },
     { elementId: 'tree-import', label: 'Import' },
     { elementId: 'tree-search', label: 'Patent Search' },
     { elementId: 'tree-ai', label: 'Drafting' },

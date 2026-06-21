@@ -99,7 +99,7 @@ export function HeroSection() {
                     <div className="mt-8 flex justify-center">
                         <WatchDemoButton size="md" className="whitespace-nowrap">
                             <Play className="w-4 h-4 fill-current" />
-                            Watch 4-Min Demo
+                            Watch 2 Min Demo
                         </WatchDemoButton>
                     </div>
                 </Container>

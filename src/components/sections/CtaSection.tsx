@@ -2,6 +2,7 @@ import { Clock, ShieldCheck, Calendar, Mail, MapPin } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { ContactForm } from '@/components/sections/ContactForm';
+import { WatchDemoLink } from '@/components/ui/WatchDemoLink';
 
 const TRUST_SIGNALS = [
     { icon: Calendar, text: '15-minute guided walkthrough' },
@@ -63,6 +64,14 @@ export function CtaSection() {
                                 drafting, compliance, and portfolio workflows in
                                 one audited platform.
                             </p>
+
+                            {/* Low-friction alternative to the form: a subtle
+                                link to watch the demo first. This is below the
+                                fold where the sticky pill is hidden, so it is
+                                the bottom-funnel watch-demo entry point. */}
+                            <WatchDemoLink className="mt-6">
+                                Prefer to watch first? See the 2-minute demo
+                            </WatchDemoLink>
 
                             {/* Trust Signals */}
                             <div className="mt-8 flex flex-wrap gap-4">

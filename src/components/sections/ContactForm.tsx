@@ -161,7 +161,11 @@ export function ContactForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+        <form
+            onSubmit={handleSubmit}
+            className="space-y-6 lg:flex lg:h-full lg:flex-col"
+            noValidate
+        >
             {/* Honeypot - hidden from real users, uncontrolled to avoid autofill issues */}
             <input
                 ref={hpRef}
@@ -243,8 +247,10 @@ export function ContactForm() {
                 />
             </div>
 
-            {/* Message */}
-            <div>
+            {/* Message — grows to fill the card so there is no empty space
+                below the submit button on lg (the card is stretched to the
+                taller left column). */}
+            <div className="lg:flex lg:flex-1 lg:flex-col lg:min-h-0">
                 <label
                     htmlFor="message"
                     className="block text-sm font-semibold text-text-primary mb-2"
@@ -262,7 +268,7 @@ export function ContactForm() {
                     aria-describedby={getFieldError('message') ? 'message-error' : undefined}
                     rows={4}
                     placeholder="Tell us about your patent workflow, portfolio size, or compliance needs..."
-                    className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none transition-colors resize-y ${
+                    className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none transition-colors resize-y lg:flex-1 lg:min-h-40 ${
                         getFieldError('message')
                             ? 'border-danger focus:border-danger focus:ring-2 focus:ring-danger/20'
                             : 'border-card-border focus:border-primary focus:ring-2 focus:ring-primary/20'
