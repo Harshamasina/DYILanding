@@ -33,6 +33,8 @@ export interface DemoRequestPayload {
     work_email: string;
     company: string;
     role: string;
+    portfolio_size?: string;
+    inquiry_type?: string;
     phone?: string;
     message?: string;
     _hp_field?: string;

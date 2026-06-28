@@ -85,13 +85,17 @@ export const INQUIRY_TYPE_OPTIONS = [
     { value: 'Other', label: 'Other' },
 ] as const;
 
-/* Portfolio Size - lead-qualification hint. NOT submitted as a structured
- * field; both forms fold it into the free-text message body, so these
- * values are display/context only and do not need to match a backend enum. */
+/* Portfolio Size. The Book-a-Demo form submits this as a STRUCTURED
+ * `portfolio_size` field, so each `value` MUST exactly match the backend enum
+ * in DYISearchBackend/src/schemas/demoRequest.ts (PORTFOLIO_SIZE_VALUES) or the
+ * submission is rejected with a validation_error. The labels are display-only.
+ * The Contact form has no structured `portfolio_size` column upstream, so it
+ * folds the human label into the message body instead. */
 export const PORTFOLIO_SIZE_OPTIONS = [
     { value: '', label: 'Select portfolio size' },
-    { value: '1-50 families', label: '1-50 families' },
-    { value: '51-250 families', label: '51-250 families' },
-    { value: '251-1,000 families', label: '251-1,000 families' },
-    { value: '1,000+ families', label: '1,000+ families' },
+    { value: '1-10', label: '1–10 families' },
+    { value: '11-50', label: '11–50 families' },
+    { value: '51-200', label: '51–200 families' },
+    { value: '201-1000', label: '201–1,000 families' },
+    { value: '1000+', label: '1,000+ families' },
 ] as const;

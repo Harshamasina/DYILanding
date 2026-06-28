@@ -3,10 +3,17 @@ import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { HeroTreeVisual } from '@/components/ui/HeroTreeVisual';
+import { HeroHubVisual } from '@/components/ui/HeroHubVisual';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { AnimatedDashboard } from '@/components/ui/AnimatedDashboard';
 import { FileSearch, Play } from 'lucide-react';
 import { SEARCH_APP_URL } from '@/lib/constants';
+
+/* A/B toggle for the hero visual.
+   'tree' = original patent family tree (variant A).
+   'hub'  = scattered sources flowing into the Patent Operations hub (variant B).
+   Flip this one value to compare the two live. */
+const HERO_VISUAL: 'tree' | 'hub' = 'hub';
 
 export function HeroSection() {
     return (
@@ -18,16 +25,17 @@ export function HeroSection() {
             <section
                 id="hero"
                 aria-label="Hero"
-                className="relative flex flex-col pt-24 sm:pt-28 pb-10 sm:pb-12 lg:min-h-screen lg:justify-center lg:pt-28 lg:pb-24 xl:pt-32 xl:pb-28 overflow-hidden"
+                className="relative flex flex-col pt-24 sm:pt-28 pb-10 sm:pb-12 lg:min-h-screen lg:justify-center lg:pt-14 lg:pb-28 xl:pt-16 xl:pb-32 overflow-hidden"
             >
                 <HeroAmbience edge="bottom" />
-                <Container className="relative z-10">
-                    <div className="flex items-start lg:items-stretch gap-8 lg:gap-16 xl:gap-28">
-                        {/* Text Content — left. On lg+ the column stretches to
-                            the tree visual's height and centers its content
+                <Container size={HERO_VISUAL === 'hub' ? 'wide' : 'default'} className="relative z-10">
+                    <div className={`flex items-start lg:items-stretch gap-8 ${HERO_VISUAL === 'hub' ? 'lg:gap-6 xl:gap-4' : 'lg:gap-16 xl:gap-28'}`}>
+                        {/* Text Content - left. On lg+ the column stretches to
+                            the visual's height and centers its content
                             vertically so the heading and CTA block sit balanced
-                            against the tree visual. */}
-                        <div className="w-full lg:max-w-[52%] xl:max-w-[44%] lg:shrink-0 flex flex-col lg:justify-center">
+                            against the visual. The hub variant gets a narrower
+                            text column so the mind map can render larger. */}
+                        <div className={`w-full lg:shrink-0 flex flex-col lg:justify-center ${HERO_VISUAL === 'hub' ? 'lg:max-w-[42%] xl:max-w-[40%]' : 'lg:max-w-[52%] xl:max-w-[44%]'}`}>
                             <div>
                                 <h1
                                     className="text-[2.25rem] font-bold leading-[1.12] tracking-tight text-text-primary sm:text-[2.75rem] md:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
@@ -67,10 +75,26 @@ export function HeroSection() {
                             </div>
                         </div>
 
-                        {/* Family Tree Visual — right, hidden below lg */}
-                        <div className="hidden lg:flex flex-1 min-w-0 items-center justify-center">
-                            <div className="w-full max-w-105">
-                                <HeroTreeVisual />
+                        {/* Hero visual - right, hidden below lg. A/B between the
+                            original family tree (variant A) and the sources-into-hub
+                            transformation (variant B), switched via HERO_VISUAL. The
+                            hub variant gets extra width at xl for its source rail. */}
+                        <div className="relative hidden lg:flex flex-1 min-w-0 items-center justify-center">
+                            {/* Soft purple/blue radial glow so the space around the
+                                workflow reads as designed rather than empty. */}
+                            {HERO_VISUAL === 'hub' && (
+                                <div
+                                    aria-hidden="true"
+                                    className="pointer-events-none absolute inset-0"
+                                    style={{
+                                        background:
+                                            'radial-gradient(ellipse 78% 66% at 52% 46%, rgba(129,140,248,0.20), rgba(139,92,246,0.09) 45%, transparent 72%)',
+                                        filter: 'blur(36px)',
+                                    }}
+                                />
+                            )}
+                            <div className={`relative z-10 w-full ${HERO_VISUAL === 'hub' ? 'max-w-none' : 'max-w-105'}`}>
+                                {HERO_VISUAL === 'hub' ? <HeroHubVisual /> : <HeroTreeVisual />}
                             </div>
                         </div>
                     </div>

@@ -84,12 +84,14 @@ export function ContactForm() {
         setErrorMessage('');
         setFieldErrors({});
 
-        // Portfolio size is a new lead-qualification field. We fold it into
-        // the message body so existing backends that don't yet know about
-        // `portfolio_size` still surface the value to the recipient. Once the
-        // backend accepts the field directly, drop the prefix and add it to
-        // ContactMessagePayload instead.
-        const messageWithContext = `Portfolio size: ${form.portfolioSize}\n\n${form.message}`;
+        // Contact messages have no structured `portfolio_size` column upstream,
+        // so we fold the human-readable label into the message body to surface
+        // the value to the recipient. (The option `value` is a terse enum code
+        // shared with the demo form, so resolve its display label here.)
+        const portfolioLabel =
+            PORTFOLIO_SIZE_OPTIONS.find((o) => o.value === form.portfolioSize)?.label ??
+            form.portfolioSize;
+        const messageWithContext = `Portfolio size: ${portfolioLabel}\n\n${form.message}`;
 
         try {
             await submitContactMessage(

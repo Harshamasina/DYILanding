@@ -23,7 +23,7 @@ import {
    so family-level insights only appear on the root, deadlines only on
    provisional/PCT/NPE cards, translations only on NPE cards, etc. */
 
-const EASE = [0.21, 0.47, 0.32, 0.98] as const;
+export const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
 /* ─────────────────────────────────────────────
    Annotation type system
@@ -222,13 +222,13 @@ const MAX_CONCURRENT = 2;       // max annotations on screen at once
 const RECENT_SIZE = 3;          // last N cards used (avoid immediate repeats)
 const INITIAL_DELAY_MS = 2800;  // wait for the tree's entrance animation to finish
 
-interface ActiveAnnotation {
+export interface ActiveAnnotation {
     id: number;
     cardId: CardId;
     annotation: Annotation;
 }
 
-function useAnnotationCycle(enabled: boolean) {
+export function useAnnotationCycle(enabled: boolean) {
     const [active, setActive] = useState<ActiveAnnotation[]>([]);
     const idRef = useRef(0);
     const recentRef = useRef<CardId[]>([]);
@@ -456,7 +456,7 @@ const STATUS_COLORS: Record<string, string> = {
     'Draft': 'bg-text-muted/10 text-text-muted',
 };
 
-function TreeCard({
+export function TreeCard({
     cardId,
     level,
     label,
@@ -749,7 +749,7 @@ function AnnotationOverlay({
    Connector primitives (unchanged)
    ───────────────────────────────────────────── */
 
-function ConnectorLine({ delay }: { delay: number }) {
+export function ConnectorLine({ delay }: { delay: number }) {
     return (
         <motion.div
             className="w-px h-8 bg-gradient-to-b from-primary/38 to-primary/22 mx-auto"
@@ -761,7 +761,7 @@ function ConnectorLine({ delay }: { delay: number }) {
     );
 }
 
-function NodeDot({ delay }: { delay: number }) {
+export function NodeDot({ delay }: { delay: number }) {
     return (
         <motion.div
             className="relative z-10"
@@ -774,7 +774,7 @@ function NodeDot({ delay }: { delay: number }) {
     );
 }
 
-function BranchSplit({ delay, width = 140, branches = 2 }: { delay: number; width?: number; branches?: number }) {
+export function BranchSplit({ delay, width = 140, branches = 2 }: { delay: number; width?: number; branches?: number }) {
     const cx = width / 2;
     const endpoints = Array.from({ length: branches }, (_, i) =>
         branches === 1 ? cx : (i / (branches - 1)) * width
@@ -804,7 +804,7 @@ function BranchSplit({ delay, width = 140, branches = 2 }: { delay: number; widt
     );
 }
 
-function MergeLine({ delay }: { delay: number }) {
+export function MergeLine({ delay }: { delay: number }) {
     const vw = 1000;
     const vh = 120;
     const cx = vw / 2;
@@ -842,7 +842,7 @@ function MergeLine({ delay }: { delay: number }) {
     );
 }
 
-function FadeCard({ children, delay, className = '' }: { children: React.ReactNode; delay: number; className?: string }) {
+export function FadeCard({ children, delay, className = '' }: { children: React.ReactNode; delay: number; className?: string }) {
     return (
         <motion.div
             className={className}

@@ -114,7 +114,7 @@ export function Header() {
             {/* Top blur veil - constrained to header width so it doesn't blur
                 the tree spine running down the page edges. */}
             <div aria-hidden="true" className="fixed top-0 left-0 right-0 z-40 pointer-events-none">
-                <div className="mx-auto w-full max-w-352 px-3 sm:px-4 lg:px-6">
+                <div className="mx-auto w-full max-w-400 px-3 sm:px-4 lg:px-6">
                     <div
                         className="h-24 sm:h-28 backdrop-blur-md"
                         style={{
@@ -126,7 +126,7 @@ export function Header() {
             </div>
 
             <header className="fixed top-0 left-0 right-0 z-50 pt-2 sm:pt-3" role="banner">
-                <div className="mx-auto w-full max-w-352 px-3 sm:px-4 lg:px-6">
+                <div className="mx-auto w-full max-w-400 px-3 sm:px-4 lg:px-6">
                     <nav
                         className={`flex items-center h-14 xl:h-16 gap-4 px-3 sm:px-4 xl:pl-6 xl:pr-3 rounded-lg border backdrop-blur-xl transition-all duration-300 ${
                             isScrolled

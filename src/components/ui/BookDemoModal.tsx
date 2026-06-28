@@ -30,6 +30,7 @@ interface DemoFormData {
     role: string;
     portfolioSize: string;
     inquiryType: string;
+    phone: string;
     message: string;
 }
 
@@ -42,6 +43,7 @@ const INITIAL_FORM: DemoFormData = {
     role: '',
     portfolioSize: '',
     inquiryType: '',
+    phone: '',
     message: '',
 };
 
@@ -116,6 +118,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
         role: 'role',
         portfolioSize: 'portfolio_size',
         inquiryType: 'inquiry_type',
+        phone: 'phone',
         message: 'message',
     };
 
@@ -151,15 +154,6 @@ function DemoModal({ onClose }: { onClose: () => void }) {
         setErrorMessage('');
         setFieldErrors({});
 
-        // Portfolio size + inquiry type fold into the message body so this
-        // submission survives backends that don't yet know about those fields
-        // as structured columns. Mirrors ContactForm's approach so both
-        // entry-points produce comparable lead context for the recipient.
-        const messageWithContext =
-            `Inquiry: ${form.inquiryType}\n` +
-            `Portfolio size: ${form.portfolioSize}\n\n` +
-            form.message;
-
         try {
             await submitDemoRequest(
                 {
@@ -167,7 +161,10 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                     work_email: form.email,
                     company: form.company,
                     role: form.role,
-                    message: messageWithContext,
+                    portfolio_size: form.portfolioSize || undefined,
+                    inquiry_type: form.inquiryType || undefined,
+                    phone: form.phone.trim() || undefined,
+                    message: form.message.trim() || undefined,
                     _hp_field: hpRef.current?.value || undefined,
                 },
                 idempotencyKey,
@@ -353,6 +350,17 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                     error={getFieldError('inquiry_type')}
                                 />
                             </div>
+
+                            {/* Phone (optional) */}
+                            <ModalField
+                                label="Phone (optional)"
+                                name="phone"
+                                type="tel"
+                                value={form.phone}
+                                onChange={handleChange}
+                                placeholder="+1 555 123 4567"
+                                error={getFieldError('phone')}
+                            />
 
                             {/* Message */}
                             <div>
