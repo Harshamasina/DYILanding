@@ -442,7 +442,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                 onVerify={setTurnstileToken}
                                 onExpire={() => setTurnstileToken(null)}
                                 onError={() => setTurnstileToken(null)}
-                                className="flex justify-center sm:justify-start"
+                                className="w-full"
                             />
 
                             {/* Submit */}

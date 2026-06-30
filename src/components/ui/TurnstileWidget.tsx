@@ -102,6 +102,11 @@ export const TurnstileWidget = forwardRef<TurnstileHandle, TurnstileWidgetProps>
                     }
                     widgetIdRef.current = window.turnstile.render(containerRef.current, {
                         sitekey: SITE_KEY,
+                        // Match the app: light forms, full-width fields. Cloudflare
+                        // only exposes theme/size/appearance — the widget interior
+                        // is a locked cross-origin iframe and can't be restyled.
+                        theme: 'light',
+                        size: 'flexible',
                         callback: (token: string) => cbRef.current.onVerify(token),
                         'expired-callback': () => cbRef.current.onExpire?.(),
                         'error-callback': () => cbRef.current.onError?.(),
