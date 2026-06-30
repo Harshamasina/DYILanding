@@ -10,6 +10,11 @@ import {
 } from '@/lib/constants';
 import { submitContactMessage, type ApiError } from '@/lib/api';
 import { validateContactForm, hasErrors } from '@/lib/validation';
+import {
+    TurnstileWidget,
+    isTurnstileEnabled,
+    type TurnstileHandle,
+} from '@/components/ui/TurnstileWidget';
 
 interface FormData {
     name: string;
@@ -40,6 +45,8 @@ export function ContactForm() {
     const [errorMessage, setErrorMessage] = useState('');
     const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
     const [idempotencyKey, setIdempotencyKey] = useState(() => crypto.randomUUID());
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+    const turnstileRef = useRef<TurnstileHandle>(null);
 
     // Frontend field name → backend field name
     const fieldMap: Record<string, string> = {
@@ -80,6 +87,12 @@ export function ContactForm() {
             return;
         }
 
+        if (isTurnstileEnabled && !turnstileToken) {
+            setStatus('error');
+            setErrorMessage('Please complete the verification challenge below.');
+            return;
+        }
+
         setStatus('submitting');
         setErrorMessage('');
         setFieldErrors({});
@@ -102,6 +115,7 @@ export function ContactForm() {
                     role: form.role,
                     inquiry_type: form.inquiryType,
                     message: messageWithContext,
+                    turnstileToken: turnstileToken ?? undefined,
                     _hp_field: hpRef.current?.value || undefined,
                 },
                 idempotencyKey,
@@ -110,6 +124,9 @@ export function ContactForm() {
             setForm(INITIAL_FORM);
         } catch (err: unknown) {
             setStatus('error');
+            // Turnstile tokens are single-use; reset for a fresh one on retry.
+            turnstileRef.current?.reset();
+            setTurnstileToken(null);
             const apiErr = err as ApiError & { status?: number };
 
             if (apiErr.code === 'validation_error' && 'details' in apiErr) {
@@ -298,6 +315,15 @@ export function ContactForm() {
                     </span>
                 </div>
             )}
+
+            {/* Bot verification (Cloudflare Turnstile) */}
+            <TurnstileWidget
+                ref={turnstileRef}
+                onVerify={setTurnstileToken}
+                onExpire={() => setTurnstileToken(null)}
+                onError={() => setTurnstileToken(null)}
+                className="flex justify-center sm:justify-start"
+            />
 
             {/* Submit */}
             <Button

@@ -42,6 +42,8 @@ export interface DemoRequestPayload {
     inquiry_type?: string;
     phone?: string;
     message?: string;
+    /** Cloudflare Turnstile token. Required by the DYISearch backend in prod. */
+    turnstileToken?: string;
     _hp_field?: string;
 }
 
@@ -79,6 +81,8 @@ export interface ContactMessagePayload {
     role: string;
     inquiry_type: string;
     message: string;
+    /** Cloudflare Turnstile token. Required by the DYISearch backend in prod. */
+    turnstileToken?: string;
     _hp_field?: string;
 }
 

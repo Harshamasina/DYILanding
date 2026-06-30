@@ -12,6 +12,11 @@ import {
 } from '@/lib/constants';
 import { submitDemoRequest, type ApiError } from '@/lib/api';
 import { validateContactForm, hasErrors } from '@/lib/validation';
+import {
+    TurnstileWidget,
+    isTurnstileEnabled,
+    type TurnstileHandle,
+} from '@/components/ui/TurnstileWidget';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -88,6 +93,8 @@ function DemoModal({ onClose }: { onClose: () => void }) {
     const [errorMessage, setErrorMessage] = useState('');
     const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
     const [idempotencyKey] = useState(() => crypto.randomUUID());
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+    const turnstileRef = useRef<TurnstileHandle>(null);
 
     // Lock body scroll
     useEffect(() => {
@@ -150,6 +157,12 @@ function DemoModal({ onClose }: { onClose: () => void }) {
             return;
         }
 
+        if (isTurnstileEnabled && !turnstileToken) {
+            setStatus('error');
+            setErrorMessage('Please complete the verification challenge below.');
+            return;
+        }
+
         setStatus('submitting');
         setErrorMessage('');
         setFieldErrors({});
@@ -165,6 +178,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                     inquiry_type: form.inquiryType || undefined,
                     phone: form.phone.trim() || undefined,
                     message: form.message.trim() || undefined,
+                    turnstileToken: turnstileToken ?? undefined,
                     _hp_field: hpRef.current?.value || undefined,
                 },
                 idempotencyKey,
@@ -172,6 +186,9 @@ function DemoModal({ onClose }: { onClose: () => void }) {
             setStatus('success');
         } catch (err: unknown) {
             setStatus('error');
+            // Turnstile tokens are single-use; reset for a fresh one on retry.
+            turnstileRef.current?.reset();
+            setTurnstileToken(null);
             const apiErr = err as ApiError & { status?: number };
 
             if (apiErr.code === 'validation_error' && 'details' in apiErr) {
@@ -418,6 +435,15 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                     </span>
                                 </div>
                             )}
+
+                            {/* Bot verification (Cloudflare Turnstile) */}
+                            <TurnstileWidget
+                                ref={turnstileRef}
+                                onVerify={setTurnstileToken}
+                                onExpire={() => setTurnstileToken(null)}
+                                onError={() => setTurnstileToken(null)}
+                                className="flex justify-center sm:justify-start"
+                            />
 
                             {/* Submit */}
                             <Button
