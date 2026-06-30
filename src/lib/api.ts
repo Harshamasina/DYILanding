@@ -1,4 +1,9 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+// Public marketing site: default to the deployed DYISearch API so a build that
+// is missing NEXT_PUBLIC_API_URL never bakes a localhost URL into production.
+// Local dev against a local backend: set NEXT_PUBLIC_API_URL in
+// .env.development.local (dev-only — NOT .env.local, which also leaks into
+// `next build`/production and overrides .env.production).
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.search.designyourinvention.com';
 
 /* ── Shared types ── */
 

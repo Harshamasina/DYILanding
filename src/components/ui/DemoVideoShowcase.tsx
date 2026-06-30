@@ -38,8 +38,8 @@ const CHAPTERS: Chapter[] = [
         title: 'Prior Art Search',
         description:
             'Search 100+ jurisdictions and save references to a patent family.',
-        start: 55,
-        time: '00:55',
+        start: 56,
+        time: '00:56',
     },
     {
         icon: FileText,
