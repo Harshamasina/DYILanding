@@ -2,6 +2,7 @@ import type { BlogPost } from './types';
 
 import { post as whatIsIpManagement } from './what-is-ip-management-software';
 import { post as patentDocketing } from './patent-docketing-best-practices';
+import { post as patentDeadlineCalendarFeeds } from './patent-deadline-calendar-feeds-attorneys';
 import { post as fdaCompliance } from './fda-21-cfr-part-11-compliance-guide';
 import { post as pctFiling } from './pct-filing-management-tips';
 import { post as portfolioAnalytics } from './patent-portfolio-analytics-roi';
@@ -16,6 +17,7 @@ import { post as form27WorkingStatement } from './form-27-working-statement-comp
 const allPosts: BlogPost[] = [
     whatIsIpManagement,
     patentDocketing,
+    patentDeadlineCalendarFeeds,
     fdaCompliance,
     pctFiling,
     portfolioAnalytics,

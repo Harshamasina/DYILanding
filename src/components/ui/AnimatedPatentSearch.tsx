@@ -154,7 +154,7 @@ const DETAIL = {
     cache: 'L1',
     latency: '12916 ms',
     compounds: 40,
-    trials: 0,
+    trials: 3,
 };
 
 const BIBLIO_COLUMNS = [
@@ -250,6 +250,27 @@ const CLAIMS: ClaimItem[] = [
             'A composition comprising the isolated protein of claim 1 and a guide RNA configured to target a genomic sequence in a mammalian cell.',
     },
 ];
+
+const CLAIM_BY_NUMBER = new Map(CLAIMS.map((claim) => [claim.number, claim]));
+
+const CLAIM_TREE_ITEMS = CLAIMS.map((claim) => {
+    let depth = 0;
+    let parentNumber = claim.dependsOn;
+    const seen = new Set<number>();
+
+    while (parentNumber && !seen.has(parentNumber)) {
+        seen.add(parentNumber);
+        const parent = CLAIM_BY_NUMBER.get(parentNumber);
+        if (!parent) break;
+        depth += 1;
+        parentNumber = parent.dependsOn;
+    }
+
+    return {
+        claim,
+        depth,
+    };
+});
 
 interface CompoundItem {
     inchiKey: string;
@@ -886,30 +907,46 @@ function ClaimsWorkspace() {
                             <Pill>33 claims</Pill>
                             <span className="text-[9px] text-slate-600" style={{ fontFamily: 'var(--font-mono)' }}>Language: en</span>
                         </div>
-                        <div className="mt-3 space-y-3 overflow-hidden">
-                            {CLAIMS.map((claim, index) => (
-                                <motion.article
-                                    key={claim.number}
-                                    className="rounded-lg border border-card-border bg-white p-3 shadow-sm"
-                                    style={{ borderLeftColor: index > 0 ? '#c4b5fd' : undefined, borderLeftWidth: index > 0 ? 2 : 1 }}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.28, delay: index * 0.05, ease: EASE }}
-                                >
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <span className="text-[12px] font-bold text-text-primary">Claim {claim.number}</span>
-                                        <Pill tone="indigo">{claim.type}</Pill>
-                                        {claim.dependsOn && (
-                                            <span className="text-[9px] text-slate-600">
-                                                depends on <span className="text-primary">Claim {claim.dependsOn}</span>
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="mt-2 max-h-[54px] overflow-hidden text-[11px] leading-relaxed text-slate-600 sm:text-[12px]">
-                                        {claim.text}
-                                    </p>
-                                </motion.article>
-                            ))}
+                        <div className="mt-3 overflow-hidden">
+                            <div className="relative space-y-3 overflow-hidden">
+                                <span
+                                    aria-hidden="true"
+                                    className="absolute bottom-5 top-5 w-px rounded-full bg-primary/80"
+                                    style={{ left: 10 }}
+                                />
+                                {CLAIM_TREE_ITEMS.map(({ claim, depth }, index) => (
+                                    <motion.article
+                                        key={claim.number}
+                                        className="relative rounded-lg border border-card-border bg-white p-3 shadow-sm"
+                                        style={{
+                                            marginLeft: `${34 + depth * 22}px`,
+                                            borderLeftColor: claim.type === 'Independent' ? '#4f46e5' : '#c4b5fd',
+                                            borderLeftWidth: claim.type === 'Independent' ? 3 : 2,
+                                        }}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.28, delay: index * 0.05, ease: EASE }}
+                                    >
+                                        <span
+                                            aria-hidden="true"
+                                            className="absolute top-6 h-px rounded-full bg-primary/70"
+                                            style={{ left: `-${24 + depth * 22}px`, width: `${24 + depth * 22}px` }}
+                                        />
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <span className="text-[12px] font-bold text-text-primary">Claim {claim.number}</span>
+                                            <Pill tone="indigo">{claim.type}</Pill>
+                                            {claim.dependsOn && (
+                                                <span className="text-[9px] text-slate-600">
+                                                    depends on <span className="text-primary">Claim {claim.dependsOn}</span>
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="mt-2 max-h-[54px] overflow-hidden text-[11px] leading-relaxed text-slate-600 sm:text-[12px]">
+                                            {claim.text}
+                                        </p>
+                                    </motion.article>
+                                ))}
+                            </div>
                         </div>
                     </motion.section>
                 </main>

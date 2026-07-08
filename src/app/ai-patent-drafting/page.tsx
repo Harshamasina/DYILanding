@@ -204,17 +204,35 @@ const SECURITY: IconItem[] = [
     {
         icon: Lock,
         title: 'Tenant isolation',
-        description: 'Composite primary keys, Row-Level Security forced on every table (no BYPASSRLS), all queries inside withTenantContext(), and JWT org_id cross-validated against the tenant, a spoofed subdomain is rejected before any data is touched.',
+        description: 'Each customer workspace is separated at the application and data layers. Tenant identity is verified before any drafting record, prior-art source, or portfolio item can be accessed.',
     },
     {
         icon: Database,
         title: 'Tamper-resistant audit',
-        description: 'Revision history and prior-art snapshots are append-only at the database layer, INSERT and SELECT only. Postgres rejects UPDATE and DELETE under RLS, even for a tenant admin. A notarized ledger any party can read but no party can edit.',
+        description: 'Draft revisions, source references, and prior-art snapshots are preserved as append-only evidence, creating a review history that can be inspected later without being rewritten.',
     },
     {
         icon: KeyRound,
         title: 'AI-specific controls',
-        description: 'API keys in AWS Secrets Manager, five-layer prompt-injection defense, Anthropic zero-retention generation with no PII by default, and per-tenant token budgets with draft:generate separated from draft:write.',
+        description: 'Model access, prompt handling, and spending limits are governed per tenant. Generation and saving are controlled separately, with zero-retention model settings and no PII by default.',
+    },
+];
+
+const SECURITY_GUARDS: { icon: React.ElementType; label: string; text: string }[] = [
+    {
+        icon: ShieldCheck,
+        label: 'Enterprise review',
+        text: 'Controls designed for procurement, security questionnaires, and regulated IP teams.',
+    },
+    {
+        icon: ScrollText,
+        label: 'Evidence retained',
+        text: 'Every generated draft remains tied to the prior-art snapshot and review trail behind it.',
+    },
+    {
+        icon: FileCheck,
+        label: 'GxP-ready patterns',
+        text: 'Audit and change-control patterns align with 21 CFR Part 11 expectations.',
     },
 ];
 
@@ -682,37 +700,46 @@ export default function AiPatentDraftingPage() {
                     className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-b from-primary/15 to-transparent"
                 />
                 <Container className="relative z-10">
-                    <FadeIn>
-                        <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary-light"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Security and compliance
-                            </span>
-                            <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
-                                style={{ fontFamily: 'var(--font-display)' }}
-                            >
-                                Built to Survive an Audit
-                            </h2>
-                            <p
-                                className="mt-4 text-lg leading-relaxed text-text-on-dark"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                Security and compliance are the product moat. AI drafting extends the same
-                                patterns that make the platform defensible in enterprise procurement and
-                                regulatory review, including 21 CFR Part 11 patterns for GxP readiness.
-                            </p>
-                        </div>
-                    </FadeIn>
+                    <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
+                        <FadeIn>
+                            <div>
+                                <span
+                                    className="text-xs font-bold uppercase tracking-[0.15em] text-primary-light"
+                                    style={{ fontFamily: 'var(--font-mono)' }}
+                                >
+                                    Security and compliance
+                                </span>
+                                <h2
+                                    className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
+                                    style={{ fontFamily: 'var(--font-display)' }}
+                                >
+                                    Built to Survive an Audit
+                                </h2>
+                                <p
+                                    className="mt-4 text-base leading-relaxed text-text-on-dark sm:text-lg"
+                                    style={{ fontFamily: 'var(--font-body)' }}
+                                >
+                                    AI drafting is governed by the same audit-first controls that protect the
+                                    wider platform: tenant boundaries, retained evidence, controlled model use,
+                                    and review history that stands up to enterprise procurement and regulated
+                                    IP workflows.
+                                </p>
 
-                    <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-3">
-                        {SECURITY.map((item, i) => (
-                            <FadeIn key={item.title} delay={i * 0.08}>
-                                <SecurityCard {...item} />
-                            </FadeIn>
-                        ))}
+                                <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-xl shadow-black/10">
+                                    {SECURITY_GUARDS.map((guard, i) => (
+                                        <SecurityGuardRow key={guard.label} guard={guard} border={i < SECURITY_GUARDS.length - 1} />
+                                    ))}
+                                </div>
+                            </div>
+                        </FadeIn>
+
+                        <div className="grid gap-4">
+                            {SECURITY.map((item, i) => (
+                                <FadeIn key={item.title} delay={i * 0.08}>
+                                    <SecurityCard {...item} />
+                                </FadeIn>
+                            ))}
+                        </div>
                     </div>
                 </Container>
             </section>
@@ -1005,28 +1032,62 @@ function CapabilityCard({ icon: Icon, title, description }: IconItem) {
     );
 }
 
+function SecurityGuardRow({
+    guard,
+    border,
+}: {
+    guard: { icon: React.ElementType; label: string; text: string };
+    border?: boolean;
+}) {
+    const Icon = guard.icon;
+
+    return (
+        <div className={`flex gap-4 p-5 ${border ? 'border-b border-white/10' : ''}`}>
+            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary-light/20 bg-primary-light/10 text-primary-light">
+                <Icon className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+                <p
+                    className="text-sm font-semibold text-white"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                >
+                    {guard.label}
+                </p>
+                <p
+                    className="mt-1 text-sm leading-relaxed text-text-on-dark/75"
+                    style={{ fontFamily: 'var(--font-body)' }}
+                >
+                    {guard.text}
+                </p>
+            </div>
+        </div>
+    );
+}
+
 function SecurityCard({ icon: Icon, title, description }: IconItem) {
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-navy-light/55 hover:shadow-lg hover:shadow-primary/[0.05]">
+        <article className="group relative flex h-full gap-4 overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-navy-light/55 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary-light/[0.12] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-linear-to-r from-primary-light/[0.10] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-white/10">
+            <div className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-white/10">
                 <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-105" />
             </div>
-            <h3
-                className="relative mt-4 text-lg font-semibold text-white"
-                style={{ fontFamily: 'var(--font-display)' }}
-            >
-                {title}
-            </h3>
-            <p
-                className="relative mt-2 text-sm leading-relaxed text-text-on-dark"
-                style={{ fontFamily: 'var(--font-body)' }}
-            >
-                {description}
-            </p>
+            <div className="relative min-w-0">
+                <h3
+                    className="text-lg font-semibold text-white"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                >
+                    {title}
+                </h3>
+                <p
+                    className="mt-1.5 text-sm leading-relaxed text-text-on-dark/80"
+                    style={{ fontFamily: 'var(--font-body)' }}
+                >
+                    {description}
+                </p>
+            </div>
         </article>
     );
 }

@@ -76,12 +76,14 @@ export default function RootLayout({
                     Skip to content
                 </a>
                 <JsonLd />
-                <Header />
-                <div className="relative">
-                    <TreeSpine />
-                    {children}
+                <div className="flex min-h-screen flex-col bg-page-bg">
+                    <Header />
+                    <div className="relative flex-1 bg-page-bg">
+                        <TreeSpine />
+                        {children}
+                    </div>
+                    <Footer />
                 </div>
-                <Footer />
                 <StickyWatchDemo />
             </body>
         </html>

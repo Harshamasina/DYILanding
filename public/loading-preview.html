@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Loading State Preview - Design Your Invention</title>
+    <style>
+        :root {
+            --page-bg: #ffffff;
+            --page-bg-alt: #f8f9fa;
+            --card-border: #e2e8f0;
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --navy: #0f1b2d;
+            --navy-light: #1b2f54;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-on-dark: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--text-primary);
+            font-family: "DM Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-shell {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            background: var(--page-bg);
+        }
+
+        .top-veil {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 40;
+            pointer-events: none;
+        }
+
+        .top-veil-inner,
+        .header-inner {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 12px;
+        }
+
+        .top-veil-blur {
+            height: 112px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            mask-image: linear-gradient(to bottom, black 55%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 50;
+            padding-top: 12px;
+        }
+
+        nav {
+            display: flex;
+            height: 64px;
+            align-items: center;
+            gap: 24px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.78);
+            padding: 0 18px 0 24px;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            margin-right: auto;
+            text-decoration: none;
+        }
+
+        .brand img {
+            width: auto;
+            height: 32px;
+            display: block;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(15, 23, 42, 0.72);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            border-radius: 8px;
+            padding: 0 14px;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .button-outline {
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            background: white;
+        }
+
+        .button-primary {
+            border: 1px solid var(--primary);
+            color: white;
+            background: var(--primary);
+            box-shadow: 0 10px 24px rgba(79, 70, 229, 0.22);
+        }
+
+        main {
+            position: relative;
+            flex: 1;
+            min-height: 100vh;
+            padding-top: 144px;
+            background:
+                radial-gradient(circle at 22% 20%, rgba(79, 70, 229, 0.08), transparent 28%),
+                linear-gradient(180deg, #ffffff 0%, #fbfcff 58%, #ffffff 100%);
+        }
+
+        .tree-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: clamp(18px, 3vw, 44px);
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(99, 102, 241, 0.55), transparent);
+            opacity: 0.45;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .loading-area {
+            display: flex;
+            min-height: calc(100vh - 144px);
+            align-items: center;
+            justify-content: center;
+            padding: 32px 0 84px;
+        }
+
+        .loading-content {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .loading-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(79, 70, 229, 0.15);
+            border-radius: 999px;
+            background: rgba(79, 70, 229, 0.05);
+            padding: 7px 12px;
+            color: var(--primary);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .loading-glyph {
+            width: 16px;
+            height: 16px;
+            overflow: visible;
+        }
+
+        .loading-glyph__orbit,
+        .loading-glyph__spark {
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        .loading-glyph__spark {
+            opacity: 0.72;
+        }
+
+        .skeleton-stack {
+            margin-top: 32px;
+        }
+
+        .skeleton-title {
+            height: 48px;
+            max-width: 680px;
+            margin-right: auto;
+            margin-left: auto;
+            border-radius: 8px;
+            background: #e2e8f0;
+            animation: shimmer 1.7s ease-in-out infinite;
+        }
+
+        .skeleton-title.short {
+            width: 82%;
+            max-width: 560px;
+            margin-top: 16px;
+            background: #e8edf5;
+        }
+
+        .skeleton-lines {
+            margin-top: 28px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .skeleton-line {
+            height: 12px;
+            max-width: 680px;
+            margin-right: auto;
+            margin-left: auto;
+            border-radius: 999px;
+            background: #f1f5f9;
+            animation: shimmer 1.7s ease-in-out infinite;
+        }
+
+        .skeleton-line:nth-child(2) {
+            width: 90%;
+        }
+
+        .skeleton-line:nth-child(3) {
+            width: 72%;
+        }
+
+        .footer-card-wrap {
+            position: relative;
+            z-index: 10;
+            background: white;
+            padding-bottom: 0;
+        }
+
+        .trust-card {
+            margin-bottom: -96px;
+            border: 1px solid rgba(79, 70, 229, 0.15);
+            border-radius: 8px;
+            background: var(--navy-light);
+            padding: 40px;
+            box-shadow: 0 24px 60px rgba(79, 70, 229, 0.12);
+        }
+
+        .trust-card h2 {
+            margin: 0;
+            color: white;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(24px, 3vw, 34px);
+            line-height: 1.15;
+        }
+
+        .trust-card p {
+            max-width: 620px;
+            margin: 16px 0 0;
+            color: rgba(226, 232, 240, 0.72);
+            line-height: 1.7;
+        }
+
+        footer {
+            background: var(--navy);
+            color: var(--text-on-dark);
+            padding: 172px 0 32px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 48px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: white;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .footer-brand img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .footer-muted {
+            max-width: 440px;
+            color: rgba(226, 232, 240, 0.6);
+            line-height: 1.7;
+        }
+
+        .footer-column h3 {
+            margin: 0 0 18px;
+            color: var(--primary-light);
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .footer-column p {
+            margin: 10px 0;
+            color: rgba(226, 232, 240, 0.6);
+            font-size: 14px;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .loading-glyph__orbit {
+                animation: loading-glyph-orbit 1.25s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+
+            .loading-glyph__spark {
+                animation: loading-glyph-spark 1.25s ease-in-out infinite;
+            }
+        }
+
+        @keyframes loading-glyph-orbit {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes loading-glyph-spark {
+            0%,
+            100% {
+                opacity: 0.48;
+                transform: scale(0.82) rotate(0deg);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1) rotate(45deg);
+            }
+        }
+
+        @keyframes shimmer {
+            0%,
+            100% {
+                opacity: 0.56;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 960px) {
+            .nav-links,
+            .nav-actions {
+                display: none;
+            }
+
+            nav {
+                height: 56px;
+                padding: 0 14px;
+            }
+
+            .brand img {
+                height: 28px;
+            }
+
+            main {
+                padding-top: 112px;
+            }
+
+            .loading-area {
+                min-height: calc(100vh - 112px);
+            }
+
+            .skeleton-title {
+                height: 40px;
+            }
+
+            .trust-card {
+                margin-bottom: 32px;
+                padding: 28px;
+            }
+
+            footer {
+                padding-top: 56px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <div class="top-veil" aria-hidden="true">
+            <div class="top-veil-inner">
+                <div class="top-veil-blur"></div>
+            </div>
+        </div>
+
+        <header>
+            <div class="header-inner">
+                <nav aria-label="Preview navigation">
+                    <a class="brand" href="#">
+                        <img src="logos/dyi-wordmark.svg" alt="Design Your Invention" />
+                    </a>
+                    <ul class="nav-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Company</a></li>
+                    </ul>
+                    <div class="nav-actions">
+                        <a class="button button-outline" href="#">Search Patents</a>
+                        <a class="button button-primary" href="#">Book Demo</a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div class="tree-line" aria-hidden="true"></div>
+            <div class="container">
+                <div class="loading-area">
+                    <div class="loading-content" aria-live="polite" aria-busy="true">
+                        <div class="loading-pill">
+                            <svg class="loading-glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="loading-preview-glyph-gradient" x1="4" y1="4" x2="20" y2="20">
+                                        <stop offset="0%" stop-color="#818cf8"></stop>
+                                        <stop offset="52%" stop-color="#4f46e5"></stop>
+                                        <stop offset="100%" stop-color="#0f1b2d"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-opacity="0.16" stroke-width="2"></circle>
+                                <circle class="loading-glyph__orbit" cx="12" cy="12" r="8.5" stroke="url(#loading-preview-glyph-gradient)" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="34 22"></circle>
+                                <path class="loading-glyph__spark" d="M12 7.5l1.08 3.42L16.5 12l-3.42 1.08L12 16.5l-1.08-3.42L7.5 12l3.42-1.08L12 7.5z" fill="currentColor"></path>
+                            </svg>
+                            Loading
+                        </div>
+                        <div class="skeleton-stack">
+                            <div class="skeleton-title"></div>
+                            <div class="skeleton-title short"></div>
+                            <div class="skeleton-lines">
+                                <div class="skeleton-line"></div>
+                                <div class="skeleton-line"></div>
+                                <div class="skeleton-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="footer-card-wrap">
+            <div class="container">
+                <section class="trust-card" aria-label="Footer preview card">
+                    <h2>Built for teams that cannot compromise on security</h2>
+                    <p>This represents the trust card above the real footer. In the loading state, the page content keeps the footer below the first viewport instead of leaving an empty gap.</p>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <div class="footer-brand">
+                            <img src="logos/dyi-logo-mark.svg" alt="" />
+                            <span>Design Your Invention</span>
+                        </div>
+                        <p class="footer-muted">Compliance-native patent operations software for law firms, pharma teams, and biotech companies.</p>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Product</h3>
+                        <p>Features</p>
+                        <p>Patent Search</p>
+                        <p>AI Patent Drafting</p>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Company</h3>
+                        <p>Contact</p>
+                        <p>Careers</p>
+                        <p>Support</p>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Legal</h3>
+                        <p>Privacy Policy</p>
+                        <p>Terms of Service</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -98,7 +98,22 @@ const SEARCH_MODES: IconItem[] = [
     },
 ];
 
-const FILTERS = ['Jurisdiction', 'Filing date', 'IPC / CPC', 'Assignee', 'Inventor', 'Scope'];
+const FILTERS = [
+    'Jurisdiction',
+    'Filing date',
+    'IPC / CPC',
+    'Assignee',
+    'Inventor',
+    'Scope',
+    'Legal status',
+    'Publication date',
+    'Priority date',
+    'Patent family',
+    'Cited by',
+    'Clinical trials',
+    'Compounds',
+    'Many more',
+];
 
 const WORKFLOW: { icon: React.ElementType; label: string }[] = [
     { icon: FlaskConical, label: 'Molecule' },
@@ -350,44 +365,89 @@ export default function PatentSearchPage() {
             <section className="relative overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">
-                    <FadeIn>
-                        <div className="max-w-3xl">
-                            <h2
-                                className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
-                                style={{ fontFamily: 'var(--font-display)' }}
-                            >
-                                One Search Bar, Every Jurisdiction
-                            </h2>
-                            <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                Avoid switching between USPTO, EPO, WIPO, Google Patents, Lens, and
-                                clinical-trial databases. Search patents, assignees, claims, molecules,
-                                and trial signals from one workflow, across 120M+ patents and every
-                                jurisdiction.
-                            </p>
-                        </div>
-                    </FadeIn>
+                    <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
+                        <FadeIn>
+                            <div className="lg:sticky lg:top-28">
+                                <span
+                                    className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
+                                    style={{ fontFamily: 'var(--font-mono)' }}
+                                >
+                                    Universal Patent Search
+                                </span>
+                                <h2
+                                    className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                    style={{ fontFamily: 'var(--font-display)' }}
+                                >
+                                    One Search Bar, Every Jurisdiction
+                                </h2>
+                                <p
+                                    className="mt-4 text-base leading-relaxed text-text-secondary sm:text-lg"
+                                    style={{ fontFamily: 'var(--font-body)' }}
+                                >
+                                    Avoid switching between USPTO, EPO, WIPO, Google Patents, Lens,
+                                    and clinical-trial databases. Search patents, assignees, claims,
+                                    molecules, and trial signals from one workflow, across 120M+
+                                    patents and every jurisdiction.
+                                </p>
 
-                    <div className="mt-12 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
-                        {SEARCH_MODES.map((mode, i) => (
-                            <FadeIn key={mode.title} delay={i * 0.05}>
-                                <IconCard {...mode} />
-                            </FadeIn>
-                        ))}
+                                <div className="mt-8 overflow-hidden rounded-2xl border border-card-border bg-white shadow-xl shadow-primary/[0.05]">
+                                    <div className="border-b border-card-border bg-linear-to-r from-primary/[0.08] via-white to-white p-4">
+                                        <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-white px-3 py-2.5 shadow-sm">
+                                            <Search className="h-4 w-4 shrink-0 text-primary" />
+                                            <span
+                                                className="min-w-0 flex-1 truncate text-sm font-semibold text-text-primary"
+                                                style={{ fontFamily: 'var(--font-body)' }}
+                                            >
+                                                antibody AND melanoma OR trial sponsor
+                                            </span>
+                                            <span
+                                                className="hidden rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white sm:inline-flex"
+                                                style={{ fontFamily: 'var(--font-mono)' }}
+                                            >
+                                                Search
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-3 divide-x divide-card-border">
+                                        <SearchMetric value="120M+" label="patents" />
+                                        <SearchMetric value="100+" label="jurisdictions" />
+                                        <SearchMetric value="6" label="search modes" />
+                                    </div>
+                                </div>
+                            </div>
+                        </FadeIn>
+
+                        <div>
+                            <div className="grid items-stretch gap-3 sm:grid-cols-2">
+                                {SEARCH_MODES.map((mode, i) => (
+                                    <FadeIn key={mode.title} delay={i * 0.04} className="h-full">
+                                        <SearchModeCard {...mode} />
+                                    </FadeIn>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
-                    <FadeIn delay={0.1}>
-                        <div className="mt-12 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-text-primary">
-                                <SlidersHorizontal className="h-4 w-4 text-primary" />
-                                Filter results by
-                            </span>
-                            <div className="flex flex-wrap gap-2">
-                                {FILTERS.map((f, i) => (
-                                    <FilterChip key={f} label={f} active={i === 0} />
-                                ))}
+                    <FadeIn delay={0.12}>
+                        <div className="mt-8 rounded-2xl border border-card-border bg-white p-5 shadow-sm sm:p-6">
+                            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                                <div className="max-w-sm">
+                                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-text-primary">
+                                        <SlidersHorizontal className="h-4 w-4 text-primary" />
+                                        Filter results by
+                                    </span>
+                                    <p
+                                        className="mt-1 text-[13px] leading-relaxed text-text-secondary"
+                                        style={{ fontFamily: 'var(--font-body)' }}
+                                    >
+                                        Narrow broad searches without leaving the same workflow.
+                                    </p>
+                                </div>
+                                <div className="flex flex-1 flex-wrap gap-2 lg:justify-end">
+                                    {FILTERS.map((f, i) => (
+                                        <FilterChip key={f} label={f} active={i === 0} />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </FadeIn>
@@ -705,6 +765,55 @@ function FilterChip({ label, active }: { label: string; active?: boolean }) {
             <SlidersHorizontal className="h-3.5 w-3.5 text-primary/75 transition-transform duration-300 group-hover:scale-110" />
             {label}
         </span>
+    );
+}
+
+function SearchMetric({ value, label }: { value: string; label: string }) {
+    return (
+        <div className="p-4 text-center">
+            <p
+                className="text-lg font-bold text-text-primary sm:text-xl"
+                style={{ fontFamily: 'var(--font-display)' }}
+            >
+                {value}
+            </p>
+            <p
+                className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted"
+                style={{ fontFamily: 'var(--font-mono)' }}
+            >
+                {label}
+            </p>
+        </div>
+    );
+}
+
+function SearchModeCard({ icon: Icon, title, description }: IconItem) {
+    return (
+        <article className="group relative flex h-full min-h-[156px] overflow-hidden rounded-2xl border border-card-border bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/[0.05]">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/35 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+            <div className="flex items-start gap-3.5">
+                <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:bg-primary/5">
+                    <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
+                </div>
+                <div className="min-w-0">
+                    <h3
+                        className="text-[15px] font-semibold leading-snug text-text-primary transition-colors duration-300 group-hover:text-primary"
+                        style={{ fontFamily: 'var(--font-display)' }}
+                    >
+                        {title}
+                    </h3>
+                    <p
+                        className="mt-1.5 text-[13px] leading-relaxed text-text-secondary"
+                        style={{ fontFamily: 'var(--font-body)' }}
+                    >
+                        {description}
+                    </p>
+                </div>
+            </div>
+        </article>
     );
 }
 

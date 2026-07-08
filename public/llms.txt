@@ -36,6 +36,7 @@
 - [Prior Art Search Guide](https://designyourinvention.com/blog/free-prior-art-search-guide): Free guide for conducting effective prior art searches online.
 - [Patent Data Migration Guide](https://designyourinvention.com/blog/patent-data-migration-csv-import): Guide for migrating patent data using a structured CSV process.
 - [NPE Case Management Guide](https://designyourinvention.com/blog/npe-case-management-guide): Guide for managing non-provisional patent application cases effectively.
+- [Patent Deadline Calendar Feeds](https://designyourinvention.com/blog/patent-deadline-calendar-feeds-attorneys): Practical guide to private calendar feeds for patent attorneys and docket teams.
 - [Patent Docketing Best Practices](https://designyourinvention.com/blog/patent-docketing-best-practices): Essential strategies for effective patent docketing management and practices.
 - [Patent Analytics Insights](https://designyourinvention.com/blog/patent-portfolio-analytics-roi): Utilizing patent analytics to maximize business value efficiently.
 - [PCT Filing Management Tips](https://designyourinvention.com/blog/pct-filing-management-tips): Essential tips for managing PCT filing deadlines effectively.
