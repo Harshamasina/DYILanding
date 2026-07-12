@@ -1,6 +1,20 @@
-# Cache policy for designyourinvention.com (static export).
+# Security + cache policy for designyourinvention.com (static export).
 # Cloudflare Pages reads this file from the build output root. On Vercel,
 # configure the same rules in vercel.json (the platform ignores _headers).
+
+# Baseline security headers for every response. A static Next.js export ships
+# inline hydration scripts, so a strict script-src CSP would need nonces the
+# export can't emit — a full script CSP is a tested follow-up. These headers are
+# safe regardless: frame-ancestors + X-Frame-Options stop clickjacking, nosniff
+# stops MIME sniffing, HSTS enforces HTTPS, and Referrer/Permissions-Policy
+# tighten leakage and feature access.
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: frame-ancestors 'none'
 
 # Content-hashed build output (JS, CSS, and self-hosted next/font woff2 files
 # under /_next/static/media). The hash changes whenever the bytes change, so
