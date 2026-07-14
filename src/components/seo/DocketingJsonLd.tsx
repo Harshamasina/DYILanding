@@ -30,6 +30,12 @@ const softwareApplicationSchema = {
         'Office action tracking and outside-counsel firm assignments',
         'Family completeness scoring across 0 to 100',
         'Bulk CSV import and CSV export of deadlines, fees, and entities',
+        'Branded PDF portfolio health reports with tenant logo, selectable sections, and an as-of date',
+        'Verifiable report integrity with a unique Report ID and SHA-256 checksum written to the audit log',
+        'Loss of Exclusivity timeline linking drug products to patent families and regulatory exclusivities',
+        'Patent wall, regulatory floor, and combined protection horizon per jurisdiction and indication',
+        'Interactive what-if that recomputes affected products when a patent family is dropped',
+        'Full tenant data export in NDJSON with JSON Schemas and CSV, plus self-serve personal data export',
         'Append-only audit trail, reason-for-change enforcement, RLS tenant isolation, and RBAC',
     ],
 };

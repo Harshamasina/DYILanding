@@ -23,6 +23,9 @@ import {
     Check,
     ArrowRight,
     Play,
+    FileText,
+    Fingerprint,
+    PackageOpen,
 } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
 import { Container } from '@/components/ui/Container';
@@ -34,6 +37,7 @@ import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedDocketingWorkflow } from '@/components/ui/AnimatedDocketingWorkflow';
+import { LoeCard } from '@/components/sections/LoeCard';
 import { DocketingHeroSvg } from '@/components/illustrations/DocketingHeroSvg';
 import { DocketingJsonLd } from '@/components/seo/DocketingJsonLd';
 import { PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
@@ -62,6 +66,7 @@ const TRACKS = [
     'Office Actions',
     'Annuity Fees',
     'Patent Fees',
+    'Drug Products',
     'Custom Reminders',
 ];
 
@@ -175,13 +180,28 @@ const OPS: IconItem[] = [
         title: 'Filtering and export',
         description: 'Filter deadlines by type, family, priority, date range, and assignee, with a "mine only" view for limited-permission users. Export deadlines, fees, and entity lists to CSV.',
     },
+    {
+        icon: FileText,
+        title: 'Branded PDF reports',
+        description: 'Turn the live docket into a client-ready document. The portfolio health report carries your logo and organization name, the sections you choose, and an optional as-of date, with deadlines ranked by risk, fees grouped per currency, and stale-record alerts.',
+    },
+    {
+        icon: Fingerprint,
+        title: 'Verifiable report integrity',
+        description: 'Every report is stamped with a unique Report ID and a SHA-256 checksum written to your audit log, and the preview and the download are byte identical. A report you handed a client months ago can still be verified against the record.',
+    },
+    {
+        icon: PackageOpen,
+        title: 'Data portability, no lock-in',
+        description: 'Export the whole account, not just a view. Families, filings, cases, fees, reminders, and audit history come out as structured NDJSON with schemas and CSV renderings, on every plan. Each user can also export their own personal data from their profile.',
+    },
 ];
 
 const SECURITY: IconItem[] = [
     {
         icon: ScrollText,
         title: 'Full audit trail',
-        description: 'Every create, update, and delete on reminders, fees, and cases is logged with actor, before and after state, timestamp, IP, and request ID.',
+        description: 'Every create, update, and delete on reminders, fees, and cases is logged with actor, before and after state, timestamp, IP, and request ID. Report generation and data exports are audited the same way, and an account export requires a typed reason and notifies every admin.',
     },
     {
         icon: Database,
@@ -242,6 +262,16 @@ const PAGE_FAQ: FaqItem[] = [
             'Every create, update, and delete on reminders, fees, and cases is logged with actor, before and after state, timestamp, IP, and request ID. Edits to sensitive fields require a typed reason, deletions always do, and tenant data is isolated with PostgreSQL Row-Level Security. Read versus write is enforced server-side per module.',
     },
     {
+        question: 'Can I hand a client or an auditor a report straight from the docket?',
+        answer:
+            'Yes. The portfolio health report turns the live docket into a branded PDF in one click. It carries your organization logo and name, only the sections you select, and an optional as-of date, and it covers portfolio stats, family analytics, deadlines ranked by risk, annuity and patent fees grouped per currency, and stale-record alerts. Every report is stamped with a unique Report ID and a SHA-256 checksum written to your audit log, so a document you handed over months ago can still be verified against the record.',
+    },
+    {
+        question: 'Can I see when a drug product actually loses exclusivity?',
+        answer:
+            'Yes. The Loss of Exclusivity timeline links each drug product to the patent families and regulatory exclusivities that protect it, then shows three numbers per jurisdiction and indication: the patent wall (the latest granted patent expiry), the regulatory floor (the latest active exclusivity end date), and the combined horizon, which is the later of the two. A live what-if lets you drop a patent family and watch every affected product recompute, so the cost of letting an annuity lapse is visible before the decision is made. The timeline visualizes the dates your attorneys record. It is a portfolio visualization, not a legal determination.',
+    },
+    {
         question: 'How does it track renewal and annuity fee dates?',
         answer:
             'Annuity and renewal fees are tracked with amount, currency, due date, fee year, renewal year, and a grace-period end date. The engine derives each renewal deadline automatically from the case data, buckets it by urgency, and the daily digest surfaces it before it comes due, distinguishing "overdue but still payable in grace" from "truly lapsed."',
@@ -255,6 +285,11 @@ const PAGE_FAQ: FaqItem[] = [
         question: 'How hard is it to migrate our existing docket from spreadsheets or another tool?',
         answer:
             'Most teams start with a bulk CSV import. You upload your existing portfolio and the system validates every row before anything touches the database, then creates families with their PRV, PCT, and NPE child records and key dates in a single atomic transaction with a full audit trail. Because deadlines are derived on read, every dependent deadline appears automatically the moment the dates are imported.',
+    },
+    {
+        question: 'If we ever leave, can we take our data with us?',
+        answer:
+            'Yes, on every plan, and without a support ticket. A tenant admin can export the entire account in one click: families, filings, PRV, PCT and NPE cases, office actions, fees, reminders, prior-art references, team roles, and the audit trail. The bundle ships as structured NDJSON with a JSON Schema for every dataset, plus CSV renderings of the common docket views, so it stays readable in Excel and parseable by another system. Each dataset carries a SHA-256 checksum, the whole export is a consistent point-in-time snapshot, and the export itself is audited and emailed to every admin. Individual users can export their own personal data from their profile.',
     },
     {
         question: 'Does it integrate with our existing tools, and is it cloud-based?',
@@ -480,7 +515,7 @@ export default function DocketingPage() {
                 </Container>
             </section>
 
-            {/* ── 4. Proactive notifications ── */}
+            {/* ── 4. Proactive notifications and the stale-alert hygiene report ── */}
             <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
                     <FadeIn>
@@ -503,50 +538,35 @@ export default function DocketingPage() {
                             >
                                 Docketing does not wait for users to log in. Three automated digest jobs
                                 push deadlines out, each respecting user notification preferences, throttled
-                                to provider limits, and failing gracefully per user.
+                                to provider limits, and failing gracefully per user. A fourth report goes
+                                further and catches what date-only docketing misses entirely.
                             </p>
                         </div>
                     </FadeIn>
 
-                    <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
+                    <FadeIn delay={0.05}>
+                        <GroupLabel
+                            label="Automated digests"
+                            note="Pushed on a schedule, in each tenant local timezone."
+                        />
+                    </FadeIn>
+
+                    <div className="mt-6 grid gap-6 lg:grid-cols-3">
                         {DIGESTS.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.08}>
                                 <CapabilityCard {...item} />
                             </FadeIn>
                         ))}
                     </div>
-                </Container>
-            </section>
 
-            {/* ── 5. Stale-alert hygiene report ── */}
-            <section className="py-20 sm:py-24 lg:py-28">
-                <Container>
-                    <FadeIn>
-                        <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Stale-alert hygiene report
-                            </span>
-                            <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
-                                style={{ fontFamily: 'var(--font-display)' }}
-                            >
-                                Catch What Date-Only Docketing Misses
-                            </h2>
-                            <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                Beyond hard deadlines, the system surfaces silent risks, cases that are not
-                                generating a deadline but still need attention. The weekly report covers six
-                                buckets.
-                            </p>
-                        </div>
+                    <FadeIn delay={0.05}>
+                        <GroupLabel
+                            label="Weekly stale-alert report"
+                            note="Six buckets of silent risk that never generate a hard deadline."
+                        />
                     </FadeIn>
 
-                    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
+                    <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {STALE_BUCKETS.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.06}>
                                 <CapabilityCard {...item} />
@@ -556,8 +576,8 @@ export default function DocketingPage() {
                 </Container>
             </section>
 
-            {/* ── 6. Fees, firms, and portfolio operations ── */}
-            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
+            {/* ── 5. Fees, firms, reporting, operations, and the LOE timeline ── */}
+            <section className="py-20 sm:py-24 lg:py-28">
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
@@ -565,7 +585,7 @@ export default function DocketingPage() {
                                 className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
                                 style={{ fontFamily: 'var(--font-mono)' }}
                             >
-                                Fees, firms, and operations
+                                Fees, firms, reporting, and operations
                             </span>
                             <h2
                                 className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
@@ -579,7 +599,9 @@ export default function DocketingPage() {
                             >
                                 Fees, outside counsel, family health, dashboards, and bulk operations all
                                 feed the same prioritized deadline view, so the docket reflects how patent
-                                work actually flows.
+                                work actually flows. The same data becomes a branded PDF report for a client
+                                or an auditor, it can leave in a format you own whenever you want it, and it
+                                rolls up into the protection horizon of every product it covers.
                             </p>
                         </div>
                     </FadeIn>
@@ -590,6 +612,17 @@ export default function DocketingPage() {
                                 <CapabilityCard {...item} />
                             </FadeIn>
                         ))}
+                    </div>
+
+                    <FadeIn delay={0.05}>
+                        <GroupLabel
+                            label="Loss of Exclusivity timeline"
+                            note="Where the docket meets the product it protects."
+                        />
+                    </FadeIn>
+
+                    <div className="mt-8">
+                        <LoeCard />
                     </div>
                 </Container>
             </section>
@@ -747,6 +780,25 @@ function DeadlineTypeRow({ row }: { row: DeadlineType }) {
                 </span>
             </td>
         </tr>
+    );
+}
+
+function GroupLabel({ label, note }: { label: string; note: string }) {
+    return (
+        <div className="mt-12 flex flex-col gap-1.5 border-t border-card-border pt-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 lg:mt-14">
+            <span
+                className="text-xs font-bold uppercase tracking-[0.15em] text-text-primary"
+                style={{ fontFamily: 'var(--font-mono)' }}
+            >
+                {label}
+            </span>
+            <span
+                className="text-sm text-text-muted"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                {note}
+            </span>
+        </div>
     );
 }
 
