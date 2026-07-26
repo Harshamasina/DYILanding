@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { TreeSpine } from '@/components/motion/TreeSpine';
+import { HashScroll } from '@/components/motion/HashScroll';
 import { StickyWatchDemo } from '@/components/ui/StickyWatchDemo';
 import '@/styles/globals.css';
 
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
                 url: '/og-image.png',
                 width: 1200,
                 height: 630,
-                alt: 'Design Your Invention — Compliance-Native IP Portfolio Management',
+                alt: 'Design Your Invention: Compliance-Native IP Portfolio Management',
             },
         ],
         locale: 'en_US',
@@ -76,6 +77,7 @@ export default function RootLayout({
                     Skip to content
                 </a>
                 <JsonLd />
+                <HashScroll />
                 <div className="flex min-h-screen flex-col bg-page-bg">
                     <Header />
                     <div className="relative flex-1 bg-page-bg">

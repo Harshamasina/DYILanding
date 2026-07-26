@@ -44,7 +44,7 @@ const LAYERS: readonly Layer[] = [
         Icon: Database,
     },
     {
-        title: 'Immutable Audit Trails',
+        title: 'Append-Only Audit Trails',
         description:
             'Every critical mutation records actor, timestamp, reason-for-change, and before/after values.',
         Icon: FileClock,
@@ -62,9 +62,9 @@ const LAYERS: readonly Layer[] = [
         Icon: UserCheck,
     },
     {
-        title: 'Zero-Retention AI',
+        title: 'Confidential AI Processing',
         description:
-            'AI drafting workflows are designed so confidential invention data is not used for model training.',
+            'AI drafting runs on enterprise providers configured so invention data is processed only to produce your draft, under the applicable provider agreements.',
         Icon: Brain,
     },
 ];
@@ -148,12 +148,12 @@ const FACETS: readonly FacetGeometry[] = [
         annotationColor: '#818CF8',
         gradId: 'moat-g4',
     },
-    /* 5 — top-left (darkest) → Zero-Retention AI */
+    /* 5 — top-left (darkest) → Confidential AI Processing */
     {
         points: '240,108 340,50 340,175',
         line: { x1: 290, y1: 79, x2: 250, y2: 0 },
         dot: { cx: 250, cy: 0 },
-        labelLines: ['Zero-Retention', 'AI'],
+        labelLines: ['Confidential', 'AI'],
         labelX: 242,
         labelY: -14,
         labelAnchor: 'end',
@@ -234,7 +234,7 @@ export function SecurityMoatDiagram() {
                     viewBox="100 -10 480 380"
                     className="w-full max-w-160 overflow-visible"
                     role="img"
-                    aria-label="Six-layer security architecture diagram. Cube facets represent: Enforced Row-Level Security, Strict Tenant Isolation, Immutable Audit Trails, Granular RBAC, Enterprise SSO, and Zero-Retention AI."
+                    aria-label="Six-layer security architecture diagram. Cube facets represent: Enforced Row-Level Security, Strict Tenant Isolation, Append-Only Audit Trails, Granular RBAC, Enterprise SSO, and Confidential AI Processing."
                 >
                     <defs>
                         <linearGradient id="moat-g0" x1="0" y1="0" x2="1" y2="1">

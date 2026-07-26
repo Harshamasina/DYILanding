@@ -19,18 +19,19 @@ const softwareApplicationSchema = {
     operatingSystem: 'Web',
     url: PAGE_URL,
     description:
-        'Attorney-in-the-loop AI patent drafting. Turn invention details and saved prior art into a filing-ready first draft, claims, abstract, description, and novelty analysis, tailored to the target jurisdiction.',
+        'Attorney-in-the-loop AI patent drafting. Turn invention details and saved prior art into a structured first draft for attorney review: claims, abstract, description, and novelty analysis, prepared for the drafting conventions of the target jurisdiction.',
     featureList: [
-        'Prior-art search across 100+ jurisdictions via EPO Open Patent Services',
+        'Prior-art search across 100+ patent authorities via EPO Open Patent Services',
         'Prior-art management: save, annotate, paste claim text, track relevance per family',
         'Jurisdiction-specific draft generation (US, EP, IN, PCT): claims, abstract, description, novelty analysis',
         'Structured, versioned claim tree with per-unit, append-only revision history',
         'Per-claim and per-section regeneration and interactive refinement',
-        'Second-opinion confidence review by a separate model (Claude Opus 4.7)',
-        'Frozen, immutable prior-art snapshots for defensible provenance',
-        'Tamper-resistant, append-only audit trail (21 CFR Part 11 patterns)',
+        'Second-opinion review by a separate, independent model',
+        'Frozen prior-art snapshots for defensible provenance',
+        'Append-only audit trail (21 CFR Part 11 patterns)',
         'Role-based access control with server-enforced permissions',
-        'Filing-ready DOCX export',
+        'Mandatory attorney review before export or filing',
+        'Formatted DOCX export',
     ],
 };
 

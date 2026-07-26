@@ -56,7 +56,8 @@ export function DemoVideoSection() {
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             See docketing, prior art search, and AI drafting run end
-                            to end in one audited platform.
+                            to end in one connected, audit-trailed workspace.
+                            Recorded with synthetic demo data.
                         </p>
                     </div>
                 </FadeIn>

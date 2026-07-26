@@ -45,7 +45,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'Free Patent Search With Chemical Structure and Clinical Trial Data',
     description:
-        'Free patent search across 120M+ patents in every jurisdiction. Detect disclosed compounds, run substructure search, and see linked clinical trials.',
+        'Free patent search across a corpus of 120M+ patent records from 100+ patent authorities. Detect disclosed compounds, run substructure search, and see linked clinical trials.',
     path: '/patent-search/',
 });
 
@@ -58,8 +58,8 @@ interface IconItem {
 }
 
 const TRUST_STRIP = [
-    '120M+ patents covered',
-    '100+ jurisdictions',
+    '120M+ patent records',
+    '100+ patent authorities',
     'Chemical structure search',
     'Clinical-trial intelligence',
     'Export-ready results',
@@ -132,7 +132,7 @@ const ENRICHMENT: IconItem[] = [
     {
         icon: Network,
         title: 'Substructure Search',
-        description: 'Every pharma patent is back-linked to the compounds it discloses. See how many a patent covers, then find every other patent disclosing the same molecule or scaffold, the substructure-aware search premium tools charge a fortune for.',
+        description: 'Pharma patents are back-linked to the compounds detected in them. See how many a patent covers, then find other patents in the corpus disclosing the same molecule or scaffold, the substructure-aware search premium tools charge a fortune for.',
     },
     {
         icon: Activity,
@@ -144,7 +144,7 @@ const ENRICHMENT: IconItem[] = [
 const DATA_SOURCES = ['PubChem', 'SureChEMBL', 'UniChem', 'RDKit', 'ClinicalTrials.gov'];
 
 const FREE_FEATURES = [
-    'Search 120M+ patents across every jurisdiction',
+    'Search 120M+ patent records across 100+ authorities',
     'Titles and abstracts, six search modes',
     'Disclosed compounds with 2D structures',
     'Linked clinical-trial data',
@@ -152,7 +152,7 @@ const FREE_FEATURES = [
 
 const WORK_FEATURES = [
     'Everything in free search',
-    'Full-text claims on every patent',
+    'Full-text claims where the source dataset provides them',
     'CSV export of results',
     'More results per page and a higher search limit',
     'Save patents to a portfolio',
@@ -208,12 +208,12 @@ const PATENT_SEARCH_FAQ: FaqItem[] = [
     {
         question: 'Is patent search free?',
         answer:
-            'Yes. You can search 120M+ patents across every jurisdiction for free, with no account. Signing in with a work email unlocks full-text claims, CSV export, and more results per page, but the core search and the compound and clinical-trial intelligence are free to use.',
+            'Yes. You can search a corpus of 120M+ patent records from 100+ patent authorities for free, with no account. Signing in with a work email unlocks full-text claims, CSV export, and more results per page, but the core search and the compound and clinical-trial intelligence are free to use.',
     },
     {
         question: 'Do I need an account to search?',
         answer:
-            'No. Anonymous search covers titles and abstracts across all jurisdictions and shows disclosed compounds and linked clinical trials. You only need to sign in with a work email when you want full-text claims or to export results to CSV.',
+            'No. Anonymous search covers titles and abstracts across the authorities in the corpus and shows detected compounds and linked clinical trials. You only need to sign in with a work email when you want full-text claims or to export results to CSV.',
     },
     {
         question: 'Can I search by assignee, inventor, jurisdiction, and legal status?',
@@ -223,7 +223,7 @@ const PATENT_SEARCH_FAQ: FaqItem[] = [
     {
         question: 'Can I search patents by chemical structure or compound?',
         answer:
-            'Yes. Compounds disclosed in a patent are detected and rendered as 2D structures with their InChIKey, IUPAC name, SMILES, and molecular weight. From any compound you can find every other patent that discloses the same molecule or scaffold.',
+            'Yes. Compounds disclosed in a patent are detected and rendered as 2D structures with their InChIKey, IUPAC name, SMILES, and molecular weight. From any compound you can find other patents in the corpus that disclose the same molecule or scaffold. Detection is automated enrichment over third-party chemistry sources, so verify structures and associations against the original patent before relying on them.',
     },
     {
         question: 'Does the platform support pharma and biotech patent research?',
@@ -233,7 +233,7 @@ const PATENT_SEARCH_FAQ: FaqItem[] = [
     {
         question: 'What clinical-trial data is shown?',
         answer:
-            'Patents are linked to trials from ClinicalTrials.gov, showing the trial phase, recruitment status, lead sponsor, and indication. This lets you see, at a glance, what is in clinical development for a molecule and who is running it.',
+            'Patents are linked to trials from ClinicalTrials.gov, showing the trial phase, recruitment status, lead sponsor, and indication. This lets you see, at a glance, what is in clinical development for a molecule and who is running it. Patent-to-trial links are inferred from compound and sponsor data and should be confirmed against the trial record.',
     },
     {
         question: 'Can my team export patent results?',
@@ -243,22 +243,22 @@ const PATENT_SEARCH_FAQ: FaqItem[] = [
     {
         question: 'Can this support freedom-to-operate or competitive-landscape research?',
         answer:
-            'It is well suited to it. Universal coverage, substructure search, assignee and inventor search, and the linked clinical-trial landscape make competitive-landscape and freedom-to-operate scoping fast. For formal work, results flow into the full Design Your Invention platform, where prior art is saved with an immutable audit trail.',
+            'It is well suited to scoping that work. Coverage across 100+ patent authorities, substructure search, assignee and inventor search, and the linked clinical-trial landscape make competitive-landscape and freedom-to-operate scoping fast. Results are a research aid, not a legal opinion: a freedom-to-operate conclusion requires qualified counsel and an appropriately scoped search, including sources and jurisdictions this corpus may not cover. For formal work, results flow into the full Design Your Invention platform, where prior art is saved with an append-only audit trail.',
     },
     {
         question: 'How many patents and jurisdictions are covered?',
         answer:
-            'The search corpus covers 120M+ patents spanning every jurisdiction and IPC class, sourced from the Google Patents public dataset via BigQuery. Coverage is universal, not limited to a single field or country.',
+            'The public search corpus covers 120M+ patent records from 100+ patent authorities across IPC classes, sourced from the Google Patents public dataset via BigQuery. Coverage, full-text availability, language, and legal-status freshness vary by authority and by publication delay, so it is broad rather than complete. The in-app prior-art search inside the platform uses a separate data source, so result sets can differ.',
     },
     {
         question: 'How is this different from Google Patents or Lens?',
         answer:
-            'Beyond keyword search, every result is enriched: compound chemistry with 2D structures, substructure search to find all patents disclosing a scaffold, and a linked clinical-trial landscape. You can save patents to a portfolio, export to CSV, and move straight into a full IP management platform whose in-app prior-art search is powered by Lens.org.',
+            'Beyond keyword search, results carry an enrichment layer: compound chemistry with 2D structures, substructure search to find other patents in the corpus disclosing a scaffold, and a linked clinical-trial landscape. You can save patents to a portfolio, export to CSV, and move straight into a full IP management platform with its own integrated prior-art search.',
     },
     {
         question: 'Is my search activity private?',
         answer:
-            'You can search without creating an account, and anonymous searches are not tied to a personal profile. When you sign in, your saved patents and portfolio are private to your account. The wider platform is built for confidential invention workflows with audit-grade access controls.',
+            'You can search without creating an account, and anonymous searches are not tied to a personal profile. Queries are still processed and logged for operational purposes such as rate limiting, abuse prevention, and service monitoring, as described in the privacy policy. When you sign in, your saved patents and portfolio are private to your account, and the wider platform is built for confidential invention workflows with tenant-scoped access controls.',
     },
     {
         question: 'Which databases power the enrichment?',
@@ -268,12 +268,12 @@ const PATENT_SEARCH_FAQ: FaqItem[] = [
     {
         question: 'How do I run a prior art search before drafting an application?',
         answer:
-            'Start with a free keyword, assignee, inventor, patent-number, or chemical-structure search to map the existing art, then save the relevant patents. Those saved references carry into the full Design Your Invention platform, where AI drafting generates claims positioned to be novel over exactly that prior art, against a frozen, auditable snapshot of what was reviewed.',
+            'Start with a free keyword, assignee, inventor, patent-number, or chemical-structure search to map the existing art, then save the relevant patents. Those saved references carry into the full Design Your Invention platform, where AI drafting generates draft claims with exactly those references available as context, against a frozen, auditable snapshot of what was reviewed. The draft and the search behind it both require attorney review.',
     },
     {
         question: 'Can I search Indian patents and other international jurisdictions?',
         answer:
-            'Yes. The corpus spans every jurisdiction, including Indian (IN) patents alongside US, EP, WO, CN, JP, KR, and the rest, sourced from the Google Patents public dataset via BigQuery. You can filter any query by jurisdiction, and a free anonymous search already covers titles and abstracts worldwide; signing in with a work email adds full-text claims and CSV export.',
+            'Yes. The corpus spans 100+ patent authorities, including Indian (IN) patents alongside US, EP, WO, CN, JP, KR, and others, sourced from the Google Patents public dataset via BigQuery. You can filter any query by jurisdiction, and a free anonymous search already covers titles and abstracts worldwide; signing in with a work email adds full-text claims and CSV export.',
     },
 ];
 
@@ -361,7 +361,7 @@ export default function PatentSearchPage() {
                 </Container>
             </section>
 
-            {/* ── 2. Universal search ── */}
+            {/* ── 2. Global search ── */}
             <section className="relative overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">
@@ -372,13 +372,13 @@ export default function PatentSearchPage() {
                                     className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
                                     style={{ fontFamily: 'var(--font-mono)' }}
                                 >
-                                    Universal Patent Search
+                                    Global Patent Search
                                 </span>
                                 <h2
                                     className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
-                                    One Search Bar, Every Jurisdiction
+                                    One Search Bar, 100+ Patent Authorities
                                 </h2>
                                 <p
                                     className="mt-4 text-base leading-relaxed text-text-secondary sm:text-lg"
@@ -386,8 +386,9 @@ export default function PatentSearchPage() {
                                 >
                                     Avoid switching between USPTO, EPO, WIPO, Google Patents, Lens,
                                     and clinical-trial databases. Search patents, assignees, claims,
-                                    molecules, and trial signals from one workflow, across 120M+
-                                    patents and every jurisdiction.
+                                    molecules, and trial signals from one workflow, across a corpus
+                                    of 120M+ patent records from 100+ patent authorities. Coverage
+                                    and full-text availability vary by source and publication delay.
                                 </p>
 
                                 <div className="mt-8 overflow-hidden rounded-2xl border border-card-border bg-white shadow-xl shadow-primary/[0.05]">
@@ -409,8 +410,8 @@ export default function PatentSearchPage() {
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-3 divide-x divide-card-border">
-                                        <SearchMetric value="120M+" label="patents" />
-                                        <SearchMetric value="100+" label="jurisdictions" />
+                                        <SearchMetric value="120M+" label="patent records" />
+                                        <SearchMetric value="100+" label="authorities" />
                                         <SearchMetric value="6" label="search modes" />
                                     </div>
                                 </div>
@@ -469,15 +470,15 @@ export default function PatentSearchPage() {
                                 className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
-                                Every Patent, From Molecule to Clinic
+                                From Molecule to Clinic, Beside the Patent
                             </h2>
                             <p
                                 className="mt-4 text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Pharma-relevant patents pick up a layer of chemistry and clinical
-                                context that generic patent search never shows, drawn from the same
-                                databases the field already trusts.
+                                context that generic patent search does not surface, drawn from the
+                                same databases the field already trusts.
                             </p>
                         </div>
                     </FadeIn>
@@ -519,6 +520,39 @@ export default function PatentSearchPage() {
                                     <SourceBadge key={s} label={s} />
                                 ))}
                             </div>
+                        </div>
+                    </FadeIn>
+
+                    {/* Enrichment is automated inference over third-party data, so the
+                        boundary between what the tool surfaces and what a professional
+                        must confirm is stated next to the claim, not in the footer. */}
+                    <FadeIn delay={0.12}>
+                        <div className="mt-6 rounded-2xl border border-compliance/25 bg-compliance/[0.04] px-6 py-5">
+                            <h3
+                                className="text-sm font-semibold text-text-primary"
+                                style={{ fontFamily: 'var(--font-display)' }}
+                            >
+                                What to verify before you rely on a result
+                            </h3>
+                            <ul
+                                className="mt-3 flex flex-col gap-2 text-[13px] leading-relaxed text-text-secondary"
+                                style={{ fontFamily: 'var(--font-body)' }}
+                            >
+                                <li>
+                                    Compound detection and patent-to-trial links are automated
+                                    enrichment. Check associations against the original patent and
+                                    trial records before acting on them.
+                                </li>
+                                <li>
+                                    Coverage, full-text availability, language, and legal-status
+                                    freshness vary by patent authority and by publication delay.
+                                </li>
+                                <li>
+                                    Search results are not a legal opinion. Freedom-to-operate,
+                                    validity, and patentability conclusions require qualified counsel
+                                    and an appropriately scoped search.
+                                </li>
+                            </ul>
                         </div>
                     </FadeIn>
                 </Container>
@@ -587,16 +621,18 @@ export default function PatentSearchPage() {
                                     className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl"
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
-                                    The Same Search, Wired Into Your IP Workflow
+                                    Search That Carries Into Your IP Workflow
                                 </h2>
                                 <p
                                     className="mt-4 text-lg leading-relaxed text-text-secondary"
                                     style={{ fontFamily: 'var(--font-body)' }}
                                 >
                                     The free tool is the front door. Inside Design Your Invention,
-                                    prior-art search runs across 100+ jurisdictions, saves straight to
-                                    a patent family with an immutable audit trail, and feeds AI-assisted
-                                    drafting, all in one platform.
+                                    prior-art search runs across 100+ patent authorities, saves
+                                    straight to a patent family with an append-only audit trail, and
+                                    feeds AI-assisted drafting, all in one platform. The public search
+                                    and the in-app prior-art search use separate data sources, so
+                                    result sets can differ.
                                 </p>
                                 <ul className="mt-6 flex flex-col gap-4">
                                     <li className="flex items-start gap-3">
@@ -605,8 +641,9 @@ export default function PatentSearchPage() {
                                             className="text-sm leading-relaxed text-text-secondary"
                                             style={{ fontFamily: 'var(--font-body)' }}
                                         >
-                                            Prior-art search across 100+ jurisdictions, with full-text
-                                            claims, legal status, citations, and family.
+                                            Prior-art search across 100+ patent authorities, with
+                                            full-text claims, legal status, citations, and family
+                                            where the source provides them.
                                         </span>
                                     </li>
                                     <li className="flex items-start gap-3">
@@ -616,7 +653,7 @@ export default function PatentSearchPage() {
                                             style={{ fontFamily: 'var(--font-body)' }}
                                         >
                                             Save references with relevance scoring and a complete,
-                                            tamper-proof audit trail.
+                                            append-only audit trail.
                                         </span>
                                     </li>
                                 </ul>
@@ -717,8 +754,8 @@ export default function PatentSearchPage() {
                             className="mt-4 text-base leading-relaxed text-text-secondary sm:text-lg"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
-                            Search 120M+ patents free, no account, with compound and clinical-trial
-                            intelligence on every result.
+                            Search 120M+ patent records free, no account, with compound and
+                            clinical-trial context on matching results.
                         </p>
                         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
                             <Button href={SEARCH_APP_URL} newTab size="lg" className="w-full justify-center sm:w-auto whitespace-nowrap">

@@ -44,7 +44,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'AI Patent Drafting Software With Attorney Review',
     description:
-        'Attorney-in-the-loop AI patent drafting: turn saved prior art into filing-ready claims, abstract, and novelty analysis for US, EP, IN, and PCT.',
+        'Attorney-in-the-loop AI patent drafting: turn saved prior art into structured draft claims, abstract, and novelty analysis for attorney review across US, EP, IN, and PCT.',
     path: '/ai-patent-drafting/',
 });
 
@@ -56,12 +56,16 @@ interface IconItem {
     description: string;
 }
 
-const GENERATION_MODEL = 'Claude Sonnet 4.6';
-const REVIEW_MODEL = 'Claude Opus 4.7';
+/* Capability language rather than pinned model versions. Providers and
+   versions change with task, availability, and customer requirements, and
+   exact model identifiers belong in the security questionnaire and release
+   notes, not in marketing copy that goes stale. */
+const GENERATION_MODEL = 'an enterprise Claude model';
+const REVIEW_MODEL = 'a separate, independent reviewer model';
 
 const POWERED_BY = [
-    `${GENERATION_MODEL} (generation)`,
-    `${REVIEW_MODEL} (review)`,
+    'Enterprise AI providers (generation)',
+    'Independent second-model review',
     'EPO Open Patent Services',
     'PostgreSQL RLS',
     'Append-only audit',
@@ -117,7 +121,7 @@ const JURISDICTIONS: Jurisdiction[] = [
         code: 'IN',
         color: '#d97706',
         authority: 'Indian Patent Office',
-        rules: 'Section 3(d) enhanced-efficacy requirement enforced for pharma claims, the single most important rule for Indian pharma patents.',
+        rules: 'Section 3(d) enhanced-efficacy considerations flagged for attorney review on pharma claims, the single most important rule for Indian pharma patents.',
     },
     {
         code: 'WO',
@@ -180,8 +184,8 @@ const VERSIONING: IconItem[] = [
 const CONFIDENCE: IconItem[] = [
     {
         icon: Gauge,
-        title: 'Three honest buckets',
-        description: 'High, medium, or low per unit, not a false-precision number. The judge defaults to medium when uncertain; high must be affirmatively justified.',
+        title: 'Three honest bands',
+        description: 'High, medium, or low per unit, describing how well the generated text is supported by the prior art on record, not a probability and not a legal opinion. The reviewer defaults to medium when uncertain; high must be affirmatively justified.',
     },
     {
         icon: ScrollText,
@@ -195,8 +199,8 @@ const CONFIDENCE: IconItem[] = [
     },
     {
         icon: ShieldCheck,
-        title: 'Prioritization, not a gate',
-        description: 'Scores help you spend review time on the weakest sections first. They never block export or approval, and are never shown to the end client.',
+        title: 'Prioritization, not a determination',
+        description: 'Bands rank where attorney attention is most useful, and do not assess patentability, novelty, or filing readiness. They do not block export or approval, and are not shown to the end client.',
     },
 ];
 
@@ -208,13 +212,13 @@ const SECURITY: IconItem[] = [
     },
     {
         icon: Database,
-        title: 'Tamper-resistant audit',
+        title: 'Append-only audit',
         description: 'Draft revisions, source references, and prior-art snapshots are preserved as append-only evidence, creating a review history that can be inspected later without being rewritten.',
     },
     {
         icon: KeyRound,
         title: 'AI-specific controls',
-        description: 'Model access, prompt handling, and spending limits are governed per tenant. Generation and saving are controlled separately, with zero-retention model settings and no PII by default.',
+        description: 'Model access, prompt handling, and spending limits are governed per tenant. Generation and saving are controlled separately, with retention-limited provider settings and no personal data by default. Current provider retention terms are shared as part of security review.',
     },
 ];
 
@@ -231,8 +235,8 @@ const SECURITY_GUARDS: { icon: React.ElementType; label: string; text: string }[
     },
     {
         icon: FileCheck,
-        label: 'GxP-ready patterns',
-        text: 'Audit and change-control patterns align with 21 CFR Part 11 expectations.',
+        label: 'Part 11-aligned patterns',
+        text: 'Audit and change-control patterns follow 21 CFR Part 11 expectations. Validation stays with the customer.',
     },
 ];
 
@@ -264,7 +268,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Which jurisdictions are supported?',
         answer:
-            'US, EP, IN, and PCT (WO) are the production set, each with jurisdiction-specific claim format, statutory rules, and mandatory section structure applied. A missing required section is flagged rather than silently omitted. JP and CN exist in the type system for future expansion.',
+            'US, EP, IN, and PCT (WO) are the production set, each with jurisdiction-specific claim format, drafting rules, and mandatory section structure applied. A missing required section is flagged rather than silently omitted. JP and CN are planned and are not available yet.',
     },
     {
         question: 'How does prior art work for US and Indian patents without a claims API?',
@@ -274,16 +278,17 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Is my data used to train the AI?',
         answer:
-            'No. Tenant data goes to Claude only during generation, under Anthropic zero-retention API policy. Prompts contain only invention details and public prior art; no personal data unless the attorney puts it there.',
+            'No. Tenant data is sent to the model provider only during generation, under an enterprise API agreement that does not permit training on customer content. Prompts contain only invention details and public prior art, and no personal data unless the attorney puts it there. The retention and processing terms in force, along with the current provider and processing regions, are shared as part of security review.',
     },
     {
         question: 'How is a draft defensible in an audit?',
         answer:
-            'Every AI revision is generated against a frozen, immutable snapshot of the exact prior-art set used at that moment, and revision history is append-only at the database layer. So "what art did the AI see when it wrote claim 3?" is always answerable, even years later and even if the live reference was later deleted.',
+            'Every AI revision is generated against a frozen snapshot of the exact prior-art set used at that moment, and revision history is append-only at the database layer. So "what art did the AI see when it wrote claim 3?" is always answerable, even years later and even if the live reference was later deleted.',
     },
     {
         question: 'What models power it?',
-        answer: `${GENERATION_MODEL} generates the draft, and a separate background review runs ${REVIEW_MODEL} as a judge to assign high / medium / low confidence to the claims, abstract, description, and novelty analysis.`,
+        answer:
+            'Generation runs on enterprise Claude models from Anthropic, configured for confidential business workflows, and a separate background review runs a second, independent model as a judge to band the claims, abstract, description, and novelty analysis as high, medium, or low support. Model selection is governed by task, availability, and customer requirements, so exact versions change over time and are confirmed during security review rather than pinned in marketing copy.',
     },
     {
         question: 'Can paralegals trigger AI generation?',
@@ -293,7 +298,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Is it suitable for regulated and pharma teams?',
         answer:
-            'Yes. The append-only audit trail, electronic records, and access controls mirror 21 CFR Part 11 patterns for GxP readiness, and the India Section 3(d) enhanced-efficacy rule is enforced for pharma claims. The structured, versioned record is built to stand up in enterprise procurement and regulatory review.',
+            'Yes. The append-only audit trail, electronic records, and access controls follow 21 CFR Part 11 patterns, and the India Section 3(d) enhanced-efficacy requirement is flagged for attorney review on pharma claims. The structured, versioned record is built to stand up in enterprise procurement and regulatory review. Compliance and validation still depend on your intended use, configuration, procedures, and quality system.',
     },
     {
         question: 'Can I just use ChatGPT to write my patent application?',
@@ -302,7 +307,8 @@ const PAGE_FAQ: FaqItem[] = [
     },
     {
         question: 'Can the AI spot claim-support issues or weaknesses before filing?',
-        answer: `Yes. Generation produces a novelty analysis that flags potential overlaps with the prior art on record, and a separate model (${REVIEW_MODEL}) reviews each claim, the abstract, the description, and the novelty analysis, assigning high, medium, or low confidence with a cited rationale. You see the weakest sections first. It assists the review; the attorney makes the call.`,
+        answer:
+            'Yes. Generation produces a novelty analysis that flags potential overlaps with the prior art on record, and a separate, independent reviewer model reviews each claim, the abstract, the description, and the novelty analysis, banding each as high, medium, or low support with a cited rationale. You see the least-supported sections first. It assists the review; the attorney makes the call.',
     },
     {
         question: 'Can it draft patent applications for India?',
@@ -355,9 +361,10 @@ export default function AiPatentDraftingPage() {
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 An attorney-in-the-loop drafting assistant that turns invention details and
-                                saved prior art into a filing-ready first draft, claims, abstract,
-                                description, and novelty analysis, tailored to the target jurisdiction. AI
-                                drafts are dramatically better when they know the art on record.
+                                saved prior art into a structured first draft for attorney review: claims,
+                                abstract, description, and novelty analysis, prepared for the drafting
+                                conventions of the target jurisdiction. AI drafts are dramatically better
+                                when they know the art on record.
                             </p>
 
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
@@ -422,8 +429,9 @@ export default function AiPatentDraftingPage() {
                             >
                                 Without prior-art context, a model writes generic claims. With the
                                 relevant references in front of it, including pasted claim text, it
-                                generates claims positioned to be novel over the art on record. Drafting
-                                lives inside the patent family, because that is how patent work flows.
+                                drafts claims against the art on record, which the attorney then tests
+                                for novelty. Drafting lives inside the patent family, because that is
+                                how patent work flows.
                             </p>
                         </div>
                     </FadeIn>
@@ -668,9 +676,11 @@ export default function AiPatentDraftingPage() {
                                 className="mt-4 text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
-                                After {GENERATION_MODEL} generates the draft, a background review runs
+                                After {GENERATION_MODEL} generates the draft, a background review runs{' '}
                                 {REVIEW_MODEL} as a judge over the claims, abstract, description, and
-                                novelty analysis, so you can spend review time where it matters.
+                                novelty analysis, banding how well each unit is supported by the prior
+                                art on record so you can spend review time where it matters. The bands
+                                guide attorney attention; they are not a legal determination.
                             </p>
                         </div>
                     </FadeIn>
@@ -847,7 +857,7 @@ export default function AiPatentDraftingPage() {
                                     className="text-sm text-text-secondary"
                                     style={{ fontFamily: 'var(--font-body)' }}
                                 >
-                                    Completed drafts render to a filing-ready{' '}
+                                    Completed drafts render to a formatted{' '}
                                     <span className="font-semibold text-text-primary">DOCX</span> from the
                                     structured claim tree, even on locked drafts, and each export is logged
                                     as an audit event.
@@ -909,6 +919,37 @@ export default function AiPatentDraftingPage() {
                                 Explore Patent Search
                             </Button>
                         </div>
+                    </div>
+
+                    {/* Professional-use notice. Kept on the conversion path, not
+                        buried in the footer, because it governs how the output
+                        of this product may be used. */}
+                    <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-compliance/25 bg-compliance/[0.04] p-6 sm:p-7">
+                        <h3
+                            className="text-sm font-semibold text-text-primary"
+                            style={{ fontFamily: 'var(--font-display)' }}
+                        >
+                            Before you use a generated draft
+                        </h3>
+                        <ul
+                            className="mt-3 flex flex-col gap-2 text-[13px] leading-relaxed text-text-secondary"
+                            style={{ fontFamily: 'var(--font-body)' }}
+                        >
+                            <li>
+                                AI-generated content may be incomplete or inaccurate and is not legal
+                                advice. A qualified patent professional must independently review all
+                                claims, citations, dates, factual statements, and filing requirements.
+                            </li>
+                            <li>
+                                Support bands and novelty analysis assist review. They are not a
+                                determination of novelty, patentability, enablement, or filing readiness.
+                            </li>
+                            <li>
+                                You remain responsible for confidentiality obligations, export-control
+                                rules, and any foreign-filing licence required before disclosing or
+                                filing an invention outside its country of origin.
+                            </li>
+                        </ul>
                     </div>
                 </Container>
             </section>

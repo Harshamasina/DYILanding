@@ -35,7 +35,7 @@ function Content() {
             <p>
                 Track every patent application from filing to grant in one centralized view. Each application record
                 captures filing dates, serial numbers, examiner assignments, prosecution status, and linked documents.
-                Automated deadline calculations ensure you never miss an office action response window.
+                Automated deadline calculations surface office action response windows well before they close.
             </p>
 
             <h3>Application Family Management</h3>
@@ -73,7 +73,7 @@ function Content() {
                 IP management software is essential for three primary audiences:
             </p>
             <ul>
-                <li><strong>Law firms</strong> managing patent portfolios for multiple clients. Each client&apos;s data must be isolated, access-controlled, and audit-ready. Multi-tenant architecture ensures one firm&apos;s data is completely separate from another&apos;s.</li>
+                <li><strong>Law firms</strong> managing patent portfolios for multiple clients. Each client&apos;s data must be isolated, access-controlled, and audit-ready. Multi-tenant architecture is designed to keep one firm&apos;s data separate from another&apos;s.</li>
                 <li><strong>Pharmaceutical companies</strong> with complex patent landscapes tied to drug compounds, formulations, and delivery mechanisms. These teams need compliance features (audit trails, electronic signatures, reason-for-change logging) to satisfy FDA requirements.</li>
                 <li><strong>Corporate IP departments</strong> in technology companies managing large portfolios of utility and design patents. Analytics dashboards help these teams make data-driven decisions about which patents to maintain, license, or let lapse.</li>
             </ul>
@@ -100,8 +100,8 @@ function Content() {
             </p>
             <p>
                 Design Your Invention provides a modern IP management platform built specifically for law firms and
-                pharma companies. With patent family visualization, automated docketing, fee tracking, and full{' '}
-                <Link href="/#compliance">FDA 21 CFR Part 11 compliance</Link>, it replaces the
+                pharma companies. With patent family visualization, automated docketing, fee tracking, and{' '}
+                <Link href="/#compliance">FDA 21 CFR Part 11-aligned controls</Link>, it replaces the
                 spreadsheets and legacy systems that put your portfolio at risk.
             </p>
         </>

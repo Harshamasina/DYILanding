@@ -65,7 +65,16 @@ export default function TermsPage() {
                                     {SITE_NAME} is a multi-tenant, cloud-based IP management platform
                                     that provides patent docketing, PCT/PRV/NPE case management, fee
                                     tracking, document management, deadline reminders, and audit trail
-                                    functionality with FDA 21 CFR Part 11 compliance capabilities.
+                                    functionality, including controls designed to support FDA 21 CFR
+                                    Part 11-aligned workflows. The Service is currently offered in
+                                    private beta, features may change, and compliance and validation
+                                    remain the responsibility of each customer.
+                                </p>
+                                <p className="mt-2">
+                                    Calculated deadlines, risk scores, search results, and AI-generated
+                                    drafts are workflow aids, not legal advice. You remain responsible
+                                    for verifying dates, rules, citations, and filing requirements
+                                    through a qualified patent professional.
                                 </p>
                             </TermsSection>
 
@@ -161,7 +170,8 @@ export default function TermsPage() {
                                         access
                                     </li>
                                     <li>
-                                        We maintain immutable audit trails for regulatory compliance
+                                        We maintain append-only audit trails to support regulatory
+                                        record-keeping
                                     </li>
                                     <li>
                                         Our data handling practices are detailed in our{' '}
@@ -177,12 +187,14 @@ export default function TermsPage() {
 
                             <TermsSection title="7. Compliance Features">
                                 <p>
-                                    {SITE_NAME} offers features designed to support FDA 21 CFR Part 11
-                                    compliance, including reason-for-change tracking, immutable audit
-                                    trails, electronic signatures with re-authentication, and role-based
-                                    access control. While we provide the tools to support compliance,
-                                    each organization is responsible for ensuring their own regulatory
-                                    compliance and validating the platform for their specific use case.
+                                    {SITE_NAME} offers controls designed to support FDA 21 CFR Part 11
+                                    aligned workflows, including reason-for-change tracking, append-only
+                                    audit trails, electronic approvals with re-authentication, and
+                                    role-based access control. These are product capabilities and not a
+                                    compliance certification. Each organization is responsible for its
+                                    own regulatory compliance, for validating the platform for its
+                                    specific intended use, and for the procedures, training, and quality
+                                    system around it.
                                 </p>
                             </TermsSection>
 

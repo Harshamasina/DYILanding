@@ -50,10 +50,11 @@ export function HeroSection() {
                                     className="mt-4 text-[15px] leading-relaxed text-text-secondary sm:mt-5 sm:text-base sm:max-w-2xl"
                                     style={{ fontFamily: 'var(--font-body)' }}
                                 >
-                                    Patent docketing, prior art search, and AI-powered drafting
-                                    in one audited platform, built for law firms and IP
-                                    teams. Manage PCT/PRV/NPE cases, track fees and deadlines,
-                                    and maintain FDA 21 CFR Part 11 compliance.
+                                    Patent docketing, prior art search, and AI-assisted drafting
+                                    in one connected, audit-trailed workspace, built for law
+                                    firms and IP teams. Manage PCT/PRV/NPE cases, track fees and
+                                    deadlines, and run Part 11-aligned workflow controls for
+                                    regulated teams.
                                 </p>
                             </div>
                             <div>

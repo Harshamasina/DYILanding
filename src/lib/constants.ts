@@ -1,7 +1,7 @@
 export const SITE_URL = 'https://designyourinvention.com';
 export const SITE_NAME = 'Design Your Invention';
 export const SITE_DESCRIPTION =
-    'Enterprise IP management with AI-powered prior art search and patent drafting. Patent docketing, PCT/PRV/NPE case management, and FDA 21 CFR Part 11 compliance.';
+    'IP management with AI-assisted prior art search and patent drafting for attorney review. Patent docketing, PCT/PRV/NPE case management, and FDA 21 CFR Part 11-aligned workflow controls.';
 
 /* ── Brand entity metadata used by Organization JSON-LD.
  * Keep these accurate. Google reads them to resolve the brand as a
@@ -93,9 +93,9 @@ export const INQUIRY_TYPE_OPTIONS = [
  * folds the human label into the message body instead. */
 export const PORTFOLIO_SIZE_OPTIONS = [
     { value: '', label: 'Select portfolio size' },
-    { value: '1-10', label: '1–10 families' },
-    { value: '11-50', label: '11–50 families' },
-    { value: '51-200', label: '51–200 families' },
-    { value: '201-1000', label: '201–1,000 families' },
+    { value: '1-10', label: '1-10 families' },
+    { value: '11-50', label: '11-50 families' },
+    { value: '51-200', label: '51-200 families' },
+    { value: '201-1000', label: '201-1,000 families' },
     { value: '1000+', label: '1,000+ families' },
 ] as const;

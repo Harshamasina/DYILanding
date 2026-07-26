@@ -32,9 +32,9 @@ const COMPLIANCE_ITEMS = [
     },
     {
         icon: ShieldCheck,
-        title: 'Immutable Audit Records',
+        title: 'Append-Only Audit Records',
         description:
-            'No edit or delete on audit history, ever. Read-only, tamper-proof records.',
+            'Audit history is append-only. The application exposes no edit or delete path, so records stay read-only.',
     },
     {
         icon: Users,
@@ -105,7 +105,7 @@ export function ComplianceSection() {
                             className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
-                            21 CFR Part 11 Ready Controls,{' '}
+                            FDA 21 CFR Part 11-Aligned Controls,{' '}
                             <span className="italic">Built In, Not Bolted On</span>
                         </h2>
                         <p
@@ -162,7 +162,7 @@ export function ComplianceSection() {
                         className="mt-12 lg:mt-16 max-w-3xl mx-auto text-center text-xs sm:text-[13px] italic text-text-muted leading-relaxed"
                         style={{ fontFamily: 'var(--font-body)' }}
                     >
-                        Supports regulated workflows; final validation depends on each organization&rsquo;s SOPs, configuration, and quality process.
+                        Designed to support Part 11-aligned workflows through access controls, electronic approvals, reasons for change, and traceable audit history. Final compliance and validation depend on each customer&rsquo;s intended use, configuration, procedures, and quality system.
                     </p>
                 </FadeIn>
             </Container>

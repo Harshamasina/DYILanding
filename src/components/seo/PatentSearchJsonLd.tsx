@@ -20,17 +20,17 @@ const softwareApplicationSchema = {
     operatingSystem: 'Web',
     url: PAGE_URL,
     description:
-        'Free patent search across 120M+ patents and every jurisdiction, with chemical compound detection, substructure search, and linked clinical-trial data.',
+        'Free patent search across a corpus of 120M+ patent records from 100+ patent authorities, with chemical compound detection, substructure search, and linked clinical-trial data.',
     offers: {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'USD',
     },
     featureList: [
-        'Universal patent search across 120M+ patents and every jurisdiction',
+        'Global patent search across 120M+ patent records from 100+ patent authorities',
         'Six search modes: keyword, title and abstract, claims, inventor, applicant, publication number',
         'Chemical compound detection with 2D structures, InChIKey, IUPAC name, SMILES, and molecular weight',
-        'Substructure search: find every patent disclosing a compound or scaffold',
+        'Substructure search: find patents in the corpus disclosing a compound or scaffold',
         'Linked clinical-trial data: phase, status, sponsor, and indication',
         'Full-text claims and CSV export for work-email accounts',
         'Save patents to a portfolio',

@@ -7,7 +7,12 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'What is Design Your Invention?',
         answer:
-            'Design Your Invention (DYI) is an intellectual property management software (IPMS) platform for pharma companies and IP boutique law firms. It brings multi-jurisdiction patent docketing, prior art search across 100+ jurisdictions via the EPO, and AI-assisted patent drafting for six jurisdictions (US, EP, IN, WO, JP, CN) into one audited platform. The architecture is compliance-ready and mirrors FDA 21 CFR Part 11 standards, with multi-tenant data isolation so each organization keeps its portfolio fully separate.',
+            'Design Your Invention (DYI) is an intellectual property management software (IPMS) platform for pharma companies and IP boutique law firms. It brings multi-jurisdiction patent docketing, prior art search across 100+ patent authorities via the EPO, and AI-assisted patent drafting for US, EP, IN, and PCT (WO) into one connected, audit-trailed workspace. The architecture follows FDA 21 CFR Part 11 patterns, with tenant-scoped data isolation so each organization keeps its portfolio separate.',
+    },
+    {
+        question: 'Is the platform generally available or in private beta?',
+        answer:
+            'The full IP management platform is in private beta and under active development, so features can change during the beta. The public patent search tool is live and free to use today. If you want early access to the platform, book a demo or use the contact form and we will talk through your workflow and the current beta scope.',
     },
     {
         question: 'Who is Design Your Invention for?',
@@ -20,9 +25,9 @@ export const FAQ_ITEMS: FaqItem[] = [
             'IP management software is a specialized platform that helps law firms, corporations, and patent teams manage their intellectual property portfolios, including patent applications, PCT filings, office actions, deadlines, fees, and compliance requirements. It replaces spreadsheets and email-based tracking with a structured, searchable, and auditable system.',
     },
     {
-        question: 'How does the platform handle FDA 21 CFR Part 11 compliance?',
+        question: 'Which controls support an FDA 21 CFR Part 11-aligned workflow?',
         answer:
-            'Compliance is built into every workflow, not bolted on. Every edit to a critical field requires a documented reason-for-change. The full audit trail logs who made each change, what changed, and when, with immutable, tamper-proof records. Electronic signatures require re-authentication, and role-based access control ensures only authorized users can perform sensitive actions.',
+            'Every edit to a critical field requires a documented reason-for-change. The audit trail logs who made each change, what changed, and when, and is append-only: the application exposes no edit or delete path on audit history. Electronic approvals require re-authentication, and role-based access control limits who can perform sensitive actions. These are product capabilities, not a compliance certification. Validation and Part 11 compliance depend on each customer intended use, configuration, procedures, training, and quality system.',
     },
     {
         question: 'Can I manage PCT and PRV filings in one place?',
@@ -32,12 +37,12 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'Can the platform manage patents across multiple jurisdictions?',
         answer:
-            'Yes. Multi-jurisdiction portfolios are the core use case. Docketing covers US, PCT, EU, JP, CN, and IN, with PRV, PCT, and NPE cases linked to their parent application families so the full filing hierarchy is visible in one place. Deadlines, fees, and office actions are tracked across every jurisdiction, and fee analytics roll up spend with date-accurate multi-currency conversion into one reporting currency.',
+            'Yes. Multi-jurisdiction portfolios are the core use case. Docketing covers US, PCT, EP, JP, CN, and IN, with PRV, PCT, and NPE cases linked to their parent application families so the full filing hierarchy is visible in one place. Deadlines, fees, and office actions are tracked across every jurisdiction in your portfolio, and fee analytics roll up spend with date-accurate multi-currency conversion into one reporting currency.',
     },
     {
-        question: 'How does the platform help me never miss a patent deadline?',
+        question: 'How does the platform help reduce deadline risk?',
         answer:
-            'Statutory and procedural deadlines are derived automatically from your case data rather than entered by hand, so they cannot be forgotten or typed wrong. Every deadline gets a 0 to 100 risk score with green, amber, and red levels, and automated email digests push what is due to the responsible owner before the date. A weekly stale-alert report also surfaces cases that are quietly going wrong without generating a hard deadline.',
+            'Supported statutory and procedural deadlines are derived from your case data rather than entered by hand, so they do not depend on someone remembering to add them to a calendar. Every deadline gets a 0 to 100 risk score with green, amber, and red levels, and automated email digests push what is due to the responsible owner before the date. A weekly stale-alert report also surfaces cases that are quietly going wrong without generating a hard deadline. Calculated dates are workflow aids: coverage depends on the case data you record, and a qualified patent professional remains responsible for verifying every date.',
     },
     {
         question: 'What patent fee types are supported?',
@@ -47,7 +52,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'Is the platform multi-tenant?',
         answer:
-            'Yes. Each organization gets a dedicated subdomain (e.g., yourfirm.designyourinvention.com) with fully isolated data. Tenant isolation is enforced at the database level using Row-Level Security (RLS), ensuring zero cross-tenant data leakage. Your data is completely separate from every other organization on the platform.',
+            'Yes. Each organization gets a dedicated subdomain (e.g., yourfirm.designyourinvention.com) with tenant-scoped data. Isolation is enforced at the database level using Row-Level Security (RLS) inside tenant-scoped transactions, which is designed to prevent cross-organization access. Your organization data is kept separate from every other organization on the platform.',
     },
     {
         question: 'How does role-based access control work?',
@@ -62,7 +67,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'What security measures are in place?',
         answer:
-            'The platform uses Auth0 for enterprise-grade authentication with support for SSO, SAML, and multi-factor authentication. Tokens are stored in-memory only (never localStorage), all data is encrypted in transit and at rest, and documents are stored in encrypted S3 buckets with presigned URL access. High-risk actions require step-up re-authentication.',
+            'The platform uses Auth0 for authentication with support for SSO, SAML, and multi-factor authentication. Access tokens are held in memory rather than written to browser storage, data is encrypted in transit and at rest, and documents are stored in encrypted S3 buckets with presigned URL access. High-risk actions require step-up re-authentication. Independent security assurance reports, such as SOC 2, have not been issued yet, and we will say so plainly in any security review.',
     },
     {
         question: 'Can I import my existing patent portfolio from spreadsheets?',
@@ -82,22 +87,22 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'Is AI-generated patent drafting safe for filing?',
         answer:
-            'AI-generated drafts are designed as a starting point, not a final filing. Every AI draft includes a mandatory disclaimer stating it requires attorney review before filing. The platform enforces a status workflow (draft, in review, approved), so no AI-generated content can be exported or acted on without human sign-off. Prior art snapshots, model versions, and token counts are preserved for every generation, giving you a complete audit trail for compliance.',
+            'AI-generated drafts are a starting point, not a final filing. AI-generated content may be incomplete or inaccurate and is not legal advice, so every draft carries a mandatory disclaimer and requires attorney review. The platform enforces a status workflow (draft, in review, approved), so no AI-generated content can be exported or acted on without human sign-off. Prior art snapshots, model details, and token counts are preserved for every generation, giving you a complete record of what the assistant saw and produced.',
     },
     {
         question: 'Which jurisdictions does AI patent drafting support?',
         answer:
-            'The AI drafting engine supports six jurisdictions: US (USPTO, 35 USC 101/102/103), EP (EPO, Article 52/54/56 EPC), IN (Indian Patent Office, Section 3(d)/(i)/(j)/(k) exclusions), WO (WIPO/PCT, international-stage neutral drafting), JP (JPO, Articles 29/36), and CN (CNIPA, Article 22/25/26). Each jurisdiction has specialized rules embedded in the generation process, so claims format, novelty language, and compliance checks adapt automatically.',
+            'Four jurisdictions are in the production set: US (USPTO, 35 USC 101/112), EP (EPO, EPC Article 84 and the EPC 2000 compound-for-use format), IN (Indian Patent Office, Section 3(d)/(i)/(j)/(k) exclusions), and WO (WIPO/PCT, international-stage neutral drafting). JP and CN are planned and not available yet. Each supported jurisdiction has drafting guidance and mandatory section structure applied during generation, so claim format and section coverage follow local convention, with relevant statutory considerations flagged for attorney review.',
     },
     {
         question: 'How does prior art search work in the platform?',
         answer:
-            'The prior art search queries the EPO global patent database covering 100+ jurisdictions, without leaving your patent family view. Four search modes are available: Keywords (technical terms across titles and abstracts), Inventor (handles name variations and titles), Applicant (strips corporate suffixes automatically), and Patent Number (any format, kind codes handled). Results can be filtered by IPC classification, date range, and jurisdiction. Relevant patents are saved directly to your family with relevance scoring and attorney notes, creating an auditable prior art record.',
+            'The in-app prior art search queries the EPO global patent database (Open Patent Services) covering 100+ patent authorities, without leaving your patent family view. It is a separate data source from the free public search tool, so result sets can differ. Four search modes are available: Keywords (technical terms across titles and abstracts), Inventor (handles name variations and titles), Applicant (strips corporate suffixes automatically), and Patent Number (any format, kind codes handled). Results can be filtered by IPC classification, date range, and jurisdiction. Relevant patents are saved directly to your family with relevance scoring and attorney notes, creating an auditable prior art record.',
     },
     {
         question: 'Does the platform support pharmaceutical patent workflows?',
         answer:
-            'Yes. Pharma companies are one of the two core audiences. Prior art search resolves disclosed compounds to canonical chemical structures and supports substructure search, which matters for chemistry and life-sciences portfolios. AI-assisted drafting includes Indian Patent Office rules, covering the Section 3 exclusions that shape pharma patentability, and the audit-first architecture mirrors FDA 21 CFR Part 11 standards for regulated workflows.',
+            'Yes. Pharma companies are one of the two core audiences. Prior art search resolves detected compounds to canonical chemical structures and supports substructure search, which matters for chemistry and life-sciences portfolios. AI-assisted drafting applies Indian Patent Office drafting rules and flags the Section 3 exclusions that shape pharma patentability for attorney review, and the audit-first architecture follows FDA 21 CFR Part 11 patterns for regulated workflows.',
     },
     {
         question: 'How do I choose the right patent management software?',
@@ -112,7 +117,17 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'How does Design Your Invention compare to legacy tools like Anaqua, Clarivate, or AppColl?',
         answer:
-            'Most IP teams run a docketing system plus separate tools for prior art search and drafting, with spreadsheets for chemistry and fees. Design Your Invention unifies multi-jurisdiction docketing, prior art search across 100+ jurisdictions, AI-assisted drafting for six jurisdictions, and chemistry enrichment in one compliance-ready platform. The comparison page has a capability-by-capability breakdown against the typical legacy setup.',
+            'Most IP teams run a docketing system plus separate tools for prior art search and drafting, with spreadsheets for chemistry and fees. Design Your Invention unifies multi-jurisdiction docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, and PCT, and chemistry enrichment in one connected, audit-trailed platform. The comparison page has a capability-by-capability breakdown against the typical legacy setup.',
+    },
+    {
+        question: 'Is my content used to train AI models?',
+        answer:
+            'No. Invention details and prior art are sent to the model provider only to generate the draft you asked for, under an enterprise API agreement that does not permit training on customer content. Prompts carry no personal data unless an attorney puts it there, every generation is recorded against a frozen prior-art snapshot, and the retention terms, provider, and processing regions in force are shared as part of security review.',
+    },
+    {
+        question: 'What security certifications does Design Your Invention hold?',
+        answer:
+            'None yet, and we will not imply otherwise. The security program is being built around the AICPA Trust Services Criteria, but no SOC 2 Type I or Type II report has been issued and no independent security audit has been completed. What exists today is architectural: tenant-scoped authorization with database row-level security, role-based access control, encryption in transit and at rest, append-only audit history, and step-up authentication on high-risk actions.',
     },
 ];
 

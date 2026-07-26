@@ -73,7 +73,7 @@ const FEATURE_ROWS: FeatureRow[] = [
     {
         mockupSide: 'left',
         mockup: 'calendar',
-        heading: 'Never Miss a Patent Deadline Again',
+        heading: 'Surface Every Patent Deadline Before It Becomes Urgent',
         headingAccent: '',
         ctaLabel: 'View deadline and fee tracking',
         ctaHref: '/docketing/',
@@ -88,7 +88,7 @@ const FEATURE_ROWS: FeatureRow[] = [
                 icon: AlertCircle,
                 title: 'Office Action Tracking',
                 description:
-                    'Never miss a response deadline. Urgency color coding: green for on track, amber for due soon, red for overdue.',
+                    'Track response deadlines with urgency color coding: green for on track, amber for due soon, red for overdue.',
             },
             {
                 icon: DollarSign,

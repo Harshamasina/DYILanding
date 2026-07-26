@@ -81,13 +81,17 @@ function GrokIcon({ className }: { className?: string }) {
     );
 }
 
+/* Badges describe controls that exist in the product today. No badge may
+   imply an independent audit or certification the company does not hold:
+   security assurance reports are not issued yet, so the strip carries a
+   plain-language qualifier underneath. */
 const TRUST_BADGES = [
-    { icon: ShieldCheck, label: 'SOC 2-Aligned Controls' },
-    { icon: FileCheck, label: '21 CFR Part 11-Ready' },
+    { icon: ShieldCheck, label: 'Tenant-Isolated Data' },
+    { icon: FileCheck, label: 'Part 11-Aligned Controls' },
     { icon: Building2, label: 'Enterprise SSO' },
     { icon: Lock, label: 'AES-256 Encryption' },
     { icon: Fingerprint, label: 'MFA Support' },
-    { icon: Server, label: 'Encrypted Infrastructure' },
+    { icon: Server, label: 'Role-Based Access Control' },
 ];
 
 const STATIC_FOOTER_LINKS = {
@@ -139,8 +143,9 @@ const ASK_AI_GEMINI_PROMPT =
     '(designyourinvention.com), an IP management software platform for pharma ' +
     'companies and IP boutique law firms. Explain in depth what it offers for ' +
     'multi-jurisdiction patent docketing, prior art search across 100+ ' +
-    'jurisdictions, AI-assisted patent drafting, and FDA 21 CFR Part 11 ' +
-    'compliance. Cover who it is for and how it compares to legacy IPMS tools.';
+    'patent authorities, AI-assisted patent drafting, and FDA 21 CFR Part 11 ' +
+    'aligned workflow controls. Cover who it is for and how it compares to ' +
+    'legacy IPMS tools.';
 
 const ASK_AI_GEMINI_QUERY = encodeURIComponent(ASK_AI_GEMINI_PROMPT);
 
@@ -237,9 +242,17 @@ export function Footer() {
                                         </div>
                                     ))}
                                 </div>
+                                <p
+                                    className="mt-5 max-w-xl text-[11px] leading-relaxed text-white/40"
+                                    style={{ fontFamily: 'var(--font-body)' }}
+                                >
+                                    Controls shown reflect the current product
+                                    architecture during private beta. Independent
+                                    security assurance reports have not been issued yet.
+                                </p>
                             </div>
 
-                            {/* Right: Testimonial */}
+                            {/* Right: Positioning statement */}
                             <div className="flex-[2] flex flex-col justify-center">
                                 <div className="border-l-2 border-primary-light/30 pl-6">
                                     <svg className="w-8 h-8 text-primary-light/20 mb-4" fill="currentColor" viewBox="0 0 32 32">

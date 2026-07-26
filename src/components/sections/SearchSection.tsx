@@ -32,7 +32,7 @@ const CAPABILITY_POINTS: { icon: React.ElementType; title: string; description: 
     {
         icon: FileText,
         title: 'Full Patent Detail',
-        description: 'Bibliographic data, abstracts, claims, citations, and patent family on every result.',
+        description: 'Bibliographic data, abstracts, claims, citations, and patent family where the source provides them.',
     },
 ];
 
@@ -59,16 +59,17 @@ export function SearchSection() {
                             className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
-                            The Same Patent Search That{' '}
-                            <span className="italic">Powers Our Platform</span>
+                            Free Patent Search, Connected to{' '}
+                            <span className="italic">Your Patent Families</span>
                         </h2>
                         <p
                             className="mt-4 text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
-                            Search across 100+ jurisdictions by keyword, inventor, applicant, or
-                            patent number, with full bibliographic detail, claims, and patent
-                            family. Get free access to our patent search tool, no signup required.
+                            Search across 100+ patent authorities by keyword, inventor, applicant,
+                            or patent number, with bibliographic detail, claims, and patent family
+                            where the source provides them. Get free access to our public patent
+                            search tool, no signup required.
                         </p>
                     </div>
                 </FadeIn>

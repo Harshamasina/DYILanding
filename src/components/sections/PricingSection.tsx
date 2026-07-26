@@ -33,8 +33,8 @@ const SIGNUP_HREF = 'https://app.designyourinvention.com/auth/sign-in';
 const PLANS: Plan[] = [
     {
         name: 'Starter',
-        price: 'Free to start',
-        priceNote: 'Self-serve onboarding, sign up in minutes',
+        price: 'Free during private beta',
+        priceNote: 'Self-serve sign-up, no credit card required',
         target: 'Solo attorneys & small IP teams',
         description:
             'Everything you need to move off spreadsheets and manage patent operations digitally.',
@@ -58,14 +58,14 @@ const PLANS: Plan[] = [
         priceNote: 'Based on users, modules, and portfolio size',
         target: 'Pharma IP teams, biotech companies & specialty law firms',
         description:
-            'Regulatory-ready controls and enterprise features for confidential, high-stakes patent workflows.',
+            'Workflow controls and enterprise features for confidential, high-stakes patent work in regulated environments.',
         recommended: true,
         cta: { label: 'Book a Compliance Demo' },
         features: [
             { text: 'Everything in Starter', detail: 'Included' },
             { text: 'Unlimited users & roles' },
-            { text: 'Immutable field-level audit trail', detail: 'Part 11-ready' },
-            { text: '21 CFR Part 11-ready controls', detail: 'Part 11-ready' },
+            { text: 'Append-only field-level audit trail', detail: 'Part 11-aligned' },
+            { text: '21 CFR Part 11-aligned workflow controls', detail: 'Part 11-aligned' },
             { text: 'Electronic signatures + re-auth' },
             { text: 'SSO / SAML integration' },
             { text: 'Foreign associate portal' },
@@ -148,7 +148,7 @@ export function PricingSection() {
                                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                                         <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-full">
                                             <Star className="w-3 h-3 fill-white" />
-                                            Most Popular
+                                            For Regulated Teams
                                         </span>
                                     </div>
                                 )}
@@ -266,6 +266,21 @@ export function PricingSection() {
                         </FadeIn>
                     ))}
                 </div>
+
+                {/* Compliance qualifier — sits with the plan that advertises
+                    Part 11-aligned controls so the customer-responsibility
+                    boundary is visible at the point of the claim. */}
+                <FadeIn treeNode="tree-pricing" delay={0.25}>
+                    <p
+                        className="mt-10 max-w-3xl mx-auto text-center text-xs sm:text-[13px] italic text-text-muted leading-relaxed"
+                        style={{ fontFamily: 'var(--font-body)' }}
+                    >
+                        Part 11-aligned controls are product capabilities, not a
+                        compliance certification. Validation and regulatory
+                        compliance depend on each organization&rsquo;s intended
+                        use, configuration, procedures, and quality system.
+                    </p>
+                </FadeIn>
 
                 {/* Enterprise CTA */}
                 <FadeIn treeNode="tree-pricing" delay={0.3}>

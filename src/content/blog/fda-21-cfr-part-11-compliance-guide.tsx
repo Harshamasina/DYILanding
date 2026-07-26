@@ -106,9 +106,10 @@ function Content() {
             </p>
             <p>
                 Design Your Invention was built with{' '}
-                <Link href="/#compliance">FDA 21 CFR Part 11 compliance</Link> as a core architectural
-                principle. Every field change is logged immutably, every critical modification requires a reason, and
-                role-based access control ensures data integrity across your entire patent portfolio.
+                <Link href="/#compliance">FDA 21 CFR Part 11-aligned controls</Link> as a core architectural
+                principle. Every field change is logged to an append-only trail, every critical modification requires
+                a reason, and role-based access control supports data integrity across your patent portfolio.
+                Compliance itself still depends on your intended use, configuration, procedures, and validation.
             </p>
         </>
     );

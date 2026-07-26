@@ -14,7 +14,6 @@ import {
     Clock3,
     Download,
     FileClock,
-    FileSearch,
     FileText,
     Folder,
     Globe2,
@@ -25,6 +24,7 @@ import {
     List,
     Mail,
     MoreVertical,
+    Pill,
     Plus,
     Search,
     Settings,
@@ -72,7 +72,7 @@ type NavId =
     | 'calendar'
     | 'families'
     | 'priorArt'
-    | 'lens'
+    | 'products'
     | 'prv'
     | 'pct'
     | 'npe'
@@ -173,7 +173,7 @@ const NAV_ITEMS: NavItem[] = [
     { id: 'calendar', section: 'MAIN', label: 'Calendar', icon: <CalendarDays className="h-3.5 w-3.5" /> },
     { id: 'families', section: 'IP MANAGEMENT', label: 'Families', icon: <Folder className="h-3.5 w-3.5" /> },
     { id: 'priorArt', section: 'IP MANAGEMENT', label: 'Prior Art Search', icon: <BookOpen className="h-3.5 w-3.5" /> },
-    { id: 'lens', section: 'IP MANAGEMENT', label: 'Lens Search', icon: <FileSearch className="h-3.5 w-3.5" /> },
+    { id: 'products', section: 'IP MANAGEMENT', label: 'Products', icon: <Pill className="h-3.5 w-3.5" /> },
     { id: 'prv', section: 'IP MANAGEMENT', label: 'PRV', icon: <ShieldCheck className="h-3.5 w-3.5" /> },
     { id: 'pct', section: 'IP MANAGEMENT', label: 'PCT', icon: <Globe2 className="h-3.5 w-3.5" /> },
     { id: 'npe', section: 'IP MANAGEMENT', label: 'NPE Cases', icon: <FileText className="h-3.5 w-3.5" /> },

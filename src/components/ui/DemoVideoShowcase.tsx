@@ -29,7 +29,7 @@ const CHAPTERS: Chapter[] = [
         icon: FolderClock,
         title: 'Patent Docketing',
         description:
-            'Track every filing, fee, and deadline on one audited timeline.',
+            'Track every filing, fee, and deadline on one audit-trailed timeline.',
         start: 34,
         time: '00:34',
     },
@@ -45,7 +45,7 @@ const CHAPTERS: Chapter[] = [
         icon: FileText,
         title: 'AI Drafting',
         description:
-            'Turn selected prior art into a jurisdiction-compliant first draft.',
+            'Turn selected prior art into a structured first draft for attorney review.',
         start: 72,
         time: '01:12',
     },

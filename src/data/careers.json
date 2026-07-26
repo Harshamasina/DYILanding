@@ -15,14 +15,14 @@
             "slug": "founding-engineer",
             "department": "Engineering",
             "title": "Founding Engineer",
-            "summary": "Join as one of the earliest engineers and help build the core platform powering the future of patent operations for leading law firms and pharma teams.",
+            "summary": "Join as one of the earliest engineers and help build the core platform we are creating for boutique patent firms and pharma IP teams.",
             "location": "Remote (India)",
             "employmentType": "Full-time",
             "compensation": "Equity offered",
             "responsibilities": [
                 "Build and ship core features that power patent drafting, docketing, search, and compliance workflows.",
                 "Work closely with founders to shape product, architecture, and engineering culture.",
-                "Make technical decisions that scale with enterprise-grade security and reliability."
+                "Make technical decisions that scale, with security and reliability built in from the start."
             ],
             "requirements": [
                 "5+ years building production TypeScript SaaS, including multi-tenant systems.",
@@ -41,7 +41,7 @@
             "occupationalCategory": "15-1252.00 Software Developers",
             "active": true,
             "detail": {
-                "tldr": "As founding engineer, you'll co-own the technical surface of a multi-tenant patent IP management platform combining AI-assisted drafting, multi-jurisdiction docketing, and chemistry-aware enrichment for pharma IP teams and IP law boutiques. You'll work closely with the founding team on architecture, infrastructure, AI integration, and customer engagement. The role offers meaningful equity, end-to-end ownership, direct customer exposure, and full code review authority on production from day one.",
+                "tldr": "As founding engineer, you'll co-own the technical surface of a multi-tenant patent IP management platform combining AI-assisted drafting, multi-jurisdiction docketing, and chemistry-aware enrichment for pharma IP teams and IP law boutiques. You'll work closely with the founding team on architecture, infrastructure, AI integration, and customer engagement. The role offers meaningful equity, end-to-end ownership, direct design-partner exposure, and full code review authority on production from day one.",
                 "sections": [
                     {
                         "heading": "About the platform",
@@ -51,11 +51,11 @@
                                 "kind": "bullets",
                                 "items": [
                                     "Multi-tenant SaaS with PostgreSQL Row-Level Security, Auth0 RBAC, and audit-first design.",
-                                    "Patent docketing across US, PCT, EU, JP, and IN with composite-key tenant isolation.",
+                                    "Patent docketing across US, PCT, EP, JP, and IN with composite-key tenant isolation.",
                                     "AI patent drafting using the Claude API with prior-art-aware claim generation.",
                                     "Prior art search via Google BigQuery (Google Patents Public Datasets) and EPO OPS.",
                                     "Chemistry and drug enrichment via PubChem, SureChEMBL, Open Targets, RDKit, ClinicalTrials.gov, and CTRI.",
-                                    "Compliance posture designed for SOC 2 Type II, GDPR, and Indian DPDP."
+                                    "Security program being built around the AICPA Trust Services Criteria, GDPR, and Indian DPDP. No SOC 2 report has been issued yet."
                                 ]
                             }
                         ]
@@ -67,9 +67,9 @@
                                 "kind": "bullets",
                                 "items": [
                                     "Founded by an experienced technical lead working alongside a co-founder with deep pharma and IP domain expertise.",
-                                    "Working product with active customer engagement and pilots in motion.",
-                                    "Production stack: Node.js 20 with TypeScript on Express, PostgreSQL with FORCE RLS via Drizzle ORM, Auth0 RS256 with RBAC, React + Tailwind CSS on the frontend, AWS infrastructure (ECS Fargate, RDS, ElastiCache, S3, SES, Secrets Manager, EC2 etc.), BullMQ with Redis for background jobs, and Stripe for subscription billing and metered usage.",
-                                    "Two products in development: the closed-product IP management platform serving paid customers and a public patent search tool that drives lead generation for the platform funnel."
+                                    "Pre-seed and pre-revenue: the platform is in private beta, in active development, and we are recruiting early design partners among boutique patent firms and pharma IP teams.",
+                                    "Production stack: Node.js with TypeScript on Express, PostgreSQL with forced row-level security via Drizzle ORM, Auth0 with RBAC, React and Tailwind CSS on the frontend, AWS infrastructure, Redis-backed background jobs, and Stripe for subscription billing and metered usage. We go deeper on architecture in the interview.",
+                                    "Two products in development: the IP management platform, currently in private beta with no paid customers yet, and a free public patent search tool that drives lead generation for the platform funnel."
                                 ]
                             }
                         ]
@@ -103,7 +103,7 @@
                                 "kind": "group",
                                 "title": "Customer and stakeholder engagement (15% of your time)",
                                 "bullets": [
-                                    "Participate in customer demos and discussions with pharma IP heads and law firm partners.",
+                                    "Participate in design-partner demos and discussions with pharma IP heads and law firm partners.",
                                     "Engage with investors during due diligence as the engineering point of contact.",
                                     "Address technical questions from compliance officers regarding tenant isolation, RLS, and SOC 2 readiness."
                                 ]
@@ -194,7 +194,7 @@
                             {
                                 "kind": "bullets",
                                 "items": [
-                                    "Remote within India. Quarterly in-person sessions in Hyderabad for strategy and customer visits, with travel costs covered.",
+                                    "Remote within India. Quarterly in-person sessions in Hyderabad for strategy and design-partner visits, with travel costs covered.",
                                     "Async-first communication via GitHub and Google Space, with real-time meetings for complex discussions.",
                                     "AI-augmented but human-owned engineering. Every AI-assisted output is reviewed and signed off before merge.",
                                     "Weekly production deployments with feature flags for in-progress work and forward-only migrations.",
@@ -243,7 +243,7 @@
                                     },
                                     {
                                         "title": "Founding team conversation (45 minutes)",
-                                        "body": "Meet the broader founding team to discuss the business, customer pipeline, and your interest in the domain."
+                                        "body": "Meet the broader founding team to discuss the business, the go-to-market plan, and your interest in the domain."
                                     }
                                 ]
                             },

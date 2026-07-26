@@ -22,7 +22,7 @@ function Content() {
                 <li><strong>Background and field of invention sections</strong> - synthesized from the disclosure and adjacent prior art</li>
                 <li><strong>Detailed description</strong> - structured to support the claim set, with figure references and reference numerals</li>
                 <li><strong>Independent and dependent claim sets</strong> - drafted to claim breadth while supporting fallback positions</li>
-                <li><strong>Abstract and summary</strong> - jurisdiction-compliant length and structure</li>
+                <li><strong>Abstract and summary</strong> - length and structure that follow local drafting convention</li>
                 <li><strong>Office action responses</strong> - first-draft arguments that respond to specific examiner rejections</li>
             </ul>
             <p>
@@ -126,7 +126,7 @@ function Content() {
             <p>
                 Design Your Invention provides{' '}
                 <Link href="/ai-patent-drafting/">AI-powered patent drafting</Link>
-                {' '}integrated into the same audited platform that handles{' '}
+                {' '}integrated into the same audit-trailed platform that handles{' '}
                 <Link href="/blog/patent-docketing-best-practices/">patent docketing</Link> and
                 {' '}<Link href="/blog/patent-portfolio-analytics-roi/">portfolio analytics</Link>.
                 Drafts are generated inside your tenant boundary, audit-trailed against the originating disclosure, and

@@ -61,8 +61,9 @@ export function CtaSection() {
                             >
                                 See how Design Your Invention helps patent teams
                                 manage docketing, prior art search, AI-assisted
-                                drafting, compliance, and portfolio workflows in
-                                one audited platform.
+                                drafting, compliance controls, and portfolio
+                                workflows in one connected, audit-trailed
+                                workspace.
                             </p>
 
                             {/* Low-friction alternative to the form: a subtle

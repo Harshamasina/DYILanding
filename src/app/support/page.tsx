@@ -77,7 +77,7 @@ const RESOURCES = [
     {
         icon: ShieldCheck,
         title: 'Compliance & Security',
-        description: 'Learn about FDA 21 CFR Part 11 compliance, audit trails, and data security.',
+        description: 'Learn about FDA 21 CFR Part 11-aligned controls, audit trails, and data security.',
         href: '/#compliance',
     },
 ];

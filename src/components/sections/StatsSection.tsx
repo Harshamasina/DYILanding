@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
     Layers,
     Users,
@@ -47,22 +47,34 @@ const FONT_VAR: Record<NumberFont, string> = {
     display: 'var(--font-display)',
 };
 
+/* useLayoutEffect warns during the static export prerender, so fall back to
+   useEffect on the server where layout effects are a no-op anyway. */
+const useIsomorphicLayoutEffect =
+    typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 function useCountUp(target: number, isVisible: boolean, duration = 1500) {
-    const [count, setCount] = useState(0);
+    /* Seeded with the final value so the exported HTML, search crawlers, and
+       no-JS visitors read the real number rather than a placeholder 0. On the
+       client the value drops to 0 before first paint and counts up once the
+       section scrolls into view. */
+    const [count, setCount] = useState(target);
+    const [canAnimate, setCanAnimate] = useState(false);
     const hasAnimated = useRef(false);
 
-    useEffect(() => {
-        if (!isVisible || hasAnimated.current) return;
-        hasAnimated.current = true;
-
+    useIsomorphicLayoutEffect(() => {
         const prefersReducedMotion = window.matchMedia(
             '(prefers-reduced-motion: reduce)'
         ).matches;
 
-        if (prefersReducedMotion) {
-            setCount(target);
-            return;
-        }
+        if (prefersReducedMotion) return;
+
+        setCount(0);
+        setCanAnimate(true);
+    }, []);
+
+    useEffect(() => {
+        if (!canAnimate || !isVisible || hasAnimated.current) return;
+        hasAnimated.current = true;
 
         const startTime = performance.now();
 
@@ -80,7 +92,7 @@ function useCountUp(target: number, isVisible: boolean, duration = 1500) {
         }
 
         requestAnimationFrame(animate);
-    }, [isVisible, target, duration]);
+    }, [canAnimate, isVisible, target, duration]);
 
     return count;
 }
@@ -296,25 +308,25 @@ export const HERO_STATS: Stat[] = [
         value: 21,
         suffix: '',
         prefix: '',
-        label: 'CFR Part 11 Compliant',
-        sublabel: 'FDA-ready from day one',
+        label: 'CFR Part 11-Aligned Controls',
+        sublabel: 'Reason-for-change, e-signature, audit history',
         icon: ShieldCheck,
     },
     {
         value: 100,
         suffix: '%',
-        label: 'Audit Coverage',
-        sublabel: 'append-only, immutable logs',
+        label: 'Critical Actions Logged',
+        sublabel: 'append-only change history',
         icon: ClipboardCheck,
     },
 ];
 
 export const PRODUCT_STATS: Stat[] = [
     {
-        value: 200,
+        value: 120,
         suffix: 'M+',
         label: 'Patent Records Searchable',
-        sublabel: 'across 100+ jurisdictions',
+        sublabel: 'across 100+ patent authorities',
         icon: Database,
     },
     {
@@ -325,10 +337,10 @@ export const PRODUCT_STATS: Stat[] = [
         icon: DollarSign,
     },
     {
-        value: 6,
+        value: 4,
         suffix: '',
         label: 'Drafting Jurisdictions',
-        sublabel: 'US, EP, IN, WO, JP, CN',
+        sublabel: 'US, EP, IN, WO (JP and CN planned)',
         icon: Globe,
     },
     {

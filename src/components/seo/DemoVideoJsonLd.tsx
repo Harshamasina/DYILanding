@@ -17,7 +17,7 @@ const videoSchema = {
     '@type': 'VideoObject',
     name: 'Design Your Invention Product Demo',
     description:
-        'A walkthrough of the Design Your Invention IP management platform: run a prior art search across 100+ jurisdictions, generate a jurisdiction-aware patent draft, and docket the filing with every fee and deadline tracked.',
+        'A walkthrough of the Design Your Invention IP management platform, recorded with synthetic demo data: run a prior art search across 100+ patent authorities, generate a jurisdiction-aware patent draft for attorney review, and docket the filing with fees and deadlines tracked.',
     thumbnailUrl: [`${SITE_URL}/video_placeholder.jpg`],
     uploadDate: '2026-06-21',
     duration: 'PT2M24S',

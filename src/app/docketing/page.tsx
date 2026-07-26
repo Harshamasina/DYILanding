@@ -46,7 +46,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'Patent Docketing and Deadline Management Software',
     description:
-        'Audit-first patent docketing that derives every statutory deadline from your case data, scores each by risk, and emails proactive reminders so none is missed.',
+        'Audit-first patent docketing that derives supported statutory deadlines from your case data, scores each by risk, and emails proactive reminders before they come due. Calculated dates remain subject to professional review.',
     path: '/docketing/',
 });
 
@@ -93,7 +93,7 @@ const ENGINE_BEHAVIORS: IconItem[] = [
     {
         icon: Globe,
         title: 'Timezone correct',
-        description: '"Today" is computed in the tenant timezone, so a deadline never looks overdue a day early, or late, for a team in another part of the world.',
+        description: '"Today" is computed in the tenant timezone, so a deadline is not shown overdue a day early, or late, for a team in another part of the world.',
     },
     {
         icon: Clock,
@@ -206,12 +206,12 @@ const SECURITY: IconItem[] = [
     {
         icon: Database,
         title: 'Reason-for-change enforced',
-        description: 'Edits to sensitive fields such as dates and statuses require a typed reason, and deletions always do. The field is never null, mirroring 21 CFR Part 11 patterns.',
+        description: 'Edits to sensitive fields such as dates and statuses require a typed reason, and deletions always do. The field is required rather than optional, following 21 CFR Part 11 patterns.',
     },
     {
         icon: ShieldCheck,
         title: 'Tenant isolation',
-        description: 'Every query runs under PostgreSQL Row-Level Security inside a tenant-scoped transaction. One firm can never see another firm docket.',
+        description: 'Every query runs under PostgreSQL Row-Level Security inside a tenant-scoped transaction. Defense-in-depth tenant isolation is designed to prevent one firm from reaching another firm docket.',
     },
     {
         icon: KeyRound,
@@ -224,7 +224,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Is this a calendar I have to keep up to date by hand?',
         answer:
-            'No. Deadlines are computed on read from the underlying case records, not entered manually. The moment you set a filing date or a publication date, every dependent statutory and procedural deadline appears automatically and stays correct as the case changes.',
+            'No. Supported deadlines are computed on read from the underlying case records, not entered manually. The moment you set a filing date or a publication date, every dependent statutory and procedural deadline the engine supports appears automatically and recalculates when those source fields change. Dates the engine does not derive stay under your control as custom reminders, and all dates should be verified by a qualified patent professional.',
     },
     {
         question: 'Which deadlines does the engine derive?',
@@ -234,17 +234,17 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'How does risk scoring decide what is red?',
         answer:
-            'Every deadline gets a 0 to 100 score blending four signals: time pressure (40%), type severity (25%), overdue cascade (25%), and assignment gap (10%). A score of 70 or higher is red, 40 or higher is amber, and anything lower is green. Scores roll up into a portfolio-level breakdown so managers get an at-a-glance health read.',
+            'Every deadline gets a 0 to 100 score blending four signals: time pressure (40%), type severity (25%), overdue cascade (25%), and assignment gap (10%). A score of 70 or higher is red, 40 or higher is amber, and anything lower is green. Scores roll up into a portfolio-level breakdown so managers get an at-a-glance health read. The score prioritizes workflow attention. It is not a legal assessment of the case or of the consequences of a missed date.',
     },
     {
         question: 'Will deadlines look overdue a day early for international teams?',
         answer:
-            'No. "Today" is computed in each tenant local timezone, so a deadline is never miscolored for a team in another part of the world. Annuity fees also track a grace-period end date, so the system separates "overdue but still payable in grace" from "truly lapsed."',
+            'No. "Today" is computed in each tenant local timezone, so a deadline is not miscolored for a team in another part of the world. Annuity fees also track a grace-period end date, so the system separates "overdue but still payable in grace" from "truly lapsed."',
     },
     {
         question: 'What are the email digests, and can users control them?',
         answer:
-            'Three automated jobs push deadlines out: a daily deadline digest (8 AM local, pre-sorted by risk), a reminder-due email the same morning, and a weekly stale-alert hygiene report on Mondays at 9 AM local. Sends respect each user notification preferences, are throttled to provider limits, and fail gracefully per user so one bad address never blocks the batch.',
+            'Three automated jobs push deadlines out: a daily deadline digest (8 AM local, pre-sorted by risk), a reminder-due email the same morning, and a weekly stale-alert hygiene report on Mondays at 9 AM local. Sends respect each user notification preferences, are throttled to provider limits, and fail gracefully per user so one bad address does not block the batch.',
     },
     {
         question: 'What is the stale-alert report for?',
@@ -279,7 +279,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'How does it reduce the risk of a missed deadline or human error?',
         answer:
-            'Deadlines are computed on read from the case records rather than typed into a calendar, so they cannot be forgotten or entered wrong. Unassigned deadlines are penalized in the risk score, abandoned or paid items drop out automatically, and three automated digests push what is due to the responsible owner. The weekly stale-alert report catches cases that are silently going wrong without generating a hard deadline.',
+            'Supported deadlines are computed on read from the case records rather than typed into a calendar, so they do not depend on someone remembering to add them. Unassigned deadlines are penalized in the risk score, abandoned or paid items drop out automatically, and three automated digests push what is due to the responsible owner. The weekly stale-alert report catches cases that are silently going wrong without generating a hard deadline. Accuracy still depends on the case data you record, and calculated dates should be verified by a qualified patent professional.',
     },
     {
         question: 'How hard is it to migrate our existing docket from spreadsheets or another tool?',
@@ -335,16 +335,18 @@ export default function DocketingPage() {
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Patent Docketing That{' '}
-                                <span className="text-primary italic">Never Misses a Deadline</span>
+                                <span className="text-primary italic">Reduces Deadline Risk</span>
                             </h1>
                             <p
                                 className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 One missed annuity payment or office-action response can cost a client an
-                                entire patent. Docketing is built as an audit-first, never-miss-a-date engine
-                                that derives every statutory and procedural deadline from your case data,
-                                scores each one by risk, and pushes it to the right person before it comes due.
+                                entire patent. Docketing is built as an audit-first engine that derives
+                                supported statutory and procedural deadlines from your case data, scores
+                                each one by risk, and pushes it to the responsible owner before it comes
+                                due. Every calculated date stays reviewable, and remains subject to
+                                verification by a qualified patent professional.
                             </p>
 
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
@@ -454,6 +456,7 @@ export default function DocketingPage() {
                             </FadeIn>
                         ))}
                     </div>
+
                 </Container>
             </section>
 
@@ -479,9 +482,10 @@ export default function DocketingPage() {
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Every deadline gets a 0 to 100 risk score and a traffic-light level, so
-                                attorneys triage by genuine risk. The score is a weighted blend of four
-                                signals, and scores roll up into a portfolio-level breakdown for an
-                                at-a-glance health read.
+                                attorneys triage by workload pressure rather than date order alone. The
+                                score is a weighted blend of four signals, and scores roll up into a
+                                portfolio-level breakdown for an at-a-glance health read. Scores rank what
+                                needs attention first. They are not a legal assessment of the case.
                             </p>
                         </div>
                     </FadeIn>
@@ -716,6 +720,14 @@ export default function DocketingPage() {
                                 Explore Patent Search
                             </Button>
                         </div>
+                        <p
+                            className="mt-8 text-xs leading-relaxed text-text-muted sm:text-[13px]"
+                            style={{ fontFamily: 'var(--font-body)' }}
+                        >
+                            Calculated dates are workflow aids, not legal advice. Coverage depends on the
+                            case data you record, and every date should be verified by a qualified patent
+                            professional before it is relied on.
+                        </p>
                     </div>
                 </Container>
             </section>

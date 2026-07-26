@@ -74,9 +74,26 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* Smooth scrolling */
+/* Smooth scrolling.
+
+   --scroll-offset clears the fixed header when the page scrolls to an anchor.
+   It drives scroll-padding-top here and is read back by lib/hashScroll, so the
+   header offset is defined once and stays correct per breakpoint. Value must
+   stay in px for the JS to parse it.
+   Header height: 8px top pad + 56px bar on small screens, 12px + 64px at xl. */
+:root {
+    --scroll-offset: 84px;
+}
+
+@media (min-width: 1280px) {
+    :root {
+        --scroll-offset: 96px;
+    }
+}
+
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: var(--scroll-offset);
 }
 
 /* Reduce motion for accessibility */

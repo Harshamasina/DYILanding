@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { SelectField } from '@/components/ui/SelectField';
 import {
     ROLE_OPTIONS,
     INQUIRY_TYPE_OPTIONS,
@@ -59,14 +60,12 @@ export function ContactForm() {
         message: 'message',
     };
 
-    function handleChange(
-        e: React.ChangeEvent<
-            HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-        >,
-    ) {
-        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    /* Shared by the native inputs and the custom SelectField, which reports
+       a plain value rather than a change event. */
+    function setField(name: string, value: string) {
+        setForm((prev) => ({ ...prev, [name]: value }));
         // Clear field error on change (using backend field name)
-        const backendName = fieldMap[e.target.name] ?? e.target.name;
+        const backendName = fieldMap[name] ?? name;
         if (fieldErrors[backendName]) {
             setFieldErrors((prev) => {
                 const next = { ...prev };
@@ -74,6 +73,12 @@ export function ContactForm() {
                 return next;
             });
         }
+    }
+
+    function handleChange(
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) {
+        setField(e.target.name, e.target.value);
     }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -233,11 +238,11 @@ export function ContactForm() {
                     placeholder="Acme Law LLP"
                     error={getFieldError('company')}
                 />
-                <FormSelect
+                <SelectField
                     label="Role"
                     name="role"
                     value={form.role}
-                    onChange={handleChange}
+                    onChange={(v) => setField('role', v)}
                     required
                     options={ROLE_OPTIONS}
                     error={getFieldError('role')}
@@ -246,20 +251,20 @@ export function ContactForm() {
 
             {/* Portfolio Size + Inquiry Type row */}
             <div className="grid gap-6 sm:grid-cols-2">
-                <FormSelect
+                <SelectField
                     label="Portfolio Size"
                     name="portfolioSize"
                     value={form.portfolioSize}
-                    onChange={handleChange}
+                    onChange={(v) => setField('portfolioSize', v)}
                     required
                     options={PORTFOLIO_SIZE_OPTIONS}
                     error={getFieldError('portfolio_size')}
                 />
-                <FormSelect
+                <SelectField
                     label="Inquiry Type"
                     name="inquiryType"
                     value={form.inquiryType}
-                    onChange={handleChange}
+                    onChange={(v) => setField('inquiryType', v)}
                     required
                     options={INQUIRY_TYPE_OPTIONS}
                     error={getFieldError('inquiry_type')}
@@ -287,10 +292,10 @@ export function ContactForm() {
                     aria-describedby={getFieldError('message') ? 'message-error' : undefined}
                     rows={4}
                     placeholder="Tell us about your patent workflow, portfolio size, or compliance needs..."
-                    className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none transition-colors resize-y lg:flex-1 lg:min-h-40 ${
+                    className={`w-full rounded-lg border bg-white/70 backdrop-blur-md px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none transition-[color,background-color,border-color,box-shadow] duration-200 resize-y lg:flex-1 lg:min-h-40 ${
                         getFieldError('message')
                             ? 'border-danger focus:border-danger focus:ring-2 focus:ring-danger/20'
-                            : 'border-card-border focus:border-primary focus:ring-2 focus:ring-primary/20'
+                            : 'border-card-border hover:border-primary/35 hover:bg-white/90 hover:shadow-md hover:shadow-primary/[0.06] focus:border-primary focus:bg-white/90 focus:ring-2 focus:ring-primary/20'
                     }`}
                     style={{ fontFamily: 'var(--font-body)' }}
                 />
@@ -385,10 +390,10 @@ function FormField({
                 aria-invalid={!!error}
                 aria-describedby={error ? `${name}-error` : undefined}
                 placeholder={placeholder}
-                className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none transition-colors ${
+                className={`w-full rounded-lg border bg-white/70 backdrop-blur-md px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none transition-[color,background-color,border-color,box-shadow] duration-200 ${
                     error
                         ? 'border-danger focus:border-danger focus:ring-2 focus:ring-danger/20'
-                        : 'border-card-border focus:border-primary focus:ring-2 focus:ring-primary/20'
+                        : 'border-card-border hover:border-primary/35 hover:bg-white/90 hover:shadow-md hover:shadow-primary/[0.06] focus:border-primary focus:bg-white/90 focus:ring-2 focus:ring-primary/20'
                 }`}
                 style={{ fontFamily: 'var(--font-body)' }}
             />
@@ -406,63 +411,3 @@ function FormField({
     );
 }
 
-function FormSelect({
-    label,
-    name,
-    value,
-    onChange,
-    required,
-    options,
-    error,
-}: {
-    label: string;
-    name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    required?: boolean;
-    options: ReadonlyArray<{ value: string; label: string }>;
-    error?: string;
-}) {
-    return (
-        <div>
-            <label
-                htmlFor={name}
-                className="block text-sm font-semibold text-text-primary mb-2"
-                style={{ fontFamily: 'var(--font-display)' }}
-            >
-                {label}
-            </label>
-            <select
-                id={name}
-                name={name}
-                value={value}
-                onChange={onChange}
-                aria-required={required}
-                aria-invalid={!!error}
-                aria-describedby={error ? `${name}-error` : undefined}
-                className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-text-primary focus:outline-none transition-colors appearance-none cursor-pointer ${
-                    error
-                        ? 'border-danger focus:border-danger focus:ring-2 focus:ring-danger/20'
-                        : 'border-card-border focus:border-primary focus:ring-2 focus:ring-primary/20'
-                }`}
-                style={{ fontFamily: 'var(--font-body)' }}
-            >
-                {options.map((opt) => (
-                    <option key={opt.value} value={opt.value} disabled={opt.value === ''}>
-                        {opt.label}
-                    </option>
-                ))}
-            </select>
-            {error && (
-                <p
-                    id={`${name}-error`}
-                    role="alert"
-                    className="mt-1.5 text-xs text-danger"
-                    style={{ fontFamily: 'var(--font-body)' }}
-                >
-                    {error}
-                </p>
-            )}
-        </div>
-    );
-}

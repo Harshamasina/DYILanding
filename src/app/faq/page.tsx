@@ -14,7 +14,7 @@ import { FAQ_ITEMS } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'IP Management Software FAQ',
     description:
-        'Answers to common questions about Design Your Invention: what it is, who it is for, supported jurisdictions, prior art search, AI patent drafting, FDA 21 CFR Part 11 compliance, and security.',
+        'Answers to common questions about Design Your Invention: what it is, who it is for, supported jurisdictions, prior art search, AI patent drafting, FDA 21 CFR Part 11-aligned controls, product stage, and security.',
     path: '/faq/',
 });
 
@@ -60,7 +60,7 @@ export default function FaqPage() {
                         >
                             What Design Your Invention is, who it is for, the jurisdictions it covers, and how
                             it handles prior art search, AI-assisted patent drafting, FDA 21 CFR Part 11
-                            compliance, and security. If your question is not here, book a demo and ask.
+                            aligned controls, and security. If your question is not here, book a demo and ask.
                         </p>
                     </div>
                 </Container>

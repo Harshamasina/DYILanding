@@ -82,7 +82,8 @@ export function ImportSection() {
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             Upload your existing spreadsheet, preview exactly what will change,
-                            and confirm with one click. No data entry, no reformatting, no risk.
+                            and confirm with one click. Validate every row before anything
+                            reaches your records, with no manual re-keying or reformatting.
                         </p>
                     </div>
                 </FadeIn>

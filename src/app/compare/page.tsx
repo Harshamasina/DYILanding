@@ -57,14 +57,14 @@ const COMPARE_ROWS: CompareRow[] = [
         capability: 'Prior art search',
         legacy: 'Commonly a separate subscription or manual EPO/Espacenet searches',
         legacyIncluded: false,
-        dyi: 'Built in, querying the EPO global database across 100+ jurisdictions without leaving the family view',
+        dyi: 'Built in, querying the EPO global database across 100+ patent authorities without leaving the family view',
     },
     {
         icon: PenLine,
         capability: 'AI-assisted patent drafting',
         legacy: 'Typically not part of a docketing platform',
         legacyIncluded: false,
-        dyi: 'First-draft generation for attorney review across six jurisdictions (US, EP, IN, WO, JP, CN), with a mandatory review workflow',
+        dyi: 'First-draft generation for attorney review across US, EP, IN, and PCT (WO), with a mandatory review workflow',
     },
     {
         icon: FlaskConical,
@@ -75,10 +75,10 @@ const COMPARE_ROWS: CompareRow[] = [
     },
     {
         icon: ShieldCheck,
-        capability: 'Compliance-ready architecture',
+        capability: 'Part 11-aligned architecture',
         legacy: 'Varies widely by vendor and product age',
         legacyIncluded: false,
-        dyi: 'Audit-first design that mirrors FDA 21 CFR Part 11 standards: reason-for-change, immutable audit trail, e-signature re-authentication',
+        dyi: 'Audit-first design following FDA 21 CFR Part 11 patterns: reason-for-change, append-only audit trail, e-signature re-authentication',
     },
     {
         icon: Building2,
@@ -93,17 +93,17 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'What are the alternatives to legacy IPMS tools like Clarivate, Anaqua, or AppColl for pharma IP?',
         answer:
-            'Teams evaluating alternatives to established IP management platforms typically want fewer disconnected tools. Design Your Invention is a modern option built for pharma companies and IP boutique law firms that unifies multi-jurisdiction patent docketing, prior art search, AI-assisted drafting, and chemistry enrichment in one compliance-ready platform, rather than stitching a docketing tool together with separate search and drafting subscriptions.',
+            'Teams evaluating alternatives to established IP management platforms typically want fewer disconnected tools. Design Your Invention is a modern option built for pharma companies and IP boutique law firms that unifies multi-jurisdiction patent docketing, prior art search, AI-assisted drafting, and chemistry enrichment in one connected, audit-trailed platform, rather than stitching a docketing tool together with separate search and drafting subscriptions.',
     },
     {
         question: 'How is Design Your Invention different from legacy IP management software?',
         answer:
-            'The main difference is consolidation. Many IP teams run a docketing system, a separate prior art search tool, a drafting tool, and spreadsheets for chemistry and fees. Design Your Invention brings docketing, prior art search across 100+ jurisdictions, AI-assisted drafting for six jurisdictions, and chemistry enrichment into one audited platform with a compliance-ready architecture and multi-tenant data isolation.',
+            'The main difference is consolidation. Many IP teams run a docketing system, a separate prior art search tool, a drafting tool, and spreadsheets for chemistry and fees. Design Your Invention brings docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, and PCT, and chemistry enrichment into one connected, audit-trailed platform with a Part 11-aligned architecture and tenant-scoped data isolation.',
     },
     {
         question: 'Does Design Your Invention replace a separate prior art search tool?',
         answer:
-            'For most prior art work, yes. The platform queries the EPO global patent database covering 100+ jurisdictions directly inside the patent family view, with keyword, inventor, applicant, and patent-number search modes. Results save to the family with relevance scoring and attorney notes, creating an auditable prior art record without a second subscription.',
+            'For most prior art work, yes. The platform queries the EPO global patent database covering 100+ patent authorities directly inside the patent family view, with keyword, inventor, applicant, and patent-number search modes. Results save to the family with relevance scoring and attorney notes, creating an auditable prior art record without a second subscription.',
     },
     {
         question: 'Is Design Your Invention a good fit for IP boutique law firms?',
@@ -113,7 +113,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Does Design Your Invention include AI patent drafting that legacy tools usually lack?',
         answer:
-            'Yes. AI-assisted drafting is built in and generates a first draft for attorney review across six jurisdictions (US, EP, IN, WO, JP, CN), each with jurisdiction-specific rules. Every draft carries a mandatory disclaimer and a draft to in-review to approved workflow, so no AI-generated content can be exported or filed without human sign-off. It is a starting point for attorneys, not filing-ready output.',
+            'Yes. AI-assisted drafting is built in and generates a first draft for attorney review across US, EP, IN, and PCT (WO), each with jurisdiction-specific drafting rules, with JP and CN planned. Every draft carries a mandatory disclaimer and a draft to in-review to approved workflow, so no AI-generated content can be exported or filed without human sign-off. It is a starting point for attorneys, not filing-ready output.',
     },
 ];
 
@@ -162,8 +162,8 @@ export default function ComparePage() {
                             Most IP teams run a docketing system, a separate prior art search tool, a
                             drafting tool, and spreadsheets for chemistry and fees. Design Your Invention
                             is an intellectual property management software (IPMS) platform that unifies
-                            all of it for pharma companies and IP boutique law firms, on a compliance-ready
-                            architecture.
+                            all of it for pharma companies and IP boutique law firms, on an audit-first,
+                            Part 11-aligned architecture.
                         </p>
 
                         <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">

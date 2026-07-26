@@ -31,8 +31,8 @@ export function SecuritySection() {
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             Every patent record, draft, fee event, and audit log
-                            is protected through layered controls &mdash; from
-                            zero-retention AI workflows to tenant-scoped queries
+                            is protected through layered controls, from
+                            confidential AI processing to tenant-scoped queries
                             and enforced row-level security.
                         </p>
                     </div>

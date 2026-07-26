@@ -120,7 +120,7 @@ function Content() {
                 jurisdiction breakdowns, and deadline tracking views that give IP directors immediate visibility into
                 portfolio health and cost structure - without exporting to Excel or hiring a data analyst.
                 Our <Link href="/ai-patent-drafting/">AI-powered patent drafting</Link> further
-                accelerates portfolio growth by generating jurisdiction-compliant specifications in minutes.
+                accelerates portfolio growth by generating structured first-draft specifications for attorney review in minutes.
                 See our <Link href="/#pricing">pricing plans</Link> to find the tier that fits your team.
             </p>
         </>

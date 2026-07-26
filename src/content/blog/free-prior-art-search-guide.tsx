@@ -11,8 +11,8 @@ function Content() {
                 where the closest art sits, and how to position claims to survive examination. Skip
                 it, and you risk spending thousands on a filing that an examiner kills with a
                 reference you could have found in an afternoon. The good news: you can now run a
-                serious prior art search across more than 120 million patents, in every jurisdiction,
-                for free.
+                serious prior art search across more than 120 million patent records, from 100+ patent
+                authorities, for free.
             </p>
 
             <h2>What a Prior Art Search Actually Tells You</h2>
@@ -48,9 +48,11 @@ function Content() {
             <p>
                 Our{' '}
                 <Link href="/patent-search/">free patent search tool</Link>
-                {' '}runs on the Google Patents public dataset through BigQuery, so coverage is
-                universal: every jurisdiction and IPC class, more than 120 million records, with no
-                account required to start. Here is a practical workflow.
+                {' '}runs on the Google Patents public dataset through BigQuery: more than 120 million
+                records from 100+ patent authorities across IPC classes, with no account required to
+                start. Coverage, full-text availability, and freshness vary by authority and by
+                publication delay, so treat it as broad rather than complete. Here is a practical
+                workflow.
             </p>
 
             <h3>1. Start broad with the right search mode</h3>

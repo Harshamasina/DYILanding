@@ -26,7 +26,7 @@ const FEATURE_MENU = [
     {
         label: 'Patent Docketing',
         href: DOCKETING_PAGE_URL,
-        description: 'Auto-derive every deadline, score it by risk, and never miss a date.',
+        description: 'Derive supported deadlines from case data, score them by risk, and act early.',
         icon: CalendarClock,
     },
     {
@@ -38,7 +38,7 @@ const FEATURE_MENU = [
     {
         label: 'AI Patent Drafting',
         href: AI_DRAFTING_PAGE_URL,
-        description: 'Turn selected prior art into jurisdiction-compliant drafts in minutes.',
+        description: 'Turn selected prior art into structured drafts for attorney review.',
         icon: PenLine,
     },
 ] as const;

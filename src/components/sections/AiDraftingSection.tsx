@@ -15,17 +15,20 @@ import { DeferredMount } from '@/components/motion/DeferredMount';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { FadeIn } from '@/components/motion/FadeIn';
 
-const JURISDICTIONS = [
+/* Production set first, planned jurisdictions marked. The AI drafting page
+   is the source of truth for this list: US, EP, IN, and PCT (WO) ship today,
+   JP and CN are planned. */
+const JURISDICTIONS: { code: string; label: string; color: string; planned?: boolean }[] = [
     { code: 'US', label: 'USPTO', color: '#dc2626' },
     { code: 'EP', label: 'EPO', color: '#6366f1' },
     { code: 'IN', label: 'IPO', color: '#d97706' },
     { code: 'WO', label: 'WIPO', color: '#0ea5e9' },
-    { code: 'JP', label: 'JPO', color: '#059669' },
-    { code: 'CN', label: 'CNIPA', color: '#dc2626' },
+    { code: 'JP', label: 'JPO', color: '#059669', planned: true },
+    { code: 'CN', label: 'CNIPA', color: '#dc2626', planned: true },
 ];
 
 const TRUST_ITEMS = [
-    { icon: Shield, label: 'Zero Data Retention' },
+    { icon: Shield, label: 'Confidential AI Processing' },
     { icon: Lock, label: '5-Layer Prompt Defense' },
     { icon: UserCheck, label: 'Attorney Review Required' },
     { icon: ClipboardList, label: 'Complete Audit Trail' },
@@ -62,7 +65,7 @@ export function AiDraftingSection() {
                             className="mt-4 text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
-                            Turn the prior art you have selected into a jurisdiction-compliant first draft in under 5 minutes. Every draft is jurisdiction-aware, requires attorney review, and is captured in a complete audit trail.
+                            Turn the prior art you have selected into a structured first draft for attorney review in under 5 minutes. Every draft is configured for the drafting conventions of the target jurisdiction, requires attorney review before it can be exported or filed, and is captured in a complete audit trail.
                         </p>
                     </div>
                 </FadeIn>
@@ -158,8 +161,8 @@ const DRAFTING_CARDS: { icon: React.ElementType; title: string; description: str
     },
     {
         icon: Shield,
-        title: 'Jurisdiction-Specific Rules',
-        description: 'Patent law rules for US, EP, IN, WO, JP, and CN are embedded in every generation automatically.',
+        title: 'Jurisdiction-Specific Drafting Guidance',
+        description: 'Configurable drafting guidance and templates for the production set (US, EP, IN, and PCT/WO) are applied to every generation.',
     },
     {
         icon: UserCheck,
@@ -168,8 +171,8 @@ const DRAFTING_CARDS: { icon: React.ElementType; title: string; description: str
     },
     {
         icon: GitCompare,
-        title: 'Version Control & Immutable Snapshots',
-        description: 'Generate V1, review, add instructions, regenerate V2. Each version is a separate immutable record.',
+        title: 'Version Control & Append-Only Snapshots',
+        description: 'Generate V1, review, add instructions, regenerate V2. Each version is kept as a separate, non-editable record.',
     },
 ];
 
@@ -231,9 +234,23 @@ function DraftingContent() {
                         >
                             {j.label}
                         </span>
+                        {j.planned && (
+                            <span
+                                className="rounded bg-text-muted/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-text-muted"
+                                style={{ fontFamily: 'var(--font-mono)' }}
+                            >
+                                Planned
+                            </span>
+                        )}
                     </div>
                 ))}
             </div>
+            <p
+                className="mt-3 text-xs text-text-muted"
+                style={{ fontFamily: 'var(--font-body)' }}
+            >
+                US, EP, IN, and PCT (WO) are the production set today. JP and CN are planned.
+            </p>
         </div>
     );
 }

@@ -107,17 +107,23 @@ export default function PrivacyPage() {
 
                             <PolicySection title="4. Data Security">
                                 <p>
-                                    We implement enterprise-grade security measures to protect your data:
+                                    We use technical and organizational safeguards designed to protect
+                                    your data:
                                 </p>
                                 <ul className="list-disc pl-6 space-y-2 mt-2">
-                                    <li>All data encrypted in transit (HTTPS/TLS) and at rest</li>
+                                    <li>Data encrypted in transit (HTTPS/TLS) and at rest</li>
                                     <li>Authentication via Auth0 with support for SSO, SAML, and MFA</li>
-                                    <li>Tokens stored in-memory only - never in localStorage or cookies</li>
+                                    <li>Access tokens held in memory rather than written to browser storage</li>
                                     <li>Row-Level Security (RLS) at the database layer for tenant isolation</li>
                                     <li>Documents stored in encrypted S3 buckets with presigned URL access</li>
-                                    <li>Immutable audit trail for all data modifications</li>
+                                    <li>Append-only audit trail for data modifications</li>
                                     <li>Role-based access control (RBAC) with server-side enforcement</li>
                                 </ul>
+                                <p className="mt-2">
+                                    No security programme can guarantee absolute security. Independent
+                                    security assurance reports, such as SOC 2, have not been issued for
+                                    the platform yet.
+                                </p>
                             </PolicySection>
 
                             <PolicySection title="5. Data Sharing & Disclosure">
@@ -148,18 +154,24 @@ export default function PrivacyPage() {
                             <PolicySection title="6. Multi-Tenant Data Isolation">
                                 <p>
                                     {SITE_NAME} is a multi-tenant platform. Each organization&apos;s data is
-                                    completely isolated from other tenants through Row-Level Security (RLS)
-                                    enforced at the database layer. Your intellectual property data is never
-                                    accessible to other organizations on the platform.
+                                    scoped to that organization through Row-Level Security (RLS) enforced at
+                                    the database layer inside tenant-scoped transactions. These safeguards
+                                    are designed to prevent other organizations on the platform from
+                                    accessing your intellectual property data.
                                 </p>
                             </PolicySection>
 
-                            <PolicySection title="7. FDA 21 CFR Part 11 Compliance">
+                            <PolicySection title="7. FDA 21 CFR Part 11-Aligned Controls">
                                 <p>
-                                    For customers using our compliance features, {SITE_NAME} maintains audit
-                                    trails, electronic signature workflows, and reason-for-change tracking
-                                    in accordance with FDA 21 CFR Part 11 requirements. Audit records are
-                                    immutable and cannot be edited or deleted.
+                                    For customers using our compliance features, {SITE_NAME} provides audit
+                                    trails, electronic approval workflows, and reason-for-change tracking
+                                    designed to support Part 11-aligned workflows. Audit records are
+                                    append-only: the application exposes no path to edit or delete them.
+                                </p>
+                                <p className="mt-2">
+                                    These are product capabilities, not a compliance certification.
+                                    Part 11 compliance and system validation depend on each customer&apos;s
+                                    intended use, configuration, procedures, training, and quality system.
                                 </p>
                             </PolicySection>
 
