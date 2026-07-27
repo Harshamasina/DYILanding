@@ -527,7 +527,7 @@ export default function PatentSearchPage() {
                     {/* Enrichment is automated inference over third-party data, so the
                         boundary between what the tool surfaces and what a professional
                         must confirm is stated next to the claim, not in the footer. */}
-                    <FadeIn delay={0.12}>
+                    {/* <FadeIn delay={0.12}>
                         <div className="mt-6 rounded-2xl border border-compliance/25 bg-compliance/[0.04] px-6 py-5">
                             <h3
                                 className="text-sm font-semibold text-text-primary"
@@ -555,7 +555,7 @@ export default function PatentSearchPage() {
                                 </li>
                             </ul>
                         </div>
-                    </FadeIn>
+                    </FadeIn> */}
                 </Container>
             </section>
 

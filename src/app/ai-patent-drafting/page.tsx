@@ -925,7 +925,7 @@ export default function AiPatentDraftingPage() {
                     {/* Professional-use notice. Kept on the conversion path, not
                         buried in the footer, because it governs how the output
                         of this product may be used. */}
-                    <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-compliance/25 bg-compliance/[0.04] p-6 sm:p-7">
+                    {/* <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-compliance/25 bg-compliance/[0.04] p-6 sm:p-7">
                         <h3
                             className="text-sm font-semibold text-text-primary"
                             style={{ fontFamily: 'var(--font-display)' }}
@@ -951,7 +951,7 @@ export default function AiPatentDraftingPage() {
                                 filing an invention outside its country of origin.
                             </li>
                         </ul>
-                    </div>
+                    </div> */}
                 </Container>
             </section>
 
