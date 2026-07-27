@@ -27,6 +27,7 @@ export const metadata: Metadata = buildMetadata({
     description:
         'How Design Your Invention compares to legacy IP management software. One platform for multi-jurisdiction patent docketing, prior art search, AI-assisted drafting, and chemistry enrichment, built for pharma companies and IP boutique law firms.',
     path: '/compare/',
+    ogKey: 'compare',
 });
 
 /* ── Data ── */

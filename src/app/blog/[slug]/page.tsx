@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { BlogPostLayout } from '@/components/blog/BlogPostLayout';
 import { getAllSlugs, getPostBySlug } from '@/content/blog';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import { blogOgKey, ogImageEntry, ogImageUrl } from '@/lib/og';
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -16,6 +17,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { slug } = await params;
     const post = getPostBySlug(slug);
     if (!post) return {};
+
+    const ogKey = blogOgKey(post.slug);
 
     return {
         title: `${post.title} - ${SITE_NAME}`,
@@ -33,11 +36,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             publishedTime: post.publishedAt,
             modifiedTime: post.updatedAt ?? post.publishedAt,
             authors: [post.author.name],
+            images: [ogImageEntry(ogKey, `${post.title} - ${SITE_NAME}`)],
         },
         twitter: {
             card: 'summary_large_image',
             title: post.title,
             description: post.description,
+            images: [ogImageUrl(ogKey)],
         },
     };
 }

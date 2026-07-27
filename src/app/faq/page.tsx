@@ -16,6 +16,7 @@ export const metadata: Metadata = buildMetadata({
     description:
         'Answers to common questions about Design Your Invention: what it is, who it is for, supported jurisdictions, prior art search, AI patent drafting, FDA 21 CFR Part 11-aligned controls, product stage, and security.',
     path: '/faq/',
+    ogKey: 'faq',
 });
 
 export default function FaqPage() {

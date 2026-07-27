@@ -6,6 +6,7 @@ import { BlogListJsonLd } from '@/components/blog/BlogJsonLd';
 import { HexCubeIllustration } from '@/components/illustrations/HexCubeIllustration';
 import { getAllPosts } from '@/content/blog';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import { ogImageEntry, ogImageUrl } from '@/lib/og';
 
 const BLOG_HERO_TAGS = ['Insights', 'Best practices', 'Compliance'];
 
@@ -29,6 +30,13 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/blog/`,
         siteName: SITE_NAME,
         type: 'website',
+        images: [ogImageEntry('blog', `IP Management Blog - ${SITE_NAME}`)],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: `IP Management Blog - ${SITE_NAME}`,
+        description: 'Insights on IP management, patent docketing, and compliance for law firms and pharma.',
+        images: [ogImageUrl('blog')],
     },
 };
 

@@ -4,7 +4,11 @@ module.exports = {
     generateRobotsTxt: true,
     generateIndexSitemap: false,
     outDir: './out',
-    exclude: [],
+    /* /og/<key>/image.png are generated social share cards, not pages. They are
+     * referenced from each page's og:image tag, which is how crawlers should
+     * reach them. Listing them as sitemap URLs would advertise 26 image files
+     * as indexable HTML documents. */
+    exclude: ['/og/*'],
     robotsTxtOptions: {
         /* AI / generative search crawlers are allowlisted explicitly so the
          * brand can be read and cited by each engine. Blocking a crawler means

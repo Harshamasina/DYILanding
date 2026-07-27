@@ -1,4 +1,5 @@
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, BRAND } from '@/lib/constants';
+import { ogImageUrl } from '@/lib/og';
 
 type OrganizationSchema = {
     '@context': 'https://schema.org';
@@ -33,7 +34,7 @@ function buildOrganizationSchema(): OrganizationSchema {
         name: SITE_NAME,
         url: SITE_URL,
         logo: `${SITE_URL}/logo.png`,
-        image: `${SITE_URL}/og-image.png`,
+        image: ogImageUrl('home'),
         description:
             'Enterprise IP management and patent docketing platform for law firms and pharma companies.',
     };

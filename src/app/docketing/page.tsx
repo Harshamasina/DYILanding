@@ -48,6 +48,7 @@ export const metadata: Metadata = buildMetadata({
     description:
         'Audit-first patent docketing that derives supported statutory deadlines from your case data, scores each by risk, and emails proactive reminders before they come due. Calculated dates remain subject to professional review.',
     path: '/docketing/',
+    ogKey: 'docketing',
 });
 
 /* ── Data ── */

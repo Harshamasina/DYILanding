@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Mail, Clock, MessageSquare, FileText, ShieldCheck, BookOpen } from 'lucide-react';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import { ogImageEntry, ogImageUrl } from '@/lib/og';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 
@@ -25,12 +26,14 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/support/`,
         siteName: SITE_NAME,
         type: 'website',
+        images: [ogImageEntry('support', `Support - ${SITE_NAME}`)],
     },
     twitter: {
-        card: 'summary',
+        card: 'summary_large_image',
         title: `Support - ${SITE_NAME}`,
         description:
             'Get help with Design Your Invention IP management platform.',
+        images: [ogImageUrl('support')],
     },
 };
 

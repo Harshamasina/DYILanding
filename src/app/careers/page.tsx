@@ -14,6 +14,7 @@ export const metadata: Metadata = buildMetadata({
     title: careers.meta.title,
     description: careers.meta.description,
     path: careers.meta.path,
+    ogKey: 'careers',
 });
 
 function buildItemListSchema(activeRoles: Role[]) {

@@ -47,6 +47,7 @@ export const metadata: Metadata = buildMetadata({
     description:
         'Free patent search across a corpus of 120M+ patent records from 100+ patent authorities. Detect disclosed compounds, run substructure search, and see linked clinical trials.',
     path: '/patent-search/',
+    ogKey: 'patent-search',
 });
 
 /* ── Data ── */

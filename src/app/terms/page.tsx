@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
+import { ogImageEntry, ogImageUrl } from '@/lib/og';
 import { Container } from '@/components/ui/Container';
 
 export const metadata: Metadata = {
@@ -16,12 +17,14 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/terms/`,
         siteName: SITE_NAME,
         type: 'website',
+        images: [ogImageEntry('terms', `Terms of Service - ${SITE_NAME}`)],
     },
     twitter: {
-        card: 'summary',
+        card: 'summary_large_image',
         title: `Terms of Service - ${SITE_NAME}`,
         description:
             'Terms of Service governing use of the Design Your Invention IP management platform.',
+        images: [ogImageUrl('terms')],
     },
 };
 

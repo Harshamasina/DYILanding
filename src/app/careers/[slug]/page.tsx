@@ -5,6 +5,7 @@ import { RoleDetailHero } from '@/components/sections/RoleDetailHero';
 import { RoleDetailBody } from '@/components/sections/RoleDetailBody';
 import { RoleDetailApply } from '@/components/sections/RoleDetailApply';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
+import { careersOgKey } from '@/lib/og';
 import careersData from '@/data/careers.json';
 import type { CareersData, DetailBlock, Role } from '@/types/careers';
 
@@ -33,6 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title: `${role.title} - Careers`,
         description: role.summary,
         path: `/careers/${role.slug}/`,
+        ogKey: careersOgKey(role.slug),
     });
 }
 

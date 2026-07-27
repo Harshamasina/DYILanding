@@ -46,6 +46,7 @@ export const metadata: Metadata = buildMetadata({
     description:
         'Attorney-in-the-loop AI patent drafting: turn saved prior art into structured draft claims, abstract, and novelty analysis for attorney review across US, EP, IN, and PCT.',
     path: '/ai-patent-drafting/',
+    ogKey: 'ai-patent-drafting',
 });
 
 /* ── Data ── */

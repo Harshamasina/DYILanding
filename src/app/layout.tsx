@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { playfair, baskerville, ibmPlexMono, dmSans, jetbrainsMono } from '@/lib/fonts';
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
+import { ogImageEntry, ogImageUrl } from '@/lib/og';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -19,12 +20,10 @@ export const metadata: Metadata = {
         url: SITE_URL,
         siteName: SITE_NAME,
         images: [
-            {
-                url: '/og-image.png',
-                width: 1200,
-                height: 630,
-                alt: 'Design Your Invention: Compliance-Native IP Portfolio Management',
-            },
+            ogImageEntry(
+                'home',
+                'Design Your Invention: Compliance-Native IP Portfolio Management',
+            ),
         ],
         locale: 'en_US',
         type: 'website',
@@ -33,7 +32,7 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: `${SITE_NAME} | IP Management Software for Law Firms & Pharma`,
         description: SITE_DESCRIPTION,
-        images: ['/og-image.png'],
+        images: [ogImageUrl('home')],
     },
     alternates: {
         canonical: SITE_URL,
