@@ -18,9 +18,7 @@ import {
     Upload,
     Download,
     LayoutDashboard,
-    Globe,
     TrendingUp,
-    Check,
     ArrowRight,
     Play,
     FileText,
@@ -37,6 +35,7 @@ import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedDocketingWorkflow } from '@/components/ui/AnimatedDocketingWorkflow';
+import { ComputedDeadlineTrace } from '@/components/ui/ComputedDeadlineTrace';
 import { LoeCard } from '@/components/sections/LoeCard';
 import { DocketingHeroSvg } from '@/components/illustrations/DocketingHeroSvg';
 import { DocketingJsonLd } from '@/components/seo/DocketingJsonLd';
@@ -71,40 +70,21 @@ const TRACKS = [
     'Custom Reminders',
 ];
 
-interface DeadlineType {
-    icon: React.ElementType;
-    type: string;
-    derivedFrom: string;
-    subTypes: string;
-    accent: string;
-    tint: string;
-}
-
-const DEADLINE_TYPES: DeadlineType[] = [
-    { icon: FileWarning, type: 'Office Action Response', derivedFrom: 'NPE office actions (due date)', subTypes: 'Non-final, Final, Advisory', accent: '#dc2626', tint: 'rgba(220,38,38,0.08)' },
-    { icon: Coins, type: 'Annuity / Renewal Fee', derivedFrom: 'NPE annuity fees (due date + grace period)', subTypes: 'On-time, In-grace window', accent: '#d97706', tint: 'rgba(217,119,6,0.09)' },
-    { icon: Globe, type: 'PCT Deadlines', derivedFrom: 'PCT filings', subTypes: 'Chapter I (Rule 22), Chapter II (Rule 30/31)', accent: '#4f46e5', tint: 'rgba(79,70,229,0.08)' },
-    { icon: CalendarX2, type: 'PRV Deadlines', derivedFrom: 'Provisional applications', subTypes: 'Expiry, Conversion deadline', accent: '#6366f1', tint: 'rgba(99,102,241,0.08)' },
-    { icon: Database, type: 'Patent Fees', derivedFrom: 'Fees on any entity', subTypes: 'Across 8 fee categories', accent: '#059669', tint: 'rgba(5,150,105,0.08)' },
-    { icon: Layers, type: 'NPE Deadlines', derivedFrom: 'NPE cases', subTypes: 'Patent expiry, Request for Examination (RFE)', accent: '#4338ca', tint: 'rgba(67,56,202,0.08)' },
-    { icon: AlarmClock, type: 'Custom Reminders', derivedFrom: 'User-created reminders', subTypes: 'One-time or recurring', accent: '#64748b', tint: 'rgba(100,116,139,0.10)' },
-];
-
-const ENGINE_BEHAVIORS: IconItem[] = [
+const TRACE_CAPABILITIES: IconItem[] = [
     {
-        icon: Globe,
-        title: 'Timezone correct',
-        description: '"Today" is computed in the tenant timezone, so a deadline is not shown overdue a day early, or late, for a team in another part of the world.',
+        icon: ScrollText,
+        title: 'Cited and explainable',
+        description: 'See the source event, governing authority, assumptions, and every calculation step.',
     },
     {
-        icon: Clock,
-        title: 'Grace periods understood',
-        description: 'Annuity fees track a grace-period end date, so the system distinguishes "overdue but still payable in grace" from "truly lapsed."',
+        icon: ShieldCheck,
+        title: 'Attorney control is preserved',
+        description: 'Overrides retain the computed value, require a reason, and remain fully audited.',
     },
     {
-        icon: Check,
-        title: 'Status aware',
-        description: 'Abandoned, granted, or already-paid items drop out of the active deadline view automatically, so the list stays the work that actually remains.',
+        icon: Layers,
+        title: 'Updates never move dates silently',
+        description: 'Preview the impact, review changes, sign the release, and restore the prior version.',
     },
 ];
 
@@ -228,9 +208,9 @@ const PAGE_FAQ: FaqItem[] = [
             'No. Supported deadlines are computed on read from the underlying case records, not entered manually. The moment you set a filing date or a publication date, every dependent statutory and procedural deadline the engine supports appears automatically and recalculates when those source fields change. Dates the engine does not derive stay under your control as custom reminders, and all dates should be verified by a qualified patent professional.',
     },
     {
-        question: 'Which deadlines does the engine derive?',
+        question: 'Which deadlines are computed, and which are tracked?',
         answer:
-            'Seven types across the whole case hierarchy: office action responses, annuity and renewal fees, PCT deadlines (Chapter I Rule 22 and Chapter II Rule 30/31), PRV deadlines (expiry and conversion), patent fees, NPE deadlines (patent expiry and request for examination), and custom reminders. Each is bucketed by urgency from overdue through upcoming.',
+            'Current computed coverage focuses on supported PCT deadlines and U.S. office-action response chains. Each result carries its informational trust status and a derivation trace, and must be professionally verified. The unified docket also tracks annuities, provisional and national-phase matters, patent fees, and custom reminders; not every tracked date is a rules-based calculation.',
     },
     {
         question: 'How does risk scoring decide what is red?',
@@ -285,7 +265,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'How hard is it to migrate our existing docket from spreadsheets or another tool?',
         answer:
-            'Most teams start with a bulk CSV import. You upload your existing portfolio and the system validates every row before anything touches the database, then creates families with their PRV, PCT, and NPE child records and key dates in a single atomic transaction with a full audit trail. Because deadlines are derived on read, every dependent deadline appears automatically the moment the dates are imported.',
+            'Most teams start with a bulk CSV import. You upload your existing portfolio and the system validates every row before anything touches the database, then creates families with their PRV, PCT, and NPE child records and key dates in a single atomic transaction with a full audit trail. Supported dependent deadlines appear automatically when the required source dates are imported.',
     },
     {
         question: 'If we ever leave, can we take our data with us?',
@@ -394,70 +374,64 @@ export default function DocketingPage() {
                 </Container>
             </section>
 
-            {/* ── 2. The unified deadline engine ── */}
-            <section className="relative overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28">
+            {/* ── 2. Traceable computed deadlines ── */}
+            <section
+                id="computed-deadlines"
+                className="relative scroll-mt-24 overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28"
+            >
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">
                     <FadeIn>
-                        <div className="max-w-3xl">
+                        <div className="max-w-4xl">
                             <span
                                 className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
                                 style={{ fontFamily: 'var(--font-mono)' }}
                             >
-                                The unified deadline engine
+                                Traceable computed deadlines
                             </span>
                             <h2
                                 className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
-                                One Engine, Seven Deadline Types
+                                Every Computed Date Shows Its Work
                             </h2>
                             <p
                                 className="mt-4 text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
-                                Deadlines are not a manual calendar. A single engine derives every
-                                statutory and procedural deadline across the entire case hierarchy and
-                                presents them in one prioritized, filterable view, each bucketed by urgency
-                                from overdue through upcoming and tagged with its family, assignee, and (for
-                                fees) amount and currency.
+                                Supported PCT and U.S. office-action deadlines are calculated from recorded
+                                case events using deterministic, versioned rules. Review the trigger,
+                                citation, arithmetic, calendar adjustment, assumptions, and rule version
+                                behind every result.
                             </p>
+                            <Link
+                                href="/blog/automated-patent-deadline-calculation-rules-engine/"
+                                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
+                                style={{ fontFamily: 'var(--font-body)' }}
+                            >
+                                Read how automated patent deadline calculation works
+                                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                            </Link>
                         </div>
                     </FadeIn>
 
                     <FadeIn delay={0.05}>
-                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm ring-1 ring-white/70 lg:mt-12">
-                            <table className="w-full min-w-150 border-collapse text-left">
-                                <thead>
-                                    <tr className="border-b border-card-border bg-white/60">
-                                        {['Deadline Type', 'Derived From', 'Sub-types'].map((h) => (
-                                            <th
-                                                key={h}
-                                                className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-text-muted"
-                                                style={{ fontFamily: 'var(--font-mono)' }}
-                                            >
-                                                {h}
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {DEADLINE_TYPES.map((row) => (
-                                        <DeadlineTypeRow key={row.type} row={row} />
-                                    ))}
-                                </tbody>
-                            </table>
+                        <div className="relative mt-10 lg:mt-12">
+                            <div
+                                aria-hidden="true"
+                                className="pointer-events-none absolute -inset-8 rounded-[3rem] bg-primary/[0.06] blur-3xl"
+                            />
+                            <ComputedDeadlineTrace />
                         </div>
                     </FadeIn>
 
                     <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3">
-                        {ENGINE_BEHAVIORS.map((item, i) => (
+                        {TRACE_CAPABILITIES.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.08}>
                                 <CapabilityCard {...item} />
                             </FadeIn>
                         ))}
                     </div>
-
                 </Container>
             </section>
 
@@ -752,47 +726,6 @@ function TrackChip({ label, delay }: { label: string; delay: number }) {
             />
             {label}
         </span>
-    );
-}
-
-function DeadlineTypeRow({ row }: { row: DeadlineType }) {
-    const Icon = row.icon;
-
-    return (
-        <tr className="group border-b border-card-border/60 transition-colors duration-200 last:border-b-0 hover:bg-white">
-            <td
-                className="px-5 py-4 text-sm font-semibold text-text-primary"
-                style={{ fontFamily: 'var(--font-body)' }}
-            >
-                <span className="flex items-center gap-3">
-                    <span
-                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-all duration-200 group-hover:scale-105 group-hover:shadow-sm"
-                        style={{ borderColor: `${row.accent}33`, backgroundColor: row.tint }}
-                    >
-                        <Icon className="h-4 w-4" style={{ color: row.accent }} />
-                    </span>
-                    {row.type}
-                </span>
-            </td>
-            <td
-                className="px-5 py-4 text-sm text-text-secondary"
-                style={{ fontFamily: 'var(--font-body)' }}
-            >
-                {row.derivedFrom}
-            </td>
-            <td className="px-5 py-4">
-                <span
-                    className="inline-flex rounded-md px-2 py-0.5 text-[12px] font-medium transition-colors duration-200"
-                    style={{
-                        color: row.accent,
-                        backgroundColor: row.tint,
-                        fontFamily: 'var(--font-mono)',
-                    }}
-                >
-                    {row.subTypes}
-                </span>
-            </td>
-        </tr>
     );
 }
 

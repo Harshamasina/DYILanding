@@ -2,10 +2,10 @@ import {
     FileText,
     GitBranch,
     FileCheck,
-    Globe,
-    Briefcase,
+    Hourglass,
+    ScrollText,
     AlertCircle,
-    CalendarDays,
+    BellRing,
     DollarSign,
     ArrowRight,
 } from 'lucide-react';
@@ -48,7 +48,7 @@ const FEATURE_ROWS: FeatureRow[] = [
                 icon: FileText,
                 title: 'Patent Docketing',
                 description:
-                    'Track every application, deadline, status, and jurisdiction from filing to grant.',
+                    'Track every application, deadline, status, and jurisdiction across PRV, PCT, NPE, and national phase cases in one audit-first docket.',
             },
             {
                 icon: GitBranch,
@@ -58,15 +58,15 @@ const FEATURE_ROWS: FeatureRow[] = [
             },
             {
                 icon: FileCheck,
-                title: 'PRV Application Tracking',
+                title: 'Branded PDF Reports',
                 description:
-                    'Manage provisional applications with priority dates, jurisdictions, and linked family records.',
+                    'Turn the live docket into a client-ready PDF with your branding, stamped with a report ID and SHA-256 checksum verifiable against the audit log.',
             },
             {
-                icon: Globe,
-                title: 'PCT Filing Management',
+                icon: Hourglass,
+                title: 'Loss of Exclusivity Timeline',
                 description:
-                    'Track international filings, Chapter II demands, publications, and office assignments.',
+                    'Link drug products to their patent wall and regulatory floor, and see the combined protection horizon with a live what-if for annuity decisions.',
             },
         ],
     },
@@ -79,10 +79,10 @@ const FEATURE_ROWS: FeatureRow[] = [
         ctaHref: '/docketing/',
         features: [
             {
-                icon: Briefcase,
-                title: 'NPE Case Management',
+                icon: ScrollText,
+                title: 'Computed Deadlines',
                 description:
-                    'Full NPE lifecycle with office actions, annuity fees, and response tracking linked to parent families.',
+                    'Supported PCT and U.S. office-action deadlines are calculated from recorded case events under versioned, cited rules, and every date shows its work.',
             },
             {
                 icon: AlertCircle,
@@ -94,13 +94,13 @@ const FEATURE_ROWS: FeatureRow[] = [
                 icon: DollarSign,
                 title: 'Fee Management',
                 description:
-                    '42 fee types across 8 categories. Track paid, due, waived, and overdue fees with analytics dashboards.',
+                    'Multi-currency annuity and patent fee tracking with grace periods and date-accurate FX rollups across the whole portfolio.',
             },
             {
-                icon: CalendarDays,
-                title: 'Deadline Calendar',
+                icon: BellRing,
+                title: 'Proactive Digests and Calendar Feeds',
                 description:
-                    'Color-coded calendar with month and year views for fees, office actions, and filing reminders.',
+                    'Risk-sorted daily deadline digests, a weekly stale-alert hygiene report, and private read-only feeds for Outlook, Google, and Apple Calendar.',
             },
         ],
     },
@@ -190,7 +190,7 @@ function FeatureRowBlock({ row, index }: { row: FeatureRow; index: number }) {
 
     return (
         <div>
-            {/* Desktop layout — items-stretch so the mockup column matches
+            {/* Desktop layout - items-stretch so the mockup column matches
                 the (heading + cards) height on the other side. */}
             <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-stretch">
                 {isMockupRight ? (
@@ -205,7 +205,7 @@ function FeatureRowBlock({ row, index }: { row: FeatureRow; index: number }) {
                     </>
                 )}
             </div>
-            {/* Mobile layout — heading + cards, then mockup */}
+            {/* Mobile layout - heading + cards, then mockup */}
             <div className="lg:hidden space-y-8">
                 {cardsColumn}
                 {mockup}

@@ -19,9 +19,13 @@ const softwareApplicationSchema = {
     operatingSystem: 'Web',
     url: PAGE_URL,
     description:
-        'Audit-first patent docketing and deadline management. A unified engine derives every statutory and procedural deadline from your case data, scores each one by risk, and pushes proactive email digests so nothing is missed.',
+        'Audit-first patent docketing and deadline management with traceable calculations for supported PCT and U.S. office-action deadlines, risk scoring, and proactive email digests. Calculated dates remain informational until professionally verified.',
     featureList: [
-        'Unified deadline engine deriving seven deadline types across the case hierarchy',
+        'Deterministic, versioned calculations for supported PCT and U.S. office-action deadlines',
+        'Per-date derivation trace with trigger provenance, legal citations, arithmetic, assumptions, and office-calendar adjustments',
+        'Informational trust status with audited attorney overrides and verification controls',
+        'Rule-release impact preview, signed activation, and rollback controls',
+        'Unified docket tracking office actions, annuities, PCT, provisional, patent-fee, national-phase, and custom-reminder dates',
         'Risk scoring with green / amber / red traffic lights and portfolio roll-up',
         'Timezone-correct deadlines with annuity grace-period handling',
         'Proactive daily, reminder-due, and weekly stale-alert email digests',
