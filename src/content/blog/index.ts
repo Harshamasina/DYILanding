@@ -14,6 +14,11 @@ import { post as chatgptForPatents } from './can-i-use-chatgpt-to-write-a-patent
 import { post as section3dIndianPharma } from './section-3d-patentability-indian-pharma';
 import { post as form27WorkingStatement } from './form-27-working-statement-compliance';
 import { post as lossOfExclusivity } from './loss-of-exclusivity-loe-timeline-pharma';
+import { post as deadlineRulesEngine } from './automated-patent-deadline-calculation-rules-engine';
+import { post as dualDocketing } from './dual-docketing-patent-docket-audit';
+import { post as deDocketing } from './patent-de-docketing-zero-touch-guide';
+import { post as oaResponseDeadlines } from './uspto-office-action-response-deadlines';
+import { post as annuityDeadlines } from './patent-annuity-maintenance-fee-deadlines';
 
 const allPosts: BlogPost[] = [
     whatIsIpManagement,
@@ -30,6 +35,11 @@ const allPosts: BlogPost[] = [
     section3dIndianPharma,
     form27WorkingStatement,
     lossOfExclusivity,
+    deadlineRulesEngine,
+    dualDocketing,
+    deDocketing,
+    oaResponseDeadlines,
+    annuityDeadlines,
 ];
 
 /** All posts sorted by publishedAt descending (newest first) */
