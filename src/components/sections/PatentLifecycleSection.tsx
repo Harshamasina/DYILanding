@@ -98,6 +98,11 @@ interface Scene {
     mainDot: SVGCircleElement | null;
     claimInk: SVGPathElement[];
     officeAction: SVGGElement | null;
+    binPath: SVGPathElement | null;
+    bin: SVGGElement | null;
+    fees: SVGGElement | null;
+    /** Groups outside a stage that follow a stage's state (the archive bin). */
+    mirrors: SVGGElement[];
     milestones: Array<{ element: SVGGElement; at: number }>;
 }
 
@@ -139,10 +144,10 @@ const STAGES: LifecycleStage[] = [
     {
         id: 'maintain',
         label: 'Maintain',
-        meta: 'Annuities through expiry',
-        detail: 'Track annuity and renewal fees in any currency with grace periods, then archive the family with its full audit history.',
+        meta: 'Maintenance fees through expiry',
+        detail: 'Track US maintenance fees, foreign annuities, and grace periods in any currency, then archive the family with its full audit history.',
         icon: CalendarClock,
-        window: [12100, 16000],
+        window: [12100, 16300],
     },
 ];
 
@@ -161,19 +166,32 @@ const OA_STATUSES = [
     { id: 'granted', text: 'Grant date recorded' },
 ];
 
+/* Maintenance fee card states, switched by how many fees the record has
+   passed (paid-1 to paid-3) and whether it has reached the archive. */
+const FEE_STATUSES = [
+    { id: 'due', text: '3.5-year fee due' },
+    { id: 'paid-1', text: '3.5-year fee paid' },
+    { id: 'paid-2', text: '7.5-year fee paid' },
+    { id: 'paid-3', text: '11.5-year fee paid' },
+    { id: 'expired', text: 'Expired at 20 years' },
+];
+
 /* ── Route geometry ── */
 
 const ROUTE = {
     converge: [0, 0.12],
     pre: [0.12, 0.44],
     branch: [0.44, 0.6],
-    post: [0.6, 1],
+    post: [0.6, 0.93],
+    bin: [0.93, 1],
 } as const;
 
 const PRE_X: Span = [210, 500];
-const POST_X: Span = [700, 1145];
+const POST_X: Span = [700, 1112];
 const CLAIMS_X: Span = [307, 432];
-const ANNUITY_X = [970, 1010, 1050, 1090];
+/* US maintenance fees fall due 3.5, 7.5 and 11.5 years after grant. */
+const ANNUITY_X = [975, 1030, 1085];
+const ANNUITY_LABELS = ['3.5 yr', '7.5 yr', '11.5 yr'];
 
 /* Each path starts at the right edge of its prior art card. */
 const PRIOR_ART = [
@@ -189,11 +207,14 @@ const BRANCH_PATHS = [
     'M 500 165 C 535 165, 535 255, 570 255 H 630 C 665 255, 665 165, 700 165',
 ];
 const POST_PATH = `M ${POST_X[0]} 165 H ${POST_X[1]}`;
+/* Curves down through the bin lid and ends inside the box. */
+const BIN_PATH = `M ${POST_X[1]} 165 C 1136 165, 1150 170, 1150 190 V 226`;
 const CLAIM_LINES = [
     'M 325 128 H 384',
-    'M 325 150 H 410',
-    'M 325 172 H 398',
-    'M 325 194 H 410',
+    /* Numbered lines start clear of their "1." to "3." markers. */
+    'M 333 150 H 410',
+    'M 333 172 H 398',
+    'M 333 194 H 410',
     'M 325 216 H 386',
 ];
 
@@ -240,8 +261,14 @@ const AT = {
     officeAction: routeAt(ROUTE.post, POST_X, 800),
     responseSubmitted: routeAt(ROUTE.post, POST_X, 850),
     grant: routeAt(ROUTE.post, POST_X, 900),
+    /* The maintenance fee card rises as the record leaves Grant. */
+    feeDue: routeAt(ROUTE.post, POST_X, 915),
     annuities: ANNUITY_X.map((x) => routeAt(ROUTE.post, POST_X, x)),
-    archive: 0.996,
+    /* The bin lid lifts as the record leaves the last annuity and closes once
+       the record has dropped inside; the bin then shows as archived. */
+    lidOpen: routeAt(ROUTE.post, POST_X, 1098),
+    lidClose: lerp(ROUTE.bin[0], ROUTE.bin[1], 0.86),
+    archive: lerp(ROUTE.bin[0], ROUTE.bin[1], 0.95),
 };
 
 /* ── Timeline ──
@@ -267,12 +294,13 @@ const TIMELINE: Keyframe[] = [
     { at: 10400, head: AT.responseSubmitted, tail: 0, stage: 3 },
     { at: 11000, head: AT.responseSubmitted, tail: 0, stage: 3 },
     { at: 11600, head: AT.grant, tail: 0, stage: 3 },
-    { at: 12100, head: AT.grant, tail: 0, stage: 3 },
+    /* Maintain goes live as the record leaves Grant, when the fee card rises. */
+    { at: 12100, head: AT.grant, tail: 0, stage: 4 },
     { at: 12800, head: AT.annuities[0], tail: 0, stage: 4 },
     { at: 14500, head: AT.annuities[AT.annuities.length - 1], tail: 0, stage: 4 },
-    { at: 15100, head: 1, tail: 0, stage: 4 },
-    { at: 16000, head: 1, tail: 0, stage: 4 },
-    { at: 17400, head: 1, tail: 1, stage: 4 },
+    { at: 15500, head: 1, tail: 0, stage: 4 },
+    { at: 16300, head: 1, tail: 0, stage: 4 },
+    { at: 17700, head: 1, tail: 1, stage: 4 },
 ];
 
 const LOOP_MS = TIMELINE[TIMELINE.length - 1].at;
@@ -280,7 +308,7 @@ const SEEK_MS = 480;
 const DOT_FADE_MS = 220;
 
 /** Route position where each stage begins, used to mark stages done or upcoming. */
-const STAGE_STARTS = [0, AT.claimsIn, AT.file, AT.branched, AT.annuities[0]];
+const STAGE_STARTS = [0, AT.claimsIn, AT.file, AT.branched, AT.grant];
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
@@ -383,6 +411,10 @@ function collectScene(root: SVGSVGElement): Scene {
         mainDot: root.querySelector<SVGCircleElement>('[data-dot="main"]'),
         claimInk: all<SVGPathElement>('[data-piece="claim"]'),
         officeAction: root.querySelector<SVGGElement>('[data-oa]'),
+        binPath: root.querySelector<SVGPathElement>('[data-piece="bin"]'),
+        bin: root.querySelector<SVGGElement>('[data-bin]'),
+        fees: root.querySelector<SVGGElement>('[data-fees]'),
+        mirrors: all<SVGGElement>('[data-stage-mirror]'),
         milestones: all<SVGGElement>('[data-at]').map((element) => ({
             element,
             at: Number(element.dataset.at),
@@ -408,6 +440,7 @@ function paintScene(scene: Scene, frame: Frame) {
     });
 
     drawSegment(scene.postPath, segmentProgress(head, ...ROUTE.post), segmentProgress(tail, ...ROUTE.post));
+    drawSegment(scene.binPath, segmentProgress(head, ...ROUTE.bin), segmentProgress(tail, ...ROUTE.bin));
 
     const claimsHead = segmentProgress(head, AT.claimsIn, AT.claimsOut);
     const claimsTail = segmentProgress(tail, AT.claimsIn, AT.claimsOut);
@@ -431,6 +464,19 @@ function paintScene(scene: Scene, frame: Frame) {
         setAttr(scene.officeAction, 'data-status', status);
     }
 
+    if (scene.fees) {
+        const paid = AT.annuities.filter((at) => head >= at).length;
+        const fee = head >= AT.archive ? 'expired' : paid > 0 ? `paid-${paid}` : 'due';
+        setAttr(scene.fees, 'data-fee', fee);
+    }
+
+    if (scene.bin) {
+        setAttr(scene.bin, 'data-lid', head >= AT.lidOpen && head < AT.lidClose ? 'open' : 'closed');
+    }
+    scene.mirrors.forEach((element) => {
+        setAttr(element, 'data-state', stageState(Number(element.dataset.stageMirror), frame));
+    });
+
     /* Dots fade out as the retracting tail catches the head. */
     const dot = frame.dot * clamp((head - tail) / 0.04);
 
@@ -447,8 +493,13 @@ function paintScene(scene: Scene, frame: Frame) {
     if (head >= ROUTE.pre[0] && head <= ROUTE.pre[1]) {
         const local = segmentProgress(head, ...ROUTE.pre);
         placeDot(scene.mainDot, scene.prePath, local, dot * claimsFade(lerp(PRE_X[0], PRE_X[1], local)));
-    } else if (head >= ROUTE.post[0]) {
+    } else if (head >= ROUTE.post[0] && head <= ROUTE.post[1]) {
         placeDot(scene.mainDot, scene.postPath, segmentProgress(head, ...ROUTE.post), dot);
+    } else if (head > ROUTE.post[1]) {
+        /* Into the archive. The bin is drawn over the dot so it drops behind
+           the box front, and it fades out at the bottom so no glow shows. */
+        const local = segmentProgress(head, ...ROUTE.bin);
+        placeDot(scene.mainDot, scene.binPath, local, dot * clamp((1 - local) / 0.12));
     } else {
         placeDot(scene.mainDot, null, 0, 0);
     }
@@ -646,14 +697,14 @@ export function PatentLifecycleSection() {
                 </p>
                 <h2
                     id="patent-lifecycle-heading"
-                    className="mt-2 text-2xl font-bold tracking-tight text-text-primary [font-family:var(--font-display)] sm:text-3xl lg:text-4xl"
+                    className="mt-2 text-balance text-2xl font-bold tracking-tight text-text-primary [font-family:var(--font-display)] sm:text-3xl lg:text-4xl"
                 >
                     Take every invention from first search to final archive.
                 </h2>
-                <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)] sm:text-[15px]">
+                <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)] sm:text-[15px]">
                     One record follows each invention from prior art search and AI drafting through
-                    filing, prosecution, and annuities. No re-keying between tools, and every change
-                    is audit-trailed.
+                    filing, prosecution, and maintenance fees. No re-keying between tools, and every change
+                    is <span className="whitespace-nowrap">audit-trailed.</span>
                 </p>
                 <p className="mt-3 text-xs text-text-secondary [font-family:var(--font-mono)] lg:hidden">
                     Scroll to follow one record through the app.
@@ -663,7 +714,7 @@ export function PatentLifecycleSection() {
             <FadeIn delay={0.2} className="relative mt-8 hidden select-none lg:block xl:mt-10">
                 <div aria-hidden="true" className="lifecycle-dot-grid pointer-events-none absolute inset-0" />
                 <LifecycleScene svgRef={svgRef} />
-                <div className="absolute inset-0 grid grid-cols-[240fr_215fr_255fr_225fr_265fr]">
+                <div className="absolute inset-0 grid grid-cols-[263fr_203fr_249fr_222fr_263fr]">
                     {STAGES.map((stage, index) => (
                         <button
                             key={stage.id}
@@ -676,7 +727,7 @@ export function PatentLifecycleSection() {
                 </div>
             </FadeIn>
 
-            <FadeIn delay={0.3} className="relative hidden h-52 select-none lg:block">
+            <FadeIn delay={0.3} className="relative -mt-2 hidden h-52 select-none lg:block">
                 <AnimatePresence initial={false}>
                     <StageCard
                         key={activeStage.id}
@@ -882,7 +933,7 @@ function MobileLifecycle({ enabled, reduceMotion }: { enabled: boolean; reduceMo
                                         {stage.id === 'maintain' && (
                                             <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-text-secondary">
                                                 <span className="inline-flex items-center gap-1.5">
-                                                    <CalendarClock className="h-3.5 w-3.5 text-compliance" /> Annuities
+                                                    <CalendarClock className="h-3.5 w-3.5 text-compliance" /> Maintenance fees
                                                 </span>
                                                 <span className="inline-flex items-center gap-1.5">
                                                     <Archive className="h-3.5 w-3.5" /> Expire &amp; Archive
@@ -934,16 +985,20 @@ const LifecycleScene = memo(function LifecycleScene({
                 </clipPath>
             </defs>
 
-            <StageSeparator x={240} />
-            <StageSeparator x={455} />
-            <StageSeparator x={710} />
-            <StageSeparator x={935} />
+            {/* Dividers sit midway between neighbouring stage content, and each
+                heading is centred over its own content. The hotspot grid and
+                the detail card anchors use the same positions. */}
+            <StageSeparator x={263} />
+            <StageSeparator x={466} />
+            <StageSeparator x={715} />
+            <StageSeparator x={937} />
 
             <g className="lifecycle-base-lines">
                 {PRIOR_ART.map(({ path }) => <path key={path} d={path} />)}
                 <path d={PRE_PATH} />
                 {BRANCH_PATHS.map((d) => <path key={d} d={d} />)}
                 <path d={POST_PATH} />
+                <path d={BIN_PATH} />
             </g>
 
             <g className="lifecycle-active-lines">
@@ -951,32 +1006,33 @@ const LifecycleScene = memo(function LifecycleScene({
                 <path d={PRE_PATH} data-piece="pre" opacity={0} />
                 {BRANCH_PATHS.map((d) => <path key={d} d={d} data-piece="branch" opacity={0} />)}
                 <path d={POST_PATH} data-piece="post" opacity={0} />
+                <path d={BIN_PATH} data-piece="bin" opacity={0} />
             </g>
 
             <g className="lifecycle-stage" data-lifecycle-stage="discover">
-                <StageHeader x={110} label="Discover" />
+                <StageHeader x={113} label="Discover" />
                 {PRIOR_ART.map(({ x, y, number }) => (
                     <PriorArtCard key={number} x={x} y={y} number={number} />
                 ))}
-                <circle className="lifecycle-stage-halo" cx="210" cy="165" r="23" />
+                <circle className="lifecycle-stage-halo" cx="210" cy="165" r="22" />
                 <g className="lifecycle-light" data-at={AT.discover}>
                     <circle className="lifecycle-node" cx="210" cy="165" r="9" />
                 </g>
-                <text className="lifecycle-micro-label" x="80" y="272" textAnchor="middle">Prior Art</text>
+                <text className="lifecycle-micro-label" x="80" y="268" textAnchor="middle">Prior Art</text>
             </g>
 
             <g className="lifecycle-stage" data-lifecycle-stage="define">
-                <StageHeader x={350} label="Define" />
+                <StageHeader x={370} label="Define" />
                 <circle className="lifecycle-stage-halo" cx="369" cy="154" r="46" />
                 <ClaimDocument />
-                <text className="lifecycle-micro-label" x="368" y="260" textAnchor="middle">Claims</text>
+                <text className="lifecycle-micro-label" x="370" y="268" textAnchor="middle">Claims</text>
             </g>
 
             <g className="lifecycle-stage" data-lifecycle-stage="file">
-                <StageHeader x={585} label="File" />
-                <circle className="lifecycle-stage-halo" cx="500" cy="165" r="26" />
+                <StageHeader x={600} label="File" />
+                <circle className="lifecycle-stage-halo" cx="500" cy="165" r="22" />
                 <g className="lifecycle-light" data-at={AT.file}>
-                    <circle className="lifecycle-node" cx="500" cy="165" r="7" />
+                    <circle className="lifecycle-node" cx="500" cy="165" r="9" />
                 </g>
                 {JURISDICTIONS.map(({ code, y }, index) => (
                     <JurisdictionChip key={code} y={y} code={code} at={branchAt(index, 0.3)} />
@@ -984,8 +1040,8 @@ const LifecycleScene = memo(function LifecycleScene({
             </g>
 
             <g className="lifecycle-stage" data-lifecycle-stage="protect">
-                <StageHeader x={820} label="Protect" />
-                <circle className="lifecycle-stage-halo" cx="800" cy="165" r="28" />
+                <StageHeader x={831} label="Protect" />
+                <circle className="lifecycle-stage-halo" cx="800" cy="165" r="22" />
                 {/* Office action card: data-status follows the record (due, drafted,
                     submitted), then the card becomes a green grant notice. */}
                 <g className="lifecycle-rise lifecycle-oa" data-at={AT.officeActionDue} data-oa="">
@@ -1016,32 +1072,33 @@ const LifecycleScene = memo(function LifecycleScene({
                     ))}
                 </g>
                 <g className="lifecycle-light" data-at={AT.officeAction}>
-                    <circle className="lifecycle-node" cx="800" cy="165" r="10" />
+                    <circle className="lifecycle-node" cx="800" cy="165" r="9" />
                 </g>
                 <g className="lifecycle-light" data-at={AT.responseSubmitted}>
-                    <circle className="lifecycle-node lifecycle-node-small" cx="850" cy="165" r="5" />
+                    <circle className="lifecycle-node lifecycle-node-small" cx="850" cy="165" r="4.5" />
                 </g>
                 <text className="lifecycle-micro-label" x="800" y="198" textAnchor="middle">Office Action</text>
 
                 <g className="lifecycle-grant" data-at={AT.grant}>
-                    <circle className="lifecycle-grant-halo" cx="900" cy="165" r="20" />
-                    <circle className="lifecycle-grant-node" cx="900" cy="165" r="14" />
-                    <path className="lifecycle-check" d="M 893 165 L 898 170 L 908 159" />
+                    <circle className="lifecycle-grant-halo" cx="900" cy="165" r="15" />
+                    <circle className="lifecycle-grant-node" cx="900" cy="165" r="9" />
+                    <path className="lifecycle-check" d="M 896 165 L 899 168 L 905 161" />
                 </g>
                 <text className="lifecycle-micro-label" x="900" y="198" textAnchor="middle">Grant</text>
             </g>
 
             <g className="lifecycle-stage" data-lifecycle-stage="maintain">
-                <StageHeader x={1040} label="Maintain" />
+                <StageHeader x={1068} label="Maintain" />
+                <FeeCard />
                 {ANNUITY_X.map((x, index) => (
                     <g key={x} className="lifecycle-annuity" data-at={AT.annuities[index]}>
                         <circle className="lifecycle-annuity-node" cx={x} cy="165" r="9" />
                         <path className="lifecycle-annuity-check" d={`M ${x - 4} 165 L ${x - 1} 168 L ${x + 5} 161`} />
+                        <text className="lifecycle-micro-label lifecycle-amber-label" x={x} y="198" textAnchor="middle">
+                            {ANNUITY_LABELS[index]}
+                        </text>
                     </g>
                 ))}
-                <text className="lifecycle-micro-label lifecycle-amber-label" x="1030" y="198" textAnchor="middle">Annuities</text>
-                <ArchiveGlyph />
-                <text className="lifecycle-micro-label" x="1150" y="270" textAnchor="middle">Expire &amp; Archive</text>
             </g>
 
             {PRIOR_ART.map(({ path }) => (
@@ -1049,7 +1106,7 @@ const LifecycleScene = memo(function LifecycleScene({
                     key={path}
                     data-dot="converge"
                     className="lifecycle-progress-dot-small"
-                    r="4"
+                    r="4.5"
                     cx="210"
                     cy="165"
                     opacity={0}
@@ -1076,6 +1133,7 @@ const LifecycleScene = memo(function LifecycleScene({
                 opacity={0}
                 filter="url(#lifecycle-dot-glow)"
             />
+            <ArchiveBin />
         </svg>
     );
 });
@@ -1193,12 +1251,60 @@ function FlagArt({ code }: { code: JurisdictionCode }) {
     }
 }
 
-function ArchiveGlyph() {
+/* Maintenance fee card above the fee nodes, mirroring the office action card
+   in Protect. It rises as the record enters Maintain, fills one step per fee
+   paid (each step is a milestone), and reads expired once archived. */
+function FeeCard() {
     return (
-        <g className="lifecycle-archive" data-at={AT.archive}>
-            <rect className="lifecycle-archive-box" x="1125" y="198" width="50" height="42" rx="8" />
-            <path className="lifecycle-archive-lid" d="M 1121 204 H 1179 V 216 H 1121 Z" />
-            <path className="lifecycle-archive-slot" d="M 1143 224 H 1157" />
+        <g className="lifecycle-rise lifecycle-fee" data-at={AT.feeDue} data-fees="">
+            <rect className="lifecycle-event-card" x="950" y="64" width="160" height="54" rx="12" />
+            <path className="lifecycle-event-tail" d="M 1019 118 L 1030 129 L 1041 118" />
+            <rect className="lifecycle-fee-icon-body" x="959" y="82" width="18" height="17" rx="3" />
+            <path
+                className="lifecycle-fee-icon-line"
+                d="M 959 87.5 H 977 M 963.5 79.5 V 84 M 972.5 79.5 V 84 M 963.5 92.5 H 966.5 M 970 92.5 H 973 M 963.5 95.8 H 966.5"
+            />
+            <text className="lifecycle-event-title" x="986" y="84.5">Maintenance Fees</text>
+            <circle className="lifecycle-fee-dot" cx="989" cy="95" r="2.2" />
+            {FEE_STATUSES.map(({ id, text }) => (
+                <text key={id} className="lifecycle-event-meta lifecycle-fee-status" data-for={id} x="994" y="97.5">
+                    {text}
+                </text>
+            ))}
+            {AT.annuities.map((at, index) => (
+                <rect
+                    key={at}
+                    className="lifecycle-fee-step"
+                    data-at={at}
+                    x={986 + index * 38.5}
+                    y="103.5"
+                    width="35"
+                    height="2.5"
+                    rx="1.25"
+                />
+            ))}
+        </g>
+    );
+}
+
+/* Archive bin. Drawn after the dots so the record drops behind the box front
+   and disappears inside. It sits outside the maintain group, so it mirrors
+   that stage's state. The lid lifts on its right hinge while the record
+   arrives (data-lid), and the bin turns indigo once archived (data-reveal). */
+function ArchiveBin() {
+    return (
+        <g className="lifecycle-stage" data-stage-mirror="4">
+            <g className="lifecycle-bin" data-bin="" data-at={AT.archive}>
+                <g className="lifecycle-bin-body">
+                    <rect className="lifecycle-bin-box" x="1128" y="206" width="44" height="38" rx="5" />
+                    <path className="lifecycle-bin-slot" d="M 1143 221 H 1157" />
+                    <g className="lifecycle-bin-lid">
+                        <rect className="lifecycle-bin-lid-shape" x="1124" y="197" width="52" height="8" rx="3" />
+                        <path className="lifecycle-bin-handle" d="M 1142 197 V 193.5 H 1158 V 197" />
+                    </g>
+                </g>
+            </g>
+            <text className="lifecycle-micro-label" x="1150" y="268" textAnchor="middle">Expire &amp; Archive</text>
         </g>
     );
 }

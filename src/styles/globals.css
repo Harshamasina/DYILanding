@@ -296,10 +296,12 @@ html {
     }
 }
 
+/* Circle system: stage nodes (r 9, 2.5 stroke), the moving marker (r 7),
+   and small waypoints and sub-dots (r 4.5). */
 .lifecycle-node {
     fill: #ffffff;
     stroke: #6366f1;
-    stroke-width: 3;
+    stroke-width: 2.5;
     transition: fill 320ms ease;
 }
 
@@ -308,13 +310,16 @@ html {
 }
 
 /* Documents */
+/* One outline weight for every card-like object: light indigo for supporting
+   objects (prior art, chips), a step darker for the record itself (claims,
+   event cards). */
 .lifecycle-document-card,
 .lifecycle-claim-document,
 .lifecycle-jurisdiction-chip,
 .lifecycle-event-card {
     fill: rgba(255, 255, 255, 0.98);
-    stroke: #d7ddf3;
-    stroke-width: 1.3;
+    stroke: #c7d2fe;
+    stroke-width: 1.4;
 }
 
 .lifecycle-document-icon,
@@ -342,8 +347,8 @@ html {
 .lifecycle-claim-document {
     /* Solid fill so the route line passing behind the document never shows through. */
     fill: #ffffff;
-    stroke: #818cf8;
-    stroke-width: 1.8;
+    stroke: #a5b4fc;
+    stroke-width: 1.4;
 }
 
 .lifecycle-claim-title {
@@ -565,8 +570,90 @@ html {
     transform: none;
 }
 
+/* Maintenance fee card: status follows the record (data-fee: due, paid-1
+   to paid-3, expired). Each step is a milestone that fills as its fee is
+   paid. Without JS the card shows "due" with every step filled. */
+.lifecycle-fee .lifecycle-event-card,
+.lifecycle-fee .lifecycle-event-tail {
+    transition: fill 360ms ease, stroke 360ms ease;
+}
+
+.lifecycle-fee[data-fee='expired'] .lifecycle-event-card,
+.lifecycle-fee[data-fee='expired'] .lifecycle-event-tail {
+    fill: #eef2ff;
+    stroke: #a5b4fc;
+}
+
+.lifecycle-fee-icon-body {
+    fill: #fffbeb;
+    stroke: #d97706;
+    stroke-width: 1.4;
+    transition: fill 320ms ease, stroke 320ms ease;
+}
+
+.lifecycle-fee-icon-line {
+    fill: none;
+    stroke: #d97706;
+    stroke-linecap: round;
+    stroke-width: 1.3;
+    transition: stroke 320ms ease;
+}
+
+.lifecycle-fee[data-fee='expired'] .lifecycle-fee-icon-body {
+    fill: #eef2ff;
+    stroke: #4f46e5;
+}
+
+.lifecycle-fee[data-fee='expired'] .lifecycle-fee-icon-line {
+    stroke: #4f46e5;
+}
+
+.lifecycle-fee-status {
+    opacity: 0;
+    transform: translateY(3px);
+    transform-box: fill-box;
+    transition:
+        opacity 260ms ease,
+        transform 320ms cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+
+.lifecycle-fee:not([data-fee]) [data-for='due'],
+.lifecycle-fee[data-fee='due'] [data-for='due'],
+.lifecycle-fee[data-fee='paid-1'] [data-for='paid-1'],
+.lifecycle-fee[data-fee='paid-2'] [data-for='paid-2'],
+.lifecycle-fee[data-fee='paid-3'] [data-for='paid-3'],
+.lifecycle-fee[data-fee='expired'] [data-for='expired'] {
+    opacity: 1;
+    transform: none;
+}
+
+.lifecycle-fee [data-for='due'] { fill: #b45309; }
+.lifecycle-fee [data-for^='paid'] { fill: #047857; }
+.lifecycle-fee [data-for='expired'] { fill: #4338ca; }
+
+.lifecycle-fee-dot {
+    fill: #d97706;
+    transition: fill 320ms ease;
+}
+
+.lifecycle-fee[data-fee^='paid'] .lifecycle-fee-dot { fill: #059669; }
+.lifecycle-fee[data-fee='expired'] .lifecycle-fee-dot { fill: #6366f1; }
+
+.lifecycle-fee-step {
+    fill: #f59e0b;
+    transition: fill 320ms ease;
+}
+
+.lifecycle-fee-step[data-reveal='hidden'] {
+    fill: #e2e8f0;
+}
+
+.lifecycle-fee[data-fee='expired'] .lifecycle-fee-step {
+    fill: #a5b4fc;
+}
+
 .lifecycle-node-small {
-    stroke-width: 2.5;
+    stroke-width: 2;
 }
 
 /* Grant, annuities, archive */
@@ -586,13 +673,13 @@ html {
     stroke: #059669;
     stroke-linecap: round;
     stroke-linejoin: round;
-    stroke-width: 2.4;
+    stroke-width: 1.8;
 }
 
 .lifecycle-annuity-node {
     fill: #fffbeb;
     stroke: #f59e0b;
-    stroke-width: 2;
+    stroke-width: 2.5;
 }
 
 .lifecycle-annuity-check {
@@ -600,21 +687,40 @@ html {
     stroke: #d97706;
     stroke-linecap: round;
     stroke-linejoin: round;
-    stroke-width: 1.6;
+    stroke-width: 1.8;
 }
 
-.lifecycle-archive-box,
-.lifecycle-archive-lid {
+/* Archive bin: the record drops in through the lid (data-lid), then the bin
+   turns indigo once it is archived (data-reveal). */
+.lifecycle-bin-box,
+.lifecycle-bin-lid-shape {
     fill: #ffffff;
     stroke: #1e293b;
     stroke-width: 2;
+    transition: fill 320ms ease, stroke 320ms ease;
 }
 
-.lifecycle-archive-slot {
+.lifecycle-bin-slot,
+.lifecycle-bin-handle {
     fill: none;
     stroke: #1e293b;
     stroke-linecap: round;
+    stroke-linejoin: round;
     stroke-width: 2;
+    transition: stroke 320ms ease;
+}
+
+/* Hinged at the lid's bottom-right corner. Closing uses a slight overshoot
+   so the lid settles shut; opening eases out. */
+.lifecycle-bin-lid {
+    transform-box: fill-box;
+    transform-origin: 100% 100%;
+    transition: transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lifecycle-bin[data-lid='open'] .lifecycle-bin-lid {
+    transform: rotate(32deg);
+    transition: transform 260ms cubic-bezier(0.21, 0.47, 0.32, 0.98);
 }
 
 .lifecycle-micro-label {
@@ -630,8 +736,7 @@ html {
 /* Milestone reveals, driven by data-reveal */
 .lifecycle-rise,
 .lifecycle-check,
-.lifecycle-annuity-check,
-.lifecycle-archive-lid {
+.lifecycle-annuity-check {
     transform-box: fill-box;
     transition:
         opacity 360ms ease,
@@ -674,16 +779,31 @@ html {
     transform: scale(0.4);
 }
 
-.lifecycle-archive {
-    transition: opacity 360ms ease;
+.lifecycle-bin[data-reveal='shown'] .lifecycle-bin-box,
+.lifecycle-bin[data-reveal='shown'] .lifecycle-bin-lid-shape {
+    fill: #eef2ff;
+    stroke: #4f46e5;
 }
 
-.lifecycle-archive[data-reveal='hidden'] {
-    opacity: 0.5;
+.lifecycle-bin[data-reveal='shown'] .lifecycle-bin-slot,
+.lifecycle-bin[data-reveal='shown'] .lifecycle-bin-handle {
+    stroke: #4f46e5;
 }
 
-.lifecycle-archive[data-reveal='hidden'] .lifecycle-archive-lid {
-    transform: translateY(-4px);
+/* A small thud as the record lands. */
+.lifecycle-bin[data-reveal='shown'] .lifecycle-bin-body {
+    animation: lifecycle-bin-settle 420ms ease-out;
+}
+
+@keyframes lifecycle-bin-settle {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    35% {
+        transform: translateY(2.5px);
+    }
 }
 
 .lifecycle-hotspot {
@@ -697,14 +817,15 @@ html {
 
 /* Detail card: anchored under the active column, clamped inside the row.
    --lifecycle-x is the stage heading position (x / 1200). */
-.lifecycle-card-track[data-stage='discover'] { --lifecycle-x: 9.1667%; }
-.lifecycle-card-track[data-stage='define'] { --lifecycle-x: 29.1667%; }
-.lifecycle-card-track[data-stage='file'] { --lifecycle-x: 48.75%; }
-.lifecycle-card-track[data-stage='protect'] { --lifecycle-x: 68.3333%; }
-.lifecycle-card-track[data-stage='maintain'] { --lifecycle-x: 86.6667%; }
+.lifecycle-card-track[data-stage='discover'] { --lifecycle-x: 9.4167%; }
+.lifecycle-card-track[data-stage='define'] { --lifecycle-x: 30.8333%; }
+.lifecycle-card-track[data-stage='file'] { --lifecycle-x: 50%; }
+.lifecycle-card-track[data-stage='protect'] { --lifecycle-x: 69.25%; }
+.lifecycle-card-track[data-stage='maintain'] { --lifecycle-x: 89%; }
 
+/* Clamped to the artwork's own edges (x 8 to 1176 of 1200), not the row. */
 .lifecycle-card {
-    left: clamp(0px, calc(var(--lifecycle-x) - 10rem), calc(100% - 20rem));
+    left: clamp(0.6667%, calc(var(--lifecycle-x) - 10rem), calc(98% - 20rem));
 }
 
 .lifecycle-card-caret {
