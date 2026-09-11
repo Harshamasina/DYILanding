@@ -1,12 +1,12 @@
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
-import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { HeroTreeVisual } from '@/components/ui/HeroTreeVisual';
 import { HeroHubVisual } from '@/components/ui/HeroHubVisual';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { AnimatedDashboard } from '@/components/ui/AnimatedDashboard';
-import { FileSearch, Play } from 'lucide-react';
+import { PatentLifecycleSection } from '@/components/sections/PatentLifecycleSection';
+import { FileSearch } from 'lucide-react';
 import { SEARCH_APP_URL } from '@/lib/constants';
 
 /* A/B toggle for the hero visual.
@@ -18,7 +18,7 @@ const HERO_VISUAL: 'tree' | 'hub' = 'hub';
 export function HeroSection() {
     return (
         <>
-            {/* Hero — natural flow on mobile, min-viewport-height on desktop.
+            {/* Hero: natural flow on mobile, min-viewport-height on desktop.
                 min-h-screen (not h-screen) so short viewports can GROW the
                 section to fit content instead of overflowing above the
                 padding into the fixed navbar. */}
@@ -102,7 +102,9 @@ export function HeroSection() {
                 </Container>
             </section>
 
-            {/* Animated Dashboard — below the fold, appears on scroll.
+            {/* Animated Dashboard, below the fold, appears on scroll. The
+                patent lifecycle loop continues directly beneath it, joined
+                by a short spine so the two read as one composition.
                 No MockupHalo wrap: the dashboard spans the container's
                 full width on lg+, so the halo would extend past the
                 viewport and get clipped by overflow-hidden, breaking
@@ -120,13 +122,7 @@ export function HeroSection() {
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">
                     <AnimatedDashboard />
-                    {/* Demo video CTA, centered beneath the dashboard mockup. */}
-                    <div className="mt-8 flex justify-center">
-                        <WatchDemoButton size="md" className="whitespace-nowrap">
-                            <Play className="w-4 h-4 fill-current" />
-                            Watch 2 Min Demo
-                        </WatchDemoButton>
-                    </div>
+                    <PatentLifecycleSection />
                 </Container>
             </section>
         </>

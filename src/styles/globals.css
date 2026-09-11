@@ -9,12 +9,12 @@
     --color-card-bg: #ffffff;
     --color-card-border: #e2e8f0;
 
-    /* Primary — Indigo */
+    /* Primary: Indigo */
     --color-primary: #4f46e5;
     --color-primary-light: #818cf8;
     --color-primary-dark: #4338ca;
 
-    /* Dark section — Navy */
+    /* Dark section: Navy */
     --color-navy: #0f1b2d;
     --color-navy-light: #1b2f54;
 
@@ -180,6 +180,628 @@ html {
     }
 }
 
+/* Patent lifecycle
+   On desktop, PatentLifecycleSection sets data-state on each stage group and
+   data-reveal on each milestone group from its animation loop. Without JS
+   neither attribute exists, so every rule below falls back to the complete,
+   static diagram. */
+.lifecycle-dot-grid {
+    background-image: radial-gradient(circle, rgba(99, 102, 241, 0.16) 1px, transparent 1.2px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 75% at center, black 15%, transparent 78%);
+    mask-image: radial-gradient(ellipse 80% 75% at center, black 15%, transparent 78%);
+    opacity: 0.45;
+}
+
+.lifecycle-stage-heading,
+.lifecycle-micro-label,
+.lifecycle-document-number,
+.lifecycle-claim-number,
+.lifecycle-jurisdiction-code,
+.lifecycle-event-title,
+.lifecycle-event-meta {
+    font-family: var(--font-mono), monospace;
+}
+
+.lifecycle-stage-heading {
+    fill: #4f46e5;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    transition: fill 320ms ease;
+}
+
+.lifecycle-stage[data-state='active'] .lifecycle-stage-heading {
+    fill: #312e81;
+}
+
+.lifecycle-stage-separator {
+    stroke: #c7d2fe;
+    stroke-width: 1.5;
+}
+
+.lifecycle-base-lines path,
+.lifecycle-active-lines path,
+.lifecycle-claim-ink {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.lifecycle-base-lines path {
+    stroke: #dbe3f4;
+    stroke-width: 2;
+}
+
+.lifecycle-active-lines path {
+    stroke: #6366f1;
+    stroke-width: 3;
+}
+
+.lifecycle-claim-ink {
+    stroke: #6366f1;
+    stroke-width: 2.2;
+}
+
+.lifecycle-progress-dot {
+    fill: #ffffff;
+    stroke: #4f46e5;
+    stroke-width: 4;
+}
+
+.lifecycle-progress-dot-small {
+    fill: #6366f1;
+    stroke: #ffffff;
+    stroke-width: 1.5;
+}
+
+/* Stage states */
+.lifecycle-stage {
+    transition: opacity 420ms ease, filter 420ms ease;
+}
+
+.lifecycle-stage[data-state='upcoming'] {
+    opacity: 0.5;
+}
+
+.lifecycle-stage[data-state='done'] {
+    opacity: 0.86;
+}
+
+.lifecycle-stage[data-state='active'] {
+    filter: drop-shadow(0 10px 18px rgba(79, 70, 229, 0.12));
+}
+
+.lifecycle-stage-halo {
+    fill: rgba(99, 102, 241, 0.12);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: opacity 320ms ease;
+}
+
+.lifecycle-stage[data-state='active'] .lifecycle-stage-halo {
+    opacity: 1;
+    animation: lifecycle-halo 2.4s ease-in-out infinite;
+}
+
+@keyframes lifecycle-halo {
+    0%,
+    100% {
+        transform: scale(0.88);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+.lifecycle-node {
+    fill: #ffffff;
+    stroke: #6366f1;
+    stroke-width: 3;
+    transition: fill 320ms ease;
+}
+
+.lifecycle-light[data-reveal='shown'] .lifecycle-node {
+    fill: #e0e7ff;
+}
+
+/* Documents */
+.lifecycle-document-card,
+.lifecycle-claim-document,
+.lifecycle-jurisdiction-chip,
+.lifecycle-event-card {
+    fill: rgba(255, 255, 255, 0.98);
+    stroke: #d7ddf3;
+    stroke-width: 1.3;
+}
+
+.lifecycle-document-icon,
+.lifecycle-claim-fold {
+    fill: #eef2ff;
+    stroke: #818cf8;
+    stroke-width: 1.5;
+}
+
+.lifecycle-document-fold,
+.lifecycle-document-line,
+.lifecycle-claim-line {
+    fill: none;
+    stroke: #cbd5e1;
+    stroke-linecap: round;
+    stroke-width: 2;
+}
+
+.lifecycle-document-number {
+    fill: #64748b;
+    font-size: 7.5px;
+    font-weight: 600;
+}
+
+.lifecycle-claim-document {
+    /* Solid fill so the route line passing behind the document never shows through. */
+    fill: #ffffff;
+    stroke: #818cf8;
+    stroke-width: 1.8;
+}
+
+.lifecycle-claim-title {
+    fill: #0f172a;
+    font-family: var(--font-display), serif;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.lifecycle-claim-number {
+    fill: #4f46e5;
+    font-size: 8px;
+    font-weight: 600;
+}
+
+/* Jurisdiction chips: flags take on colour as the branch dots pass */
+.lifecycle-jurisdiction-chip {
+    stroke: #c7d2fe;
+    transition: fill 320ms ease, stroke 320ms ease;
+}
+
+.lifecycle-chip[data-reveal='shown'] .lifecycle-jurisdiction-chip {
+    fill: #eef2ff;
+    stroke: #818cf8;
+}
+
+.lifecycle-flag {
+    transition: filter 320ms ease, opacity 320ms ease;
+}
+
+.lifecycle-chip[data-reveal='hidden'] .lifecycle-flag {
+    filter: grayscale(1);
+    opacity: 0.55;
+}
+
+.lifecycle-flag-border {
+    fill: none;
+    stroke: rgba(15, 23, 42, 0.2);
+    stroke-width: 0.5;
+}
+
+.lifecycle-jurisdiction-code {
+    fill: #1e293b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Office action card */
+.lifecycle-event-card {
+    stroke: #a5b4fc;
+}
+
+.lifecycle-event-tail {
+    fill: rgba(255, 255, 255, 0.98);
+    stroke: #a5b4fc;
+    stroke-width: 1.2;
+}
+
+.lifecycle-event-icon {
+    fill: #eef2ff;
+    stroke: #4f46e5;
+    stroke-width: 1.4;
+}
+
+.lifecycle-event-icon-line {
+    fill: none;
+    stroke: #6366f1;
+    stroke-linecap: round;
+    stroke-width: 1.3;
+}
+
+.lifecycle-event-title {
+    fill: #1e293b;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.lifecycle-event-meta {
+    fill: #64748b;
+    font-size: 7.5px;
+    font-weight: 600;
+}
+
+/* Office action status follows the record: due, drafted, submitted.
+   Without JS (no data-status) the card shows the "due" state. */
+.lifecycle-oa-status,
+.lifecycle-oa-badge {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+        opacity 260ms ease,
+        transform 320ms cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+
+.lifecycle-oa-status {
+    transform: translateY(3px);
+}
+
+.lifecycle-oa:not([data-status]) [data-for='due'],
+.lifecycle-oa[data-status='due'] [data-for='due'],
+.lifecycle-oa[data-status='drafted'] [data-for='drafted'],
+.lifecycle-oa[data-status='submitted'] [data-for='submitted'],
+.lifecycle-oa[data-status='granted'] [data-for='granted'] {
+    opacity: 1;
+    transform: none;
+}
+
+.lifecycle-oa [data-for='due'] { fill: #b45309; }
+.lifecycle-oa [data-for='drafted'] { fill: #4338ca; }
+.lifecycle-oa [data-for='submitted'] { fill: #047857; }
+.lifecycle-oa [data-for='granted'] { fill: #047857; }
+
+.lifecycle-oa-dot,
+.lifecycle-oa-step {
+    transition: fill 320ms ease;
+}
+
+.lifecycle-oa-dot { fill: #d97706; }
+.lifecycle-oa[data-status='drafted'] .lifecycle-oa-dot { fill: #6366f1; }
+.lifecycle-oa[data-status='submitted'] .lifecycle-oa-dot,
+.lifecycle-oa[data-status='granted'] .lifecycle-oa-dot { fill: #059669; }
+
+.lifecycle-oa-step { fill: #e2e8f0; }
+
+.lifecycle-oa:not([data-status]) [data-step='1'],
+.lifecycle-oa[data-status='due'] [data-step='1'] {
+    fill: #f59e0b;
+}
+
+.lifecycle-oa[data-status='drafted'] [data-step='1'],
+.lifecycle-oa[data-status='drafted'] [data-step='2'] {
+    fill: #6366f1;
+}
+
+.lifecycle-oa[data-status='submitted'] .lifecycle-oa-step,
+.lifecycle-oa[data-status='granted'] .lifecycle-oa-step {
+    fill: #10b981;
+}
+
+.lifecycle-oa-badge {
+    transform: scale(0.4);
+}
+
+.lifecycle-oa-badge circle {
+    fill: #059669;
+    stroke: #ffffff;
+    stroke-width: 1.5;
+}
+
+.lifecycle-oa-badge path {
+    fill: none;
+    stroke: #ffffff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.4;
+}
+
+.lifecycle-oa[data-status='submitted'] .lifecycle-oa-badge {
+    opacity: 1;
+    transform: none;
+}
+
+/* Granted: the office action card turns into a green grant notice with a
+   check icon and the "Patent Granted" title. */
+.lifecycle-oa .lifecycle-event-card,
+.lifecycle-oa .lifecycle-event-tail {
+    transition: fill 360ms ease, stroke 360ms ease;
+}
+
+.lifecycle-oa[data-status='granted'] .lifecycle-event-card,
+.lifecycle-oa[data-status='granted'] .lifecycle-event-tail {
+    fill: #f0fdf4;
+    stroke: #6ee7b7;
+}
+
+.lifecycle-oa-title,
+.lifecycle-oa-icon,
+.lifecycle-oa-grant-icon {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+        opacity 260ms ease,
+        transform 320ms cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+
+.lifecycle-oa [data-title='grant'] {
+    fill: #065f46;
+    opacity: 0;
+}
+
+.lifecycle-oa-grant-icon {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+.lifecycle-oa-grant-icon circle {
+    fill: #ecfdf5;
+    stroke: #10b981;
+    stroke-width: 1.6;
+}
+
+.lifecycle-oa-grant-icon path {
+    fill: none;
+    stroke: #059669;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.lifecycle-oa[data-status='granted'] [data-title='oa'],
+.lifecycle-oa[data-status='granted'] .lifecycle-oa-icon {
+    opacity: 0;
+}
+
+.lifecycle-oa[data-status='granted'] [data-title='grant'],
+.lifecycle-oa[data-status='granted'] .lifecycle-oa-grant-icon {
+    opacity: 1;
+    transform: none;
+}
+
+.lifecycle-node-small {
+    stroke-width: 2.5;
+}
+
+/* Grant, annuities, archive */
+.lifecycle-grant-halo {
+    fill: rgba(16, 185, 129, 0.12);
+    filter: url('#lifecycle-grant-glow');
+}
+
+.lifecycle-grant-node {
+    fill: #ecfdf5;
+    stroke: #10b981;
+    stroke-width: 2.5;
+}
+
+.lifecycle-check {
+    fill: none;
+    stroke: #059669;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.4;
+}
+
+.lifecycle-annuity-node {
+    fill: #fffbeb;
+    stroke: #f59e0b;
+    stroke-width: 2;
+}
+
+.lifecycle-annuity-check {
+    fill: none;
+    stroke: #d97706;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
+}
+
+.lifecycle-archive-box,
+.lifecycle-archive-lid {
+    fill: #ffffff;
+    stroke: #1e293b;
+    stroke-width: 2;
+}
+
+.lifecycle-archive-slot {
+    fill: none;
+    stroke: #1e293b;
+    stroke-linecap: round;
+    stroke-width: 2;
+}
+
+.lifecycle-micro-label {
+    fill: #475569;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.lifecycle-amber-label {
+    fill: #b45309;
+}
+
+/* Milestone reveals, driven by data-reveal */
+.lifecycle-rise,
+.lifecycle-check,
+.lifecycle-annuity-check,
+.lifecycle-archive-lid {
+    transform-box: fill-box;
+    transition:
+        opacity 360ms ease,
+        transform 420ms cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+
+.lifecycle-rise {
+    transform-origin: 50% 100%;
+}
+
+.lifecycle-check,
+.lifecycle-annuity-check {
+    transform-origin: center;
+}
+
+.lifecycle-rise[data-reveal='hidden'] {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+}
+
+.lifecycle-grant-node,
+.lifecycle-grant-halo,
+.lifecycle-annuity-node {
+    transition: fill 320ms ease, stroke 320ms ease, opacity 320ms ease;
+}
+
+.lifecycle-grant[data-reveal='hidden'] .lifecycle-grant-node,
+.lifecycle-annuity[data-reveal='hidden'] .lifecycle-annuity-node {
+    fill: #ffffff;
+    stroke: #cbd5e1;
+}
+
+.lifecycle-grant[data-reveal='hidden'] .lifecycle-grant-halo {
+    opacity: 0;
+}
+
+.lifecycle-grant[data-reveal='hidden'] .lifecycle-check,
+.lifecycle-annuity[data-reveal='hidden'] .lifecycle-annuity-check {
+    opacity: 0;
+    transform: scale(0.4);
+}
+
+.lifecycle-archive {
+    transition: opacity 360ms ease;
+}
+
+.lifecycle-archive[data-reveal='hidden'] {
+    opacity: 0.5;
+}
+
+.lifecycle-archive[data-reveal='hidden'] .lifecycle-archive-lid {
+    transform: translateY(-4px);
+}
+
+.lifecycle-hotspot {
+    background: transparent;
+}
+
+.lifecycle-hotspot:focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: -4px;
+}
+
+/* Detail card: anchored under the active column, clamped inside the row.
+   --lifecycle-x is the stage heading position (x / 1200). */
+.lifecycle-card-track[data-stage='discover'] { --lifecycle-x: 9.1667%; }
+.lifecycle-card-track[data-stage='define'] { --lifecycle-x: 29.1667%; }
+.lifecycle-card-track[data-stage='file'] { --lifecycle-x: 48.75%; }
+.lifecycle-card-track[data-stage='protect'] { --lifecycle-x: 68.3333%; }
+.lifecycle-card-track[data-stage='maintain'] { --lifecycle-x: 86.6667%; }
+
+.lifecycle-card {
+    left: clamp(0px, calc(var(--lifecycle-x) - 10rem), calc(100% - 20rem));
+}
+
+.lifecycle-card-caret {
+    left: var(--lifecycle-x);
+}
+
+/* Mobile: one rail from the first stage node to the last. Its top and
+   height are measured in JS; the fallback here spans the list. The fill
+   and dot are moved by scroll progress. Node centres sit 16px from the
+   left edge (40px list padding, node at -31px, 14px wide). */
+.lifecycle-mobile-rail {
+    position: absolute;
+    left: 15px;
+    top: 35px;
+    bottom: 35px;
+    width: 2px;
+    border-radius: 9999px;
+    background: #e2e8f0;
+    pointer-events: none;
+}
+
+.lifecycle-mobile-rail-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: #6366f1;
+    transform: scaleY(0);
+    transform-origin: top;
+}
+
+.lifecycle-mobile-rail-dot {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border: 3px solid #4f46e5;
+    border-radius: 9999px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.45);
+    opacity: 0;
+    transition: opacity 200ms ease;
+}
+
+.lifecycle-mobile-node {
+    position: absolute;
+    left: -31px;
+    top: 28px;
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #ffffff;
+    border-radius: 9999px;
+    background: #c7d2fe;
+    box-shadow: 0 0 0 1px #c7d2fe;
+    transition: background-color 300ms ease, box-shadow 300ms ease;
+}
+
+.lifecycle-mobile-stage[data-state='done'] .lifecycle-mobile-node {
+    background: #6366f1;
+    box-shadow: 0 0 0 1px #6366f1;
+}
+
+.lifecycle-mobile-stage[data-state='active'] .lifecycle-mobile-node {
+    background: #4f46e5;
+    box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.18);
+}
+
+.lifecycle-mobile-card {
+    border-color: #e2e8f0;
+    transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.lifecycle-mobile-stage[data-state='active'] .lifecycle-mobile-card {
+    border-color: rgba(99, 102, 241, 0.34);
+    box-shadow: 0 16px 40px -28px rgba(79, 70, 229, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lifecycle-stage,
+    .lifecycle-stage-halo,
+    .lifecycle-mobile-card,
+    .lifecycle-mobile-node {
+        transition: none;
+    }
+
+    .lifecycle-stage[data-state='active'] .lifecycle-stage-halo {
+        animation: none;
+    }
+
+    .lifecycle-progress-dot,
+    .lifecycle-progress-dot-small,
+    .lifecycle-mobile-rail-dot {
+        display: none;
+    }
+}
 
 /* Blog prose styles */
 .blog-prose {

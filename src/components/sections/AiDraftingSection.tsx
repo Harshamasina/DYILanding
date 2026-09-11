@@ -76,15 +76,15 @@ export function AiDraftingSection() {
                     <div>
                         {/* Desktop */}
                         <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center">
+                            <FadeIn delay={0.2}>
+                                <DraftingContent />
+                            </FadeIn>
                             <FadeIn delay={0.1}>
                                 <DeferredMount className="w-full h-[440px] sm:h-[480px] lg:h-[520px]">
                                     <MockupHalo>
                                         <AnimatedAiDraftGeneration />
                                     </MockupHalo>
                                 </DeferredMount>
-                            </FadeIn>
-                            <FadeIn delay={0.2}>
-                                <DraftingContent />
                             </FadeIn>
                         </div>
                         {/* Mobile */}
