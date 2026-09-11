@@ -613,6 +613,27 @@ export function PatentLifecycleSection() {
         return () => query.removeEventListener('change', sync);
     }, [paint]);
 
+    /* The scene caches its nodes, milestone positions and path lengths.
+       Re-collect whenever the SVG markup changes (for example after a hot
+       reload in development), so a replaced node is never left without its
+       state and shown ahead of the dot. The loop's own writes never touch
+       children, d, or data-at, so they don't trigger this. */
+    useEffect(() => {
+        const svg = svgRef.current;
+        if (!svg) return;
+        const refresh = (records: MutationRecord[]) => {
+            records.forEach(({ target }) => {
+                if (target instanceof SVGPathElement) pathLengths.delete(target);
+            });
+            sceneRef.current = null;
+            paint(frameRef.current);
+        };
+        refresh([]);
+        const observer = new MutationObserver((records) => refresh(records));
+        observer.observe(svg, { subtree: true, childList: true, attributeFilter: ['d', 'data-at'] });
+        return () => observer.disconnect();
+    }, [paint]);
+
     /* Run the desktop loop only while the diagram is on screen. The margin
        matches FadeIn, so the loop starts from Discover as the diagram fades in. */
     useEffect(() => {
