@@ -68,6 +68,14 @@ const STATIC_CARDS: Record<string, OgCardContent> = {
         description:
             'Turn saved prior art into a structured first draft of claims, abstract, and novelty analysis for attorney review across US, EP, IN, and PCT.',
     },
+    'office-actions': {
+        variant: 'page',
+        visual: 'office-actions',
+        eyebrow: 'Office Actions',
+        title: 'Office Action Analysis and Response',
+        description:
+            'Map every USPTO rejection to claims and source-checked quotes, then build the response on the signed analysis for attorney approval.',
+    },
     compare: {
         variant: 'page',
         visual: 'comparison',
@@ -132,6 +140,7 @@ function activeRoles(): Role[] {
  * product scene, with the editorial scene as a graceful fallback. */
 function articleVisual(category: string): OgVisual {
     const value = category.toLowerCase();
+    if (value.includes('prosecution') || value.includes('office action')) return 'office-actions';
     if (value.includes('draft') || value.includes('chatgpt')) return 'drafting';
     if (value.includes('search') || value.includes('prior art')) return 'search';
     if (value.includes('docket') || value.includes('filing') || value.includes('npe')) return 'docketing';

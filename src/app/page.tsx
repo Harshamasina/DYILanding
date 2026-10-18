@@ -5,6 +5,7 @@ import { DemoVideoSection } from '@/components/sections/DemoVideoSection';
 import { ImportSection } from '@/components/sections/ImportSection';
 import { SearchSection } from '@/components/sections/SearchSection';
 import { AiDraftingSection } from '@/components/sections/AiDraftingSection';
+import { OfficeActionSection } from '@/components/sections/OfficeActionSection';
 import { ComplianceSection } from '@/components/sections/ComplianceSection';
 import { SecuritySection } from '@/components/sections/SecuritySection';
 import { PricingSection } from '@/components/sections/PricingSection';
@@ -23,6 +24,7 @@ export default function HomePage() {
             <ImportSection />
             <SearchSection />
             <AiDraftingSection />
+            <OfficeActionSection />
             <ComplianceSection />
             <StatsSection
                 stats={PRODUCT_STATS}

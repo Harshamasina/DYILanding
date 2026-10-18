@@ -1,7 +1,7 @@
 export const SITE_URL = 'https://designyourinvention.com';
 export const SITE_NAME = 'Design Your Invention';
 export const SITE_DESCRIPTION =
-    'IP management with AI-assisted prior art search and patent drafting for attorney review. Patent docketing, PCT/PRV/NPE case management, and FDA 21 CFR Part 11-aligned workflow controls.';
+    'IP management with AI-assisted prior art search, patent drafting, and office action response for attorney review. Patent docketing, PCT/PRV/NPE case management, and FDA 21 CFR Part 11-aligned workflow controls.';
 
 /* ── Brand entity metadata used by Organization JSON-LD.
  * Keep these accurate. Google reads them to resolve the brand as a
@@ -25,7 +25,7 @@ export const BRAND = {
         availableLanguage: ['English'],
     },
     /** Add public profile URLs as you create them. Each entry must be a
-     * fully-qualified, working URL — Google penalizes broken sameAs. */
+     * fully-qualified, working URL: Google penalizes broken sameAs. */
     socialUrls: [
         'https://www.linkedin.com/company/design-your-invention/',
         // 'https://twitter.com/<handle>',
@@ -39,6 +39,7 @@ export const BRAND = {
  * of here, see FEATURE_MENU in Header.tsx. */
 export const NAV_LINKS = [
     { label: 'Compliance', href: '/#compliance' },
+    { label: 'Security', href: '/#security' },
     { label: 'Pricing', href: '/#pricing' },
     { label: 'Contact', href: '/#contact' },
 ] as const;
@@ -57,6 +58,7 @@ export const FEATURES_SECTION_URL = '/#features';
 export const PATENT_SEARCH_PAGE_URL = '/patent-search/';
 export const AI_DRAFTING_PAGE_URL = '/ai-patent-drafting/';
 export const DOCKETING_PAGE_URL = '/docketing/';
+export const OFFICE_ACTIONS_PAGE_URL = '/office-actions/';
 
 /* Shared form enums. The `value` of role and inquiry_type MUST exactly
  * match the backend's strict Zod enums, since both are submitted as

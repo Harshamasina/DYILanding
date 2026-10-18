@@ -17,7 +17,7 @@ interface Plan {
     target: string;
     recommended?: boolean;
     features: PlanFeature[];
-    /** CTA label and routing — links go through next/link, demos open the
+    /** CTA label and routing: links go through next/link, demos open the
      *  BookDemoModal. Lets each plan match its actual conversion intent. */
     cta: {
         label: string;
@@ -67,6 +67,7 @@ const PLANS: Plan[] = [
             { text: 'Append-only field-level audit trail', detail: 'Part 11-aligned' },
             { text: '21 CFR Part 11-aligned workflow controls', detail: 'Part 11-aligned' },
             { text: 'Electronic signatures + re-auth' },
+            { text: 'Office action analysis & response', detail: 'USPTO' },
             { text: 'SSO / SAML integration' },
             { text: 'Foreign associate portal' },
             { text: 'Orange Book / EMA auto-sync' },
@@ -192,7 +193,7 @@ export function PricingSection() {
                                     </p>
                                 </div>
 
-                                {/* CTA Button — link for self-serve, modal for demo */}
+                                {/* CTA Button: link for self-serve, modal for demo */}
                                 <div className="mb-6">
                                     {plan.cta.href ? (
                                         <Button
@@ -241,7 +242,7 @@ export function PricingSection() {
                                     ))}
                                 </ul>
 
-                                {/* Optional advisory note — points to the higher
+                                {/* Optional advisory note: points to the higher
                                     tier instead of stacking X-marks for missing
                                     features. */}
                                 {plan.note && (
@@ -267,7 +268,7 @@ export function PricingSection() {
                     ))}
                 </div>
 
-                {/* Compliance qualifier — sits with the plan that advertises
+                {/* Compliance qualifier: sits with the plan that advertises
                     Part 11-aligned controls so the customer-responsibility
                     boundary is visible at the point of the claim. */}
                 <FadeIn treeNode="tree-pricing" delay={0.25}>

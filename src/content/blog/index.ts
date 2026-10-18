@@ -19,6 +19,10 @@ import { post as dualDocketing } from './dual-docketing-patent-docket-audit';
 import { post as deDocketing } from './patent-de-docketing-zero-touch-guide';
 import { post as oaResponseDeadlines } from './uspto-office-action-response-deadlines';
 import { post as annuityDeadlines } from './patent-annuity-maintenance-fee-deadlines';
+import { post as officeActionAnalysis } from './how-to-analyze-a-uspto-office-action';
+import { post as aiOfficeActionResponse } from './ai-office-action-response-uspto-guidance';
+import { post as claimAmendments } from './claim-amendments-37-cfr-1-121-guide';
+import { post as afterFinalOptions } from './after-final-rejection-options-uspto';
 
 const allPosts: BlogPost[] = [
     whatIsIpManagement,
@@ -40,6 +44,10 @@ const allPosts: BlogPost[] = [
     deDocketing,
     oaResponseDeadlines,
     annuityDeadlines,
+    officeActionAnalysis,
+    aiOfficeActionResponse,
+    claimAmendments,
+    afterFinalOptions,
 ];
 
 /** All posts sorted by publishedAt descending (newest first) */

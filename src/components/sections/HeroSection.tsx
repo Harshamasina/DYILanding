@@ -29,7 +29,10 @@ export function HeroSection() {
             >
                 <HeroAmbience edge="bottom" />
                 <Container size={HERO_VISUAL === 'hub' ? 'wide' : 'default'} className="relative z-10">
-                    <div className={`flex items-start lg:items-stretch gap-8 ${HERO_VISUAL === 'hub' ? 'lg:gap-6 xl:gap-4' : 'lg:gap-16 xl:gap-28'}`}>
+                    {/* Small laptops (lg/xl) get extra side padding and a wider column
+                        gap so the heading and hub never run to the viewport
+                        edge; 2xl screens have room to spare and drop back. */}
+                    <div className={`flex items-start lg:items-stretch gap-8 ${HERO_VISUAL === 'hub' ? 'lg:gap-10 lg:px-6 xl:gap-12 xl:px-10 2xl:gap-4 2xl:px-0' : 'lg:gap-16 xl:gap-28'}`}>
                         {/* Text Content - left. On lg+ the column stretches to
                             the visual's height and centers its content
                             vertically so the heading and CTA block sit balanced
@@ -38,7 +41,7 @@ export function HeroSection() {
                         <div className={`w-full lg:shrink-0 flex flex-col lg:justify-center ${HERO_VISUAL === 'hub' ? 'lg:max-w-[42%] xl:max-w-[40%]' : 'lg:max-w-[52%] xl:max-w-[44%]'}`}>
                             <div>
                                 <h1
-                                    className="text-[2.25rem] font-bold leading-[1.12] tracking-tight text-text-primary sm:text-[2.75rem] md:text-5xl lg:text-[3.5rem] xl:text-[4rem]"
+                                    className="text-[2.25rem] font-bold leading-[1.12] tracking-tight text-text-primary sm:text-[2.75rem] md:text-5xl lg:text-[2.75rem] xl:text-[3.25rem] 2xl:text-[4rem]"
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
                                     Patent Operations That Replace Your{' '}
@@ -47,12 +50,12 @@ export function HeroSection() {
                                     </span>
                                 </h1>
                                 <p
-                                    className="mt-4 text-[15px] leading-relaxed text-text-secondary sm:mt-5 sm:text-base sm:max-w-2xl"
+                                    className="mt-4 text-[15px] leading-relaxed text-text-secondary sm:mt-5 sm:text-base sm:max-w-2xl lg:text-[15px] 2xl:text-base"
                                     style={{ fontFamily: 'var(--font-body)' }}
                                 >
-                                    Patent docketing, prior art search, and AI-assisted drafting
-                                    in one connected, audit-trailed workspace, built for law
-                                    firms and IP teams. Manage PCT/PRV/NPE cases, track fees and
+                                    Patent docketing, prior art search, AI-assisted drafting, and
+                                    office action response in one connected, audit-trailed
+                                    workspace, built for law firms and IP teams. Manage PCT/PRV/NPE cases, track fees and
                                     deadlines, and run Part 11-aligned workflow controls for
                                     regulated teams.
                                 </p>

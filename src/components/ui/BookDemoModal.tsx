@@ -232,7 +232,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="demo-modal-title"
-                className="relative w-full max-w-lg max-h-[calc(100vh-2rem)] overflow-y-auto rounded-2xl border border-card-border bg-white p-8 shadow-2xl"
+                className="relative w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl border border-card-border bg-white p-6 shadow-2xl sm:p-7"
                 initial={{ opacity: 0, scale: 0.95, y: 16 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 16 }}
@@ -284,15 +284,15 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                             Book a Demo
                         </h3>
                         <p
-                            className="text-sm text-text-secondary mb-6"
+                            className="text-sm text-text-secondary mb-5"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             See how Design Your Invention can streamline your IP
                             workflow. We&apos;ll reach out to schedule a time.
                         </p>
 
-                        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                            {/* Honeypot — hidden from real users, uncontrolled to avoid autofill */}
+                        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                            {/* Honeypot: hidden from real users, uncontrolled to avoid autofill */}
                             <input
                                 ref={hpRef}
                                 type="text"
@@ -304,8 +304,8 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                 aria-hidden="true"
                             />
 
-                            {/* Name + Email */}
-                            <div className="grid gap-5 sm:grid-cols-2">
+                            {/* Name + Email + Phone: three across so the form fits short laptop screens without scrolling */}
+                            <div className="grid gap-4 sm:grid-cols-3">
                                 <ModalField
                                     label="Full Name"
                                     name="name"
@@ -326,10 +326,19 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                     placeholder="jane@acmelaw.com"
                                     error={getFieldError('work_email')}
                                 />
+                                <ModalField
+                                    label="Phone (optional)"
+                                    name="phone"
+                                    type="tel"
+                                    value={form.phone}
+                                    onChange={handleChange}
+                                    placeholder="+1 555 123 4567"
+                                    error={getFieldError('phone')}
+                                />
                             </div>
 
                             {/* Company + Role */}
-                            <div className="grid gap-5 sm:grid-cols-2">
+                            <div className="grid gap-4 sm:grid-cols-2">
                                 <ModalField
                                     label="Company"
                                     name="company"
@@ -353,7 +362,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                             </div>
 
                             {/* Portfolio Size + Inquiry Type */}
-                            <div className="grid gap-5 sm:grid-cols-2">
+                            <div className="grid gap-4 sm:grid-cols-2">
                                 <SelectField
                                     label="Portfolio Size"
                                     name="portfolioSize"
@@ -376,17 +385,6 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                 />
                             </div>
 
-                            {/* Phone (optional) */}
-                            <ModalField
-                                label="Phone (optional)"
-                                name="phone"
-                                type="tel"
-                                value={form.phone}
-                                onChange={handleChange}
-                                placeholder="+1 555 123 4567"
-                                error={getFieldError('phone')}
-                            />
-
                             {/* Message */}
                             <div>
                                 <label
@@ -406,7 +404,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                     aria-required="true"
                                     aria-invalid={!!getFieldError('message')}
                                     aria-describedby={getFieldError('message') ? 'demo-message-error' : undefined}
-                                    rows={3}
+                                    rows={2}
                                     maxLength={1000}
                                     placeholder="Tell us about your patent workflow, portfolio size, or compliance needs..."
                                     className={`w-full rounded-lg border bg-white/70 backdrop-blur-md px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none transition-[color,background-color,border-color,box-shadow] duration-200 resize-y ${
@@ -458,7 +456,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                 type="submit"
                                 disabled={status === 'submitting'}
                                 className="w-full justify-center"
-                                size="lg"
+                                size="md"
                             >
                                 {status === 'submitting' ? (
                                     'Sending...'

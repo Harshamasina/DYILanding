@@ -100,6 +100,11 @@ export const FAQ_ITEMS: FaqItem[] = [
             'The in-app prior art search queries the EPO global patent database (Open Patent Services) covering 100+ patent authorities, without leaving your patent family view. It is a separate data source from the free public search tool, so result sets can differ. Four search modes are available: Keywords (technical terms across titles and abstracts), Inventor (handles name variations and titles), Applicant (strips corporate suffixes automatically), and Patent Number (any format, kind codes handled). Results can be filtered by IPC classification, date range, and jurisdiction. Relevant patents are saved directly to your family with relevance scoring and attorney notes, creating an auditable prior art record.',
     },
     {
+        question: 'How does office action analysis and response work?',
+        answer:
+            'Office action analysis reads a USPTO office action, once an attorney confirms the documents, into an issue map with the legal basis, affected claims, and cited references for each issue, and charts every claim limitation against the cited passages. Every quotation is matched to the source text before it is stored, and an authorized attorney signs the analysis. The response is then built on the signed analysis: a strategy for every issue, a claim listing with status identifiers, and support for inserted claim language in the application as filed. Replies under 37 CFR 1.111 and amendments after final under 37 CFR 1.116 are supported. Approval requires an attorney who did not last revise the draft, approved content is locked, and the reply exports to Word for the attorney to file. AI drafting aids are available only where the capability has completed its evaluation and workspace policy permits it. Other jurisdictions are planned, starting with EP.',
+    },
+    {
         question: 'Does the platform support pharmaceutical patent workflows?',
         answer:
             'Yes. Pharma companies are one of the two core audiences. Prior art search resolves detected compounds to canonical chemical structures and supports substructure search, which matters for chemistry and life-sciences portfolios. AI-assisted drafting applies Indian Patent Office drafting rules and flags the Section 3 exclusions that shape pharma patentability for attorney review, and the audit-first architecture follows FDA 21 CFR Part 11 patterns for regulated workflows.',
@@ -107,7 +112,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'How do I choose the right patent management software?',
         answer:
-            'Look for a platform that covers your whole workflow in one place rather than a docketing tool plus separate prior art and drafting subscriptions. Practical criteria are multi-jurisdiction docketing, automatic deadline derivation, fee and renewal tracking, built-in prior art search, an easy way to import an existing portfolio, and an audit trail and access control that meet your compliance needs. Design Your Invention is built to cover all of these in a single platform, with a capability-by-capability breakdown on the comparison page.',
+            'Look for a platform that covers your whole workflow in one place rather than a docketing tool plus separate prior art and drafting subscriptions. Practical criteria are multi-jurisdiction docketing, automatic deadline derivation, fee and renewal tracking, built-in prior art search, office action analysis connected to the docket, an easy way to import an existing portfolio, and an audit trail and access control that meet your compliance needs. Design Your Invention is built to cover all of these in a single platform, with a capability-by-capability breakdown on the comparison page.',
     },
     {
         question: 'How much does Design Your Invention cost?',
@@ -117,7 +122,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'How does Design Your Invention compare to legacy tools like Anaqua, Clarivate, or AppColl?',
         answer:
-            'Most IP teams run a docketing system plus separate tools for prior art search and drafting, with spreadsheets for chemistry and fees. Design Your Invention unifies multi-jurisdiction docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, and PCT, and chemistry enrichment in one connected, audit-trailed platform. The comparison page has a capability-by-capability breakdown against the typical legacy setup.',
+            'Most IP teams run a docketing system plus separate tools for prior art search and drafting, with spreadsheets for chemistry and fees. Design Your Invention unifies multi-jurisdiction docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, and PCT, USPTO office action analysis and response, and chemistry enrichment in one connected, audit-trailed platform. The comparison page has a capability-by-capability breakdown against the typical legacy setup.',
     },
     {
         question: 'Is my content used to train AI models?',

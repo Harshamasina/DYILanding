@@ -34,6 +34,7 @@ export type OgVisual =
     | 'docketing'
     | 'search'
     | 'drafting'
+    | 'office-actions'
     | 'comparison'
     | 'careers'
     | 'support'

@@ -101,6 +101,8 @@ const softwareSchema = {
         'PCT Filing Management',
         'NPE Case Management',
         'Office Action Tracking',
+        'USPTO Office Action Analysis with Source-Checked Claim Charts',
+        'Office Action Response Workspace with Two-Attorney Approval and DOCX Output',
         'Computed Deadlines with Per-Date Derivation Traces (supported PCT and U.S. office-action rules)',
         'Patent Fee Management (42 fee types across 8 categories)',
         'Document Management with Version Control',

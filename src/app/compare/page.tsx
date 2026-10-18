@@ -6,6 +6,7 @@ import {
     Globe,
     Search,
     PenLine,
+    FileSearch,
     FlaskConical,
     ShieldCheck,
     Building2,
@@ -25,7 +26,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'Design Your Invention vs Legacy IPMS',
     description:
-        'How Design Your Invention compares to legacy IP management software. One platform for multi-jurisdiction patent docketing, prior art search, AI-assisted drafting, and chemistry enrichment, built for pharma companies and IP boutique law firms.',
+        'How Design Your Invention compares to legacy IP management software. One platform for multi-jurisdiction patent docketing, prior art search, AI-assisted drafting, office action analysis and response, and chemistry enrichment, built for pharma companies and IP boutique law firms.',
     path: '/compare/',
     ogKey: 'compare',
 });
@@ -68,6 +69,13 @@ const COMPARE_ROWS: CompareRow[] = [
         dyi: 'First-draft generation for attorney review across US, EP, IN, and PCT (WO), with a mandatory review workflow',
     },
     {
+        icon: FileSearch,
+        capability: 'Office action analysis and response',
+        legacy: 'Usually worked in Word documents and email, outside the docket',
+        legacyIncluded: false,
+        dyi: 'USPTO rejections mapped to claims with source-checked quotes, and responses built on the signed analysis for approval by a second attorney',
+    },
+    {
         icon: FlaskConical,
         capability: 'Drug and chemistry enrichment',
         legacy: 'Rarely addressed; handled in separate tools or spreadsheets',
@@ -94,12 +102,12 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'What are the alternatives to legacy IPMS tools like Clarivate, Anaqua, or AppColl for pharma IP?',
         answer:
-            'Teams evaluating alternatives to established IP management platforms typically want fewer disconnected tools. Design Your Invention is a modern option built for pharma companies and IP boutique law firms that unifies multi-jurisdiction patent docketing, prior art search, AI-assisted drafting, and chemistry enrichment in one connected, audit-trailed platform, rather than stitching a docketing tool together with separate search and drafting subscriptions.',
+            'Teams evaluating alternatives to established IP management platforms typically want fewer disconnected tools. Design Your Invention is a modern option built for pharma companies and IP boutique law firms that unifies multi-jurisdiction patent docketing, prior art search, AI-assisted drafting, office action analysis and response, and chemistry enrichment in one connected, audit-trailed platform, rather than stitching a docketing tool together with separate search and drafting subscriptions.',
     },
     {
         question: 'How is Design Your Invention different from legacy IP management software?',
         answer:
-            'The main difference is consolidation. Many IP teams run a docketing system, a separate prior art search tool, a drafting tool, and spreadsheets for chemistry and fees. Design Your Invention brings docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, and PCT, and chemistry enrichment into one connected, audit-trailed platform with a Part 11-aligned architecture and tenant-scoped data isolation.',
+            'The main difference is consolidation. Many IP teams run a docketing system, a separate prior art search tool, a drafting tool, and spreadsheets for chemistry and fees. Design Your Invention brings docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, and PCT, USPTO office action analysis and response, and chemistry enrichment into one connected, audit-trailed platform with a Part 11-aligned architecture and tenant-scoped data isolation.',
     },
     {
         question: 'Does Design Your Invention replace a separate prior art search tool?',
@@ -115,6 +123,11 @@ const PAGE_FAQ: FaqItem[] = [
         question: 'Does Design Your Invention include AI patent drafting that legacy tools usually lack?',
         answer:
             'Yes. AI-assisted drafting is built in and generates a first draft for attorney review across US, EP, IN, and PCT (WO), each with jurisdiction-specific drafting rules, with JP and CN planned. Every draft carries a mandatory disclaimer and a draft to in-review to approved workflow, so no AI-generated content can be exported or filed without human sign-off. It is a starting point for attorneys, not filing-ready output.',
+    },
+    {
+        question: 'Does Design Your Invention handle office action responses?',
+        answer:
+            'Yes, for USPTO office actions. The platform maps each rejection to the affected claims and the cited passages, with every quotation matched to the source text, and an attorney signs the analysis. The response is built on that signed analysis with a strategy per issue, a claim listing, and support links to the application as filed, then approved by an attorney who did not last revise it and exported to Word for filing. Legacy setups usually handle this work in Word and email, outside the docket. Other jurisdictions are planned, starting with EP.',
     },
 ];
 
@@ -290,8 +303,8 @@ export default function ComparePage() {
                             className="mt-4 text-base leading-relaxed text-text-secondary sm:text-lg"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
-                            Book a walkthrough to see docketing, prior art search, AI-assisted drafting, and
-                            chemistry enrichment working together on a sample portfolio.
+                            Book a walkthrough to see docketing, prior art search, AI-assisted drafting, office
+                            action response, and chemistry enrichment working together on a sample portfolio.
                         </p>
                         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
                             <BookDemoButton size="lg" className="w-full justify-center sm:w-auto">

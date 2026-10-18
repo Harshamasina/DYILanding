@@ -430,7 +430,7 @@ function DocketSidebar({ activeNav }: { activeNav: NavId }) {
 
     return (
         <aside className="hidden min-w-0 flex-col border-r border-card-border bg-white sm:flex" style={{ fontFamily: 'var(--font-dashboard)' }}>
-            <div className="flex h-14 shrink-0 items-center gap-2 border-b border-card-border px-2 sm:h-16 sm:px-3">
+            <div className="flex h-14 shrink-0 items-center gap-2 border-b border-card-border px-2 sm:px-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-primary/20">
                     <ShieldCheck className="h-4 w-4" />
                 </div>

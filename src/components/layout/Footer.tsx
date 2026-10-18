@@ -99,6 +99,7 @@ const STATIC_FOOTER_LINKS = {
         { label: 'Features', href: '/#features' },
         { label: 'Patent Search', href: '/patent-search/' },
         { label: 'AI Patent Drafting', href: '/ai-patent-drafting/' },
+        { label: 'Office Action Analysis & Response', href: '/office-actions/' },
         { label: 'Patent Docketing', href: '/docketing/' },
         { label: 'Compare vs Legacy IPMS', href: '/compare/' },
         { label: 'Compliance', href: '/#compliance' },

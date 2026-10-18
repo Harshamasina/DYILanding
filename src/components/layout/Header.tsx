@@ -13,6 +13,7 @@ import {
     PATENT_SEARCH_PAGE_URL,
     AI_DRAFTING_PAGE_URL,
     DOCKETING_PAGE_URL,
+    OFFICE_ACTIONS_PAGE_URL,
     SEARCH_APP_URL,
 } from '@/lib/constants';
 import { Button } from '@/components/ui/Button';
@@ -21,7 +22,7 @@ import { BrandLogoLink } from '@/components/ui/BrandLogoLink';
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
-/* The two flagship product pages, surfaced in the "Features" mega-menu. */
+/* Product pages, surfaced in the desktop and mobile Features menus. */
 const FEATURE_MENU = [
     {
         label: 'Patent Docketing',
@@ -40,6 +41,12 @@ const FEATURE_MENU = [
         href: AI_DRAFTING_PAGE_URL,
         description: 'Turn selected prior art into structured drafts for attorney review.',
         icon: PenLine,
+    },
+    {
+        label: 'Office Action Analysis',
+        href: OFFICE_ACTIONS_PAGE_URL,
+        description: 'Map USPTO rejections to claims, then draft responses for attorney approval.',
+        icon: FileSearch,
     },
 ] as const;
 

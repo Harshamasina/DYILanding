@@ -17,6 +17,7 @@ const TREE_NODE_IDS: TreeNodeConfig[] = [
     { elementId: 'tree-import', label: 'Import' },
     { elementId: 'tree-search', label: 'Patent Search' },
     { elementId: 'tree-ai', label: 'Drafting' },
+    { elementId: 'tree-office-actions', label: 'Office Actions' },
     { elementId: 'tree-compliance', label: 'Compliance' },
     { elementId: 'tree-security', label: 'Security', isDark: true },
     { elementId: 'tree-pricing', label: 'Pricing' },

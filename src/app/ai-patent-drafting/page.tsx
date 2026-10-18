@@ -38,7 +38,7 @@ import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedClaimsWorkflow } from '@/components/ui/AnimatedClaimsWorkflow';
 import { AiDraftingHeroSvg } from '@/components/illustrations/AiDraftingHeroSvg';
 import { AiDraftingJsonLd } from '@/components/seo/AiDraftingJsonLd';
-import { PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
+import { OFFICE_ACTIONS_PAGE_URL, PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
 
 export const metadata: Metadata = buildMetadata({
@@ -920,6 +920,14 @@ export default function AiPatentDraftingPage() {
                                 Explore Patent Search
                             </Button>
                         </div>
+                        <Link
+                            href={OFFICE_ACTIONS_PAGE_URL}
+                            className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
+                            style={{ fontFamily: 'var(--font-body)' }}
+                        >
+                            After filing, see office action analysis and response
+                            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                        </Link>
                     </div>
 
                     {/* Professional-use notice. Kept on the conversion path, not

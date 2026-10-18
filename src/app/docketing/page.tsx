@@ -39,7 +39,7 @@ import { ComputedDeadlineTrace } from '@/components/ui/ComputedDeadlineTrace';
 import { LoeCard } from '@/components/sections/LoeCard';
 import { DocketingHeroSvg } from '@/components/illustrations/DocketingHeroSvg';
 import { DocketingJsonLd } from '@/components/seo/DocketingJsonLd';
-import { PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
+import { OFFICE_ACTIONS_PAGE_URL, PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
 
 export const metadata: Metadata = buildMetadata({
@@ -404,14 +404,24 @@ export default function DocketingPage() {
                                 citation, arithmetic, calendar adjustment, assumptions, and rule version
                                 behind every result.
                             </p>
-                            <Link
-                                href="/blog/automated-patent-deadline-calculation-rules-engine/"
-                                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                Read how automated patent deadline calculation works
-                                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                            </Link>
+                            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                                <Link
+                                    href="/blog/automated-patent-deadline-calculation-rules-engine/"
+                                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
+                                    style={{ fontFamily: 'var(--font-body)' }}
+                                >
+                                    Read how automated patent deadline calculation works
+                                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                                </Link>
+                                <Link
+                                    href={OFFICE_ACTIONS_PAGE_URL}
+                                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
+                                    style={{ fontFamily: 'var(--font-body)' }}
+                                >
+                                    See office action analysis and response
+                                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                                </Link>
+                            </div>
                         </div>
                     </FadeIn>
 

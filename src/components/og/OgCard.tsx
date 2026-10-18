@@ -110,6 +110,22 @@ const SCENES: Record<OgVisual, string> = {
         <rect x="99" y="236" width="184" height="74" rx="15" fill="#6366f1" opacity=".12" stroke="#818cf8"/>
         <path d="M119 274h47l18-20 22 34 18-22 18 8" fill="none" stroke="#a5b4fc" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M319 84v42M298 105h42M306 92l26 26M332 92l-26 26" stroke="#f8fafc" stroke-width="4" stroke-linecap="round"/>`,
+    'office-actions': `
+        <rect x="44" y="70" width="236" height="270" rx="26" class="card"/>
+        <rect x="68" y="96" width="92" height="12" rx="6" fill="#818cf8"/>
+        <g>
+          <circle cx="80" cy="152" r="9" fill="#6366f1"/><rect x="100" y="146" width="104" height="9" rx="4.5" class="line"/>
+          <rect x="216" y="143" width="44" height="16" rx="8" fill="#f87171" opacity=".75"/>
+          <circle cx="80" cy="208" r="9" fill="#6366f1"/><rect x="100" y="202" width="86" height="9" rx="4.5" class="line"/>
+          <rect x="216" y="199" width="44" height="16" rx="8" fill="#fbbf24" opacity=".75"/>
+          <circle cx="80" cy="264" r="9" fill="none" stroke="#818cf8" stroke-width="2.5"/><rect x="100" y="258" width="112" height="9" rx="4.5" class="line"/>
+          <rect x="216" y="255" width="44" height="16" rx="8" fill="#34d399" opacity=".75"/>
+        </g>
+        <path d="M280 205h22" class="wire"/>
+        <circle cx="320" cy="205" r="12" class="dot"/>
+        <path d="M320 217v38" class="wire"/>
+        <circle cx="320" cy="300" r="46" fill="url(#brand)" stroke="#c7d2fe" stroke-width="3"/>
+        <path d="M300 300l14 14 26-30" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`,
     comparison: `
         <rect x="48" y="81" width="132" height="254" rx="23" fill="#111f35" stroke="#475569"/>
         <rect x="205" y="61" width="140" height="294" rx="23" class="card"/>

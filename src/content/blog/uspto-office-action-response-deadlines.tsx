@@ -130,6 +130,16 @@ function Content() {
                 while the docket stays the source of truth.
             </p>
             <p>
+                The response itself is built in the same platform. The{' '}
+                <Link href="/office-actions/">office action analysis and response workspace</Link>{' '}
+                maps each rejection to the affected claims and cited passages, then builds the reply on
+                the signed analysis for attorney approval. Our guides to{' '}
+                <Link href="/blog/how-to-analyze-a-uspto-office-action/">analyzing a USPTO office action</Link>{' '}
+                and to{' '}
+                <Link href="/blog/after-final-rejection-options-uspto/">options after a final rejection</Link>{' '}
+                pick up where the deadline leaves off.
+            </p>
+            <p>
                 Three months, extendable to six, is a fine summary and a poor docket entry. The chain is
                 the real deadline. Docket the chain.
             </p>

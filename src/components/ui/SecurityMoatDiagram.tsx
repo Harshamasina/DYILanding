@@ -64,7 +64,7 @@ const LAYERS: readonly Layer[] = [
     {
         title: 'Confidential AI Processing',
         description:
-            'AI drafting runs on enterprise providers configured so invention data is processed only to produce your draft, under the applicable provider agreements.',
+            'AI drafting and office action drafting aids run on enterprise providers configured so invention data is processed only to produce the output you requested, under the applicable provider agreements.',
         Icon: Brain,
     },
 ];
@@ -88,7 +88,7 @@ interface FacetGeometry {
 }
 
 const FACETS: readonly FacetGeometry[] = [
-    /* 0 — top-right (lightest) → Enforced Row-Level Security */
+    /* 0: top-right (lightest) → Enforced Row-Level Security */
     {
         points: '340,50 440,108 340,175',
         line: { x1: 390, y1: 79, x2: 430, y2: 0 },
@@ -100,7 +100,7 @@ const FACETS: readonly FacetGeometry[] = [
         annotationColor: '#A5B4FC',
         gradId: 'moat-g0',
     },
-    /* 1 — right → Strict Tenant Isolation */
+    /* 1: right → Strict Tenant Isolation */
     {
         points: '440,108 440,233 340,175',
         line: { x1: 440, y1: 170.5, x2: 520, y2: 170 },
@@ -112,7 +112,7 @@ const FACETS: readonly FacetGeometry[] = [
         annotationColor: '#818CF8',
         gradId: 'moat-g1',
     },
-    /* 2 — bottom-right → Immutable Audit Trails */
+    /* 2: bottom-right → Immutable Audit Trails */
     {
         points: '440,233 340,291 340,175',
         line: { x1: 390, y1: 262, x2: 430, y2: 345 },
@@ -124,7 +124,7 @@ const FACETS: readonly FacetGeometry[] = [
         annotationColor: '#6366F1',
         gradId: 'moat-g2',
     },
-    /* 3 — bottom-left → Granular RBAC */
+    /* 3: bottom-left → Granular RBAC */
     {
         points: '340,291 240,233 340,175',
         line: { x1: 290, y1: 262, x2: 250, y2: 345 },
@@ -136,7 +136,7 @@ const FACETS: readonly FacetGeometry[] = [
         annotationColor: '#4F46E5',
         gradId: 'moat-g3',
     },
-    /* 4 — left → Enterprise SSO */
+    /* 4: left → Enterprise SSO */
     {
         points: '240,233 240,108 340,175',
         line: { x1: 240, y1: 170.5, x2: 160, y2: 170 },
@@ -148,7 +148,7 @@ const FACETS: readonly FacetGeometry[] = [
         annotationColor: '#818CF8',
         gradId: 'moat-g4',
     },
-    /* 5 — top-left (darkest) → Confidential AI Processing */
+    /* 5: top-left (darkest) → Confidential AI Processing */
     {
         points: '240,108 340,50 340,175',
         line: { x1: 290, y1: 79, x2: 250, y2: 0 },
@@ -277,7 +277,7 @@ export function SecurityMoatDiagram() {
                         </radialGradient>
                     </defs>
 
-                    {/* Outer ambient halo — soft purple wash behind the cube */}
+                    {/* Outer ambient halo: soft purple wash behind the cube */}
                     <circle
                         cx="340"
                         cy="175"
@@ -286,7 +286,7 @@ export function SecurityMoatDiagram() {
                         opacity="0.65"
                     />
 
-                    {/* Inner bright bloom — concentrated white-violet around the core */}
+                    {/* Inner bright bloom: concentrated white-violet around the core */}
                     <circle
                         cx="340"
                         cy="175"
@@ -295,7 +295,7 @@ export function SecurityMoatDiagram() {
                         opacity="0.5"
                     />
 
-                    {/* Cube facets — clickable, dim when not active */}
+                    {/* Cube facets: clickable, dim when not active */}
                     {FACETS.map((facet, i) => (
                         <polygon
                             key={`facet-${i}`}
@@ -319,7 +319,7 @@ export function SecurityMoatDiagram() {
                         opacity="0.3"
                     />
 
-                    {/* Inner white hexagonal core — the protected IP */}
+                    {/* Inner white hexagonal core: the protected IP */}
                     <polygon
                         points="340,140 370,157 370,193 340,210 310,193 310,157"
                         fill="#ffffff"
@@ -328,7 +328,7 @@ export function SecurityMoatDiagram() {
                     <circle cx="340" cy="175" r="4" fill="#6366F1" />
                     <circle cx="340" cy="175" r="1.5" fill="#ffffff" />
 
-                    {/* Bottom reflection bloom — light from the core bleeding
+                    {/* Bottom reflection bloom: light from the core bleeding
                         onto the surface below the cube, anchoring it in space. */}
                     <ellipse
                         cx="340"
