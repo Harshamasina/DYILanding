@@ -13,6 +13,7 @@ import {
     Minimize,
     Loader2,
     RotateCcw,
+    Captions,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
@@ -34,7 +35,9 @@ interface WatchDemoButtonProps {
 const VIDEO_SRC = '/dyi_film.mp4';
 /** Shown by the <video> element until the first frame decodes, so the initial
     load shows the branded placeholder instead of a black well. */
-const POSTER_SRC = '/video_placeholder.jpg';
+const POSTER_SRC = '/thumb-film.jpg';
+/** English captions (WebVTT), timed to the narration. Off until toggled. */
+const CAPTIONS_SRC = '/dyi_film.vtt';
 
 /**
  * Headless launcher that owns the modal open state, the body portal, and the
@@ -135,6 +138,7 @@ function VideoModal({
 
     const [videoState, setVideoState] = useState<VideoState>('idle');
     const [isMuted, setIsMuted] = useState(false);
+    const [captionsOn, setCaptionsOn] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [showControls, setShowControls] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
@@ -209,6 +213,14 @@ function VideoModal({
         if (!video) return;
         video.muted = !video.muted;
         setIsMuted(video.muted);
+    }
+
+    function toggleCaptions() {
+        const track = videoRef.current?.textTracks[0];
+        if (!track) return;
+        const next = !captionsOn;
+        track.mode = next ? 'showing' : 'hidden';
+        setCaptionsOn(next);
     }
 
     function toggleFullscreen() {
@@ -414,7 +426,14 @@ function VideoModal({
                                     setShowControls(true);
                                 }}
                                 onError={() => setVideoState('error')}
-                            />
+                            >
+                                <track
+                                    kind="captions"
+                                    src={CAPTIONS_SRC}
+                                    srcLang="en"
+                                    label="English"
+                                />
+                            </video>
                         </div>
 
                         {/* Loading / Buffering spinner */}
@@ -599,6 +618,17 @@ function VideoModal({
                                     </span>
 
                                     <div className="flex-1" />
+
+                                    {/* Captions */}
+                                    <button
+                                        type="button"
+                                        onClick={toggleCaptions}
+                                        className={`${captionsOn ? 'text-primary-light' : 'text-white'} hover:text-primary transition-colors cursor-pointer`}
+                                        aria-label={captionsOn ? 'Hide captions' : 'Show captions'}
+                                        aria-pressed={captionsOn}
+                                    >
+                                        <Captions className="w-5 h-5" />
+                                    </button>
 
                                     {/* Fullscreen */}
                                     <button

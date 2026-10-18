@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Check, ChevronDown } from 'lucide-react';
 
@@ -21,6 +22,11 @@ import { Check, ChevronDown } from 'lucide-react';
 
    Focus stays on the trigger the whole time (aria-activedescendant pattern),
    which keeps Escape and Tab behaviour predictable inside the demo modal.
+
+   The panel is portalled to <body> with fixed positioning, so a scrolling
+   or overflow-hidden ancestor (the demo modal body) can never clip it. It
+   opens toward whichever side of the viewport has more room, sizes its
+   height to that room, and follows the trigger while anything scrolls.
    ────────────────────────────────────────────────────────────────────── */
 
 export interface SelectOption {
@@ -44,8 +50,23 @@ interface SelectFieldProps {
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
-/** Height reserved for the panel when deciding whether to open upward. */
-const PANEL_ESTIMATE_PX = 264;
+/** Tallest the panel grows before its list scrolls. */
+const PANEL_MAX_PX = 240;
+/** Gap between trigger and panel, and the minimum margin to the viewport edge. */
+const PANEL_GAP_PX = 8;
+const VIEWPORT_MARGIN_PX = 12;
+/** One option row (py-2.5 plus a text-sm line) and the list's p-1.5 padding. */
+const OPTION_ROW_PX = 42;
+const LIST_PADDING_PX = 12;
+
+interface PanelPlacement {
+    left: number;
+    width: number;
+    /** Distance from the viewport top (opening down) or bottom (opening up). */
+    offset: number;
+    up: boolean;
+    maxHeight: number;
+}
 
 export function SelectField({
     label,
@@ -65,13 +86,18 @@ export function SelectField({
     const errorId = `${uid}-${name}-error`;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
     const typeahead = useRef({ buffer: '', timer: 0 });
 
     const [open, setOpen] = useState(false);
-    const [openUp, setOpenUp] = useState(false);
+    const [placement, setPlacement] = useState<PanelPlacement | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [mounted, setMounted] = useState(false);
+
+    // The portal needs document.body, which does not exist during SSR.
+    useEffect(() => setMounted(true), []);
 
     const placeholder =
         options.find((o) => o.value === '')?.label ?? 'Select an option';
@@ -84,25 +110,59 @@ export function SelectField({
         if (refocus) buttonRef.current?.focus();
     }, []);
 
-    /* Open toward whichever side has room. The demo modal is a scroll
-       container, so a panel that always dropped down would push the form
-       and trap the last field's options against the modal edge. */
-    const openPanel = useCallback(() => {
+    const itemCount = items.length;
+
+    /* Measure against the viewport, not any scroll container: the panel is
+       fixed to <body>, so the viewport is the only edge that can cut it. */
+    const place = useCallback(() => {
         const rect = buttonRef.current?.getBoundingClientRect();
-        if (rect) {
-            const below = window.innerHeight - rect.bottom;
-            setOpenUp(below < PANEL_ESTIMATE_PX && rect.top > below);
-        }
+        if (!rect) return;
+        const wanted = Math.min(PANEL_MAX_PX, itemCount * OPTION_ROW_PX + LIST_PADDING_PX);
+        const below = window.innerHeight - rect.bottom - PANEL_GAP_PX - VIEWPORT_MARGIN_PX;
+        const above = rect.top - PANEL_GAP_PX - VIEWPORT_MARGIN_PX;
+        const up = below < wanted && above > below;
+        setPlacement({
+            left: rect.left,
+            width: rect.width,
+            offset: up ? window.innerHeight - rect.top + PANEL_GAP_PX : rect.bottom + PANEL_GAP_PX,
+            up,
+            maxHeight: Math.max(OPTION_ROW_PX * 2, Math.min(wanted, up ? above : below)),
+        });
+    }, [itemCount]);
+
+    const openPanel = useCallback(() => {
+        place();
         setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
         setOpen(true);
-    }, [selectedIndex]);
+    }, [place, selectedIndex]);
+
+    /* Follow the trigger while the page or the modal body scrolls, and on
+       resize. Capture catches scrolls on any ancestor, not just window. */
+    useLayoutEffect(() => {
+        if (!open) return;
+        let frame = 0;
+        const schedule = (event?: Event) => {
+            // Scrolling inside the list itself does not move the trigger.
+            if (event && panelRef.current?.contains(event.target as Node)) return;
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(place);
+        };
+        window.addEventListener('scroll', schedule, true);
+        window.addEventListener('resize', schedule);
+        return () => {
+            cancelAnimationFrame(frame);
+            window.removeEventListener('scroll', schedule, true);
+            window.removeEventListener('resize', schedule);
+        };
+    }, [open, place]);
 
     // Dismiss on any pointer press outside the field.
     useEffect(() => {
         if (!open) return;
 
         function onPointerDown(event: PointerEvent) {
-            if (!containerRef.current?.contains(event.target as Node)) {
+            const target = event.target as Node;
+            if (!containerRef.current?.contains(target) && !panelRef.current?.contains(target)) {
                 setOpen(false);
             }
         }
@@ -218,8 +278,7 @@ export function SelectField({
             <label
                 id={labelId}
                 htmlFor={buttonId}
-                className={`block text-sm font-semibold text-text-primary ${labelSpacing}`}
-                style={{ fontFamily: 'var(--font-display)' }}
+                className={`block text-sm font-semibold text-text-primary [font-family:var(--font-display)] ${labelSpacing}`}
             >
                 {label}
             </label>
@@ -243,14 +302,13 @@ export function SelectField({
                 aria-describedby={error ? errorId : undefined}
                 onClick={() => (open ? close(false) : openPanel())}
                 onKeyDown={handleKeyDown}
-                className={`group relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border bg-white/70 text-left text-sm backdrop-blur-md transition-[color,background-color,border-color,box-shadow] duration-200 focus:outline-none ${triggerPadding} ${
+                className={`group relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border bg-white/70 text-left text-sm backdrop-blur-md transition-[color,background-color,border-color,box-shadow] duration-200 [font-family:var(--font-body)] focus:outline-none ${triggerPadding} ${
                     error
                         ? 'border-danger hover:border-danger focus-visible:border-danger focus-visible:ring-2 focus-visible:ring-danger/20'
                         : open
                           ? 'border-primary/50 bg-white/90 shadow-lg shadow-primary/[0.07] ring-2 ring-primary/15'
                           : 'border-card-border hover:border-primary/35 hover:bg-white/90 hover:shadow-md hover:shadow-primary/[0.06] focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20'
                 }`}
-                style={{ fontFamily: 'var(--font-body)' }}
             >
                 <span
                     className={`truncate transition-colors duration-200 ${
@@ -269,111 +327,92 @@ export function SelectField({
                 </motion.span>
             </button>
 
-            <AnimatePresence>
-                {open && (
-                    <motion.div
-                        className={`absolute left-0 right-0 z-50 ${
-                            openUp ? 'bottom-full mb-2' : 'top-full mt-2'
-                        }`}
-                        initial={{ opacity: 0, y: openUp ? 6 : -6, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: openUp ? 4 : -4, scale: 0.98 }}
-                        transition={
-                            reduceMotion
-                                ? { duration: 0 }
-                                : { duration: 0.18, ease: EASE }
-                        }
-                        style={{ transformOrigin: openUp ? 'bottom center' : 'top center' }}
-                    >
-                        {/* Frosted panel: translucent white over a blur, with an
-                            indigo sheen at the top edge so it reads as glass
-                            rather than a flat dropdown. */}
-                        <div className="relative overflow-hidden rounded-xl border border-white/70 bg-white/80 shadow-[0_24px_48px_-16px_rgba(15,23,42,0.28)] ring-1 ring-primary/10 backdrop-blur-xl">
-                            <div
-                                aria-hidden="true"
-                                className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-primary/[0.07] to-transparent"
-                            />
-                            <ul
-                                ref={listRef}
-                                id={listId}
-                                role="listbox"
-                                aria-labelledby={labelId}
-                                className="relative max-h-60 overflow-y-auto overscroll-contain p-1.5"
-                            >
-                                {items.map((option, index) => {
-                                    const isActive = index === activeIndex;
-                                    const isSelected = option.value === value;
+            {mounted && createPortal(
+                <AnimatePresence>
+                    {open && placement && (
+                        <motion.div
+                            ref={panelRef}
+                            className={`fixed z-[110] ${placement.up ? 'origin-bottom' : 'origin-top'}`}
+                            style={{
+                                left: placement.left,
+                                width: placement.width,
+                                ...(placement.up ? { bottom: placement.offset } : { top: placement.offset }),
+                            }}
+                            initial={{ opacity: 0, y: placement.up ? 6 : -6, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: placement.up ? 4 : -4, scale: 0.98 }}
+                            transition={reduceMotion ? { duration: 0 } : { duration: 0.18, ease: EASE }}
+                        >
+                            {/* Frosted panel: translucent white over a blur, with an
+                                indigo sheen at the top edge so it reads as glass
+                                rather than a flat dropdown. */}
+                            <div className="relative overflow-hidden rounded-xl border border-white/70 bg-white/90 shadow-[0_24px_48px_-16px_rgba(15,23,42,0.28)] ring-1 ring-primary/10 backdrop-blur-xl">
+                                <div
+                                    aria-hidden="true"
+                                    className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-primary/[0.07] to-transparent"
+                                />
+                                <ul
+                                    ref={listRef}
+                                    id={listId}
+                                    role="listbox"
+                                    aria-labelledby={labelId}
+                                    className="relative overflow-y-auto overscroll-contain p-1.5"
+                                    style={{ maxHeight: placement.maxHeight }}
+                                >
+                                    {items.map((option, index) => {
+                                        const isActive = index === activeIndex;
+                                        const isSelected = option.value === value;
 
-                                    return (
-                                        <motion.li
-                                            key={option.value}
-                                            id={`${listId}-${index}`}
-                                            role="option"
-                                            aria-selected={isSelected}
-                                            data-active={isActive}
-                                            initial={
-                                                reduceMotion
-                                                    ? false
-                                                    : { opacity: 0, y: openUp ? 3 : -3 }
-                                            }
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={
-                                                reduceMotion
-                                                    ? { duration: 0 }
-                                                    : {
-                                                          duration: 0.16,
-                                                          ease: EASE,
-                                                          delay: Math.min(index * 0.022, 0.12),
-                                                      }
-                                            }
-                                            onMouseEnter={() => setActiveIndex(index)}
-                                            onClick={() => commit(index)}
-                                            className={`relative flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors duration-150 ${
-                                                isActive
-                                                    ? 'bg-primary/[0.09] text-primary'
-                                                    : isSelected
-                                                      ? 'text-primary'
-                                                      : 'text-text-secondary'
-                                            }`}
-                                            style={{ fontFamily: 'var(--font-body)' }}
-                                        >
-                                            {/* Left accent bar grows in on the active row */}
-                                            <motion.span
-                                                aria-hidden="true"
-                                                className="absolute left-0 top-1/2 w-0.5 -translate-y-1/2 rounded-full bg-primary"
-                                                initial={false}
-                                                animate={{
-                                                    height: isActive ? 18 : 0,
-                                                    opacity: isActive ? 1 : 0,
-                                                }}
+                                        return (
+                                            <motion.li
+                                                key={option.value}
+                                                id={`${listId}-${index}`}
+                                                role="option"
+                                                aria-selected={isSelected}
+                                                data-active={isActive}
+                                                initial={reduceMotion ? false : { opacity: 0, y: placement.up ? 3 : -3 }}
+                                                animate={{ opacity: 1, y: 0 }}
                                                 transition={
                                                     reduceMotion
                                                         ? { duration: 0 }
-                                                        : { duration: 0.18, ease: EASE }
+                                                        : { duration: 0.16, ease: EASE, delay: Math.min(index * 0.022, 0.12) }
                                                 }
-                                            />
-                                            <span className="truncate">{option.label}</span>
-                                            {isSelected && (
-                                                <Check
+                                                onMouseEnter={() => setActiveIndex(index)}
+                                                onClick={() => commit(index)}
+                                                className={`relative flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors duration-150 [font-family:var(--font-body)] ${
+                                                    isActive
+                                                        ? 'bg-primary/[0.09] text-primary'
+                                                        : isSelected
+                                                          ? 'text-primary'
+                                                          : 'text-text-secondary'
+                                                }`}
+                                            >
+                                                {/* Left accent bar grows in on the active row */}
+                                                <motion.span
                                                     aria-hidden="true"
-                                                    className="h-4 w-4 shrink-0 text-primary"
+                                                    className="absolute left-0 top-1/2 w-0.5 -translate-y-1/2 rounded-full bg-primary"
+                                                    initial={false}
+                                                    animate={{ height: isActive ? 18 : 0, opacity: isActive ? 1 : 0 }}
+                                                    transition={reduceMotion ? { duration: 0 } : { duration: 0.18, ease: EASE }}
                                                 />
-                                            )}
-                                        </motion.li>
-                                    );
-                                })}
-                            </ul>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                                                <span className="truncate">{option.label}</span>
+                                                {isSelected && <Check aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />}
+                                            </motion.li>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>,
+                document.body,
+            )}
 
             {error && (
                 <p
                     id={errorId}
                     role="alert"
-                    className="mt-1.5 text-xs text-danger"
-                    style={{ fontFamily: 'var(--font-body)' }}
+                    className="mt-1.5 text-xs text-danger [font-family:var(--font-body)]"
                 >
                     {error}
                 </p>

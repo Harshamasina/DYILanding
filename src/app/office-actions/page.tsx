@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import type { ElementType, ReactNode } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Check, ChevronDown, FileCheck2, FileSearch, Fingerprint, GitCompare, ListChecks, LockKeyhole, PenLine, Quote, ScrollText, SlidersHorizontal, TriangleAlert } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, FileCheck2, FileSearch, Fingerprint, GitCompare, ListChecks, LockKeyhole, PenLine, Play, Quote, ScrollText, SlidersHorizontal, TriangleAlert } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
+import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
@@ -67,8 +68,8 @@ const INTAKE = [
 ];
 /* Claim parsing facts follow DYIBackend docs/features/CLAIM_PARSER.md. */
 const CHART_RULES = [
-    { title: 'Deterministic claim parsing', text: 'Claims are parsed without a model call. Numbering is never changed, and a multiple dependent claim keeps every dependency path.' },
-    { title: 'Parse problems stop the chart', text: 'Duplicate or unnumbered claims and structural dependency errors, such as circular or unresolved references, are raised as blockers until the parse is corrected.' },
+    { title: 'Preserve claim numbering and dependencies', text: 'The examined claim structure stays intact throughout the analysis. Original numbering is preserved, and each multiple dependent claim retains every dependency path for review.' },
+    { title: 'Resolve claim-structure issues before charting', text: 'Duplicate or unnumbered claims and dependency errors, including circular or unresolved references, are flagged for correction. The chart waits until the claim structure is resolved.' },
     { title: 'One reading per limitation, per reference', text: 'Each cited passage carries its own pinpoint, and every quotation is matched to the source text before it is stored.' },
     { title: 'Silence is not a finding', text: 'A limitation the examiner did not address is marked not addressed. It is never presented as proof the reference lacks it.' },
 ];
@@ -128,7 +129,11 @@ export default function OfficeActionsPage() {
                             </p>
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
                                 <BookDemoButton size="lg" className="justify-center">Book a Demo<ArrowRight className="h-5 w-5" aria-hidden="true" /></BookDemoButton>
-                                <Button href="#record" variant="secondary" size="lg" className="justify-center">Explore Features</Button>
+                                {/* 1:39 is where the film turns to office actions ("Then the USPTO pushes back"). */}
+                                <WatchDemoButton variant="secondary" size="lg" startTime={99} className="justify-center">
+                                    <Play className="h-5 w-5 fill-current" />
+                                    Watch Demo
+                                </WatchDemoButton>
                             </div>
                             <p className="mt-4 text-xs leading-relaxed text-text-muted">Built for USPTO office actions</p>
                         </div>
@@ -155,7 +160,7 @@ export default function OfficeActionsPage() {
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">
                     <SectionIntro eyebrow="The prosecution record" title="Start From the Record the Examiner Acted On">
-                        A response is only as strong as the record behind it. The analysis keeps the office action, the examined claim set, and the application as filed in their own roles, so every later reading points back to the right paper.
+                        A response is only as strong as the record behind it. The analysis keeps <strong className="font-semibold text-text-primary">the office action, the examined claim set, and the application as filed in their own roles</strong>, so every later reading points back to the right paper.
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><ProsecutionRecordVisual /></div></FadeIn>
                     <div className="mt-10 grid gap-x-8 gap-y-6 border-t border-card-border pt-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
@@ -177,11 +182,11 @@ export default function OfficeActionsPage() {
             <section id="issue-map" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-24 lg:py-28">
                 <Container className="relative z-10">
                     <SectionIntro eyebrow="Source-linked analysis" title="Every Examiner Issue Connected to the Record">
-                        See each rejection, the claims it affects, and the passages behind it. The issue map brings the examiner’s position and the supporting source text into one reviewable record.
+                        See each rejection, the claims it affects, and the passages behind it. The issue map brings <strong className="font-semibold text-text-primary">the examiner’s position and the supporting source text into one reviewable record.</strong>
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><OfficeActionEvidenceTrace /></div></FadeIn>
                     <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3">
-                        {ANALYSIS_BENEFITS.map((item, i) => <FadeIn key={item.title} delay={i * 0.06} className="h-full"><CapabilityCard icon={[ListChecks, Quote, Fingerprint][i]} title={item.title} description={item.text} /></FadeIn>)}
+                        {ANALYSIS_BENEFITS.map((item, i) => <FadeIn key={item.title} delay={i * 0.06} className="h-full"><CapabilityCard surface="open" icon={[ListChecks, Quote, Fingerprint][i]} title={item.title} description={item.text} /></FadeIn>)}
                     </div>
                     <FadeIn>
                         <details className="group mt-8 border-t border-card-border pt-5">
@@ -198,31 +203,29 @@ export default function OfficeActionsPage() {
             {/* ── Claim chart: the examiner's mapping, limitation by limitation ── */}
             <section id="claim-chart" className="relative scroll-mt-24 overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
-                    <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-14">
-                        <div className="lg:sticky lg:top-28">
-                            <SectionIntro eyebrow="Claim charts" title="Read the Rejection Limitation by Limitation">
-                                Each claim is broken into labeled limitations and charted against every reference the examiner relies on. See where the examiner’s mapping holds, where it is partial, and where it says nothing.
-                            </SectionIntro>
-                            <ol className="mt-8 space-y-5">
-                                {CHART_RULES.map(({ title, text }, i) => (
-                                    <li key={title}>
-                                        <FadeIn delay={i * 0.06} className="group flex gap-4">
-                                            <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-white text-xs font-semibold text-primary transition-colors duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-white [font-family:var(--font-mono)]">{String(i + 1).padStart(2, '0')}</span>
-                                            <div>
-                                                <h3 className="text-base font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary">{title}</h3>
-                                                <p className="mt-1 text-sm leading-relaxed text-text-secondary">{text}</p>
-                                            </div>
-                                        </FadeIn>
-                                    </li>
-                                ))}
-                            </ol>
-                        </div>
-                        <FadeIn delay={0.1}>
-                            <div className="relative">
-                                <div aria-hidden="true" className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-primary/[0.05] blur-3xl" />
-                                <div className="relative"><LimitationChartVisual /></div>
-                            </div>
+                    <SectionIntro eyebrow="Claim charts" title="Read the Rejection Limitation by Limitation">
+                        Each claim is broken into labeled limitations and charted against every reference the examiner relies on. See <strong className="font-semibold text-text-primary">where the examiner’s mapping holds, where it is partial, and where it says nothing.</strong>
+                    </SectionIntro>
+                    {/* Rows: example label, card, caption. The chart sits on a subgrid so the
+                        rules beside it start and end with the card, not the label or caption. */}
+                    <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:grid-rows-[auto_1fr_auto] lg:gap-x-14 lg:gap-y-0">
+                        <FadeIn delay={0.1} className="relative lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:grid lg:grid-rows-subgrid">
+                            <div aria-hidden="true" className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-primary/[0.05] blur-3xl" />
+                            <LimitationChartVisual className="relative lg:row-span-3 lg:grid lg:grid-rows-subgrid" />
                         </FadeIn>
+                        <ol className="flex flex-col gap-6 lg:col-start-1 lg:row-start-2 lg:justify-between lg:gap-5 lg:py-1">
+                            {CHART_RULES.map(({ title, text }, i) => (
+                                <li key={title}>
+                                    <FadeIn delay={i * 0.06} className="group flex gap-4">
+                                        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-white text-xs font-semibold text-primary transition-colors duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-white [font-family:var(--font-mono)]">{String(i + 1).padStart(2, '0')}</span>
+                                        <div>
+                                            <h3 className="text-base font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary">{title}</h3>
+                                            <p className="mt-1 text-sm leading-relaxed text-text-secondary">{text}</p>
+                                        </div>
+                                    </FadeIn>
+                                </li>
+                            ))}
+                        </ol>
                     </div>
                 </Container>
             </section>
@@ -231,25 +234,30 @@ export default function OfficeActionsPage() {
             <section id="strategy" className="scroll-mt-24 py-20 sm:py-24 lg:py-28">
                 <Container>
                     <SectionIntro eyebrow="Response strategy" title="Choose a Strategy for Every Ground of Rejection">
-                        Every issue in the signed analysis gets a recorded strategy before the drafting starts. The choice shapes the response sections, and the reasoning stays with the issue for the reviewing attorney.
+                        Every issue in the signed analysis gets <strong className="font-semibold text-text-primary">a recorded strategy before the drafting starts.</strong> The choice shapes the response sections, and the reasoning stays with the issue for the reviewing attorney.
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><ResponseStrategyVisual /></div></FadeIn>
-                    <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-card-border bg-card-border sm:grid-cols-2 lg:mt-12 lg:grid-cols-3">
-                        {STRATEGIES.map(({ label, text }, i) => (
-                            <FadeIn key={label} delay={i * 0.05} className="h-full">
-                                <article className="group relative h-full bg-white p-6 transition-colors duration-300 hover:bg-primary/[0.02]">
-                                    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/35 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                    <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-primary [font-family:var(--font-mono)]">{label}</h3>
-                                    <p className="mt-3 text-sm leading-relaxed text-text-secondary transition-colors duration-300 group-hover:text-text-primary">{text}</p>
-                                </article>
-                            </FadeIn>
-                        ))}
+                    <div className="mt-10 grid items-start gap-8 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.6fr)] lg:gap-14">
                         <FadeIn delay={STRATEGIES.length * 0.05} className="h-full">
-                            <div className="flex h-full items-start gap-3 bg-primary/[0.04] p-6">
-                                <Fingerprint className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-                                <p className="text-sm leading-relaxed text-text-secondary"><span className="font-semibold text-text-primary">Counsel decides.</span> Only strategies the US rule pack permits for the issue type are offered, and only an attorney selects one.</p>
-                            </div>
+                            <aside className="rounded-2xl border border-primary/15 bg-primary/[0.04] p-6 sm:p-8">
+                                <Fingerprint className="h-7 w-7 text-primary" aria-hidden="true" />
+                                <h3 className="mt-5 text-2xl font-semibold text-text-primary">Counsel decides.</h3>
+                                <p className="mt-4 text-sm leading-relaxed text-text-secondary">Available response strategies reflect the issue type and supported U.S. procedures. An attorney selects the approach and records the reasoning before drafting begins.</p>
+                                <p className="mt-6 border-t border-primary/15 pt-5 text-sm font-semibold leading-relaxed text-primary">Issue → Strategy → Response section</p>
+                            </aside>
                         </FadeIn>
+                        
+                        <div className="border-t border-card-border">
+                            {STRATEGIES.map(({ label, text }, i) => (
+                                <FadeIn key={label} delay={i * 0.05} className="h-full">
+                                    <article className="group relative grid h-full gap-3 border-b border-card-border bg-white p-6 transition-colors duration-300 hover:bg-primary/[0.02] sm:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] sm:gap-6">
+                                        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/35 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                        <h3 className="text-base font-semibold leading-relaxed text-text-primary">{label}</h3>
+                                        <p className="text-sm leading-relaxed text-text-secondary transition-colors duration-300 group-hover:text-text-primary">{text}</p>
+                                    </article>
+                                </FadeIn>
+                            ))}
+                        </div>
                     </div>
                 </Container>
             </section>
@@ -257,16 +265,18 @@ export default function OfficeActionsPage() {
             <section id="response" className="scroll-mt-24 bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
                     <SectionIntro eyebrow="Structured response drafting" title="Build the Response From the Signed Analysis">
-                        Carry reviewed issues into a structured draft. Keep your strategy, claim changes, and disclosure support connected as you prepare the reply.
+                        Carry reviewed issues into a structured draft. Keep <strong className="font-semibold text-text-primary">your strategy, claim changes, and disclosure support connected</strong> as you prepare the reply.
                     </SectionIntro>
-                    <div className="mt-12 grid items-start gap-6 lg:mt-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-                        <div className="grid gap-6 sm:grid-cols-2">
+                    {/* Rows: example label, card. The four cards span both rows, so they run
+                        from the top of the label to the bottom of the card. */}
+                    <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:grid-rows-[auto_1fr] lg:gap-y-0">
+                        <FadeIn delay={0.1} className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:grid lg:grid-rows-subgrid"><OfficeActionResponsePreview className="lg:row-span-2 lg:grid lg:grid-rows-subgrid" /></FadeIn>
+                        <div className="grid gap-6 sm:grid-cols-2 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:grid-rows-2">
                             <FadeIn className="h-full"><CapabilityCard icon={GitCompare} title="Compared With Your Patent Draft" description="Line up the examined claims against the linked patent draft, claim by claim, to see how prosecution has moved them." /></FadeIn>
                             <FadeIn delay={0.06} className="h-full"><CapabilityCard icon={PenLine} title="Consistent Claim Amendments" description="Claim statuses and amendment markup are computed from your edits, with numbering and dependencies checked." /></FadeIn>
-                            <FadeIn delay={0.12} className="h-full"><CapabilityCard icon={FileSearch} title="Support From the Disclosure" description="Link inserted language to passages in the application as filed, which an attorney confirms. Added words no cited passage holds are flagged before approval." /></FadeIn>
+                            <FadeIn delay={0.12} className="h-full"><CapabilityCard icon={FileSearch} title="Support From the Disclosure" description="Link inserted language to specific passages in the application as filed for attorney confirmation. Inserted language without matching disclosure support is flagged for review before approval." /></FadeIn>
                             <FadeIn delay={0.18} className="h-full"><CapabilityCard icon={ScrollText} title="A Structured Starting Point" description="Carry issues, claims, references, and examiner quotations into response sections for attorney drafting and review." /></FadeIn>
                         </div>
-                        <FadeIn delay={0.1}><OfficeActionResponsePreview /></FadeIn>
                     </div>
                     <FadeIn delay={0.05}>
                         <div className="mt-10 grid gap-8 rounded-2xl border border-primary/15 bg-white p-6 shadow-sm sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
@@ -299,12 +309,18 @@ export default function OfficeActionsPage() {
             <section id="approval" className="scroll-mt-24 py-20 sm:py-24 lg:py-28">
                 <Container>
                     <SectionIntro eyebrow="Review, approval, and exports" title="Attorney Sign-Off Before the Final Copy">
-                        Move from a review draft to an approved response with clear checks and a recorded signature. Approved content is locked, and filing remains with the attorney.
+                        Move from a review draft to an approved response with clear checks and a recorded signature. <strong className="font-semibold text-text-primary">Approved content is locked, and filing remains with the attorney.</strong>
                     </SectionIntro>
                     <div className="mt-12 grid items-center gap-10 lg:mt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
-                        <div className="grid gap-5">
-                            {REVIEW_STEPS.map(({ icon, title, text }, i) => <FadeIn key={title} delay={i * 0.06}><CapabilityCard icon={icon} title={title} description={text} /></FadeIn>)}
-                        </div>
+                        <ol className="relative grid gap-5">
+                            {REVIEW_STEPS.map(({ icon, title, text }, i) => (
+                                <li key={title} className="relative pl-11 sm:pl-14">
+                                    {i < REVIEW_STEPS.length - 1 && <span aria-hidden="true" className="absolute top-10 bottom-[-20px] left-4 border-l border-primary/20" />}
+                                    <span aria-hidden="true" className="absolute top-6 left-0 inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 bg-primary/[0.04] text-xs font-semibold text-primary [font-family:var(--font-mono)]">{String(i + 1).padStart(2, '0')}</span>
+                                    <FadeIn delay={i * 0.06}><CapabilityCard surface="step" icon={icon} title={title} description={text} /></FadeIn>
+                                </li>
+                            ))}
+                        </ol>
                         <FadeIn delay={0.1}><OfficeActionApprovalPreview /></FadeIn>
                     </div>
                     <FadeIn delay={0.1}>
@@ -319,7 +335,7 @@ export default function OfficeActionsPage() {
             <section id="governance" className="scroll-mt-24 bg-navy py-20 sm:py-24 lg:py-28">
                 <Container>
                     <SectionIntro eyebrow="Audit, security, and control" title="Built for Privileged Prosecution Work" dark>
-                        The same access controls and audit history that protect your docket extend to every office action analysis and response.
+                        The same <strong className="font-semibold text-white">access controls and audit history that protect your docket</strong> extend to every office action analysis and response.
                     </SectionIntro>
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
                         {GOVERNANCE.map(({ icon: Icon, title, text }, i) => (
@@ -368,9 +384,14 @@ function SectionIntro({ eyebrow, title, children, dark = false }: { eyebrow: str
     return <FadeIn><div className="max-w-3xl"><span className={`text-xs font-bold uppercase tracking-[0.15em] [font-family:var(--font-mono)] ${dark ? 'text-primary-light' : 'text-primary'}`}>{eyebrow}</span><h2 className={`mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl ${dark ? 'text-white' : 'text-text-primary'}`}>{title}</h2><p className={`mt-4 text-lg leading-relaxed ${dark ? 'text-text-on-dark' : 'text-text-secondary'}`}>{children}</p></div></FadeIn>;
 }
 
-function CapabilityCard({ icon: Icon, title, description }: { icon: ElementType; title: string; description: string }) {
+function CapabilityCard({ icon: Icon, title, description, surface = 'card' }: { icon: ElementType; title: string; description: string; surface?: 'card' | 'open' | 'step' }) {
+    const surfaceClasses = {
+        card: 'rounded-2xl border border-card-border bg-card-bg shadow-sm',
+        open: 'rounded-none border-t border-primary/25 bg-transparent',
+        step: 'rounded-none border-b border-card-border bg-transparent',
+    };
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
+        <article className={`group relative flex h-full flex-col overflow-hidden p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05] ${surfaceClasses[surface]}`}>
             <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]"><Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" aria-hidden="true" /></div>
             <h3 className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary">{title}</h3>

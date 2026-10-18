@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 import { ArrowRight, Check, CheckCheck, FileText, Fingerprint, Link2, LockKeyhole, Quote, ShieldCheck } from 'lucide-react';
+import { OfficeActionExampleLabel } from './OfficeActionExampleLabel';
 
 
 /* Static product illustrations for the marketing page. All matter details and
    excerpts are fictional. These are deliberately not interactive app controls.
-   The main animation slot is reserved for the user's future asset. */
+   These static examples accompany the separately maintained hero animation. */
 const dashboardFont = '[font-family:var(--font-dashboard)]';
 const monoFont = '[font-family:var(--font-dashboard-mono)]';
 
@@ -12,6 +13,7 @@ const monoFont = '[font-family:var(--font-dashboard-mono)]';
 export function OfficeActionEvidenceTrace() {
     return (
         <figure className="relative min-w-0">
+            <OfficeActionExampleLabel step="02">Trace the examiner’s rejection</OfficeActionExampleLabel>
             <div className="overflow-hidden rounded-2xl border border-primary/15 bg-white shadow-lg shadow-primary/[0.05] ring-1 ring-white/70">
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-card-border px-5 py-5 sm:px-7">
                     <h3 className="text-xl font-semibold text-text-primary sm:text-2xl">Obviousness · Claims 1-3</h3>
@@ -21,17 +23,17 @@ export function OfficeActionEvidenceTrace() {
                     <div className="border-b border-card-border bg-primary/[0.025] p-5 sm:p-7 lg:border-r lg:border-b-0">
                         <p className="text-xs font-bold uppercase tracking-[0.12em] text-primary [font-family:var(--font-mono)]">Illustrative Issue Map</p>
                         <dl className="mt-6 grid gap-5 sm:grid-cols-3 lg:grid-cols-1">
-                            {[['Legal basis', '35 U.S.C. § 103'], ['Affected claims', 'Claims 1-3'], ['Cited reference', 'Smith reference']].map(([label, value]) => <div key={label} className="border-b border-card-border pb-5 last:border-0 last:pb-0"><dt className="text-xs text-text-muted">{label}</dt><dd className="mt-2 text-sm font-semibold text-text-primary">{value}</dd></div>)}
+                            {[['Legal basis', '35 U.S.C. § 103'], ['Affected claims', 'Claims 1-3'], ['Cited references', 'Smith and Jones']].map(([label, value]) => <div key={label} className="border-b border-card-border pb-5 last:border-0 last:pb-0"><dt className="text-xs text-text-muted">{label}</dt><dd className="mt-2 text-sm font-semibold text-text-primary">{value}</dd></div>)}
                         </dl>
                     </div>
                     <div className="p-5 sm:p-7">
                         <div className="flex gap-4 border-b border-card-border pb-6">
                             <TraceIcon><FileText className="h-5 w-5" /></TraceIcon>
-                            <div><p className="text-sm font-semibold text-text-primary">Claim 1 · Limitation [1b]</p><p className="mt-2 text-sm leading-relaxed text-text-secondary">A controller configured to adjust a sampling interval in response to a detected change in temperature.</p></div>
+                            <div><p className="text-sm font-semibold text-text-primary">Claim 1 · Examined Limitation [1b]</p><p className="mt-2 text-sm leading-relaxed text-text-secondary">A controller configured to adjust a sampling interval periodically.</p></div>
                         </div>
                         <div className="flex gap-4 py-6">
                             <TraceIcon><Quote className="h-5 w-5" /></TraceIcon>
-                            <div><p className="text-sm font-semibold text-text-primary">Examiner’s Passage</p><blockquote className="mt-2 text-sm leading-relaxed text-text-secondary">“Smith discloses a controller that adjusts the sampling interval based on a change in the measured temperature.”</blockquote><p className="mt-2 text-xs text-text-muted">Office action · page 4</p></div>
+                            <div><p className="text-sm font-semibold text-text-primary">Examiner’s Passage</p><blockquote className="mt-2 text-sm leading-relaxed text-text-secondary">“Smith discloses a controller that adjusts the sampling interval periodically.”</blockquote><p className="mt-2 text-xs text-text-secondary">Office action · page 4 · Citing Smith ¶ [0031]</p></div>
                         </div>
                         <div className="flex items-start gap-4 rounded-xl border border-primary/15 bg-primary/[0.035] p-4">
                             <TraceIcon><ShieldCheck className="h-5 w-5" /></TraceIcon>
@@ -95,31 +97,33 @@ export function OfficeActionAnalysisPreview() {
     );
 }
 
-export function OfficeActionResponsePreview() {
+/* className lets the page place the label and card on subgrid rows,
+   so the card edges line up with the content beside it. */
+export function OfficeActionResponsePreview({ className = '' }: { className?: string }) {
     return (
-        <figure className="min-w-0">
-            <div className={`overflow-hidden rounded-xl border border-card-border bg-white shadow-xl shadow-navy/[0.05] ${dashboardFont}`}>
+        <figure className={`min-w-0 ${className}`}>
+            <OfficeActionExampleLabel step="05">Amend Claim 1 with disclosure support</OfficeActionExampleLabel>
+            <div className={`flex flex-col overflow-hidden rounded-xl border border-card-border bg-white shadow-xl shadow-navy/[0.05] ${dashboardFont}`}>
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-card-border px-5 py-4 sm:px-6">
                     <span className="text-sm font-semibold text-text-primary">Response workspace</span><span className="text-[11px] font-medium text-text-muted">Review draft</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 border-b border-card-border bg-page-bg-alt px-5 py-3 text-xs sm:px-6">
                     <Fingerprint className="h-3.5 w-3.5 text-primary" aria-hidden="true" /><span className="text-text-secondary">Based on signed analysis</span><ArrowRight className="h-3 w-3 text-text-muted" aria-hidden="true" /><span className="font-medium text-primary">Amend and traverse</span>
                 </div>
-                <div className="p-5 sm:p-7">
-                    <PreviewLabel>Amendments to the claims</PreviewLabel>
+                <div className="flex flex-1 flex-col p-5 sm:p-7">
+                    <PreviewLabel>Amendments to the claims · Limitation [1b]</PreviewLabel>
                     <div className="mt-5 border-l-2 border-primary/25 pl-4">
                         <p className="text-sm font-semibold text-text-primary">1. (Currently amended)</p>
                         <p className="mt-3 text-sm leading-7 text-text-secondary">A sensor system comprising a controller configured to adjust a sampling interval <del className="decoration-text-muted">periodically</del> <ins className="bg-primary/[0.07] text-primary decoration-primary underline-offset-4">in response to a detected change in temperature</ins>.</p>
                     </div>
-                    <div className="mt-6 rounded-lg border border-card-border bg-page-bg-alt p-4">
+                    <div className="my-6 rounded-lg border border-card-border bg-page-bg-alt p-4">
                         <div className="flex items-center gap-2 text-xs font-semibold text-text-primary"><Link2 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />Linked disclosure support</div>
                         <p className="mt-2 text-xs leading-relaxed text-text-secondary">Application as filed · paragraph [0032]</p>
-                        <p className="mt-2 text-xs leading-relaxed text-text-muted">“The controller varies the sampling interval when the temperature changes.”</p>
+                        <p className="mt-2 text-sm leading-relaxed text-text-secondary">“The controller varies the sampling interval when the temperature changes.”</p>
                     </div>
-                    <div className="mt-6 flex items-start gap-2.5 border-t border-card-border pt-4 text-xs leading-relaxed text-text-secondary"><Fingerprint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />The attorney confirms support and accepts the amendment.</div>
+                    <div className="mt-auto flex items-start gap-2.5 border-t border-card-border pt-4 text-xs leading-relaxed text-text-secondary"><Fingerprint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />The attorney confirms support and accepts the amendment.</div>
                 </div>
             </div>
-            <PreviewCaption>Claim changes stay connected to the original disclosure</PreviewCaption>
         </figure>
     );
 }
@@ -127,6 +131,7 @@ export function OfficeActionResponsePreview() {
 export function OfficeActionApprovalPreview() {
     return (
         <figure className="min-w-0">
+            <OfficeActionExampleLabel step="06">Approve and export the response</OfficeActionExampleLabel>
             <div className={`relative overflow-hidden rounded-xl border border-card-border bg-page-bg-alt p-6 sm:p-9 ${dashboardFont}`}>
                 <div className="mx-auto max-w-sm rounded-sm border border-card-border bg-white px-6 pt-7 pb-8 shadow-lg shadow-navy/[0.05] sm:px-8">
                     <div className="flex items-center justify-between gap-3"><FileText className="h-6 w-6 text-primary" aria-hidden="true" /><span className={`text-[10px] tracking-widest text-text-muted ${monoFont}`}>DOCX</span></div>

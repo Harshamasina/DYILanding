@@ -29,6 +29,11 @@ const TREE_NODE_IDS: TreeNodeConfig[] = [
     { elementId: 'tree-end', label: 'Enterprise Trust', isDark: true },
 ];
 
+/* The drawn line starts this far above the spine's origin and fades in over
+   it, so the spine reads as already running rather than starting at a point.
+   Matches the mask's 56px fade below. */
+const LEAD_IN = 56;
+
 interface ComputedNode {
     elementId: string;
     top: number;
@@ -45,6 +50,8 @@ export function TreeSpine() {
     const [treeEnd, setTreeEnd] = useState(0);
     const [ready, setReady] = useState(false);
 
+    /* Line progress covers the lead-in plus the spine, so the line's tip
+       always sits at the viewport middle, one px drawn per px scrolled. */
     const rawProgress = useMotionValue(0);
     const progress = useSpring(rawProgress, {
         stiffness: 120,
@@ -150,7 +157,8 @@ export function TreeSpine() {
             const viewportMid = scrollY + window.innerHeight * 0.5;
             const treeProgress = (viewportMid - treeStart) / treeEnd;
             const clamped = Math.max(0, Math.min(treeProgress, 1));
-            rawProgress.set(clamped);
+            const lineProgress = (viewportMid - treeStart + LEAD_IN) / (treeEnd + LEAD_IN);
+            rawProgress.set(Math.max(0, Math.min(lineProgress, 1)));
 
             const drawnLength = clamped * treeEnd;
             const newVisible = nodes.map((node) => drawnLength >= node.top);
@@ -183,31 +191,26 @@ export function TreeSpine() {
                 width: 80,
             }}
         >
-            {/* Background track — faint guide line */}
+            {/* One line from the lead-in to the end, so there is no seam. The
+                fade lives on this unscaled wrapper, so it stays 56px however
+                far the line inside has been drawn. */}
             <div
-                className="absolute left-1.5 top-0 w-0.5 rounded-full bg-primary/6"
-                style={{ height: treeEnd }}
-            />
+                className="absolute inset-x-0 [mask-image:linear-gradient(to_bottom,transparent,black_56px)]"
+                style={{ top: -LEAD_IN, height: treeEnd + LEAD_IN }}
+            >
+                {/* Background track: faint guide line */}
+                <div className="absolute left-1.5 top-0 h-full w-0.5 rounded-full bg-primary/6" />
 
-            {/* Animated drawn line — scales from top */}
-            <motion.div
-                className="absolute left-1 top-0 w-1 rounded-full origin-top"
-                style={{
-                    height: treeEnd,
-                    scaleY: progress,
-                    background: 'linear-gradient(to bottom, #6366F1, #818cf8)',
-                    boxShadow: '0 0 10px rgba(99, 102, 241, 0.35)',
-                }}
-            />
-
-            {/* Start dot — connects to dashboard */}
-            <motion.div
-                className="absolute w-3 h-3 rounded-full bg-primary shadow-md shadow-primary/40"
-                style={{ top: -6, left: 0.5 }}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 1, duration: 0.5, ease: 'backOut' }}
-            />
+                {/* Animated drawn line, scaled from the top */}
+                <motion.div
+                    className="absolute left-1 top-0 h-full w-1 rounded-full origin-top"
+                    style={{
+                        scaleY: progress,
+                        background: 'linear-gradient(to bottom, #6366F1, #818cf8)',
+                        boxShadow: '0 0 10px rgba(99, 102, 241, 0.35)',
+                    }}
+                />
+            </div>
 
             {/* Node dots + branch lines */}
             {nodes.map((node, i) => (

@@ -6,7 +6,8 @@ import { DemoVideoShowcase } from '@/components/ui/DemoVideoShowcase';
 /**
  * Inline product-demo section. Sits between Features and the per-pillar
  * deep-dives (Import / Search / AI Drafting): Features tells, this section
- * shows all three pillars working together, then each section drills in.
+ * shows the pillars working together (docketing, search, drafting, office
+ * actions, security), then each section drills in.
  *
  * The video itself only loads when a trigger opens the shared modal, so this
  * section ships a poster and chapter list (cheap markup) plus VideoObject
@@ -48,16 +49,16 @@ export function DemoVideoSection() {
                             className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
-                            From Prior Art Search to{' '}
-                            <span className="text-primary">Docketed Filing</span>
+                            From Docketing to{' '}
+                            <span className="text-primary">Office Action Response</span>
                         </h2>
                         <p
                             className="mt-4 text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
-                            See docketing, prior art search, and AI drafting run end
-                            to end in one connected, audit-trailed workspace.
-                            Recorded with synthetic demo data.
+                            See docketing, prior art search, AI drafting, and office
+                            action response run end to end in one connected,
+                            audit-trailed workspace. Recorded with synthetic demo data.
                         </p>
                     </div>
                 </FadeIn>

@@ -939,6 +939,12 @@ function MobileLifecycle({ enabled, reduceMotion }: { enabled: boolean; reduceMo
                                                         {code}
                                                     </span>
                                                 ))}
+                                                <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-primary/20 px-2.5 py-1 text-[11px] font-semibold text-primary [font-family:var(--font-mono)]">
+                                                    <span className="opacity-80">JP</span>
+                                                    <span className="opacity-55">CN</span>
+                                                    <span aria-hidden="true" className="opacity-40">···</span>
+                                                    <span className="sr-only">and more patent offices</span>
+                                                </span>
                                             </div>
                                         )}
                                         {stage.id === 'protect' && (
@@ -1058,6 +1064,7 @@ const LifecycleScene = memo(function LifecycleScene({
                 {JURISDICTIONS.map(({ code, y }, index) => (
                     <JurisdictionChip key={code} y={y} code={code} at={branchAt(index, 0.3)} />
                 ))}
+                <MoreOfficesChip at={branchAt(1.5, 0.3)} />
             </g>
 
             <g className="lifecycle-stage" data-lifecycle-stage="protect">
@@ -1209,6 +1216,23 @@ function JurisdictionChip({ y, code, at }: { y: number; code: JurisdictionCode; 
                 <rect className="lifecycle-flag-border" width="18" height="12" rx="2" />
             </g>
             <text className="lifecycle-jurisdiction-code" x="613" y={y + 4} textAnchor="middle">{code}</text>
+        </g>
+    );
+}
+
+/* The four chips are examples, not the full list. A ghost chip in the gap
+   between EP and IN, on dashed stubs from the file node and into the post
+   route, says more offices follow. Its codes fade out into an ellipsis. */
+function MoreOfficesChip({ at }: { at: number }) {
+    return (
+        <g className="lifecycle-chip lifecycle-more" data-at={at}>
+            <path className="lifecycle-more-route" d="M 511 165 H 562 M 638 165 H 698" />
+            <rect className="lifecycle-more-chip" x="562" y="154" width="76" height="22" rx="11" />
+            <text className="lifecycle-more-code" x="600" y="168.5" textAnchor="middle">
+                <tspan opacity="0.8">JP</tspan>
+                <tspan dx="5" opacity="0.5">CN</tspan>
+                <tspan dx="3" opacity="0.45">···</tspan>
+            </text>
         </g>
     );
 }

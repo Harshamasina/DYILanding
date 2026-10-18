@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, memo, useContext, useId, useRef, type ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
     Bell,
@@ -31,30 +31,25 @@ import {
 } from 'lucide-react';
 import { BrowserMockupChrome } from './BrowserMockupChrome';
 import { DATE_ANCHOR, buildDates, useDemoDates, type DemoDates } from '@/lib/office-action-demo-dates';
+import { OfficeActionPlaybackControls, useOfficeActionPlayback } from './OfficeActionPlayback';
+import { OfficeActionFocusScene, type OfficeActionScene } from './OfficeActionFocusScene';
 
 /* ── Animated Office Action workflow (detail page hero) ──
    A simplified copy of the DYIFrontend office action screens, played as one
    matter moving from examiner rejection to a released filing copy:
-     pipeline   (0)      the five analysis stages tick through
-     issueMap   (3000)   issues land with legal basis and confidence tags
-     claimChart (5500)   issue 1 opens to a limitation, quote and source block
-     signModal  (8000)   M. Chen signs the issue map; signed view at 9300
-     strategy   (10500)  response tab, a strategy lands on every issue
-     claims     (13000)  claim 1 (Currently amended), support passage covers it
-     approval   (15700)  checks hold, R. Patel approves, content locks
-     exportCopy (18300)  filing copy made; the attorney files and records it
-     fadeout    (21600)  reset (22300), loop at 22900ms, matching the
-                         AI drafting hero.
+   The walkthrough pauses offscreen, allows direct stage selection, and holds
+   the exported copy at the end. Evidence and amendments get longer reading
+   windows, and the path-to-filing banner advances with every stage.
+   Small screens show focused excerpts of the same matter.
    Two attorneys on purpose: the one who revised the draft cannot approve it.
    Matter, references and people are fictional. Model drafting is gated in
    production, so no model-writing control appears. */
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
-const MOCKUP_HEIGHT = 'h-[520px] sm:h-[620px] lg:h-[700px]';
+const MOCKUP_HEIGHT = 'min-h-[560px] lg:h-[740px]';
 const MATTER = 'OA-DEMO-118';
 
 type Phase =
-    | 'idle'
     | 'pipeline'
     | 'issueMap'
     | 'claimChart'
@@ -62,46 +57,61 @@ type Phase =
     | 'strategy'
     | 'claims'
     | 'approval'
-    | 'exportCopy'
-    | 'fadeout';
+    | 'exportCopy';
 
 interface Frame {
     phase: Phase;
     step: number;
 }
 
-/* [ms, phase, step]. A step is a beat inside a phase. */
+/* [ms, phase, step]. A step is a beat inside a phase. Every view holds for
+   at least 4s after its entrance settles, so each state can be read. */
 const TIMELINE: [number, Phase, number][] = [
+    [0, 'pipeline', 0],
     [700, 'pipeline', 1],
-    [1200, 'pipeline', 2],
-    [1700, 'pipeline', 3],
-    [2300, 'pipeline', 5],
-    [3000, 'issueMap', 0],
-    [5500, 'claimChart', 0],
-    [6400, 'claimChart', 1],
-    [8000, 'signModal', 0],
-    [9300, 'signModal', 1],
-    [10500, 'strategy', 0],
-    [10950, 'strategy', 1],
-    [11450, 'strategy', 2],
-    [11950, 'strategy', 3],
-    [13000, 'claims', 0],
-    [14200, 'claims', 1],
-    [15700, 'approval', 0],
-    [16200, 'approval', 1],
-    [16600, 'approval', 2],
-    [17400, 'approval', 3],
-    [18300, 'exportCopy', 0],
-    [19000, 'exportCopy', 1],
-    [21600, 'fadeout', 0],
-    [22300, 'idle', 0],
+    [1300, 'pipeline', 2],
+    [1900, 'pipeline', 3],
+    [2700, 'pipeline', 5],
+    [3500, 'issueMap', 0],
+    [8500, 'claimChart', 0],
+    [11000, 'claimChart', 1],
+    [16500, 'signModal', 0],
+    [19500, 'signModal', 1],
+    [23000, 'strategy', 0],
+    [24000, 'strategy', 1],
+    [25000, 'strategy', 2],
+    [26000, 'strategy', 3],
+    [28500, 'claims', 0],
+    [31500, 'claims', 1],
+    [36000, 'approval', 0],
+    [37500, 'approval', 1],
+    [39000, 'approval', 2],
+    [42000, 'approval', 3],
+    [45500, 'exportCopy', 0],
+    [47000, 'exportCopy', 1],
 ];
-const T_LOOP = 22900;
-
-/* Reduced motion shows the claim chart: the evidence is the frame that says most. */
-const STATIC_FRAME: Frame = { phase: 'claimChart', step: 1 };
+const DURATION = 53000;
+const CHAPTERS = [
+    { label: 'Issues', at: 0, previewAt: 3500, summary: 'Read the office action once. Keep each rejection connected to the affected claims and cited references.' },
+    { label: 'Evidence', at: 8500, previewAt: 11000, summary: 'Inspect Claim 1 beside Smith’s cited passage. Source matching supports review; counsel evaluates the examiner’s reading.' },
+    { label: 'Sign-off', at: 16500, previewAt: 19500, summary: 'An attorney records the analysis review. The signed issue map becomes the response’s source record.' },
+    { label: 'Draft', at: 23000, previewAt: 31500, summary: 'Counsel chooses a strategy, revises Claim 1, and links the inserted language to the application as filed.' },
+    { label: 'Approval', at: 36000, previewAt: 42000, summary: 'A separate attorney reviews the response. Approval records the signature and locks the approved content.' },
+    { label: 'Export', at: 45500, previewAt: 47000, summary: 'Prepare the approved Word filing copy. The attorney files separately with the USPTO and records the filing.' },
+] as const;
+/* The reduced-motion preview opens on the evidence frame. */
+const STATIC_AT = CHAPTERS[1].previewAt;
 
 const ANALYSIS_PHASES: Phase[] = ['pipeline', 'issueMap', 'claimChart', 'signModal'];
+
+/* Views that swap the whole page body. Issue map and claim chart share one
+   view so the sub-tabs stay put while only the panel underneath changes. */
+function viewFor(phase: Phase) {
+    if (phase === 'pipeline') return 'pipeline';
+    if (phase === 'issueMap' || phase === 'claimChart') return 'map';
+    if (phase === 'signModal') return 'signoff';
+    return 'response';
+}
 
 /* Dates come from the shared demo helper, relative to today. */
 const DatesContext = createContext<DemoDates>(buildDates(DATE_ANCHOR));
@@ -111,88 +121,72 @@ function useDates() {
 }
 
 export function AnimatedOfficeActionWorkflow() {
-    const [frame, setFrame] = useState<Frame>({ phase: 'pipeline', step: 0 });
-    const [reducedMotion, setReducedMotion] = useState(false);
+    const containerRef = useRef<HTMLElement>(null);
+    const playback = useOfficeActionPlayback(containerRef, DURATION, STATIC_AT);
+    const screenId = useId();
     const dates = useDemoDates();
-
-    const runCycle = useCallback(() => {
-        setFrame({ phase: 'pipeline', step: 0 });
-        return TIMELINE.map(([ms, phase, step]) => setTimeout(() => setFrame({ phase, step }), ms));
-    }, []);
-
-    useEffect(() => {
-        const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-        const update = () => setReducedMotion(media.matches);
-        update();
-        media.addEventListener('change', update);
-        return () => media.removeEventListener('change', update);
-    }, []);
-
-    useEffect(() => {
-        if (reducedMotion) {
-            setFrame(STATIC_FRAME);
-            return;
-        }
-        let timers = runCycle();
-        const interval = setInterval(() => {
-            timers.forEach(clearTimeout);
-            timers = runCycle();
-        }, T_LOOP);
-        return () => {
-            timers.forEach(clearTimeout);
-            clearInterval(interval);
-        };
-    }, [runCycle, reducedMotion]);
-
-    const { phase, step } = frame;
-    const hidden = phase === 'fadeout' || phase === 'idle';
-    const inAnalysis = ANALYSIS_PHASES.includes(phase) || phase === 'idle';
-    const approver = phase === 'approval' || phase === 'exportCopy' || phase === 'fadeout';
+    const [, phase, step] = TIMELINE.reduce((current, next) => next[0] <= playback.elapsed ? next : current, TIMELINE[0]);
 
     return (
         <DatesContext.Provider value={dates}>
-        <div
-            aria-hidden="true"
-            role="img"
-            className={`relative flex select-none flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 [font-family:var(--font-dashboard)] ${MOCKUP_HEIGHT}`}
-        >
-            <BrowserMockupChrome url={browserUrl(phase)} />
-            {/* Same app shell as the docketing hero: sidebar column, then top bar over the page. */}
-            <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)] overflow-hidden sm:grid-cols-[170px_minmax(0,1fr)] lg:grid-cols-[190px_minmax(0,1fr)]">
-                <AppSidebar approver={approver} />
-                <div className="flex min-w-0 flex-col overflow-hidden">
-                    <AppTopBar approver={approver} />
-                    <motion.div
-                        className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden bg-[#f4f5f7] p-2 sm:gap-2.5 sm:p-3 lg:p-4"
-                        animate={{ opacity: hidden ? 0 : 1 }}
-                        transition={{ duration: 0.45, ease: EASE }}
-                    >
-                        <MatterHeader />
-                        <MainTabs active={inAnalysis ? 'Analysis' : 'Response'} />
-                        <AnimatePresence mode="wait" initial={false}>
-                            <motion.div
-                                key={inAnalysis ? 'analysis' : 'response'}
-                                className="flex min-h-0 flex-1 flex-col gap-2 sm:gap-2.5"
-                                initial={{ opacity: 0, y: 8 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -6 }}
-                                transition={{ duration: 0.3, ease: EASE }}
-                            >
-                                {inAnalysis ? <AnalysisArea phase={phase} step={step} /> : <ResponseArea phase={phase} step={step} />}
-                            </motion.div>
-                        </AnimatePresence>
-                    </motion.div>
+            <figure ref={containerRef} aria-label="Office action analysis and response walkthrough">
+                <div
+                    id={screenId}
+                    className={`relative flex select-none flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 [font-family:var(--font-dashboard)] ${MOCKUP_HEIGHT}`}
+                >
+                    <BrowserMockupChrome url={browserUrl(phase)} />
+                    <WorkflowScreen phase={phase} step={step} reducedMotion={playback.reducedMotion} />
                 </div>
-            </div>
-
-            <AnimatePresence>
-                {phase === 'signModal' && step === 0 && <SignAnalysisModal />}
-                {phase === 'approval' && step === 2 && <ApproveModal />}
-            </AnimatePresence>
-        </div>
+                <OfficeActionPlaybackControls playback={playback} chapters={CHAPTERS} screenId={screenId} />
+            </figure>
         </DatesContext.Provider>
     );
 }
+
+/* The clock ticks every 100ms but the screen only changes at timeline beats,
+   so the mockup is memoized on its frame and skips the in-between renders. */
+const WorkflowScreen = memo(function WorkflowScreen({ phase, step, reducedMotion }: Frame & { reducedMotion: boolean }) {
+    const inAnalysis = ANALYSIS_PHASES.includes(phase);
+    const approver = phase === 'approval' || phase === 'exportCopy';
+    const scene: OfficeActionScene = phase === 'claimChart' ? 'evidence' : phase === 'signModal' ? 'signed' : phase === 'strategy' ? 'strategy' : phase === 'claims' ? 'amendment' : phase === 'approval' ? 'approval' : phase === 'exportCopy' ? 'export' : 'issues';
+    const resolved = reducedMotion || (phase === 'approval' ? step >= 3 : step >= 1);
+    return (
+        <>
+            <div className={`min-h-[520px] flex-1 ${reducedMotion ? 'flex' : 'flex lg:hidden'}`}>
+                <OfficeActionFocusScene scene={scene} resolved={resolved} reducedMotion={reducedMotion} />
+            </div>
+            {/* Same app shell as the docketing hero: sidebar column, then top bar over the page. */}
+            {!reducedMotion && (
+                <div aria-hidden="true" className="relative hidden min-h-0 flex-1 grid-cols-[150px_minmax(0,1fr)] grid-rows-[minmax(0,1fr)] overflow-hidden lg:grid">
+                    <AppSidebar approver={approver} />
+                    <div className="flex min-w-0 flex-col overflow-hidden">
+                        <AppTopBar approver={approver} />
+                        <div className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-hidden bg-[#f4f5f7] p-4">
+                            <MatterHeader />
+                            <MainTabs active={inAnalysis ? 'Analysis' : 'Response'} />
+                            <AnimatePresence mode="wait" initial={false}>
+                                <motion.div
+                                    key={viewFor(phase)}
+                                    className="flex min-h-0 flex-1 flex-col gap-2.5"
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -6, transition: { duration: 0.18, ease: EASE } }}
+                                    transition={{ duration: 0.32, ease: EASE }}
+                                >
+                                    {inAnalysis ? <AnalysisArea phase={phase} step={step} /> : <ResponseArea phase={phase} step={step} />}
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                    </div>
+                    <AnimatePresence>
+                        {phase === 'signModal' && step === 0 && <SignAnalysisModal key="sign" />}
+                        {phase === 'approval' && step === 2 && <ApproveModal key="approve" />}
+                    </AnimatePresence>
+                </div>
+            )}
+        </>
+    );
+});
 
 function browserUrl(phase: Phase) {
     const base = `app.designyourinvention.com/office-actions/${MATTER}`;
@@ -262,7 +256,7 @@ function AppSidebar({ approver }: { approver: boolean }) {
                     <div key={section} className="mb-3">
                         <p className="mb-1 hidden px-2 text-[9px] font-bold uppercase tracking-wide text-slate-400 sm:block">{section}</p>
                         <div className="space-y-0.5">
-                            {items.map(item => (
+                            {items.filter(item => ['Dashboard', 'Families', 'Office Actions', 'Documents', 'Audit Log', 'Settings'].includes(item.label)).map(item => (
                                 <div
                                     key={item.label}
                                     className={`flex items-center justify-center gap-2 rounded-lg px-2 py-2 text-[11px] font-semibold sm:justify-start ${item.active ? 'bg-primary/10 text-primary' : 'text-slate-600'}`}
@@ -300,7 +294,7 @@ function AppTopBar({ approver }: { approver: boolean }) {
                 </div>
                 <div className="hidden h-9 w-full max-w-[420px] items-center gap-2 rounded-lg border border-card-border bg-white px-3 text-[11px] text-slate-400 sm:flex">
                     <Search className="h-4 w-4 shrink-0 text-slate-500" />
-                    <span className="truncate">Search families, PRV, PCT, NPE, UUID</span>
+                    <span className="truncate">Search this matter’s prosecution record</span>
                 </div>
             </div>
             <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
@@ -397,7 +391,7 @@ function SubTabs({ tabs, active }: { tabs: string[]; active: string }) {
 const ANALYSIS_SUBTABS = ['Issue map', 'Warnings (2)', 'References', 'Review', 'Sign-off', 'Exports', 'Source documents', 'Runs'];
 
 function AnalysisArea({ phase, step }: Frame) {
-    if (phase === 'pipeline' || phase === 'idle') return <PipelineCard step={phase === 'idle' ? 0 : step} />;
+    if (phase === 'pipeline') return <PipelineCard step={step} />;
     if (phase === 'signModal') {
         return (
             <>
@@ -411,7 +405,18 @@ function AnalysisArea({ phase, step }: Frame) {
         <>
             <SubTabs tabs={ANALYSIS_SUBTABS} active="Issue map" />
             <p className="shrink-0 text-[9px] text-slate-500 sm:text-[10px]">AI-assisted analysis. Draft for attorney review. · 3 issues, 0 corrected, 0 added by a person</p>
-            {phase === 'issueMap' ? <IssueList /> : <ClaimChartView highlight={step === 1} />}
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                    key={phase}
+                    className="flex min-h-0 flex-1 flex-col"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                    transition={{ duration: 0.3, ease: EASE }}
+                >
+                    {phase === 'issueMap' ? <IssueList /> : <ClaimChartView highlight={step === 1} />}
+                </motion.div>
+            </AnimatePresence>
         </>
     );
 }
@@ -545,63 +550,28 @@ function IssueList() {
 
 const LIMITATIONS = [
     { label: '[1a]', text: 'a temperature sensor', coverage: 'Fully disclosed', ref: 'SMITH' },
-    { label: '[1b]', text: 'a controller configured to adjust a sampling interval in response to a detected change in temperature', coverage: 'Fully disclosed', ref: 'SMITH' },
+    { label: '[1b]', text: 'a controller configured to adjust a sampling interval periodically', coverage: 'Fully disclosed', ref: 'SMITH' },
     { label: '[1c]', text: 'a stored calibration profile', coverage: 'Partly disclosed', ref: 'JONES' },
 ];
 
 function ClaimChartView({ highlight }: { highlight: boolean }) {
     return (
-        <div className="grid min-h-0 flex-1 gap-2.5 lg:grid-cols-[minmax(0,1fr)_260px]">
-            <div className="min-h-0 overflow-hidden rounded-lg border border-card-border bg-white p-3 shadow-sm">
-                <IssueRow index={0} open />
-                <div className="mt-2 pl-5">
-                    <p className="text-[9px] leading-relaxed text-slate-600 sm:text-[10px]">
-                        Claims 1-3 are rejected under 35 U.S.C. 103 as unpatentable over Smith in view of Jones. The examiner relies on Smith for the sensor and controller, and on Jones for the stored calibration profile.
-                    </p>
-                    <p className="mt-1.5 flex flex-wrap items-center gap-1 text-[9px] text-slate-500">References: <Tag>SMITH</Tag><Tag>JONES</Tag></p>
-                    <div className="mt-2 rounded-md border border-card-border">
-                        <div className="flex flex-wrap items-center gap-1.5 border-b border-card-border px-2.5 py-1.5">
-                            <ChevronDown className="h-3 w-3 text-slate-500" />
-                            <span className="text-[10px] font-semibold text-text-primary">Claim 1</span>
-                            <span className="text-[9px] text-slate-400">3 limitations</span>
-                            <Tag>Rejected</Tag>
-                            <Tag>Not reviewed</Tag>
-                        </div>
-                        {LIMITATIONS.map((lim, i) => (
-                            <div key={lim.label} className="border-b border-card-border/70 px-2.5 py-1.5 last:border-0">
-                                <div className="flex flex-wrap items-center gap-1.5">
-                                    {i === 1 ? <ChevronDown className="h-3 w-3 text-slate-500" /> : <ChevronRight className="h-3 w-3 text-slate-500" />}
-                                    <span className="text-[10px] font-bold text-text-primary">{lim.label}</span>
-                                    <Tag tone={lim.coverage === 'Fully disclosed' ? 'red' : 'orange'}>{lim.coverage}</Tag>
-                                    <span className="text-[9px] text-slate-600">{lim.ref}</span>
-                                </div>
-                                {i === 1 && (
-                                    <div className="mt-2 pl-4">
-                                        <div className="grid gap-2 sm:grid-cols-2">
-                                            <div>
-                                                <p className="text-[9px] font-bold text-text-primary">Limitation</p>
-                                                <p className="mt-0.5 text-[9px] leading-relaxed text-slate-600">{lim.label} {lim.text}</p>
-                                            </div>
-                                            <div className="hidden sm:block">
-                                                <p className="text-[9px] font-bold text-text-primary">Examiner&apos;s reading</p>
-                                                <p className="mt-0.5 text-[9px] leading-relaxed text-slate-600">The examiner reads the controller onto Smith&apos;s processing unit, which shortens the sampling interval when the measured temperature changes.</p>
-                                            </div>
-                                        </div>
-                                        <p className="mt-2 text-[9px] font-bold text-text-primary">Support</p>
-                                        <figure className={`mt-1 rounded-r-md border-l-4 px-2.5 py-1.5 transition-all duration-500 ${highlight ? 'border-primary bg-primary/5 ring-1 ring-primary/30' : 'border-slate-300 bg-slate-50'}`}>
-                                            <blockquote className="text-[9px] leading-relaxed text-text-primary">&ldquo;The processing unit adjusts the sampling interval based on a change in the measured temperature.&rdquo;</blockquote>
-                                            <figcaption className="mt-1 flex flex-wrap items-center gap-1.5 text-[8px] text-slate-500">
-                                                <span>[0031]</span><span>SMITH</span><Tag>Express</Tag>
-                                                <span className="underline decoration-dotted">Source verification required.</span>
-                                                <span className="text-primary">Show in source</span>
-                                            </figcaption>
-                                        </figure>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+        <div className="grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.8fr)]">
+            <div className="min-h-0 overflow-hidden rounded-lg border border-card-border bg-white p-4 shadow-sm">
+                <p className="text-sm font-semibold text-text-primary">Obviousness · Claim 1</p>
+                <p className="mt-2 text-xs leading-relaxed text-text-secondary">Smith and Jones · The examiner’s mapping remains subject to attorney review.</p>
+                <div className="mt-4 divide-y divide-card-border rounded-lg border border-card-border">
+                    {LIMITATIONS.map((lim, i) => <div key={lim.label} className={`p-3 transition-colors duration-500 ${i === 1 && highlight ? 'bg-primary/5 shadow-[inset_2px_0_0_var(--color-primary)]' : ''}`}>
+                        <div className="flex items-center justify-between gap-3"><span className="text-xs font-semibold text-primary">{lim.label} · {lim.ref}</span><span className="text-xs text-text-secondary">{lim.coverage}</span></div>
+                        <p className="mt-2 text-sm leading-relaxed text-text-primary">{lim.text}</p>
+                    </div>)}
                 </div>
+                <AnimatePresence mode="wait" initial={false}>
+                    <motion.p key={highlight ? 'matched' : 'compare'} className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-text-secondary" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+                        {highlight ? <CircleCheck className="h-4 w-4 shrink-0 text-emerald-600" /> : <Clock3 className="h-4 w-4 shrink-0 text-slate-400" />}
+                        {highlight ? 'Quotation matched to the cited source. Counsel decides how to address the issue.' : 'Matching [1b] against the cited passage in Smith.'}
+                    </motion.p>
+                </AnimatePresence>
             </div>
             <SourcePane highlight={highlight} />
         </div>
@@ -611,29 +581,18 @@ function ClaimChartView({ highlight }: { highlight: boolean }) {
 const SOURCE_BLOCKS = [
     { block: 'Block 12', para: '[0029]', text: 'The sensor housing encloses a thermistor coupled to the measurement circuit.' },
     { block: 'Block 13', para: '[0030]', text: 'Readings are buffered before the processing unit evaluates them.' },
-    { block: 'Block 14', para: '[0031]', text: 'The processing unit adjusts the sampling interval based on a change in the measured temperature.' },
+    { block: 'Block 14', para: '[0031]', text: 'The processing unit adjusts the sampling interval periodically.' },
 ];
 
 function SourcePane({ highlight }: { highlight: boolean }) {
     return (
-        <aside className="hidden min-h-0 flex-col overflow-hidden rounded-lg border border-card-border bg-white shadow-sm lg:flex">
-            <div className="flex items-center justify-between border-b border-card-border px-3 py-2">
-                <span className="text-[10px] font-semibold text-text-primary">Source</span>
-                <span className="text-[9px] text-slate-500">Close source</span>
-            </div>
-            <div className="flex flex-col gap-2 p-2.5">
-                <span className="flex items-center justify-between rounded-md border border-primary/40 px-2 py-1 text-[9px] text-text-primary">
-                    Cited reference: SMITH <ChevronDown className="h-3 w-3 text-slate-400" />
-                </span>
-                {SOURCE_BLOCKS.map(b => {
-                    const lit = highlight && b.para === '[0031]';
-                    return (
-                        <div key={b.block} className={`rounded-md border p-2 transition-all duration-500 ${lit ? 'border-primary bg-primary/5 ring-1 ring-primary/30' : 'border-card-border'}`}>
-                            <p className="text-[9px] font-semibold text-text-primary">{b.block} <span className="font-normal text-slate-400 [font-family:var(--font-dashboard-mono)]">{b.para}</span></p>
-                            <p className="mt-1 text-[9px] leading-relaxed text-slate-600">{b.text}</p>
-                        </div>
-                    );
-                })}
+        <aside className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-card-border bg-white shadow-sm">
+            <div className="border-b border-card-border px-4 py-3"><p className="text-sm font-semibold text-text-primary">Cited reference · Smith</p><p className="mt-1 text-xs text-text-secondary">Pinpoint passages from the source document</p></div>
+            <div className="space-y-3 p-4">
+                {SOURCE_BLOCKS.map((block, i) => <div key={block.para} className={`rounded-lg border p-3 transition-colors duration-500 ${i === 2 && highlight ? 'border-primary bg-primary/5' : 'border-card-border'}`}>
+                    <p className="text-xs font-semibold text-primary">¶ {block.para}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-text-primary">{block.text}</p>
+                </div>)}
             </div>
         </aside>
     );
@@ -799,12 +758,13 @@ const PATH_NOW: Record<number, { sentence: string; detail: string; actor?: strin
     3: { sentence: 'Choose a strategy for each issue (3 issues).', detail: 'For each issue, choose how the reply answers it and say why. The sections and arguments follow the strategy.', button: 'Open sections' },
     6: { sentence: 'Cite the support for the amended claims (1 claim).', detail: 'Cite where the application as filed shows each amended claim.', button: 'Open passages' },
     11: { sentence: 'Approve the response.', detail: 'A second attorney, not the last person to revise the draft, signs the approval and confirms their identity in the dialog.', actor: 'A second attorney approves this draft.', button: 'Open approval' },
+    12: { sentence: 'Make the filing copy from the approved draft.', detail: 'The filing copy carries no watermark or notes and matches the approved content.', button: 'Open documents' },
     13: { sentence: 'File the paper with the Office, then record the filing here.', detail: 'File the paper with the Office outside the product, then record the date it was filed here.', button: 'Open filings' },
 };
 
 function ResponseArea({ phase, step }: Frame) {
-    const pathStep = phase === 'strategy' ? 3 : phase === 'claims' ? 6 : phase === 'approval' ? 11 : 13;
-    const status = phase === 'approval' ? (step >= 3 ? 'approved' : 'review') : phase === 'exportCopy' || phase === 'fadeout' ? 'approved' : 'drafting';
+    const pathStep = phase === 'strategy' ? 3 : phase === 'claims' ? 6 : phase === 'approval' ? (step >= 3 ? 12 : 11) : step >= 1 ? 13 : 12;
+    const status = phase === 'approval' ? (step >= 3 ? 'approved' : 'review') : phase === 'exportCopy' ? 'approved' : 'drafting';
     const subtab = phase === 'strategy' ? 'Sections' : phase === 'claims' ? 'Claims' : phase === 'approval' ? 'Approval' : 'Documents';
     return (
         <>
@@ -813,7 +773,7 @@ function ResponseArea({ phase, step }: Frame) {
             <SubTabs tabs={RESPONSE_SUBTABS} active={subtab} />
             <AnimatePresence mode="popLayout" initial={false}>
                 <motion.div
-                    key={phase === 'fadeout' ? 'exportCopy' : phase}
+                    key={phase}
                     className="flex min-h-0 flex-1 flex-col"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -823,7 +783,7 @@ function ResponseArea({ phase, step }: Frame) {
                     {phase === 'strategy' && <StrategyView step={step} />}
                     {phase === 'claims' && <ClaimsView covered={step >= 1} />}
                     {phase === 'approval' && <ApprovalView step={step} />}
-                    {(phase === 'exportCopy' || phase === 'fadeout') && <DocumentsView released={phase === 'fadeout' || step >= 1} />}
+                    {phase === 'exportCopy' && <DocumentsView released={step >= 1} />}
                 </motion.div>
             </AnimatePresence>
         </>
@@ -837,11 +797,13 @@ function DraftBar({ status }: { status: 'drafting' | 'review' | 'approved' }) {
             <div className="flex min-w-0 items-center gap-2">
                 <Tag tone={status === 'approved' ? 'green' : 'blue'}>{label}</Tag>
                 <span className="text-[10px] font-semibold text-text-primary sm:text-[11px]">Reply under 37 CFR 1.111</span>
-                <span className="hidden text-[9px] text-slate-400 md:inline">{status === 'approved' ? 'Approved by R. Patel' : 'Revised by M. Chen'}</span>
+                <span className="hidden text-[9px] text-slate-400 md:inline">{status === 'approved' ? 'Approved by R. Patel' : status === 'review' ? 'Submitted by M. Chen' : 'Revised by M. Chen'}</span>
             </div>
             <div className="flex items-center gap-1.5">
                 {status === 'approved' ? (
                     <span className="inline-flex items-center gap-1 text-[9px] text-slate-500"><LockKeyhole className="h-3 w-3" />Approved content locked</span>
+                ) : status === 'review' ? (
+                    <span className="inline-flex items-center gap-1 text-[9px] text-slate-500"><Clock3 className="h-3 w-3" />Awaiting a second attorney</span>
                 ) : (
                     <>
                         <span className="hidden items-center gap-1 rounded-md border border-card-border bg-slate-50 px-2 py-1 text-[9px] text-slate-400 sm:inline-flex"><ShieldCheck className="h-3 w-3" />Approve response</span>
@@ -855,39 +817,17 @@ function DraftBar({ status }: { status: 'drafting' | 'review' | 'approved' }) {
 
 function PathToFiling({ current }: { current: number }) {
     const now = PATH_NOW[current];
-    const next = PATH_STEPS.slice(current, current + 4);
-    const after = PATH_STEPS.slice(current, current + 3).map(([, lower]) => lower);
     return (
-        <section className="shrink-0 rounded-lg border border-card-border bg-white px-3 py-2.5 shadow-sm">
-            <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold text-text-primary sm:text-[11px]">Path to filing</span>
-                <span className="text-[9px] text-slate-400">Step {current} of 14</span>
-            </div>
-            <ol className="mt-2 hidden items-start gap-3 md:flex">
-                <li className="flex items-start gap-1.5">
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-primary text-primary"><Check className="h-2.5 w-2.5" /></span>
-                    <span className="text-[9px] text-text-primary">{current - 1} steps done</span>
-                </li>
-                <li className="flex items-start gap-1.5">
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[8px] font-semibold text-white">{current}</span>
-                    <span className="text-[9px] font-semibold text-text-primary">{PATH_STEPS[current - 1][0]}<span className="block font-normal text-slate-400">Now</span></span>
-                </li>
-                {next.map(([label], i) => (
-                    <li key={label} className={`items-start gap-1.5 ${i > 1 ? 'hidden xl:flex' : 'flex'}`}>
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-slate-100 text-[8px] text-slate-500">{current + i + 1}</span>
-                        <span className="text-[9px] text-slate-500">{label}</span>
-                    </li>
-                ))}
-            </ol>
-            <div className="mt-2 flex items-center justify-between gap-3 border-t border-card-border pt-2">
-                <div className="min-w-0">
-                    <p className="flex items-center gap-1.5 text-[9px] font-semibold text-text-primary sm:text-[10px]"><Tag tone="blue">Now</Tag><span className="truncate">{now.sentence}</span></p>
-                    {/* The detail sentence only where it carries the story: the second-attorney rule. */}
-                    {now.actor && <p className="mt-1 hidden text-[9px] text-slate-500 sm:block">{now.detail}</p>}
-                    {now.actor && <p className="mt-0.5 hidden text-[9px] text-amber-600 sm:block">{now.actor}</p>}
-                    {after.length > 0 && <p className="mt-0.5 hidden text-[8px] text-slate-400 lg:block">After this: {after.join(', ')}.</p>}
-                </div>
-                {now.button && <span className="hidden shrink-0 rounded-md bg-primary px-2.5 py-1.5 text-[9px] font-semibold text-white sm:inline">{now.button}</span>}
+        <section className="flex shrink-0 items-center gap-4 rounded-lg border border-card-border bg-white px-4 py-3 shadow-sm">
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.div key={current} className="flex min-w-0 items-start gap-4" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.22, ease: EASE }}>
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">{current}</span>
+                    <div className="min-w-0"><p className="text-xs font-semibold text-text-primary">{now.sentence}</p><p className="mt-1 text-xs text-text-secondary">{now.actor || `Path to filing · Step ${current} of 14 · ${PATH_STEPS[current - 1][0]}`}</p></div>
+                </motion.div>
+            </AnimatePresence>
+            {/* 14-step path at a glance: done, current, ahead. */}
+            <div className="ml-auto hidden shrink-0 items-center gap-0.5 xl:flex">
+                {PATH_STEPS.map(([label], i) => <span key={label} className={`h-1 w-2.5 rounded-full transition-colors duration-500 ${i + 1 < current ? 'bg-primary' : i + 1 === current ? 'bg-primary/40' : 'bg-slate-200'}`} />)}
             </div>
         </section>
     );
@@ -965,33 +905,33 @@ function ClaimsView({ covered }: { covered: boolean }) {
         <div className="grid min-h-0 flex-1 gap-2.5 lg:grid-cols-2">
             <section className="min-h-0 overflow-hidden rounded-lg border border-card-border bg-white shadow-sm">
                 <div className="flex items-center justify-between border-b border-card-border px-3 py-2">
-                    <p className="text-[11px] font-bold text-text-primary">1. (Currently amended)</p>
-                    <span className="text-[9px] text-primary">Edit claim</span>
+                    <p className="text-sm font-bold text-text-primary">1. (Currently amended)</p>
+                    <span className="text-xs text-primary">Edit claim</span>
                 </div>
                 <div className="p-3">
                     <div className="flex gap-1"><Tag tone="blue">Amended</Tag></div>
-                    <p className="mt-2 text-[9px] font-semibold text-text-primary">Claim text and listing markings</p>
-                    <p className="mt-1 text-[10px] leading-relaxed text-text-primary">
+                    <p className="mt-2 text-xs font-semibold text-text-primary">Claim text and listing markings</p>
+                    <p className="mt-1 text-sm leading-relaxed text-text-primary">
                         A sensor system comprising: a temperature sensor; a controller configured to adjust a sampling interval <del>periodically</del>{' '}
-                        <motion.ins initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.3 }}>in response to a detected change in temperature</motion.ins>; and a stored calibration profile.
+                        <motion.ins className="bg-primary/10 text-primary underline-offset-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.3 }}>in response to a detected change in temperature</motion.ins>; and a stored calibration profile.
                     </p>
                     <div className="mt-3 rounded-md border border-card-border bg-slate-50 p-2">
-                        <p className="text-[9px] font-semibold text-text-primary">Dependency and structure</p>
-                        <p className="mt-0.5 text-[9px] text-slate-500">Not multiple dependent · Read from the claim text</p>
+                        <p className="text-xs font-semibold text-text-primary">Dependency and structure</p>
+                        <p className="mt-0.5 text-xs text-slate-500">Not multiple dependent · Read from the claim text</p>
                     </div>
                     <div className="mt-2 rounded-md border border-card-border bg-slate-50 p-2">
-                        <p className="text-[9px] font-semibold text-text-primary">Examined starting point</p>
-                        <p className="mt-0.5 flex items-center gap-1 text-[9px] text-slate-500"><Tag>Original</Tag><Tag>From the USPTO record</Tag></p>
+                        <p className="text-xs font-semibold text-text-primary">Examined starting point</p>
+                        <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500"><Tag>Original</Tag><Tag>From the USPTO record</Tag></p>
                     </div>
                 </div>
             </section>
             <section className="hidden min-h-0 overflow-hidden rounded-lg border border-card-border bg-white shadow-sm sm:block">
                 <div className="border-b border-card-border px-3 py-2">
-                    <p className="text-[11px] font-bold text-text-primary">1. (Currently amended) passages</p>
+                    <p className="text-sm font-bold text-text-primary">1. (Currently amended) passages</p>
                 </div>
                 <div className="p-3">
                     <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="text-[10px] font-semibold text-text-primary">Inserted words</span>
+                        <span className="text-sm font-semibold text-text-primary">Inserted words</span>
                         <Tag tone="blue">Required</Tag>
                         <AnimatePresence mode="wait" initial={false}>
                             <motion.span key={covered ? 'ok' : 'need'} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
@@ -999,19 +939,19 @@ function ClaimsView({ covered }: { covered: boolean }) {
                             </motion.span>
                         </AnimatePresence>
                     </div>
-                    <p className="mt-1 text-[9px] text-slate-500">in response to a detected change in temperature</p>
+                    <p className="mt-1 text-xs text-slate-500">in response to a detected change in temperature</p>
                     <motion.div
                         className="mt-2.5 rounded-md border border-card-border p-2.5"
                         initial={false}
                         animate={{ opacity: covered ? 1 : 0.35, y: covered ? 0 : 6 }}
                         transition={{ duration: 0.35, ease: EASE }}
                     >
-                        <p className="flex flex-wrap items-center gap-1.5 text-[10px] font-semibold text-text-primary">Specification, page 16 <Tag>Cited for &ldquo;change in temperature&rdquo;</Tag></p>
-                        <p className="mt-1 text-[9px] leading-relaxed text-slate-600">[0032] The controller varies the sampling interval when the temperature changes.</p>
-                        <p className="mt-1 text-[9px] text-primary">Read passage in source</p>
+                        <p className="flex flex-wrap items-center gap-1.5 text-sm font-semibold text-text-primary">Specification, page 16 <Tag>Cited for &ldquo;change in temperature&rdquo;</Tag></p>
+                        <p className="mt-1 text-xs leading-relaxed text-slate-600">[0032] The controller varies the sampling interval when the temperature changes.</p>
+                        <p className="mt-1 text-xs text-primary">Read passage in source</p>
                     </motion.div>
-                    <p className="mt-2 text-[9px] text-slate-500">{covered ? 'Cites 1 passage.' : 'Cites nothing yet'}</p>
-                    <p className="mt-2 text-[8px] leading-relaxed text-slate-400">Cite where the application as filed shows this claim as amended. One passage is often enough, such as the claim as filed or a paragraph.</p>
+                    <p className="mt-2 text-xs text-slate-500">{covered ? 'Cites 1 passage.' : 'Cites nothing yet'}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-400">Cite where the application as filed shows this claim as amended. One passage is often enough, such as the claim as filed or a paragraph.</p>
                 </div>
             </section>
         </div>
@@ -1057,14 +997,16 @@ function ApprovalView({ step }: { step: number }) {
                         <span className={`inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-[9px] font-semibold ${ready ? 'bg-primary text-white' : 'border border-card-border bg-white text-slate-400'}`}><ShieldCheck className="h-3 w-3" />Approve response</span>
                     </div>
                 )}
-                {!ready && (
-                    <>
-                        <p className="mt-3 text-[10px] font-semibold text-text-primary">Needs attention (2)</p>
-                        {ATTENTION.map(item => <CheckLine key={item} label={item} ok={false} />)}
-                    </>
-                )}
-                <p className="mt-3 text-[10px] font-semibold text-text-primary">Holding ({ready ? 14 : 12})</p>
-                {(ready ? [...ATTENTION, ...HOLDING] : HOLDING).slice(0, 6).map(item => <CheckLine key={item} label={item} ok />)}
+                <AnimatePresence initial={false}>
+                    {!ready && (
+                        <motion.div className="overflow-hidden" exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.35, ease: EASE }}>
+                            <p className="mt-3 text-[10px] font-semibold text-text-primary">Needs attention (2)</p>
+                            {ATTENTION.map(item => <CheckLine key={item} label={item} ok={false} />)}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+                <p className="mt-3 text-xs font-semibold text-text-primary">Holding ({ready ? 14 : 12})</p>
+                <div className="grid grid-cols-2 gap-x-6">{(ready ? [...ATTENTION, ...HOLDING] : HOLDING).slice(0, 6).map(item => <CheckLine key={item} label={item} ok />)}</div>
             </div>
         </section>
     );

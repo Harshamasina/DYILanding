@@ -5,6 +5,7 @@ import {
     Search,
     FileText,
     FolderClock,
+    FileCheck2,
     ArrowRight,
 } from 'lucide-react';
 import { FadeIn } from '@/components/motion/FadeIn';
@@ -30,24 +31,32 @@ const CHAPTERS: Chapter[] = [
         title: 'Patent Docketing',
         description:
             'Track every filing, fee, and deadline on one audit-trailed timeline.',
-        start: 34,
-        time: '00:34',
+        start: 28,
+        time: '00:28',
     },
     {
         icon: Search,
         title: 'Prior Art Search',
         description:
             'Search 100+ jurisdictions and save references to a patent family.',
-        start: 56,
-        time: '00:56',
+        start: 50,
+        time: '00:50',
     },
     {
         icon: FileText,
         title: 'AI Drafting',
         description:
             'Turn selected prior art into a structured first draft for attorney review.',
-        start: 72,
-        time: '01:12',
+        start: 68,
+        time: '01:08',
+    },
+    {
+        icon: FileCheck2,
+        title: 'Office Actions',
+        description:
+            'Map every USPTO rejection to your claims, sign the analysis, and approve the response with a second attorney.',
+        start: 99,
+        time: '01:39',
     },
 ];
 
@@ -142,15 +151,15 @@ export function DemoVideoShowcase() {
                             >
                                 {/* 16:9 poster body */}
                                 <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                                    {/* Placeholder frame. Swap /video_placeholder.jpg
-                                        for a captured frame of the real demo when
-                                        it lands. */}
+                                    {/* Poster: the film's title card (/thumb-film.jpg),
+                                        the same image the player shows while the
+                                        video loads. */}
                                     <div
                                         aria-hidden="true"
                                         className="absolute inset-0"
                                         style={{
                                             backgroundImage:
-                                                'url(/video_placeholder.jpg)',
+                                                'url(/thumb-film.jpg)',
                                             backgroundSize: 'cover',
                                             backgroundPosition: 'center',
                                         }}
@@ -185,7 +194,7 @@ export function DemoVideoShowcase() {
                                         style={{ fontFamily: 'var(--font-mono)' }}
                                     >
                                         <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                                        02:24
+                                        02:35
                                     </span>
                                 </div>
                             </button>
