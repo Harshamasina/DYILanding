@@ -251,15 +251,15 @@ function AppSidebar({ approver }: { approver: boolean }) {
                 </div>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-hidden px-1 py-2 sm:px-2">
+            <div className="min-h-0 flex-1 overflow-hidden px-1 py-1.5 sm:px-2">
                 {NAV_SECTIONS.map(([section, items]) => (
-                    <div key={section} className="mb-3">
-                        <p className="mb-1 hidden px-2 text-[9px] font-bold uppercase tracking-wide text-slate-400 sm:block">{section}</p>
+                    <div key={section} className="mb-1.5">
+                        <p className="mb-0.5 hidden px-2 text-[9px] font-bold uppercase tracking-wide text-slate-400 sm:block">{section}</p>
                         <div className="space-y-0.5">
-                            {items.filter(item => ['Dashboard', 'Families', 'Office Actions', 'Documents', 'Audit Log', 'Settings'].includes(item.label)).map(item => (
+                            {items.map(item => (
                                 <div
                                     key={item.label}
-                                    className={`flex items-center justify-center gap-2 rounded-lg px-2 py-2 text-[11px] font-semibold sm:justify-start ${item.active ? 'bg-primary/10 text-primary' : 'text-slate-600'}`}
+                                    className={`flex items-center justify-center gap-2 rounded-lg px-2 py-[5px] text-[11px] font-semibold sm:justify-start ${item.active ? 'bg-primary/10 text-primary' : 'text-slate-600'}`}
                                 >
                                     <span className={item.active ? 'text-primary' : 'text-slate-500'}>{item.icon}</span>
                                     <span className="hidden truncate sm:inline">{item.label}</span>

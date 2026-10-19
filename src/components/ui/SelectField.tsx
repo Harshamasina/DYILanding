@@ -51,7 +51,7 @@ interface SelectFieldProps {
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 
 /** Tallest the panel grows before its list scrolls. */
-const PANEL_MAX_PX = 240;
+const PANEL_MAX_PX = 280;
 /** Gap between trigger and panel, and the minimum margin to the viewport edge. */
 const PANEL_GAP_PX = 8;
 const VIEWPORT_MARGIN_PX = 12;
