@@ -57,7 +57,9 @@ export function ComplianceSection() {
             id="compliance"
             className="relative overflow-hidden py-24 lg:py-32 bg-page-bg-alt"
         >
-            {/* Pure indigo aurora — same palette as hero/CTA. Two
+            {/* Amber aurora: this is the site's compliance section, and amber
+                is the compliance accent (globals.css). Warm hues read stronger
+                than indigo, so watch the alpha if this is tuned. Two
                 positions because the layout stacks on mobile vs side-by-
                 side on desktop:
                   - Mobile/tablet: centered horizontally, positioned in
@@ -75,7 +77,7 @@ export function ComplianceSection() {
                     className="lg:hidden absolute top-[68%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-110 w-150 sm:h-130 sm:w-180"
                     style={{
                         background:
-                            'radial-gradient(ellipse at center, rgba(99,102,241,0.20) 0%, rgba(129,140,248,0.10) 35%, transparent 65%)',
+                            'radial-gradient(ellipse at center, rgba(217,119,6,0.24) 0%, rgba(245,158,11,0.12) 35%, transparent 65%)',
                         filter: 'blur(60px)',
                     }}
                 />
@@ -84,7 +86,7 @@ export function ComplianceSection() {
                     className="hidden lg:block absolute top-1/2 -right-[8%] -translate-y-1/2 lg:h-160 lg:w-220"
                     style={{
                         background:
-                            'radial-gradient(ellipse at center, rgba(99,102,241,0.20) 0%, rgba(129,140,248,0.10) 35%, transparent 65%)',
+                            'radial-gradient(ellipse at center, rgba(217,119,6,0.24) 0%, rgba(245,158,11,0.12) 35%, transparent 65%)',
                         filter: 'blur(60px)',
                     }}
                 />
@@ -173,8 +175,8 @@ export function ComplianceSection() {
 function ComplianceCard({ icon: Icon, title, description }: { icon: React.ElementType; title: string; description: string }) {
     return (
         <article className="group flex gap-4 items-start p-4 rounded-xl border border-transparent transition-all duration-200 hover:border-card-border hover:bg-card-bg hover:shadow-md hover:shadow-black/3">
-            <div className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(99,102,241,0.08)] mt-0.5">
-                <Icon className="w-5 h-5 text-primary" />
+            <div className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg border border-amber-100/80 bg-linear-to-br from-amber-50 via-white to-amber-50/40 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(217,119,6,0.08)] mt-0.5">
+                <Icon className="w-5 h-5 text-compliance" />
             </div>
             <div className="min-w-0">
                 <h3
