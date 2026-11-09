@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import type { ElementType, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Check, ChevronDown, FileCheck2, FileSearch, Fingerprint, GitCompare, ListChecks, LockKeyhole, PenLine, Play, Quote, ScrollText, SlidersHorizontal, TriangleAlert } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, FileCheck2, Fingerprint, Play, SlidersHorizontal } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -10,6 +10,8 @@ import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { OfficeActionHeroSvg } from '@/components/illustrations/OfficeActionHeroSvg';
 import { OfficeActionApprovalPreview, OfficeActionEvidenceTrace, OfficeActionResponsePreview } from '@/components/illustrations/OfficeActionPreviews';
@@ -61,10 +63,10 @@ const FAQ: FaqItem[] = [
 ];
 
 const INTAKE = [
-    { icon: FileSearch, title: 'Import by number', text: 'Bring in a US application by application, patent, or publication number, or upload the papers directly.' },
-    { icon: ListChecks, title: 'The examined claims as baseline', text: 'The claim set the examiner acted on anchors the chart and, later, the claim listing.' },
-    { icon: Quote, title: 'References fetched where available', text: 'EP and WO text through EPO OPS, US publications through USPTO Open Data. Granted US patents and NPL are uploaded.' },
-    { icon: TriangleAlert, title: 'Gaps flagged, never guessed', text: 'An ambiguous claim set waits for your confirmation, and missing or unreadable pages are flagged.' },
+    { title: 'Import by number', text: 'Bring in a US application by application, patent, or publication number, or upload the papers directly.' },
+    { title: 'The examined claims as baseline', text: 'The claim set the examiner acted on anchors the chart and, later, the claim listing.' },
+    { title: 'References fetched where available', text: 'EP and WO text through EPO OPS, US publications through USPTO Open Data. Granted US patents and NPL are uploaded.' },
+    { title: 'Gaps flagged, never guessed', text: 'An ambiguous claim set waits for your confirmation, and missing or unreadable pages are flagged.' },
 ];
 /* Claim parsing facts follow DYIBackend docs/features/CLAIM_PARSER.md. */
 const CHART_RULES = [
@@ -95,14 +97,14 @@ const ANALYSIS_BENEFITS = [
     { title: 'Your judgment on the record', text: 'Correct readings, resolve warnings, and sign the analysis before starting the response.' },
 ];
 const REVIEW_STEPS = [
-    { icon: FileCheck2, title: 'Review the response', text: 'Resolve open issues, check citations, and confirm the support for amended claims.' },
-    { icon: Fingerprint, title: 'Record attorney approval', text: 'A second attorney approves the response with an electronic signature, locking the content.' },
-    { icon: ScrollText, title: 'Export the approved copy', text: 'Download a Word document. The attorney handles filing and records what was submitted.' },
+    { title: 'Review the response', text: 'Resolve open issues, check citations, and confirm the support for amended claims.' },
+    { title: 'Record attorney approval', text: 'A second attorney approves the response with an electronic signature, locking the content.' },
+    { title: 'Export the approved copy', text: 'Download a Word document. The attorney handles filing and records what was submitted.' },
 ];
 const GOVERNANCE = [
-    { icon: LockKeyhole, title: 'Matter access', text: 'Tenant isolation and optional matter walls keep sensitive work within the authorized team.' },
-    { icon: SlidersHorizontal, title: 'AI policy', text: 'Restrict providers, require a region and retention level, and block AI for individual matters. Monthly AI usage is capped per workspace.' },
-    { icon: Fingerprint, title: 'Audit history', text: 'Keep corrections, decisions, and signatures on the record, with the person and reason behind each act.' },
+    { title: 'Matter access', text: 'Tenant isolation and optional matter walls keep sensitive work within the authorized team.' },
+    { title: 'AI policy', text: 'Restrict providers, require a region and retention level, and block AI for individual matters. Monthly AI usage is capped per workspace.' },
+    { title: 'Audit history', text: 'Keep corrections, decisions, and signatures on the record, with the person and reason behind each act.' },
 ];
 
 export default function OfficeActionsPage() {
@@ -120,8 +122,8 @@ export default function OfficeActionsPage() {
                     </nav>
                     <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:gap-8 xl:gap-12">
                         <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
-                            <Eyebrow>Office Action Analysis and Response</Eyebrow>
-                            <h1 className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]">
+                            <SectionMark numbered={false}>Office Action Analysis and Response</SectionMark>
+                            <h1 className="mt-5 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]">
                                 Office Action Analysis With <span className="text-primary italic">Response Drafting Built In</span>
                             </h1>
                             <p className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg">
@@ -164,10 +166,10 @@ export default function OfficeActionsPage() {
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><ProsecutionRecordVisual /></div></FadeIn>
                     <div className="mt-10 grid gap-x-8 gap-y-6 border-t border-card-border pt-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
-                        {INTAKE.map(({ icon: Icon, title, text }, i) => (
+                        {INTAKE.map(({ title, text }, i) => (
                             <FadeIn key={title} delay={i * 0.06}>
                                 <div className="group -m-3 flex gap-3 rounded-xl p-3 transition-colors duration-300 hover:bg-white">
-                                    <Icon className="mt-1 h-4 w-4 shrink-0 text-primary transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
+                                    <SubsectionNumber size="sm" className="mt-0.5 w-9 shrink-0" />
                                     <div>
                                         <h3 className="text-sm font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary">{title}</h3>
                                         <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">{text}</p>
@@ -186,7 +188,7 @@ export default function OfficeActionsPage() {
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><OfficeActionEvidenceTrace /></div></FadeIn>
                     <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3">
-                        {ANALYSIS_BENEFITS.map((item, i) => <FadeIn key={item.title} delay={i * 0.06} className="h-full"><CapabilityCard surface="open" icon={[ListChecks, Quote, Fingerprint][i]} title={item.title} description={item.text} /></FadeIn>)}
+                        {ANALYSIS_BENEFITS.map((item, i) => <FadeIn key={item.title} delay={i * 0.06} className="h-full"><CapabilityCard surface="open" title={item.title} description={item.text} /></FadeIn>)}
                     </div>
                     <FadeIn>
                         <details className="group mt-8 border-t border-card-border pt-5">
@@ -217,7 +219,7 @@ export default function OfficeActionsPage() {
                             {CHART_RULES.map(({ title, text }, i) => (
                                 <li key={title}>
                                     <FadeIn delay={i * 0.06} className="group flex gap-4">
-                                        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-white text-xs font-semibold text-primary transition-colors duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-white [font-family:var(--font-mono)]">{String(i + 1).padStart(2, '0')}</span>
+                                        <SubsectionNumber size="sm" className="mt-0.5 w-9 shrink-0" />
                                         <div>
                                             <h3 className="text-base font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary">{title}</h3>
                                             <p className="mt-1 text-sm leading-relaxed text-text-secondary">{text}</p>
@@ -272,10 +274,10 @@ export default function OfficeActionsPage() {
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:grid-rows-[auto_1fr] lg:gap-y-0">
                         <FadeIn delay={0.1} className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:grid lg:grid-rows-subgrid"><OfficeActionResponsePreview className="lg:row-span-2 lg:grid lg:grid-rows-subgrid" /></FadeIn>
                         <div className="grid gap-6 sm:grid-cols-2 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:grid-rows-2">
-                            <FadeIn className="h-full"><CapabilityCard icon={GitCompare} title="Compared With Your Patent Draft" description="Line up the examined claims against the linked patent draft, claim by claim, to see how prosecution has moved them." /></FadeIn>
-                            <FadeIn delay={0.06} className="h-full"><CapabilityCard icon={PenLine} title="Consistent Claim Amendments" description="Claim statuses and amendment markup are computed from your edits, with numbering and dependencies checked." /></FadeIn>
-                            <FadeIn delay={0.12} className="h-full"><CapabilityCard icon={FileSearch} title="Support From the Disclosure" description="Link inserted language to specific passages in the application as filed for attorney confirmation. Inserted language without matching disclosure support is flagged for review before approval." /></FadeIn>
-                            <FadeIn delay={0.18} className="h-full"><CapabilityCard icon={ScrollText} title="A Structured Starting Point" description="Carry issues, claims, references, and examiner quotations into response sections for attorney drafting and review." /></FadeIn>
+                            <FadeIn className="h-full"><CapabilityCard title="Compared With Your Patent Draft" description="Line up the examined claims against the linked patent draft, claim by claim, to see how prosecution has moved them." /></FadeIn>
+                            <FadeIn delay={0.06} className="h-full"><CapabilityCard title="Consistent Claim Amendments" description="Claim statuses and amendment markup are computed from your edits, with numbering and dependencies checked." /></FadeIn>
+                            <FadeIn delay={0.12} className="h-full"><CapabilityCard title="Support From the Disclosure" description="Link inserted language to specific passages in the application as filed for attorney confirmation. Inserted language without matching disclosure support is flagged for review before approval." /></FadeIn>
+                            <FadeIn delay={0.18} className="h-full"><CapabilityCard title="A Structured Starting Point" description="Carry issues, claims, references, and examiner quotations into response sections for attorney drafting and review." /></FadeIn>
                         </div>
                     </div>
                     <FadeIn delay={0.05}>
@@ -313,11 +315,11 @@ export default function OfficeActionsPage() {
                     </SectionIntro>
                     <div className="mt-12 grid items-center gap-10 lg:mt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
                         <ol className="relative grid gap-5">
-                            {REVIEW_STEPS.map(({ icon, title, text }, i) => (
+                            {REVIEW_STEPS.map(({ title, text }, i) => (
                                 <li key={title} className="relative pl-11 sm:pl-14">
                                     {i < REVIEW_STEPS.length - 1 && <span aria-hidden="true" className="absolute top-10 bottom-[-20px] left-4 border-l border-primary/20" />}
-                                    <span aria-hidden="true" className="absolute top-6 left-0 inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 bg-primary/[0.04] text-xs font-semibold text-primary [font-family:var(--font-mono)]">{String(i + 1).padStart(2, '0')}</span>
-                                    <FadeIn delay={i * 0.06}><CapabilityCard surface="step" icon={icon} title={title} description={text} /></FadeIn>
+                                    <span aria-hidden="true" className="subsection-number absolute top-6 left-0 inline-flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 bg-primary/[0.04] text-sm font-semibold tabular-nums text-primary [font-family:var(--font-display)]" />
+                                    <FadeIn delay={i * 0.06}><CapabilityCard surface="step" numbered={false} title={title} description={text} /></FadeIn>
                                 </li>
                             ))}
                         </ol>
@@ -338,11 +340,11 @@ export default function OfficeActionsPage() {
                         The same <strong className="font-semibold text-white">access controls and audit history that protect your docket</strong> extend to every office action analysis and response.
                     </SectionIntro>
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
-                        {GOVERNANCE.map(({ icon: Icon, title, text }, i) => (
+                        {GOVERNANCE.map(({ title, text }, i) => (
                             <FadeIn key={title} delay={i * 0.06} className="h-full">
                                 <article className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-white/[0.05] hover:shadow-lg hover:shadow-primary/[0.05]">
                                     <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary-light/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                    <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-primary-light/10 group-hover:shadow-sm group-hover:shadow-primary/[0.05]"><Icon className="h-5 w-5 text-compliance-on-dark transition-transform duration-300 group-hover:scale-105" aria-hidden="true" /></span>
+                                    <SubsectionNumber tone="compliance" dark className="relative" />
                                     <h3 className="relative mt-4 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-primary-light">{title}</h3>
                                     <p className="relative mt-2 text-sm leading-relaxed text-text-on-dark/80">{text}</p>
                                 </article>
@@ -376,20 +378,15 @@ export default function OfficeActionsPage() {
     );
 }
 
-function Eyebrow({ children }: { children: ReactNode }) {
-    return <span className="text-xs font-bold uppercase tracking-[0.15em] text-primary [font-family:var(--font-mono)]">{children}</span>;
-}
-
-/* accent marks the page's compliance beats in amber: the eyebrow, and on
-   white the highlight (a short phrase of the title) when one is given. */
+/* accent marks the page's compliance beats in amber on the section mark. The
+   highlight (a short phrase of the title) is set in italic, not colour. */
 function SectionIntro({ eyebrow, title, highlight, children, dark = false, accent = false }: { eyebrow: string; title: string; highlight?: string; children: ReactNode; dark?: boolean; accent?: boolean }) {
-    const eyebrowTone = accent ? (dark ? 'text-compliance-on-dark' : 'text-compliance-ink') : dark ? 'text-primary-light' : 'text-primary';
-    const at = accent && !dark && highlight ? title.indexOf(highlight) : -1;
-    const heading = at >= 0 && highlight ? <>{title.slice(0, at)}<span className="text-compliance-ink">{highlight}</span>{title.slice(at + highlight.length)}</> : title;
-    return <FadeIn><div className="max-w-3xl"><span className={`text-xs font-bold uppercase tracking-[0.15em] [font-family:var(--font-mono)] ${eyebrowTone}`}>{eyebrow}</span><h2 className={`mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl ${dark ? 'text-white' : 'text-text-primary'}`}>{heading}</h2><p className={`mt-4 text-lg leading-relaxed ${dark ? 'text-text-on-dark' : 'text-text-secondary'}`}>{children}</p></div></FadeIn>;
+    const at = highlight ? title.indexOf(highlight) : -1;
+    const heading = at >= 0 && highlight ? <>{title.slice(0, at)}<span className="pr-[0.12em] italic">{highlight}</span>{title.slice(at + highlight.length)}</> : title;
+    return <FadeIn><div className="max-w-3xl"><SectionMark tone={accent ? 'compliance' : 'primary'} dark={dark}>{eyebrow}</SectionMark><h2 className={`mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl ${dark ? 'text-white' : 'text-text-primary'}`}>{heading}</h2><p className={`mt-4 text-lg leading-relaxed ${dark ? 'text-text-on-dark' : 'text-text-secondary'}`}>{children}</p></div></FadeIn>;
 }
 
-function CapabilityCard({ icon: Icon, title, description, surface = 'card' }: { icon: ElementType; title: string; description: string; surface?: 'card' | 'open' | 'step' }) {
+function CapabilityCard({ title, description, surface = 'card', numbered = true }: { title: string; description: string; surface?: 'card' | 'open' | 'step'; numbered?: boolean }) {
     const surfaceClasses = {
         card: 'rounded-2xl border border-card-border bg-card-bg shadow-sm',
         open: 'rounded-none border-t border-primary/25 bg-transparent',
@@ -398,8 +395,8 @@ function CapabilityCard({ icon: Icon, title, description, surface = 'card' }: { 
     return (
         <article className={`group relative flex h-full flex-col overflow-hidden p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05] ${surfaceClasses[surface]}`}>
             <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]"><Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" aria-hidden="true" /></div>
-            <h3 className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary">{title}</h3>
+            {numbered && <SubsectionNumber className="relative" />}
+            <h3 className={`relative text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary ${numbered ? 'mt-4' : ''}`}>{title}</h3>
             <p className="relative mt-2 text-sm leading-relaxed text-text-secondary">{description}</p>
         </article>
     );

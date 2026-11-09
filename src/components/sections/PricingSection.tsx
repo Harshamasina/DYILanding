@@ -3,6 +3,7 @@ import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { Button } from '@/components/ui/Button';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 interface PlanFeature {
     text: string;
@@ -106,14 +107,9 @@ export function PricingSection() {
             </div>
             <Container className="relative">
                 {/* Section Heading */}
-                <div id="tree-pricing" className="flex items-center gap-3 mb-6">
-                    <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        Plans
-                    </span>
-                </div>
+                <SectionMark id="tree-pricing" className="mb-6">
+                    Plans
+                </SectionMark>
                 <FadeIn treeNode="tree-pricing">
                     <div className="max-w-2xl mb-16 lg:mb-20">
                         <h2

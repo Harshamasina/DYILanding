@@ -4,20 +4,16 @@ import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { HOME_FAQ_ITEMS } from '@/lib/faq-data';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 export function FaqSection() {
     return (
         <section id="faq" className="py-24 lg:py-32 bg-page-bg-alt">
             <Container>
                 {/* Section Heading */}
-                <div id="tree-faq" className="flex items-center gap-3 mb-6">
-                    <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        FAQ
-                    </span>
-                </div>
+                <SectionMark id="tree-faq" className="mb-6">
+                    FAQ
+                </SectionMark>
                 <FadeIn treeNode="tree-faq">
                     <div className="max-w-2xl mb-12 lg:mb-16">
                         <h2

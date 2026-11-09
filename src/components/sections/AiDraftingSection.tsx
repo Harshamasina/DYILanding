@@ -1,6 +1,4 @@
 import {
-    Brain,
-    GitCompare,
     Lock,
     Shield,
     UserCheck,
@@ -14,6 +12,9 @@ import { MockupHalo } from '@/components/ui/MockupHalo';
 import { DeferredMount } from '@/components/motion/DeferredMount';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { FadeIn } from '@/components/motion/FadeIn';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
+import { FigureCaption } from '@/components/ui/FigureCaption';
 
 /* Production set first, planned jurisdictions marked. The AI drafting page
    is the source of truth for this list: US, EP, IN, and PCT (WO) ship today,
@@ -44,14 +45,9 @@ export function AiDraftingSection() {
         >
             <Container>
                 {/* ── Section Heading ── */}
-                <div id="tree-ai" className="flex items-center gap-3 mb-6">
-                    <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        AI Drafting
-                    </span>
-                </div>
+                <SectionMark id="tree-ai" className="mb-6">
+                    AI Drafting
+                </SectionMark>
                 <FadeIn treeNode="tree-ai">
                     <div className="max-w-3xl mb-16 lg:mb-20">
                         <h2
@@ -73,7 +69,7 @@ export function AiDraftingSection() {
                 {/* ── Sub-sections ── */}
                 <div className="space-y-20 lg:space-y-28">
                     {/* ─── AI Draft Generation: Mockup left, Text right ─── */}
-                    <div>
+                    <div className="figure-group">
                         {/* Desktop */}
                         <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center">
                             <FadeIn delay={0.2}>
@@ -85,6 +81,7 @@ export function AiDraftingSection() {
                                         <AnimatedAiDraftGeneration />
                                     </MockupHalo>
                                 </DeferredMount>
+                                <FigureCaption className="mt-5">AI draft workspace with claim review</FigureCaption>
                             </FadeIn>
                         </div>
                         {/* Mobile */}
@@ -98,6 +95,7 @@ export function AiDraftingSection() {
                                         <AnimatedAiDraftGeneration />
                                     </MockupHalo>
                                 </DeferredMount>
+                                <FigureCaption className="mt-5">AI draft workspace with claim review</FigureCaption>
                             </FadeIn>
                         </div>
                     </div>
@@ -151,54 +149,25 @@ export function AiDraftingSection() {
     );
 }
 
-/* ── Sub-section card data (icon + title + description, same as Features/Compliance) ── */
 
-const DRAFTING_CARDS: { icon: React.ElementType; title: string; description: string }[] = [
+const DRAFTING_CARDS: ReferenceItem[] = [
     {
-        icon: Brain,
         title: 'Draft in Under 5 Minutes',
         description: 'Select prior art references, describe your invention, and generate a full patent specification.',
     },
     {
-        icon: Shield,
         title: 'Jurisdiction-Specific Drafting Guidance',
         description: 'Configurable drafting guidance and templates for the production set (US, EP, IN, and PCT/WO) are applied to every generation.',
     },
     {
-        icon: UserCheck,
         title: 'Mandatory Attorney Review',
         description: 'Every AI-generated draft includes a disclaimer and requires human sign-off before filing.',
     },
     {
-        icon: GitCompare,
         title: 'Version Control & Append-Only Snapshots',
         description: 'Generate V1, review, add instructions, regenerate V2. Each version is kept as a separate, non-editable record.',
     },
 ];
-
-function AiCard({ icon: Icon, title, description }: { icon: React.ElementType; title: string; description: string }) {
-    return (
-        <article className="group flex gap-4 items-start p-4 rounded-xl border border-transparent transition-all duration-200 hover:border-card-border hover:bg-card-bg hover:shadow-md hover:shadow-black/[0.03]">
-            <div className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(99,102,241,0.08)] mt-0.5">
-                <Icon className="w-5 h-5 text-primary" />
-            </div>
-            <div className="min-w-0">
-                <h3
-                    className="text-[15px] font-semibold text-text-primary leading-snug"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                >
-                    {title}
-                </h3>
-                <p
-                    className="mt-1 text-[13px] leading-relaxed text-text-secondary"
-                    style={{ fontFamily: 'var(--font-body)' }}
-                >
-                    {description}
-                </p>
-            </div>
-        </article>
-    );
-}
 
 function DraftingContent() {
     return (
@@ -209,11 +178,7 @@ function DraftingContent() {
             >
                 From Prior Art to First Draft, With Attorney Review Built In
             </h3>
-            <div className="flex flex-col gap-1 mb-6">
-                {DRAFTING_CARDS.map((card) => (
-                    <AiCard key={card.title} {...card} />
-                ))}
-            </div>
+            <ReferenceList items={DRAFTING_CARDS} className="mb-6" />
 
             {/* Jurisdiction Badges */}
             <div className="flex flex-wrap gap-2">

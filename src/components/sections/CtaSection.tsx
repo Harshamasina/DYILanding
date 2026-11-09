@@ -3,6 +3,7 @@ import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { ContactForm } from '@/components/sections/ContactForm';
 import { WatchDemoLink } from '@/components/ui/WatchDemoLink';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 const TRUST_SIGNALS = [
     { icon: Calendar, text: '15-minute guided walkthrough' },
@@ -37,21 +38,16 @@ export function CtaSection() {
                     {/* Left Column — CTA copy + contact info */}
                     <div className="lg:col-span-2">
                         {/* Section Heading — tree branch anchor */}
-                        <div id="tree-contact" className="flex items-center gap-3 mb-6">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Contact
-                            </span>
-                        </div>
+                        <SectionMark id="tree-contact" className="mb-6">
+                            Contact
+                        </SectionMark>
                         <FadeIn treeNode="tree-contact">
                             <h2
                                 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Modernize Patent Operations With a{' '}
-                                <span className="text-primary">
+                                <span className="italic">
                                     Guided Demo
                                 </span>
                             </h2>

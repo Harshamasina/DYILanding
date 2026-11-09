@@ -2,6 +2,7 @@ import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { DemoVideoJsonLd } from '@/components/seo/DemoVideoJsonLd';
 import { DemoVideoShowcase } from '@/components/ui/DemoVideoShowcase';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 /**
  * Inline product-demo section. Sits between Features and the per-pillar
@@ -34,14 +35,9 @@ export function DemoVideoSection() {
 
             <Container className="relative">
                 {/* Section heading — tree branch anchor */}
-                <div id="tree-demo" className="flex items-center gap-3 mb-6">
-                    <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        Live Demo
-                    </span>
-                </div>
+                <SectionMark id="tree-demo" className="mb-6">
+                    Live Demo
+                </SectionMark>
 
                 <FadeIn treeNode="tree-demo">
                     <div className="max-w-3xl mb-12 lg:mb-16">
@@ -50,7 +46,7 @@ export function DemoVideoSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             From Docketing to{' '}
-                            <span className="text-primary">Office Action Response</span>
+                            <span className="italic">Office Action Response</span>
                         </h2>
                         <p
                             className="mt-4 text-lg text-text-secondary leading-relaxed"

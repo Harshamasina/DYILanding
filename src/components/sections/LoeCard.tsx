@@ -1,18 +1,17 @@
-import { ArrowRight, CalendarClock, Landmark, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { LoeTimeline } from '@/components/ui/LoeTimeline';
 
 interface Pillar {
-    icon: React.ElementType;
     label: string;
     detail: string;
 }
 
 const PILLARS: Pillar[] = [
-    { icon: ShieldCheck, label: 'Patent wall', detail: 'Latest granted patent expiry' },
-    { icon: Landmark, label: 'Regulatory floor', detail: 'Latest active exclusivity end' },
-    { icon: CalendarClock, label: 'Combined horizon', detail: 'The later of the two' },
+    { label: 'Patent wall', detail: 'Latest granted patent expiry' },
+    { label: 'Regulatory floor', detail: 'Latest active exclusivity end' },
+    { label: 'Combined horizon', detail: 'The later of the two' },
 ];
 
 /**
@@ -57,7 +56,7 @@ export function LoeCard() {
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
                                     See When Exclusivity{' '}
-                                    <span className="text-primary italic">Really Ends</span>
+                                    <span className="italic">Really Ends</span>
                                 </h2>
 
                                 <p
@@ -118,18 +117,10 @@ export function LoeCard() {
 }
 
 function PillarChip({ pillar, index }: { pillar: Pillar; index: number }) {
-    const Icon = pillar.icon;
-
     return (
         <li>
             <FadeIn delay={0.1 + index * 0.08} direction="up">
                 <div className="group flex h-full items-start gap-3 rounded-xl border border-white/80 bg-white/70 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-white/90 hover:shadow-md hover:shadow-primary/[0.06]">
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.08]">
-                        <Icon
-                            className="h-4 w-4 text-primary transition-transform duration-300 group-hover:scale-110"
-                            aria-hidden="true"
-                        />
-                    </span>
                     <span className="min-w-0">
                         <span
                             className="block text-[13px] font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"

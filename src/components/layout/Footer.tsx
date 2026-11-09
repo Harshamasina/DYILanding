@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { BrandLogoLink } from '@/components/ui/BrandLogoLink';
+import { SectionMark } from '@/components/ui/SectionMark';
 import { SITE_NAME } from '@/lib/constants';
 import { getLatestPosts } from '@/content/blog';
 
@@ -212,13 +213,9 @@ export function Footer() {
                         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
                             {/* Left: Trust Badges */}
                             <div className="flex-[3]">
-                                <p
-                                    id="tree-end"
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-on-dark mb-4"
-                                    style={{ fontFamily: 'var(--font-mono)' }}
-                                >
+                                <SectionMark id="tree-end" tone="compliance" dark numbered={false} className="mb-4">
                                     Enterprise Trust
-                                </p>
+                                </SectionMark>
                                 <h3
                                     className="text-xl sm:text-2xl font-bold text-white mb-6"
                                     style={{ fontFamily: 'var(--font-display)' }}
@@ -255,41 +252,20 @@ export function Footer() {
 
                             {/* Right: Positioning statement */}
                             <div className="flex-[2] flex flex-col justify-center">
+                                {/* A statement signed by the team, not a quotation: no
+                                    quote marks or avatar, which read as a testimonial. */}
                                 <div className="border-l-2 border-primary-light/30 pl-6">
-                                    <svg className="w-8 h-8 text-primary-light/20 mb-4" fill="currentColor" viewBox="0 0 32 32">
-                                        <path d="M10 8c-3.3 0-6 2.7-6 6v10h10V14H8c0-1.1.9-2 2-2V8zm14 0c-3.3 0-6 2.7-6 6v10h10V14h-6c0-1.1.9-2 2-2V8z" />
-                                    </svg>
-                                    <blockquote>
-                                        <p
-                                            className="text-base sm:text-lg text-white/90 leading-relaxed italic"
-                                            style={{ fontFamily: 'var(--font-body)' }}
-                                        >
-                                            Built for regulated patent teams handling
-                                            confidential invention data, audit-sensitive
-                                            workflows, and multi-jurisdiction portfolios.
-                                        </p>
-                                    </blockquote>
-                                    <div className="mt-5 flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                                            <span className="text-sm font-bold text-primary-light" style={{ fontFamily: 'var(--font-mono)' }}>
-                                                DI
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <p
-                                                className="text-sm font-semibold text-white"
-                                                style={{ fontFamily: 'var(--font-display)' }}
-                                            >
-                                                Design Your Invention Team
-                                            </p>
-                                            <p
-                                                className="text-xs text-white/40"
-                                                style={{ fontFamily: 'var(--font-body)' }}
-                                            >
-                                                IP Management Platform
-                                            </p>
-                                        </div>
-                                    </div>
+                                    <p className="text-base leading-relaxed text-white/90 [font-family:var(--font-body)] sm:text-lg">
+                                        Built for regulated patent teams handling
+                                        confidential invention data, audit-sensitive
+                                        workflows, and multi-jurisdiction portfolios.
+                                    </p>
+                                    <p className="mt-5 text-sm font-semibold text-white [font-family:var(--font-display)]">
+                                        Design Your Invention Team
+                                        <span className="mt-0.5 block text-xs font-normal text-white/40 [font-family:var(--font-body)]">
+                                            IP Management Platform
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -360,10 +336,7 @@ export function Footer() {
                             <div className="mt-8">
                                 <div className="mb-3 flex items-center gap-2">
                                     <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary-light" />
-                                    <span
-                                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary-light"
-                                        style={{ fontFamily: 'var(--font-mono)' }}
-                                    >
+                                    <span className="text-base leading-none tracking-[0.1em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                         Ask AI about us
                                     </span>
                                 </div>
@@ -394,10 +367,7 @@ export function Footer() {
                         {/* Link Columns */}
                         {footerColumns.map(({ category, links }) => (
                             <div key={category}>
-                                <h3
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-primary-light mb-5"
-                                    style={{ fontFamily: 'var(--font-display)' }}
-                                >
+                                <h3 className="mb-5 text-base leading-none tracking-[0.1em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                     {category}
                                 </h3>
                                 <ul className="space-y-3.5">

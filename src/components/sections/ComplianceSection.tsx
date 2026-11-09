@@ -1,49 +1,38 @@
-import {
-    FileWarning,
-    ScrollText,
-    KeyRound,
-    ShieldCheck,
-    Users,
-    FolderLock,
-} from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { AnimatedAuditTable } from '@/components/ui/AnimatedAuditTable';
 import { DeferredMount } from '@/components/motion/DeferredMount';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
+import { FigureCaption } from '@/components/ui/FigureCaption';
 
-const COMPLIANCE_ITEMS = [
+const COMPLIANCE_ITEMS: ReferenceItem[] = [
     {
-        icon: FileWarning,
         title: 'Reason-for-Change on Every Edit',
         description:
             'Critical field edits require a documented reason before saving. No silent changes.',
     },
     {
-        icon: ScrollText,
         title: 'Full Audit Trail',
         description:
             'Every change logged: who, what, when, and the before/after diff.',
     },
     {
-        icon: KeyRound,
         title: 'Electronic Signatures',
         description:
             'Re-authentication prompt before approval actions and high-risk operations.',
     },
     {
-        icon: ShieldCheck,
         title: 'Append-Only Audit Records',
         description:
             'Audit history is append-only. The application exposes no edit or delete path, so records stay read-only.',
     },
     {
-        icon: Users,
         title: 'Role-Based Access Control',
         description:
             'Admin, Attorney, Paralegal, Viewer: granular permissions enforced server-side.',
     },
     {
-        icon: FolderLock,
         title: 'Secure Document Management',
         description:
             'Version-controlled uploads with presigned downloads and full delete audit trail.',
@@ -93,14 +82,9 @@ export function ComplianceSection() {
             </div>
             <Container className="relative">
                 {/* Section Heading */}
-                <div id="tree-compliance" className="flex items-center gap-3 mb-6">
-                    <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-ink"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        Compliance
-                    </span>
-                </div>
+                <SectionMark id="tree-compliance" tone="compliance" className="mb-6">
+                    Compliance
+                </SectionMark>
                 <FadeIn treeNode="tree-compliance">
                     <div className="max-w-2xl mb-12 lg:mb-16">
                         <h2
@@ -108,7 +92,7 @@ export function ComplianceSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             FDA 21 CFR Part 11-Aligned Controls,{' '}
-                            <span className="italic text-compliance-ink">Built In, Not Bolted On</span>
+                            <span className="italic">Built In, Not Bolted On</span>
                         </h2>
                         <p
                             className="mt-4 text-lg text-text-secondary leading-relaxed"
@@ -120,39 +104,29 @@ export function ComplianceSection() {
                 </FadeIn>
 
                 {/* Alternating layout: items left, audit table right */}
-                <div>
+                <div className="figure-group">
                     {/* Desktop */}
                     <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-start">
                         {/* Left: Compliance items */}
-                        <div className="flex flex-col gap-1">
-                            {COMPLIANCE_ITEMS.map((item, i) => (
-                                <FadeIn key={item.title} treeNode="tree-compliance" delay={i * 0.08}>
-                                    <ComplianceCard {...item} />
-                                </FadeIn>
-                            ))}
-                        </div>
+                        <ReferenceList items={COMPLIANCE_ITEMS} tone="compliance" treeNode="tree-compliance" />
 
                         {/* Right: Animated Audit Table */}
                         <FadeIn treeNode="tree-compliance" delay={0.1}>
                             <DeferredMount className="w-full h-120 sm:h-135 lg:h-150">
                                 <AnimatedAuditTable />
                             </DeferredMount>
+                            <FigureCaption className="mt-5">Audit history with reasons for change</FigureCaption>
                         </FadeIn>
                     </div>
 
                     {/* Mobile */}
                     <div className="lg:hidden space-y-8">
-                        <div className="flex flex-col gap-1">
-                            {COMPLIANCE_ITEMS.map((item, i) => (
-                                <FadeIn key={item.title} delay={i * 0.08}>
-                                    <ComplianceCard {...item} />
-                                </FadeIn>
-                            ))}
-                        </div>
+                        <ReferenceList items={COMPLIANCE_ITEMS} tone="compliance" />
                         <FadeIn delay={0.2}>
                             <DeferredMount className="w-full h-120 sm:h-135 lg:h-150">
                                 <AnimatedAuditTable />
                             </DeferredMount>
+                            <FigureCaption className="mt-5">Audit history with reasons for change</FigureCaption>
                         </FadeIn>
                     </div>
                 </div>
@@ -169,29 +143,5 @@ export function ComplianceSection() {
                 </FadeIn>
             </Container>
         </section>
-    );
-}
-
-function ComplianceCard({ icon: Icon, title, description }: { icon: React.ElementType; title: string; description: string }) {
-    return (
-        <article className="group flex gap-4 items-start p-4 rounded-xl border border-transparent transition-all duration-200 hover:border-card-border hover:bg-card-bg hover:shadow-md hover:shadow-black/3">
-            <div className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-lg border border-amber-100/80 bg-linear-to-br from-amber-50 via-white to-amber-50/40 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(217,119,6,0.08)] mt-0.5">
-                <Icon className="w-5 h-5 text-compliance" />
-            </div>
-            <div className="min-w-0">
-                <h3
-                    className="text-[15px] font-semibold text-text-primary leading-snug"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                >
-                    {title}
-                </h3>
-                <p
-                    className="mt-1 text-[13px] leading-relaxed text-text-secondary"
-                    style={{ fontFamily: 'var(--font-body)' }}
-                >
-                    {description}
-                </p>
-            </div>
-        </article>
     );
 }

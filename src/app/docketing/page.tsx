@@ -1,29 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
-    AlarmClock,
-    Mail,
-    BellRing,
-    CalendarX2,
-    Clock,
-    ShieldCheck,
-    Database,
-    KeyRound,
-    ScrollText,
-    Coins,
-    Building2,
-    FileWarning,
-    Layers,
-    FolderTree,
-    Upload,
-    Download,
-    LayoutDashboard,
     TrendingUp,
     ArrowRight,
     Play,
-    FileText,
-    Fingerprint,
-    PackageOpen,
 } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
 import { Container } from '@/components/ui/Container';
@@ -33,6 +13,8 @@ import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedDocketingWorkflow } from '@/components/ui/AnimatedDocketingWorkflow';
 import { ComputedDeadlineTrace } from '@/components/ui/ComputedDeadlineTrace';
@@ -52,8 +34,7 @@ export const metadata: Metadata = buildMetadata({
 
 /* ── Data ── */
 
-interface IconItem {
-    icon: React.ElementType;
+interface CardItem {
     title: string;
     description: string;
 }
@@ -70,19 +51,16 @@ const TRACKS = [
     'Custom Reminders',
 ];
 
-const TRACE_CAPABILITIES: IconItem[] = [
+const TRACE_CAPABILITIES: CardItem[] = [
     {
-        icon: ScrollText,
         title: 'Cited and explainable',
         description: 'See the source event, governing authority, assumptions, and every calculation step.',
     },
     {
-        icon: ShieldCheck,
         title: 'Attorney control is preserved',
         description: 'Overrides retain the computed value, require a reason, and remain fully audited.',
     },
     {
-        icon: Layers,
         title: 'Updates never move dates silently',
         description: 'Preview the impact, review changes, sign the release, and restore the prior version.',
     },
@@ -103,99 +81,83 @@ const RISK_SIGNALS: RiskSignal[] = [
     { weight: '10%', title: 'Assignment gap', description: 'Unassigned deadlines are penalized. An orphaned deadline is a dangerous deadline.', accent: '#059669', tint: 'rgba(5,150,105,0.10)' },
 ];
 
-const DIGESTS: IconItem[] = [
+const DIGESTS: CardItem[] = [
     {
-        icon: Mail,
         title: 'Daily Deadline Digest',
         description: 'Every morning at 8 AM in each tenant local timezone, every user gets the deadlines coming due within a configurable window, pre-sorted by risk.',
     },
     {
-        icon: BellRing,
         title: 'Reminder-Due Email',
         description: 'The same morning send for custom reminders falling due that day, so team-specific tasks land alongside statutory deadlines.',
     },
     {
-        icon: CalendarX2,
         title: 'Weekly Stale-Alert Digest',
         description: 'Mondays at 9 AM local, a hygiene report of the things quietly going wrong that no hard deadline would surface.',
     },
 ];
 
-const STALE_BUCKETS: IconItem[] = [
-    { icon: FolderTree, title: 'Families with no filings', description: 'A docket opened but never built out, sitting empty and forgotten.' },
-    { icon: Clock, title: 'Stale records', description: 'PRV, PCT, or NPE entities untouched past a threshold (default 90 days).' },
-    { icon: FileWarning, title: 'Overdue open office actions', description: 'Past due and still not responded, the single most expensive thing to miss.' },
-    { icon: Coins, title: 'Unpaid overdue fees', description: 'Annuities past due, surfaced with grace-period and amount context.' },
-    { icon: AlarmClock, title: 'Expired reminders', description: 'Pending reminders whose date has already passed without action.' },
-    { icon: Layers, title: 'Stale families', description: 'Active families with no updates inside the threshold window.' },
+const STALE_BUCKETS: CardItem[] = [
+    { title: 'Families with no filings', description: 'A docket opened but never built out, sitting empty and forgotten.' },
+    { title: 'Stale records', description: 'PRV, PCT, or NPE entities untouched past a threshold (default 90 days).' },
+    { title: 'Overdue open office actions', description: 'Past due and still not responded, the single most expensive thing to miss.' },
+    { title: 'Unpaid overdue fees', description: 'Annuities past due, surfaced with grace-period and amount context.' },
+    { title: 'Expired reminders', description: 'Pending reminders whose date has already passed without action.' },
+    { title: 'Stale families', description: 'Active families with no updates inside the threshold window.' },
 ];
 
-const OPS: IconItem[] = [
+const OPS: CardItem[] = [
     {
-        icon: Coins,
         title: 'Multi-currency fees',
         description: 'Track patent and annuity fees with status, due date, amount, and currency. Analytics roll up spend across the portfolio with date-accurate FX conversion into one chosen currency.',
     },
     {
-        icon: Building2,
         title: 'Outside-counsel directory',
         description: 'A searchable, tenant-scoped roster of firms and agents, with per-case assignments by role (lead counsel, local agent, foreign associate, annuity provider) and duplicate-assignment protection.',
     },
     {
-        icon: TrendingUp,
         title: 'Family completeness scoring',
         description: 'Each family gets a 0 to 100 data-completeness score across family fields, child coverage, and child quality, turning "is this docket set up correctly?" into a measurable number.',
     },
     {
-        icon: LayoutDashboard,
         title: 'Portfolio dashboard',
         description: 'Status breakdowns across families, PRVs, PCTs, NPE cases, office actions, annuities, and reminders, plus deadline-window counts and the aggregate risk breakdown, as of any chosen date.',
     },
     {
-        icon: Upload,
         title: 'Bulk CSV import',
         description: 'Onboard whole portfolios in one pass, importing families with their PRV, PCT, and NPE child records and key dates, with validation and column mapping.',
     },
     {
-        icon: Download,
         title: 'Filtering and export',
         description: 'Filter deadlines by type, family, priority, date range, and assignee, with a "mine only" view for limited-permission users. Export deadlines, fees, and entity lists to CSV.',
     },
     {
-        icon: FileText,
         title: 'Branded PDF reports',
         description: 'Turn the live docket into a client-ready document. The portfolio health report carries your logo and organization name, the sections you choose, and an optional as-of date, with deadlines ranked by risk, fees grouped per currency, and stale-record alerts.',
     },
     {
-        icon: Fingerprint,
         title: 'Verifiable report integrity',
         description: 'Every report is stamped with a unique Report ID and a SHA-256 checksum written to your audit log, and the preview and the download are byte identical. A report you handed a client months ago can still be verified against the record.',
     },
     {
-        icon: PackageOpen,
         title: 'Data portability, no lock-in',
         description: 'Export the whole account, not just a view. Families, filings, cases, fees, reminders, and audit history come out as structured NDJSON with schemas and CSV renderings, on every plan. Each user can also export their own personal data from their profile.',
     },
 ];
 
-const SECURITY: IconItem[] = [
+const SECURITY: CardItem[] = [
     {
-        icon: ScrollText,
         title: 'Full audit trail',
         description: 'Every create, update, and delete on reminders, fees, and cases is logged with actor, before and after state, timestamp, IP, and request ID. Report generation and data exports are audited the same way, and an account export requires a typed reason and notifies every admin.',
     },
     {
-        icon: Database,
         title: 'Reason-for-change enforced',
         description: 'Edits to sensitive fields such as dates and statuses require a typed reason, and deletions always do. The field is required rather than optional, following 21 CFR Part 11 patterns.',
     },
     {
-        icon: ShieldCheck,
         title: 'Tenant isolation',
         description: 'Every query runs under PostgreSQL Row-Level Security inside a tenant-scoped transaction. Defense-in-depth tenant isolation is designed to prevent one firm from reaching another firm docket.',
     },
     {
-        icon: KeyRound,
         title: 'Role-based access',
         description: 'Read versus write is enforced server-side per module (prv, pct, npe, and the rest). "View all reminders" versus "only mine" is a permission, not a UI toggle.',
     },
@@ -305,14 +267,9 @@ export default function DocketingPage() {
 
                     <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:gap-8 xl:gap-12">
                         <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Patent Docketing and Deadline Management
-                            </span>
+                            <SectionMark numbered={false}>Patent Docketing and Deadline Management</SectionMark>
                             <h1
-                                className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+                                className="mt-5 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Patent Docketing That{' '}
@@ -383,18 +340,13 @@ export default function DocketingPage() {
                 <Container className="relative z-10">
                     <FadeIn>
                         <div className="max-w-4xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-ink"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Traceable computed deadlines
-                            </span>
+                            <SectionMark tone="compliance">Traceable computed deadlines</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Every Computed Date{' '}
-                                <span className="text-compliance-ink">Shows Its Work</span>
+                                <span className="italic">Shows Its Work</span>
                             </h2>
                             <p
                                 className="mt-4 text-lg leading-relaxed text-text-secondary"
@@ -451,14 +403,9 @@ export default function DocketingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Risk scoring
-                            </span>
+                            <SectionMark>Risk scoring</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Triage by Real Risk, Not Just Date Order
@@ -510,14 +457,9 @@ export default function DocketingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Proactive notifications
-                            </span>
+                            <SectionMark>Proactive notifications</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Deadlines Come to You, Not the Other Way Around
@@ -571,14 +513,9 @@ export default function DocketingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Fees, firms, reporting, and operations
-                            </span>
+                            <SectionMark>Fees, firms, reporting, and operations</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 The Operating Layer Around Every Deadline
@@ -622,14 +559,9 @@ export default function DocketingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-on-dark"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Audit, security and compliance
-                            </span>
+                            <SectionMark tone="compliance" dark>Audit, security and compliance</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Audit-First, Tenant-Isolated, Built to Survive Review
@@ -759,16 +691,14 @@ function GroupLabel({ label, note }: { label: string; note: string }) {
     );
 }
 
-function CapabilityCard({ icon: Icon, title, description }: IconItem) {
+function CapabilityCard({ title, description }: CardItem) {
     return (
         <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
-            </div>
+            <SubsectionNumber className="relative" />
             <h3
                 className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
                 style={{ fontFamily: 'var(--font-display)' }}
@@ -912,16 +842,14 @@ function RiskScorePanel() {
     );
 }
 
-function SecurityCard({ icon: Icon, title, description }: IconItem) {
+function SecurityCard({ title, description }: CardItem) {
     return (
         <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-white/[0.05] hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary-light/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-primary-light/10 group-hover:shadow-sm group-hover:shadow-primary/[0.05]">
-                <Icon className="h-5 w-5 text-compliance-on-dark transition-transform duration-300 group-hover:scale-105" />
-            </div>
+            <SubsectionNumber tone="compliance" dark className="relative" />
             <h3
                 className="relative mt-4 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-primary-light"
                 style={{ fontFamily: 'var(--font-display)' }}

@@ -3,11 +3,7 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import {
     Search,
-    FileText,
-    ScrollText,
-    UserSearch,
     Building2,
-    Hash,
     FlaskConical,
     Network,
     Activity,
@@ -21,9 +17,6 @@ import {
     Bookmark,
     ChevronRight,
     TrendingUp,
-    ScanSearch,
-    Lightbulb,
-    Scale,
     CheckCircle2,
     ArrowRight,
     FileSearch,
@@ -35,6 +28,8 @@ import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedPatentSearch } from '@/components/ui/AnimatedPatentSearch';
 import { PatentSearchHeroSvg } from '@/components/illustrations/PatentSearchHeroSvg';
@@ -53,7 +48,6 @@ export const metadata: Metadata = buildMetadata({
 /* ── Data ── */
 
 interface IconItem {
-    icon: React.ElementType;
     title: string;
     description: string;
 }
@@ -68,32 +62,26 @@ const TRUST_STRIP = [
 
 const SEARCH_MODES: IconItem[] = [
     {
-        icon: Search,
         title: 'Keyword',
         description: 'Full-text search across titles, abstracts, and claims, with hyphens and stop words handled for you.',
     },
     {
-        icon: FileText,
         title: 'Title and Abstract',
         description: 'A faster, scoped search for when you want precision over recall.',
     },
     {
-        icon: ScrollText,
         title: 'Claims',
         description: 'Search the claim language itself to find what a patent actually protects.',
     },
     {
-        icon: UserSearch,
         title: 'Inventor',
         description: 'Every filing by a named inventor, with name-order variations matched automatically.',
     },
     {
-        icon: Building2,
         title: 'Applicant',
         description: 'Search by company or assignee, with corporate suffixes (Inc., Ltd., GmbH) normalized.',
     },
     {
-        icon: Hash,
         title: 'Publication Number',
         description: 'Jump straight to a patent by number in any format, spaces and kind codes handled.',
     },
@@ -126,17 +114,14 @@ const WORKFLOW: { icon: React.ElementType; label: string }[] = [
 
 const ENRICHMENT: IconItem[] = [
     {
-        icon: FlaskConical,
         title: 'Compound Chemistry',
         description: 'Compounds disclosed in a patent are resolved to a canonical structure: a 2D depiction plus InChIKey, IUPAC name, SMILES, molecular weight, and cross-database IDs (PubChem, ChEMBL, CAS, DrugBank).',
     },
     {
-        icon: Network,
         title: 'Substructure Search',
         description: 'Pharma patents are back-linked to the compounds detected in them. See how many a patent covers, then find other patents in the corpus disclosing the same molecule or scaffold, the substructure-aware search premium tools charge a fortune for.',
     },
     {
-        icon: Activity,
         title: 'Clinical Trial Landscape',
         description: 'Linked trials from ClinicalTrials.gov show phase, status, sponsor, and indication, so you can see what is in clinic for a molecule and who is running it, right beside the patent.',
     },
@@ -161,22 +146,18 @@ const WORK_FEATURES = [
 
 const PLATFORM_CAPS: IconItem[] = [
     {
-        icon: Search,
         title: 'Patent Intelligence',
         description: 'Search by keyword, claims, assignee, inventor, and jurisdiction.',
     },
     {
-        icon: FlaskConical,
         title: 'Chemical Search',
         description: 'Find patents connected to compounds, substructures, and molecular families.',
     },
     {
-        icon: Activity,
         title: 'Clinical Signals',
         description: 'Map patents to trial activity, indications, sponsors, and competitive signals.',
     },
     {
-        icon: Download,
         title: 'Export and Workflow',
         description: 'Save searches, export results, and share findings with IP or R&D teams.',
     },
@@ -184,22 +165,18 @@ const PLATFORM_CAPS: IconItem[] = [
 
 const USE_CASES: IconItem[] = [
     {
-        icon: ScanSearch,
         title: 'IP Analysts',
         description: 'Run prior-art, patentability, and competitive-landscape searches faster.',
     },
     {
-        icon: FlaskConical,
         title: 'Pharma R&D Teams',
         description: 'Connect compounds, indications, and clinical-trial activity to the patents that cover them.',
     },
     {
-        icon: Lightbulb,
         title: 'Startup Founders',
         description: 'Understand the white space before investing in development or filing.',
     },
     {
-        icon: Scale,
         title: 'Legal Teams',
         description: 'Prepare export-ready patent evidence and family-level summaries.',
     },
@@ -304,14 +281,9 @@ export default function PatentSearchPage() {
 
                     <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(430px,1.05fr)] lg:gap-8 xl:gap-12">
                         <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Patent Search
-                            </span>
+                            <SectionMark numbered={false}>Patent Search</SectionMark>
                             <h1
-                                className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+                                className="mt-5 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Search 120M+ Patents, From Keyword to{' '}
@@ -369,14 +341,9 @@ export default function PatentSearchPage() {
                     <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
                         <FadeIn>
                             <div className="lg:sticky lg:top-28">
-                                <span
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                    style={{ fontFamily: 'var(--font-mono)' }}
-                                >
-                                    Global Patent Search
-                                </span>
+                                <SectionMark>Global Patent Search</SectionMark>
                                 <h2
-                                    className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                    className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
                                     One Search Bar, 100+ Patent Authorities
@@ -461,14 +428,9 @@ export default function PatentSearchPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Drug-Discovery Intelligence
-                            </span>
+                            <SectionMark>Drug-Discovery Intelligence</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 From Molecule to Clinic, Beside the Patent
@@ -612,14 +574,9 @@ export default function PatentSearchPage() {
                     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
                         <FadeIn>
                             <div>
-                                <span
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                    style={{ fontFamily: 'var(--font-mono)' }}
-                                >
-                                    Inside the platform
-                                </span>
+                                <SectionMark>Inside the platform</SectionMark>
                                 <h2
-                                    className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl"
+                                    className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl"
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
                                     Search That Carries Into Your IP Workflow
@@ -685,14 +642,9 @@ export default function PatentSearchPage() {
                 <Container>
                     <FadeIn>
                         <div className="mx-auto max-w-2xl text-center">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Use cases
-                            </span>
+                            <SectionMark className="justify-center">Use cases</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Built for Patent, R&D, and Biotech Teams
@@ -825,7 +777,7 @@ function SearchMetric({ value, label }: { value: string; label: string }) {
     );
 }
 
-function SearchModeCard({ icon: Icon, title, description }: IconItem) {
+function SearchModeCard({ title, description }: IconItem) {
     return (
         <article className="group relative flex h-full min-h-[156px] overflow-hidden rounded-2xl border border-card-border bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
@@ -833,9 +785,7 @@ function SearchModeCard({ icon: Icon, title, description }: IconItem) {
                 className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/35 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
             <div className="flex items-start gap-3.5">
-                <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/25 group-hover:bg-primary/5">
-                    <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
-                </div>
+                <SubsectionNumber className="w-10 shrink-0 pt-0.5" />
                 <div className="min-w-0">
                     <h3
                         className="text-[15px] font-semibold leading-snug text-text-primary transition-colors duration-300 group-hover:text-primary"
@@ -880,40 +830,14 @@ function WorkflowStep({
     );
 }
 
-function IconCard({ icon: Icon, title, description }: IconItem) {
-    return (
-        <article className="group flex gap-4 rounded-2xl border border-transparent p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-card-border hover:bg-card-bg hover:shadow-lg hover:shadow-primary/[0.04]">
-            <div className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
-            </div>
-            <div className="min-w-0">
-                <h3
-                    className="text-[15px] font-semibold leading-snug text-text-primary transition-colors duration-300 group-hover:text-primary"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                >
-                    {title}
-                </h3>
-                <p
-                    className="mt-1 text-[13px] leading-relaxed text-text-secondary"
-                    style={{ fontFamily: 'var(--font-body)' }}
-                >
-                    {description}
-                </p>
-            </div>
-        </article>
-    );
-}
-
-function FeatureCard({ icon: Icon, title, description }: IconItem) {
+function FeatureCard({ title, description }: IconItem) {
     return (
         <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
-            </div>
+            <SubsectionNumber className="relative" />
             <h3
                 className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
                 style={{ fontFamily: 'var(--font-display)' }}
@@ -930,12 +854,10 @@ function FeatureCard({ icon: Icon, title, description }: IconItem) {
     );
 }
 
-function MiniFeatureCard({ icon: Icon, title, description }: IconItem) {
+function MiniFeatureCard({ title, description }: IconItem) {
     return (
         <article className="group rounded-2xl border border-card-border bg-page-bg-alt p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-card-bg hover:shadow-md hover:shadow-primary/[0.05]">
-            <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
-            </div>
+            <SubsectionNumber />
             <h3
                 className="mt-3 text-[15px] font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
                 style={{ fontFamily: 'var(--font-display)' }}

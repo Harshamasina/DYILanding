@@ -11,6 +11,7 @@ import { FadeIn } from '@/components/motion/FadeIn';
 import { ImportConnectors } from '@/components/ui/ImportConnectors';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 const STEPS = [
     {
@@ -59,14 +60,9 @@ export function ImportSection() {
 
             <Container className="relative">
                 {/* Section Header */}
-                <div id="tree-import" className="flex items-center gap-3 mb-6">
-                    <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        Portfolio Import
-                    </span>
-                </div>
+                <SectionMark id="tree-import" className="mb-6">
+                    Portfolio Import
+                </SectionMark>
 
                 <FadeIn treeNode="tree-import">
                     <div className="max-w-3xl mb-12 lg:mb-16">
@@ -75,7 +71,7 @@ export function ImportSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             Migrate your entire portfolio in{' '}
-                            <span className="text-primary">hours, not months</span>
+                            <span className="italic">hours, not months</span>
                         </h2>
                         <p
                             className="mt-4 text-lg text-text-secondary leading-relaxed"

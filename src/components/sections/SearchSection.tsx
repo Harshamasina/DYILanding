@@ -1,4 +1,4 @@
-import { Globe, Search, FileText, FileSearch } from 'lucide-react';
+import { FileSearch } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { AnimatedPriorArtSearch } from '@/components/ui/AnimatedPriorArtSearch';
 import { MockupHalo } from '@/components/ui/MockupHalo';
@@ -6,6 +6,9 @@ import { DeferredMount } from '@/components/motion/DeferredMount';
 import { Button } from '@/components/ui/Button';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SEARCH_APP_URL, PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
+import { FigureCaption } from '@/components/ui/FigureCaption';
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    Patent Search section.
@@ -13,24 +16,21 @@ import { SEARCH_APP_URL, PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
    Narrative: "This is the patent search built into our platform. Try it
    free, no signup. Want more detail? View more." The mockup depicts the
    in-platform search (its chrome reads app.designyourinvention.com), so
-   it is labelled "Inside the platform" to stay honest — the free public
+   its figure caption says "inside the platform" to stay honest: the free public
    tool reached via "Get Free Access" is a separate, free-to-try surface,
    not the in-app experience with save-to-family and audit trail.
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-const CAPABILITY_POINTS: { icon: React.ElementType; title: string; description: string }[] = [
+const CAPABILITY_POINTS: ReferenceItem[] = [
     {
-        icon: Globe,
         title: '100+ Jurisdictions',
         description: 'Search the global patent corpus from a single search bar, no tool switching.',
     },
     {
-        icon: Search,
         title: 'Six Search Modes',
         description: 'Keyword, inventor, applicant, IPC, CPC, and patent number, with edge cases handled for you.',
     },
     {
-        icon: FileText,
         title: 'Full Patent Detail',
         description: 'Bibliographic data, abstracts, claims, citations, and patent family where the source provides them.',
     },
@@ -45,14 +45,9 @@ export function SearchSection() {
         >
             <Container>
                 {/* ── Section Heading ── */}
-                <div id="tree-search" className="flex items-center gap-3 mb-6">
-                    <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        Patent Search
-                    </span>
-                </div>
+                <SectionMark id="tree-search" className="mb-6">
+                    Patent Search
+                </SectionMark>
                 <FadeIn treeNode="tree-search">
                     <div className="max-w-3xl mb-12 lg:mb-16">
                         <h2
@@ -75,27 +70,22 @@ export function SearchSection() {
                 </FadeIn>
 
                 {/* ── Mockup (left) + Copy (right) ── */}
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="figure-group grid lg:grid-cols-2 gap-12 items-center">
                     <FadeIn delay={0.1}>
                         <DeferredMount className="w-full h-[440px] sm:h-[480px] lg:h-[520px]">
                             <MockupHalo>
                                 <AnimatedPriorArtSearch />
                             </MockupHalo>
                         </DeferredMount>
+                        {/* Honesty label: the mockup is the in-app search
+                            (its chrome reads app.designyourinvention.com),
+                            not the free public tool the CTA opens. */}
+                        <FigureCaption className="mt-5">Patent search, inside the platform</FigureCaption>
                     </FadeIn>
                     <FadeIn delay={0.2}>
                         <div>
-                            {/* Honesty label: the mockup is the in-app search
-                                (its chrome reads app.designyourinvention.com),
-                                not the free public tool the CTA opens. */}
-                            <span
-                                className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Inside the platform
-                            </span>
                             <h3
-                                className="mt-4 text-2xl font-bold text-text-primary sm:text-3xl"
+                                className="text-2xl font-bold text-text-primary sm:text-3xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Search Prior Art the Way Your Team Works
@@ -109,29 +99,7 @@ export function SearchSection() {
                                 and without an account.
                             </p>
 
-                            <ul className="mt-6 flex flex-col gap-4">
-                                {CAPABILITY_POINTS.map((point) => (
-                                    <li key={point.title} className="flex gap-3 items-start">
-                                        <div className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 mt-0.5">
-                                            <point.icon className="w-4.5 h-4.5 text-primary" />
-                                        </div>
-                                        <div>
-                                            <p
-                                                className="text-[15px] font-semibold text-text-primary leading-snug"
-                                                style={{ fontFamily: 'var(--font-display)' }}
-                                            >
-                                                {point.title}
-                                            </p>
-                                            <p
-                                                className="mt-0.5 text-[13px] leading-relaxed text-text-secondary"
-                                                style={{ fontFamily: 'var(--font-body)' }}
-                                            >
-                                                {point.description}
-                                            </p>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
+                            <ReferenceList items={CAPABILITY_POINTS} titleAs="p" className="mt-4" />
 
                             <div className="mt-8 flex flex-col sm:flex-row gap-3">
                                 <Button

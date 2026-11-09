@@ -22,6 +22,7 @@ import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { CompareJsonLd } from '@/components/seo/CompareJsonLd';
 import { PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 export const metadata: Metadata = buildMetadata({
     title: 'Design Your Invention vs Legacy IPMS',
@@ -159,14 +160,9 @@ export default function ComparePage() {
                     </nav>
 
                     <div className="max-w-3xl">
-                        <span
-                            className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
-                            Design Your Invention vs Legacy IPMS
-                        </span>
+                        <SectionMark numbered={false}>Design Your Invention vs Legacy IPMS</SectionMark>
                         <h1
-                            className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+                            className="mt-5 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             One IP Platform Instead of{' '}
@@ -205,14 +201,9 @@ export default function ComparePage() {
                 <Container className="relative z-10">
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Capability by capability
-                            </span>
+                            <SectionMark>Capability by capability</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 What a Modern IPMS Includes by Default

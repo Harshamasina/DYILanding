@@ -1,20 +1,16 @@
 import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SecurityMoatDiagram } from '@/components/ui/SecurityMoatDiagram';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 export function SecuritySection() {
     return (
         <section id="security" className="py-24 lg:py-32 bg-navy">
             <Container>
                 {/* Section Heading */}
-                <div id="tree-security" className="flex items-center gap-3 mb-6">
-                    <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-on-dark"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        Security
-                    </span>
-                </div>
+                <SectionMark id="tree-security" tone="compliance" dark className="mb-6">
+                    Security
+                </SectionMark>
                 <FadeIn treeNode="tree-security">
                     <div className="max-w-2xl mb-12 lg:mb-16">
                         <h2
@@ -22,7 +18,7 @@ export function SecuritySection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             Six Layers of{' '}
-                            <span className="text-primary-light">
+                            <span className="italic">
                                 Compliance-Native Defense
                             </span>
                         </h2>

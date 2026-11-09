@@ -64,6 +64,42 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Section marks, figures and reference numerals number themselves by page
+   order, so reordering sections never breaks the numbering (see
+   components/ui/SectionMark.tsx, FigureCaption.tsx, ReferenceList.tsx and
+   SubsectionNumber.tsx). A figure's numerals run 102, 104, 106 for FIG. 1, as
+   in a patent; subsections under § 03 run 3.1, 3.2, 3.3, as in a statute.
+   counter-set (not counter-reset) restarts the subsection count, so it stays
+   in the scope opened on main. */
+main {
+    counter-reset: section-mark figure subsection;
+}
+
+.figure-group {
+    counter-increment: figure;
+    counter-reset: reference;
+}
+
+.figure-number::before {
+    content: counter(figure);
+}
+
+.subsection-number::before {
+    counter-increment: subsection;
+    content: counter(section-mark) "." counter(subsection);
+}
+
+.reference-numeral::before {
+    counter-increment: reference 2;
+    content: counter(figure) counter(reference, decimal-leading-zero);
+}
+
+.section-mark-number::before {
+    counter-increment: section-mark;
+    counter-set: subsection 0;
+    content: counter(section-mark, decimal-leading-zero);
+}
+
 /* Heading font */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display), 'Georgia', serif;

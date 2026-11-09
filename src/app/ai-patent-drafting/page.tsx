@@ -2,24 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
     Search,
-    BookmarkCheck,
-    Sparkles,
+    GitBranch,
+    ShieldCheck,
+    ScrollText,
     FolderPlus,
     PenLine,
     UserCheck,
     FileCheck,
-    GitBranch,
-    History,
-    RotateCcw,
-    GitCompare,
-    ListTree,
-    RefreshCw,
-    Lock,
-    ShieldCheck,
-    Database,
-    KeyRound,
-    ScrollText,
-    Gauge,
     FileText,
     Check,
     Minus,
@@ -34,6 +23,8 @@ import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedClaimsWorkflow } from '@/components/ui/AnimatedClaimsWorkflow';
 import { AiDraftingHeroSvg } from '@/components/illustrations/AiDraftingHeroSvg';
@@ -51,8 +42,7 @@ export const metadata: Metadata = buildMetadata({
 
 /* ── Data ── */
 
-interface IconItem {
-    icon: React.ElementType;
+interface CardItem {
     title: string;
     description: string;
 }
@@ -72,19 +62,16 @@ const POWERED_BY = [
     'Append-only audit',
 ];
 
-const CAPABILITIES: IconItem[] = [
+const CAPABILITIES: CardItem[] = [
     {
-        icon: Search,
         title: 'Prior Art Search',
         description: 'Worldwide patent search via EPO Open Patent Services, covering 100+ jurisdictions through INPADOC.',
     },
     {
-        icon: BookmarkCheck,
         title: 'Prior Art Management',
         description: 'Save, annotate, paste claim text, and track the relevance of references per patent family.',
     },
     {
-        icon: Sparkles,
         title: 'AI Draft Generation',
         description: `Feed invention details and saved prior art to ${GENERATION_MODEL} to generate jurisdiction-specific claims, abstract, description, and novelty analysis, asynchronously.`,
     },
@@ -149,93 +136,77 @@ const COVERAGE_ROWS: { label: string; us: string; in: string; ep: string; pct: s
     },
 ];
 
-const VERSIONING: IconItem[] = [
+const VERSIONING: CardItem[] = [
     {
-        icon: RefreshCw,
         title: 'Per-unit regeneration',
         description: 'Refine claim 3 without burning tokens regenerating claims 1, 2, and 4 through N. Each claim and section is its own record.',
     },
     {
-        icon: Sparkles,
         title: 'Interactive refinement',
         description: 'Natural-language instructions ("broaden claim 2 to cover oral and IV administration") produce a new revision of one unit, not a full rewrite.',
     },
     {
-        icon: PenLine,
         title: 'Manual edits, never blocked',
         description: 'Attorney edits are revisioned identically to AI edits, distinguished only by a source field.',
     },
     {
-        icon: RotateCcw,
         title: 'Restore as a new revision',
         description: 'Restoring an earlier revision creates a new revision, never a deletion. History only grows.',
     },
     {
-        icon: ListTree,
         title: 'Cascade staleness',
         description: 'Editing claim 2 marks dependent claims, novelty analysis, and description sections stale. You decide what to regenerate, the system never does it for you.',
     },
     {
-        icon: GitCompare,
         title: 'Diff and tree edits',
         description: 'Side-by-side comparison between any two revisions of any unit, plus reorder, reparent, split, and merge of claims.',
     },
 ];
 
-const CONFIDENCE: IconItem[] = [
+const CONFIDENCE: CardItem[] = [
     {
-        icon: Gauge,
         title: 'Three honest bands',
         description: 'High, medium, or low per unit, describing how well the generated text is supported by the prior art on record, not a probability and not a legal opinion. The reviewer defaults to medium when uncertain; high must be affirmatively justified.',
     },
     {
-        icon: ScrollText,
         title: 'Evidence-grounded',
         description: 'Every rating cites a specific claim number, quoted phrase, or publication number from the prior-art snapshot. No vague hand-waving.',
     },
     {
-        icon: History,
         title: 'Progressive reveal',
         description: 'The draft is readable the instant generation completes; scores backfill seconds later while you read. No single long spinner.',
     },
     {
-        icon: ShieldCheck,
         title: 'Prioritization, not a determination',
         description: 'Bands rank where attorney attention is most useful, and do not assess patentability, novelty, or filing readiness. They do not block export or approval, and are not shown to the end client.',
     },
 ];
 
-const SECURITY: IconItem[] = [
+const SECURITY: CardItem[] = [
     {
-        icon: Lock,
         title: 'Tenant isolation',
         description: 'Each customer workspace is separated at the application and data layers. Tenant identity is verified before any drafting record, prior-art source, or portfolio item can be accessed.',
     },
     {
-        icon: Database,
         title: 'Append-only audit',
         description: 'Draft revisions, source references, and prior-art snapshots are preserved as append-only evidence, creating a review history that can be inspected later without being rewritten.',
     },
     {
-        icon: KeyRound,
         title: 'AI-specific controls',
         description: 'Model access, prompt handling, and spending limits are governed per tenant. Generation and saving are controlled separately, with retention-limited provider settings and no personal data by default. Current provider retention terms are shared as part of security review.',
     },
 ];
 
-const SECURITY_GUARDS: { icon: React.ElementType; label: string; text: string }[] = [
+const SECURITY_GUARDS: { label: string; text: string }[] = [
     {
-        icon: ShieldCheck,
         label: 'Enterprise review',
         text: 'Controls designed for procurement, security questionnaires, and regulated IP teams.',
     },
     {
-        icon: ScrollText,
         label: 'Evidence retained',
         text: 'Every generated draft remains tied to the prior-art snapshot and review trail behind it.',
     },
     {
-        icon: FileCheck,
         label: 'Part 11-aligned patterns',
         text: 'Audit and change-control patterns follow 21 CFR Part 11 expectations. Validation stays with the customer.',
     },
@@ -344,14 +315,9 @@ export default function AiPatentDraftingPage() {
 
                     <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:gap-8 xl:gap-12">
                         <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                AI Patent Drafting
-                            </span>
+                            <SectionMark numbered={false}>AI Patent Drafting</SectionMark>
                             <h1
-                                className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+                                className="mt-5 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 AI Patent Drafting With{' '}
@@ -454,7 +420,7 @@ export default function AiPatentDraftingPage() {
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
                         {CAPABILITIES.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.08}>
-                                <CapabilityCard {...item} />
+                                <CapabilityCard {...item} numbered={false} />
                             </FadeIn>
                         ))}
                     </div>
@@ -466,14 +432,9 @@ export default function AiPatentDraftingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Jurisdiction-aware
-                            </span>
+                            <SectionMark>Jurisdiction-aware</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Claims Written to the Rules That Apply
@@ -504,14 +465,9 @@ export default function AiPatentDraftingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Prior Art and References
-                            </span>
+                            <SectionMark>Prior Art and References</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Real Coverage, Stated Plainly
@@ -594,18 +550,13 @@ export default function AiPatentDraftingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-ink"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Structured and versioned
-                            </span>
+                            <SectionMark tone="compliance">Structured and versioned</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 A Draft Is a{' '}
-                                <span className="text-compliance-ink">Record</span>, Not a Blob of Text
+                                <span className="italic">Record</span>, Not a Blob of Text
                             </h2>
                             <p
                                 className="mt-4 text-lg leading-relaxed text-text-secondary"
@@ -622,7 +573,7 @@ export default function AiPatentDraftingPage() {
                     <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-3">
                         {VERSIONING.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.06}>
-                                <CapabilityCard {...item} />
+                                <CapabilityCard {...item} tone="compliance" />
                             </FadeIn>
                         ))}
                     </div>
@@ -662,14 +613,9 @@ export default function AiPatentDraftingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Second-opinion review
-                            </span>
+                            <SectionMark>Second-opinion review</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 A Separate Model Reviews the Draft
@@ -715,14 +661,11 @@ export default function AiPatentDraftingPage() {
                     <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
                         <FadeIn>
                             <div>
-                                <span
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-on-dark"
-                                    style={{ fontFamily: 'var(--font-mono)' }}
-                                >
+                                <SectionMark tone="compliance" dark>
                                     Security and compliance
-                                </span>
+                                </SectionMark>
                                 <h2
-                                    className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
+                                    className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
                                     Built to Survive an Audit
@@ -761,14 +704,9 @@ export default function AiPatentDraftingPage() {
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
-                            <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Access control
-                            </span>
+                            <SectionMark>Access control</SectionMark>
                             <h2
-                                className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Five Permissions, Server-Enforced
@@ -1057,18 +995,21 @@ function JurisdictionCard({ jurisdiction }: { jurisdiction: Jurisdiction }) {
     );
 }
 
-function CapabilityCard({ icon: Icon, title, description }: IconItem) {
+function CapabilityCard({
+    title,
+    description,
+    tone = 'primary',
+    numbered = true,
+}: CardItem & { tone?: 'primary' | 'compliance'; numbered?: boolean }) {
     return (
         <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]">
-                <Icon className="h-5 w-5 text-primary transition-transform duration-300 group-hover:scale-105" />
-            </div>
+            {numbered && <SubsectionNumber tone={tone} className="relative" />}
             <h3
-                className="relative mt-4 text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
+                className={`relative text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary ${numbered ? 'mt-4' : ''}`}
                 style={{ fontFamily: 'var(--font-display)' }}
             >
                 {title}
@@ -1087,16 +1028,12 @@ function SecurityGuardRow({
     guard,
     border,
 }: {
-    guard: { icon: React.ElementType; label: string; text: string };
+    guard: { label: string; text: string };
     border?: boolean;
 }) {
-    const Icon = guard.icon;
-
     return (
         <div className={`flex gap-4 p-5 ${border ? 'border-b border-white/10' : ''}`}>
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary-light/20 bg-primary-light/10 text-primary-light">
-                <Icon className="h-5 w-5" />
-            </span>
+            <SubsectionNumber tone="compliance" dark className="w-10 shrink-0 pt-0.5" />
             <div className="min-w-0">
                 <p
                     className="text-sm font-semibold text-white"
@@ -1115,16 +1052,14 @@ function SecurityGuardRow({
     );
 }
 
-function SecurityCard({ icon: Icon, title, description }: IconItem) {
+function SecurityCard({ title, description }: CardItem) {
     return (
         <article className="group relative flex h-full gap-4 overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-navy-light/55 hover:shadow-lg hover:shadow-primary/[0.05]">
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-linear-to-r from-primary-light/[0.10] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
-            <div className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-white/10">
-                <Icon className="h-5 w-5 text-compliance-on-dark transition-transform duration-300 group-hover:scale-105" />
-            </div>
+            <SubsectionNumber tone="compliance" dark className="relative w-10 shrink-0 pt-1" />
             <div className="relative min-w-0">
                 <h3
                     className="text-lg font-semibold text-white"
