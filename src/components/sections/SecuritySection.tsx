@@ -9,7 +9,7 @@ export function SecuritySection() {
                 {/* Section Heading */}
                 <div id="tree-security" className="flex items-center gap-3 mb-6">
                     <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary-light"
+                        className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-on-dark"
                         style={{ fontFamily: 'var(--font-mono)' }}
                     >
                         Security

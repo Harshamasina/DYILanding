@@ -308,7 +308,7 @@ export default function OfficeActionsPage() {
 
             <section id="approval" className="scroll-mt-24 py-20 sm:py-24 lg:py-28">
                 <Container>
-                    <SectionIntro eyebrow="Review, approval, and exports" title="Attorney Sign-Off Before the Final Copy">
+                    <SectionIntro eyebrow="Review, approval, and exports" title="Attorney Sign-Off Before the Final Copy" highlight="Sign-Off" accent>
                         Move from a review draft to an approved response with clear checks and a recorded signature. <strong className="font-semibold text-text-primary">Approved content is locked, and filing remains with the attorney.</strong>
                     </SectionIntro>
                     <div className="mt-12 grid items-center gap-10 lg:mt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
@@ -334,7 +334,7 @@ export default function OfficeActionsPage() {
 
             <section id="governance" className="scroll-mt-24 bg-navy py-20 sm:py-24 lg:py-28">
                 <Container>
-                    <SectionIntro eyebrow="Audit, security, and control" title="Built for Privileged Prosecution Work" dark>
+                    <SectionIntro eyebrow="Audit, security, and control" title="Built for Privileged Prosecution Work" dark accent>
                         The same <strong className="font-semibold text-white">access controls and audit history that protect your docket</strong> extend to every office action analysis and response.
                     </SectionIntro>
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
@@ -342,7 +342,7 @@ export default function OfficeActionsPage() {
                             <FadeIn key={title} delay={i * 0.06} className="h-full">
                                 <article className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-white/[0.05] hover:shadow-lg hover:shadow-primary/[0.05]">
                                     <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary-light/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                    <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-primary-light/10 group-hover:shadow-sm group-hover:shadow-primary/[0.05]"><Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-105" aria-hidden="true" /></span>
+                                    <span className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-primary-light/10 group-hover:shadow-sm group-hover:shadow-primary/[0.05]"><Icon className="h-5 w-5 text-compliance-on-dark transition-transform duration-300 group-hover:scale-105" aria-hidden="true" /></span>
                                     <h3 className="relative mt-4 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-primary-light">{title}</h3>
                                     <p className="relative mt-2 text-sm leading-relaxed text-text-on-dark/80">{text}</p>
                                 </article>
@@ -380,8 +380,13 @@ function Eyebrow({ children }: { children: ReactNode }) {
     return <span className="text-xs font-bold uppercase tracking-[0.15em] text-primary [font-family:var(--font-mono)]">{children}</span>;
 }
 
-function SectionIntro({ eyebrow, title, children, dark = false }: { eyebrow: string; title: string; children: ReactNode; dark?: boolean }) {
-    return <FadeIn><div className="max-w-3xl"><span className={`text-xs font-bold uppercase tracking-[0.15em] [font-family:var(--font-mono)] ${dark ? 'text-primary-light' : 'text-primary'}`}>{eyebrow}</span><h2 className={`mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl ${dark ? 'text-white' : 'text-text-primary'}`}>{title}</h2><p className={`mt-4 text-lg leading-relaxed ${dark ? 'text-text-on-dark' : 'text-text-secondary'}`}>{children}</p></div></FadeIn>;
+/* accent marks the page's compliance beats in amber: the eyebrow, and on
+   white the highlight (a short phrase of the title) when one is given. */
+function SectionIntro({ eyebrow, title, highlight, children, dark = false, accent = false }: { eyebrow: string; title: string; highlight?: string; children: ReactNode; dark?: boolean; accent?: boolean }) {
+    const eyebrowTone = accent ? (dark ? 'text-compliance-on-dark' : 'text-compliance-ink') : dark ? 'text-primary-light' : 'text-primary';
+    const at = accent && !dark && highlight ? title.indexOf(highlight) : -1;
+    const heading = at >= 0 && highlight ? <>{title.slice(0, at)}<span className="text-compliance-ink">{highlight}</span>{title.slice(at + highlight.length)}</> : title;
+    return <FadeIn><div className="max-w-3xl"><span className={`text-xs font-bold uppercase tracking-[0.15em] [font-family:var(--font-mono)] ${eyebrowTone}`}>{eyebrow}</span><h2 className={`mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl ${dark ? 'text-white' : 'text-text-primary'}`}>{heading}</h2><p className={`mt-4 text-lg leading-relaxed ${dark ? 'text-text-on-dark' : 'text-text-secondary'}`}>{children}</p></div></FadeIn>;
 }
 
 function CapabilityCard({ icon: Icon, title, description, surface = 'card' }: { icon: ElementType; title: string; description: string; surface?: 'card' | 'open' | 'step' }) {

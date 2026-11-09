@@ -648,7 +648,7 @@ export default function PatentSearchPage() {
                                         </span>
                                     </li>
                                     <li className="flex items-start gap-3">
-                                        <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                                        <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-compliance" />
                                         <span
                                             className="text-sm leading-relaxed text-text-secondary"
                                             style={{ fontFamily: 'var(--font-body)' }}

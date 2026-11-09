@@ -93,7 +93,7 @@ export function ComplianceSection() {
                 {/* Section Heading */}
                 <div id="tree-compliance" className="flex items-center gap-3 mb-6">
                     <span
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-compliance"
+                        className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-ink"
                         style={{ fontFamily: 'var(--font-mono)' }}
                     >
                         Compliance
@@ -106,7 +106,7 @@ export function ComplianceSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             FDA 21 CFR Part 11-Aligned Controls,{' '}
-                            <span className="italic">Built In, Not Bolted On</span>
+                            <span className="italic text-compliance-ink">Built In, Not Bolted On</span>
                         </h2>
                         <p
                             className="mt-4 text-lg text-text-secondary leading-relaxed"

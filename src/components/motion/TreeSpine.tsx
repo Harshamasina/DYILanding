@@ -9,6 +9,8 @@ interface TreeNodeConfig {
     elementId: string;
     label: string;
     isDark?: boolean;
+    /** Amber node: the sections whose label is amber (compliance, security, trust). */
+    isAccent?: boolean;
 }
 
 const TREE_NODE_IDS: TreeNodeConfig[] = [
@@ -18,16 +20,34 @@ const TREE_NODE_IDS: TreeNodeConfig[] = [
     { elementId: 'tree-search', label: 'Patent Search' },
     { elementId: 'tree-ai', label: 'Drafting' },
     { elementId: 'tree-office-actions', label: 'Office Actions' },
-    { elementId: 'tree-compliance', label: 'Compliance' },
-    { elementId: 'tree-security', label: 'Security', isDark: true },
+    { elementId: 'tree-compliance', label: 'Compliance', isAccent: true },
+    { elementId: 'tree-security', label: 'Security', isDark: true, isAccent: true },
     { elementId: 'tree-pricing', label: 'Pricing' },
     { elementId: 'tree-faq', label: 'FAQ' },
     { elementId: 'tree-contact', label: 'Contact' },
     // Final branch — the Enterprise Trust eyebrow inside the Footer's trust
     // card. isDark because the trust card sits on a navy-light surface and
     // uses the lighter indigo color for contrast (matches Security pattern).
-    { elementId: 'tree-end', label: 'Enterprise Trust', isDark: true },
+    { elementId: 'tree-end', label: 'Enterprise Trust', isDark: true, isAccent: true },
 ];
+
+function nodeDotClass(node: ComputedNode): string {
+    if (node.isAccent) {
+        return node.isDark
+            ? 'bg-compliance-on-dark border-white/20 shadow-compliance-on-dark/30'
+            : 'bg-compliance border-white shadow-compliance/30';
+    }
+    return node.isDark
+        ? 'bg-primary-light border-white/20 shadow-primary-light/30'
+        : 'bg-primary border-white shadow-primary/30';
+}
+
+/* Inline because the branch width is computed; the colours mirror the tokens
+   in globals.css (compliance, compliance-on-dark, tree-line, primary-light). */
+function branchColor(node: ComputedNode): string {
+    if (node.isAccent) return node.isDark ? '#f59e0b' : '#d97706';
+    return node.isDark ? '#818cf8' : '#6366F1';
+}
 
 /* The drawn line starts this far above the spine's origin and fades in over
    it, so the spine reads as already running rather than starting at a point.
@@ -39,6 +59,7 @@ interface ComputedNode {
     top: number;
     label: string;
     isDark: boolean;
+    isAccent: boolean;
 }
 
 export function TreeSpine() {
@@ -81,6 +102,7 @@ export function TreeSpine() {
                     top: rect.top + window.scrollY - startY,
                     label: node.label,
                     isDark: node.isDark ?? false,
+                    isAccent: node.isAccent ?? false,
                 });
             }
         });
@@ -221,11 +243,7 @@ export function TreeSpine() {
                 >
                     {/* Node dot */}
                     <motion.div
-                        className={`w-3.5 h-3.5 rounded-full border-2 shadow-md ${
-                            node.isDark
-                                ? 'bg-primary-light border-white/20 shadow-primary-light/30'
-                                : 'bg-primary border-white shadow-primary/30'
-                        }`}
+                        className={`w-3.5 h-3.5 rounded-full border-2 shadow-md ${nodeDotClass(node)}`}
                         initial={{ scale: 0 }}
                         animate={visibleNodes[i] ? { scale: 1 } : { scale: 0 }}
                         transition={{ duration: 0.35, ease: 'backOut' }}
@@ -236,8 +254,8 @@ export function TreeSpine() {
                         className="absolute top-1.5 left-4 h-px origin-left"
                         style={{
                             width: 'calc(2rem + 40px)',
-                            backgroundColor: node.isDark ? '#818cf8' : '#6366F1',
-                            opacity: node.isDark ? 0.5 : 0.3,
+                            backgroundColor: branchColor(node),
+                            opacity: node.isDark ? 0.5 : node.isAccent ? 0.45 : 0.3,
                         }}
                         initial={{ scaleX: 0 }}
                         animate={visibleNodes[i] ? { scaleX: 1 } : { scaleX: 0 }}

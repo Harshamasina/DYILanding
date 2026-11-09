@@ -595,7 +595,7 @@ export default function AiPatentDraftingPage() {
                     <FadeIn>
                         <div className="max-w-3xl">
                             <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
+                                className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-ink"
                                 style={{ fontFamily: 'var(--font-mono)' }}
                             >
                                 Structured and versioned
@@ -604,7 +604,8 @@ export default function AiPatentDraftingPage() {
                                 className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
-                                A Draft Is a Record, Not a Blob of Text
+                                A Draft Is a{' '}
+                                <span className="text-compliance-ink">Record</span>, Not a Blob of Text
                             </h2>
                             <p
                                 className="mt-4 text-lg leading-relaxed text-text-secondary"
@@ -715,7 +716,7 @@ export default function AiPatentDraftingPage() {
                         <FadeIn>
                             <div>
                                 <span
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-primary-light"
+                                    className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-on-dark"
                                     style={{ fontFamily: 'var(--font-mono)' }}
                                 >
                                     Security and compliance
@@ -1122,7 +1123,7 @@ function SecurityCard({ icon: Icon, title, description }: IconItem) {
                 className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-linear-to-r from-primary-light/[0.10] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
             <div className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-white/10">
-                <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-105" />
+                <Icon className="h-5 w-5 text-compliance-on-dark transition-transform duration-300 group-hover:scale-105" />
             </div>
             <div className="relative min-w-0">
                 <h3

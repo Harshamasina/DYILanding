@@ -25,6 +25,8 @@ interface Stat {
      *  as a single chunk at a more compact size so longer phrases don't
      *  wrap word-by-word and throw off card alignment. */
     display?: string;
+    /** The one compliance figure in a band, shown in amber. One per band at most. */
+    accent?: boolean;
 }
 
 type StatsVariant = 'cards' | 'minimal';
@@ -109,6 +111,10 @@ function StatCard({
     const count = useCountUp(stat.value, isVisible);
     const Icon = stat.icon;
     const fontFamily = FONT_VAR[numberFont];
+    const tone = stat.accent ? 'text-compliance' : 'text-primary';
+    const iconTile = stat.accent
+        ? 'border-amber-100/80 bg-linear-to-br from-amber-50 via-white to-amber-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(217,119,6,0.08)]'
+        : 'border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(99,102,241,0.08)]';
 
     return (
         <div className="h-full p-4 sm:p-5 lg:p-6 rounded-2xl border border-card-border bg-card-bg shadow-[0_1px_2px_rgba(15,23,42,0.04)] flex flex-col">
@@ -117,11 +123,11 @@ function StatCard({
             <div className="flex items-start gap-3 sm:gap-4">
                 {Icon && (
                     <div
-                        className="shrink-0 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(99,102,241,0.08)]"
+                        className={`shrink-0 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-xl border backdrop-blur-sm ${iconTile}`}
                         aria-hidden="true"
                     >
                         <Icon
-                            className="w-5 h-5 lg:w-6 lg:h-6 text-primary"
+                            className={`w-5 h-5 lg:w-6 lg:h-6 ${tone}`}
                             strokeWidth={1.75}
                         />
                     </div>
@@ -129,7 +135,7 @@ function StatCard({
                 <div className="min-w-0 flex items-center h-11 sm:h-12 lg:h-14">
                     {stat.display ? (
                         <span
-                            className="text-2xl sm:text-3xl lg:text-[2.25rem] font-bold text-primary tracking-tight leading-none whitespace-nowrap"
+                            className={`text-2xl sm:text-3xl lg:text-[2.25rem] font-bold ${tone} tracking-tight leading-none whitespace-nowrap`}
                             style={{ fontFamily }}
                         >
                             {stat.display}
@@ -138,20 +144,20 @@ function StatCard({
                         <div className="flex items-baseline gap-0.5">
                             {stat.prefix && (
                                 <span
-                                    className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary"
+                                    className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${tone}`}
                                     style={{ fontFamily }}
                                 >
                                     {stat.prefix}
                                 </span>
                             )}
                             <span
-                                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary tracking-tight leading-none"
+                                className={`text-3xl sm:text-4xl lg:text-5xl font-bold ${tone} tracking-tight leading-none`}
                                 style={{ fontFamily }}
                             >
                                 {count}
                             </span>
                             <span
-                                className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary"
+                                className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${tone}`}
                                 style={{ fontFamily }}
                             >
                                 {stat.suffix}
@@ -311,6 +317,7 @@ export const HERO_STATS: Stat[] = [
         label: 'CFR Part 11-Aligned Controls',
         sublabel: 'Reason-for-change, e-signature, audit history',
         icon: ShieldCheck,
+        accent: true,
     },
     {
         value: 100,
@@ -349,5 +356,6 @@ export const PRODUCT_STATS: Stat[] = [
         label: 'Audit Coverage',
         sublabel: 'critical actions fully traceable',
         icon: ClipboardCheck,
+        accent: true,
     },
 ];

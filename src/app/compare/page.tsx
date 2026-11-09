@@ -38,6 +38,8 @@ interface CompareRow {
     capability: string;
     legacy: string;
     legacyIncluded: boolean;
+    /** The compliance row, marked in amber. */
+    accent?: boolean;
     dyi: string;
 }
 
@@ -87,6 +89,7 @@ const COMPARE_ROWS: CompareRow[] = [
         capability: 'Part 11-aligned architecture',
         legacy: 'Varies widely by vendor and product age',
         legacyIncluded: false,
+        accent: true,
         dyi: 'Audit-first design following FDA 21 CFR Part 11 patterns: reason-for-change, append-only audit trail, e-signature re-authentication',
     },
     {
@@ -336,8 +339,14 @@ function CompareTableRow({ row }: { row: CompareRow }) {
                 style={{ fontFamily: 'var(--font-body)' }}
             >
                 <span className="flex items-center gap-3">
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
-                        <Icon className="h-4 w-4 text-primary" />
+                    <span
+                        className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border bg-linear-to-br via-white ${
+                            row.accent
+                                ? 'border-amber-100/80 from-amber-50 to-amber-50/40'
+                                : 'border-indigo-100/80 from-indigo-50 to-indigo-50/40'
+                        }`}
+                    >
+                        <Icon className={`h-4 w-4 ${row.accent ? 'text-compliance' : 'text-primary'}`} />
                     </span>
                     {row.capability}
                 </span>

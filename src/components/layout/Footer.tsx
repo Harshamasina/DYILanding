@@ -214,7 +214,7 @@ export function Footer() {
                             <div className="flex-[3]">
                                 <p
                                     id="tree-end"
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-primary-light mb-4"
+                                    className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-on-dark mb-4"
                                     style={{ fontFamily: 'var(--font-mono)' }}
                                 >
                                     Enterprise Trust
@@ -231,8 +231,8 @@ export function Footer() {
                                             key={badge.label}
                                             className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-white/10 bg-white/4"
                                         >
-                                            <div className="w-8 h-8 rounded-lg bg-primary-light/10 flex items-center justify-center shrink-0">
-                                                <badge.icon className="w-4 h-4 text-primary-light" />
+                                            <div className="w-8 h-8 rounded-lg bg-compliance-on-dark/10 flex items-center justify-center shrink-0">
+                                                <badge.icon className="w-4 h-4 text-compliance-on-dark" />
                                             </div>
                                             <span
                                                 className="text-[11px] sm:text-xs font-semibold text-white/80"

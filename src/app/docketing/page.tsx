@@ -384,7 +384,7 @@ export default function DocketingPage() {
                     <FadeIn>
                         <div className="max-w-4xl">
                             <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
+                                className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-ink"
                                 style={{ fontFamily: 'var(--font-mono)' }}
                             >
                                 Traceable computed deadlines
@@ -393,7 +393,8 @@ export default function DocketingPage() {
                                 className="mt-4 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
-                                Every Computed Date Shows Its Work
+                                Every Computed Date{' '}
+                                <span className="text-compliance-ink">Shows Its Work</span>
                             </h2>
                             <p
                                 className="mt-4 text-lg leading-relaxed text-text-secondary"
@@ -622,7 +623,7 @@ export default function DocketingPage() {
                     <FadeIn>
                         <div className="max-w-3xl">
                             <span
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-primary-light"
+                                className="text-xs font-bold uppercase tracking-[0.15em] text-compliance-on-dark"
                                 style={{ fontFamily: 'var(--font-mono)' }}
                             >
                                 Audit, security and compliance
@@ -919,7 +920,7 @@ function SecurityCard({ icon: Icon, title, description }: IconItem) {
                 className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary-light/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
             <div className="relative inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-primary-light/25 group-hover:bg-primary-light/10 group-hover:shadow-sm group-hover:shadow-primary/[0.05]">
-                <Icon className="h-5 w-5 text-primary-light transition-transform duration-300 group-hover:scale-105" />
+                <Icon className="h-5 w-5 text-compliance-on-dark transition-transform duration-300 group-hover:scale-105" />
             </div>
             <h3
                 className="relative mt-4 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-primary-light"

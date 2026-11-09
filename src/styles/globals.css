@@ -24,8 +24,16 @@
     --color-text-muted: #737f8d;
     --color-text-on-dark: #e2e8f0;
 
-    /* Compliance accent */
+    /* Compliance accent: amber means regulated, on time, provable. It is
+       never a button or link colour (indigo owns "click here"), never a large
+       fill, and appears once or twice per page.
+       - compliance: large figures, icons and lines on white (3.2:1)
+       - compliance-ink: labels and heading phrases on white (5.0:1)
+       - compliance-on-dark: labels and icons on navy (8.1:1); navy
+         headings stay white, since amber at display size is too loud there */
     --color-compliance: #d97706;
+    --color-compliance-ink: #b45309;
+    --color-compliance-on-dark: #f59e0b;
 
     /* Status */
     --color-success: #059669;
