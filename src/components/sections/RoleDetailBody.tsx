@@ -48,10 +48,7 @@ export function RoleDetailBody({ role }: RoleDetailBodyProps) {
                 <div className="max-w-3xl mx-auto">
                     {/* TLDR callout */}
                     <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 sm:p-7">
-                        <p
-                            className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary mb-3"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
+                        <p className="mb-3 text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                             TL;DR
                         </p>
                         <SplitParagraphs
@@ -154,11 +151,10 @@ function BlockView({ block }: { block: DetailBlock }) {
                     {block.items.map((step, i) => (
                         <li key={i} className="flex gap-4">
                             <span
-                                className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-semibold shrink-0"
-                                style={{ fontFamily: 'var(--font-mono)' }}
+                                className="w-8 shrink-0 pt-0.5 text-lg font-semibold leading-none tabular-nums text-primary [font-family:var(--font-display)]"
                                 aria-hidden="true"
                             >
-                                {i + 1}
+                                {String(i + 1).padStart(2, '0')}
                             </span>
                             <div className="pt-0.5">
                                 <h3

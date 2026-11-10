@@ -26,7 +26,7 @@ import {
 import { BrowserMockupChrome } from './BrowserMockupChrome';
 
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
-const SEARCH_QUERY = 'CRISPR diagnostics';
+const SEARCH_QUERY = 'aspirin AND caffeine';
 const MOCKUP_HEIGHT = 'h-[520px] sm:h-[620px] lg:h-[680px]';
 
 const TYPE_START = 650;
@@ -68,105 +68,109 @@ interface ResultItem {
     abstract: string;
 }
 
+/* Every record in this mockup is illustrative: one fictional matter (a
+   fixed-dose analgesic combination tablet) with DEMO publication numbers, so
+   nothing reads as a real patent. The compounds are real, and each name,
+   SMILES, formula, weight and InChIKey belongs to the same molecule. */
 const SEARCH_RESULTS_DATA: ResultItem[] = [
     {
-        pub: 'US-11873485-B2',
-        date: '2024-01-16',
-        codes: ['C12N15/11', 'C12N9/22'],
-        title: 'Allosteric conditional guide RNAs for cell-selective regulation of CRISPR/Cas',
-        inventors: 'HOCHREIN, LISA, HANEWICH-HOLLATZ, MIKHAIL H., CHEN, ZHWEI +4 more',
+        pub: 'US-DEMO-2022-0042-A1',
+        date: '2022-01-20',
+        codes: ['A61K31/616', 'A61K31/167', 'A61K31/522'],
+        title: 'Stabilized fixed-dose analgesic combination tablet',
+        inventors: 'REYES, ANA, OKAFOR, DANIEL, LINDQVIST, MAJA +2 more',
         abstract:
-            'Programmable guide RNAs (gRNAs) play a central role in the CRISPR revolution sweeping biology and medicine by directing the function of a Cas protein effector to a target gene of choice. To achieve programmable control over regulatory scope, the activity of a conditional guide RNA depends on the presence or absence of a trigger sequence.',
+            'A fixed-dose analgesic tablet combines acetylsalicylic acid, acetaminophen, and caffeine with an excipient system that limits hydrolysis of acetylsalicylic acid to salicylic acid during storage.',
     },
     {
-        pub: 'US-12385040-B2',
-        date: '2025-08-12',
-        codes: ['C12N9/22', 'C12N15/11'],
-        title: 'Allosteric conditional guide RNAs for cell-selective regulation of CRISPR/Cas',
-        inventors: 'HOCHREIN, LISA, HANEWICH-HOLLATZ, MIKHAIL H., CHEN, ZHWEI +4 more',
+        pub: 'EP-DEMO-0108-B1',
+        date: '2023-06-14',
+        codes: ['A61K9/2086', 'A61K31/616'],
+        title: 'Bilayer tablet separating acetylsalicylic acid from acetaminophen',
+        inventors: 'BRANDT, LUKAS, SATO, HARUKA +3 more',
         abstract:
-            'Programmable guide RNAs (gRNAs) play a central role in the CRISPR revolution sweeping biology and medicine by directing the function of a Cas protein effector to a target gene of choice. Conditional guide RNAs may provide cell-selective editing and diagnostic readouts.',
+            'A bilayer tablet keeps acetylsalicylic acid and acetaminophen in separate layers to reduce interaction during storage, with caffeine distributed in the second layer.',
     },
     {
-        pub: 'US-12522863-B2',
-        date: '2026-01-13',
-        codes: ['C12Q1/70', 'C12Q1/6806', 'C12N9/78'],
-        title: 'Crispr effector system based coronavirus diagnostics',
-        inventors: 'ZHANG, FENG, Gootenberg, Jonathan, Abudayyeh, Omar +4 more',
+        pub: 'WO-DEMO-0311-A1',
+        date: '2024-03-07',
+        codes: ['A61K31/522', 'A61P29/02'],
+        title: 'Caffeine-containing analgesic composition for tension-type headache',
+        inventors: 'MORENO, LUCIA, PATEL, RAVI +2 more',
         abstract:
-            'Systems and methods for rapid diagnostics related to the use of CRISPR effector systems and optimized guide sequences for detection of coronavirus, including multiplex lateral flow diagnostic devices and methods of use, are provided.',
+            'Analgesic compositions comprising caffeine as an adjuvant to acetaminophen are described for the acute treatment of tension-type headache, with defined dose ranges for each component.',
     },
     {
-        pub: 'WO-2026048712-A1',
-        date: '2026-03-28',
-        codes: ['C12Q1/68', 'A61K39/395'],
-        title: 'CRISPR effector system based diagnostics for virus detection',
-        inventors: 'CHEN, SMITH, DUBOIS, MORRISON +3 more',
+        pub: 'US-DEMO-0517-B2',
+        date: '2024-09-24',
+        codes: ['A61K9/16', 'A61K31/616'],
+        title: 'Low-moisture granulation process for aspirin combination products',
+        inventors: 'HALL, GRACE, NGUYEN, TRAN +4 more',
         abstract:
-            'Compositions and methods are disclosed for nucleic acid detection in biological samples using guide RNA complexes, target amplification, and reporter cleavage assays suitable for point-of-care diagnostics.',
+            'A dry granulation process holds residual moisture below a set limit so that acetylsalicylic acid in combination products degrades less to salicylic acid.',
     },
     {
-        pub: 'EP-4285631-B1',
-        date: '2025-11-04',
-        codes: ['C12N15/90', 'C07K14/39'],
-        title: 'Engineered CRISPR nucleases with altered target specificity',
-        inventors: 'JOUNG, J KEITH, KLEINSTIVER, BENJAMIN +6 more',
+        pub: 'JP-DEMO-0057-A',
+        date: '2025-02-13',
+        codes: ['A61K31/167', 'A61K9/20'],
+        title: 'Rapid-dissolving acetaminophen and caffeine formulation',
+        inventors: 'TANAKA, KENJI, MORI, AYA +3 more',
         abstract:
-            'Engineered CRISPR nucleases with improved activity and altered protospacer-adjacent motif compatibility are described for genome editing, epigenomic engineering, and in vitro diagnostic applications.',
+            'A rapidly dissolving tablet of acetaminophen and caffeine uses a disintegrant blend to shorten dissolution time in simulated gastric fluid.',
     },
     {
-        pub: 'US-20260091442-A1',
-        date: '2026-02-19',
-        codes: ['C12Q1/6816', 'G01N33/569'],
-        title: 'Methods and compositions for multiplex sample nucleic acid detection',
-        inventors: 'WILSON, PRIYA, GARCIA, MATEO, LEWIS, ANIKA +2 more',
+        pub: 'US-DEMO-0623-A1',
+        date: '2025-07-31',
+        codes: ['A61P25/06', 'A61K31/616'],
+        title: 'Method of treating migraine with a fixed-dose analgesic combination',
+        inventors: 'REYES, ANA, CHEN, WEI +2 more',
         abstract:
-            'A multiplexed nucleic-acid detection workflow combines CRISPR-associated enzymes, barcoded guide RNAs, and optical reporters to identify pathogen signatures from a single prepared sample.',
+            'Methods of treating migraine headache by orally administering a tablet comprising acetylsalicylic acid, acetaminophen, and caffeine are disclosed.',
     },
     {
-        pub: 'JP-2026010038-A',
-        date: '2026-04-02',
-        codes: ['C12N9/22', 'C12Q1/6876'],
-        title: 'RNA-guided detection system with improved reporter stability',
-        inventors: 'NAKAMURA, Y., TAKEDA, S., PARK, M. +5 more',
+        pub: 'EP-DEMO-0734-A1',
+        date: '2026-01-15',
+        codes: ['A61K31/192', 'A61K31/522'],
+        title: 'Ibuprofen and caffeine combination with faster onset of action',
+        inventors: 'KOWALSKI, PIOTR, ADEYEMI, TOLU +2 more',
         abstract:
-            'Reporter constructs and reaction buffers are optimized to improve CRISPR-based signal stability across temperature ranges, enabling transportable diagnostic kits with high sensitivity.',
+            'An oral combination of ibuprofen and caffeine is formulated to reach therapeutic plasma levels sooner than ibuprofen alone in an illustrative pharmacokinetic study.',
     },
 ];
 
 const PORTFOLIO_ITEMS = [
-    { title: 'COMPOSITIONS, METHODS AND ARTICLES CONCERNING...', pub: 'WO2012034089A1', savedDaysAgo: 0 },
-    { title: 'COMPOSITIONS AND METHODS FOR TREATMENT...', pub: 'JP2020100623A', savedDaysAgo: 1 },
-    { title: 'PHARMACEUTICAL FORMULATIONS AND THEIR...', pub: 'US2025186435A1', savedDaysAgo: 2 },
+    { title: 'CAFFEINE-CONTAINING ANALGESIC COMPOSITION...', pub: 'WO-DEMO-0311-A1', savedDaysAgo: 0 },
+    { title: 'RAPID-DISSOLVING ACETAMINOPHEN AND...', pub: 'JP-DEMO-0057-A', savedDaysAgo: 1 },
+    { title: 'LOW-MOISTURE GRANULATION PROCESS FOR...', pub: 'US-DEMO-0517-B2', savedDaysAgo: 2 },
 ];
 
 const FILTERS = ['Jurisdiction', 'Filing date', 'IPC / CPC', 'Assignee', 'Inventor', 'Scope'];
 
 const DETAIL = {
     country: 'US',
-    number: '20220017883',
+    number: 'DEMO-2022-0042',
     kind: 'A1',
-    title: 'Variants of CRISPR from Prevotella and Francisella 1 (Cpf1)',
-    applicants: 'MASSACHUSETTS G...',
-    inventor: 'JOUNG J KEITH, KLEI...',
-    ipc: 'C12N9/22',
+    title: 'Stabilized fixed-dose analgesic combination tablet',
+    applicants: 'NORTHSTAR PHARMA...',
+    inventor: 'REYES ANA, OKAFOR...',
+    ipc: 'A61K31/616',
     source: 'Cache',
     cache: 'L1',
     latency: '12916 ms',
-    compounds: 40,
+    compounds: 5,
     trials: 3,
 };
 
 const BIBLIO_COLUMNS = [
     [
-        ['Publication number', 'US12590299B2'],
+        ['Publication number', 'US-DEMO-2022-0042-A1'],
         ['Country code', 'US'],
-        ['Kind code', 'B2'],
+        ['Kind code', 'A1'],
     ],
     [
-        ['Publication date', '31 Mar 2026'],
-        ['Application date', '12 Oct 2021'],
-        ['Priority date', '26 Jul 2016'],
+        ['Publication date', '20 Jan 2022'],
+        ['Application date', '14 Jul 2021'],
+        ['Priority date', '15 Jul 2020'],
     ],
     [
         ['Source', 'Cache'],
@@ -175,16 +179,16 @@ const BIBLIO_COLUMNS = [
     ],
 ] as const;
 
-const IPC_CODES = ['C12N9/22', 'C07K14/39', 'C12N9/02', 'C12N15/11', 'C12N15/90'] as const;
+const IPC_CODES = ['A61K31/616', 'A61K31/167', 'A61K31/522', 'A61K9/20', 'A61P29/02'] as const;
 
 const FAMILY_MEMBERS = [
-    ['US', 'B2', 'US12590299B2'],
-    ['US', 'A1', 'US20180030425A1'],
-    ['CA', 'A1', 'CA3031414A1'],
-    ['EP', 'A1', 'EP3491133A1'],
-    ['US', 'A1', 'US20220017883A1'],
-    ['AU', 'A1', 'AU2025275207A1'],
-    ['AU', 'B2', 'AU2023208113B2'],
+    ['US', 'A1', 'US-DEMO-2022-0042-A1'],
+    ['US', 'B2', 'US-DEMO-0042-B2'],
+    ['EP', 'A1', 'EP-DEMO-0042-A1'],
+    ['WO', 'A1', 'WO-DEMO-0042-A1'],
+    ['CA', 'A1', 'CA-DEMO-0042-A1'],
+    ['JP', 'A', 'JP-DEMO-0042-A'],
+    ['AU', 'A1', 'AU-DEMO-0042-A1'],
 ] as const;
 
 interface ClaimItem {
@@ -199,55 +203,50 @@ const CLAIMS: ClaimItem[] = [
         number: 1,
         type: 'Independent',
         text:
-            'An isolated CRISPR from Prevotella and Francisella 1 (Cpf1) protein, wherein the protein is from Lachnospiraceae bacterium ND2006 (LbCpf1), comprising a sequence that is at least 80% identical to the amino acid sequence of amino acids 1-1228 of SEQ ID NO: 10, with mutations at one or more of the following positions: N160, S168, N256, N260, K272, S286, K349, D505, Q513, G741, Q944, K945, and/or S985 of amino acids 1-1228 of SEQ ID NO:10.',
+            'A pharmaceutical tablet comprising acetylsalicylic acid, acetaminophen, and caffeine, wherein the weight ratio of acetylsalicylic acid to caffeine is from 3:1 to 5:1, and a pharmaceutically acceptable excipient.',
     },
     {
         number: 2,
         type: 'Dependent',
         dependsOn: 1,
-        text:
-            'The isolated protein of claim 1, comprising one or more of the following mutations: N160A, S168A, N256A, N260A, K272A, S286A, K349A, D505A, Q513A, G741A, Q944A, K945A, and/or S985A.',
+        text: 'The tablet of claim 1, comprising 250 mg acetylsalicylic acid, 250 mg acetaminophen, and 65 mg caffeine.',
     },
     {
         number: 3,
         type: 'Dependent',
         dependsOn: 1,
-        text:
-            'The isolated protein of claim 1, further comprising one or more mutations that decrease nuclease activity selected from the group consisting of mutations at D832 and E925.',
+        text: 'The tablet of claim 1, wherein the tablet is film-coated.',
     },
     {
         number: 4,
         type: 'Dependent',
         dependsOn: 3,
-        text: 'The isolated protein of claim 3, comprising mutations D832A and E925A.',
+        text: 'The tablet of claim 3, wherein the film coating comprises hydroxypropyl methylcellulose.',
     },
     {
         number: 5,
         type: 'Dependent',
         dependsOn: 1,
-        text:
-            'The isolated protein of claim 1, comprising a sequence that is at least 95% identical to the amino acid sequence of amino acids 1-1228 of SEQ ID NO:10.',
+        text: 'The tablet of claim 1, wherein the acetylsalicylic acid is present in a layer separate from the acetaminophen.',
     },
     {
         number: 6,
         type: 'Dependent',
         dependsOn: 1,
         text:
-            'The isolated protein of claim 1, further comprising mutations at one or more guide-RNA contact residues that increase guide RNA binding affinity.',
+            'The tablet of claim 1, wherein the salicylic acid content does not exceed 3% of the acetylsalicylic acid content after 12 months of storage at 25 degrees C and 60% relative humidity.',
     },
     {
         number: 7,
         type: 'Dependent',
         dependsOn: 1,
-        text:
-            'The isolated protein of claim 1, wherein the protein exhibits altered target specificity relative to a wild-type Cpf1 protein.',
+        text: 'The tablet of claim 1, for use in the acute treatment of migraine headache.',
     },
     {
         number: 8,
         type: 'Dependent',
         dependsOn: 1,
-        text:
-            'A composition comprising the isolated protein of claim 1 and a guide RNA configured to target a genomic sequence in a mammalian cell.',
+        text: 'A method of treating acute pain, comprising orally administering the tablet of claim 1 to a patient in need thereof.',
     },
 ];
 
@@ -272,25 +271,24 @@ const CLAIM_TREE_ITEMS = CLAIMS.map((claim) => {
     };
 });
 
+type StructureId = 'aspirin' | 'salicylic' | 'paracetamol' | 'ibuprofen' | 'caffeine';
+
 interface CompoundItem {
+    name: string;
+    structure: StructureId;
     inchiKey: string;
     formula: string;
     mw: string;
     smiles: string;
     source: string;
-    variant: number;
 }
 
 const COMPOUNDS: CompoundItem[] = [
-    { inchiKey: 'QGZKDVFQNNGYKY-UHFFFAOYSA-N', formula: '[43NH3]', mw: '3 g/mol', smiles: '[43NH3]', source: 'SureChEMBL #20', variant: 0 },
-    { inchiKey: 'MDFFNEOEWAXZRQ-UHFFFAOYSA-N', formula: '[NH2]', mw: '16.0226 g/mol', smiles: '[NH2]', source: 'SureChEMBL #3129', variant: 1 },
-    { inchiKey: 'DHMQDGOQFOQNFH-UHFFFAOYSA-N', formula: 'NCC(=O)O', mw: '75.0666 g/mol', smiles: 'NCC(=O)O', source: 'SureChEMBL #6163', variant: 2 },
-    { inchiKey: 'QNAYBMKLOCPYGJ-UHFFFAOYSA-N', formula: 'CC(N)C(=O)O', mw: '89.0932 g/mol', smiles: 'CC(N)C(=O)O', source: 'SureChEMBL #31', variant: 3 },
-    { inchiKey: 'QNAYBMKLOCPYGJ-REOHCLBHSA-N', formula: 'C[C@H](N)C(=O)O', mw: '89.0932 g/mol', smiles: 'C[C@H](N)C(=O)O', source: 'SureChEMBL #32', variant: 4 },
-    { inchiKey: 'MTCFGRXMJLQNBG-UHFFFAOYSA-N', formula: 'NC(CO)C(=O)O', mw: '105.093 g/mol', smiles: 'NC(CO)C(=O)O', source: 'SureChEMBL #1774', variant: 5 },
-    { inchiKey: 'XLYOFNOQVPJJNP-UHFFFAOYSA-N', formula: 'H2O', mw: '18.015 g/mol', smiles: 'O', source: 'SureChEMBL #411', variant: 6 },
-    { inchiKey: 'RWSOTUBLDIXVET-UHFFFAOYSA-N', formula: 'C6H6N2O', mw: '122.12 g/mol', smiles: 'O=C(N)c1ccncc1', source: 'SureChEMBL #4521', variant: 7 },
-    { inchiKey: 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N', formula: 'C9H8O4', mw: '180.16 g/mol', smiles: 'CC(=O)Oc1ccccc1C(=O)O', source: 'SureChEMBL #2210', variant: 8 },
+    { name: 'Aspirin', structure: 'aspirin', inchiKey: 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N', formula: 'C9H8O4', mw: '180.16 g/mol', smiles: 'CC(=O)Oc1ccccc1C(=O)O', source: 'Claim 1' },
+    { name: 'Acetaminophen', structure: 'paracetamol', inchiKey: 'RZVAJINKPMORJF-UHFFFAOYSA-N', formula: 'C8H9NO2', mw: '151.16 g/mol', smiles: 'CC(=O)Nc1ccc(O)cc1', source: 'Claim 1' },
+    { name: 'Caffeine', structure: 'caffeine', inchiKey: 'RYYVLZVUVIJVGH-UHFFFAOYSA-N', formula: 'C8H10N4O2', mw: '194.19 g/mol', smiles: 'Cn1cnc2c1c(=O)n(C)c(=O)n2C', source: 'Claim 1' },
+    { name: 'Salicylic acid', structure: 'salicylic', inchiKey: 'YGSDEFSMJLZEOE-UHFFFAOYSA-N', formula: 'C7H6O3', mw: '138.12 g/mol', smiles: 'O=C(O)c1ccccc1O', source: 'Claim 6' },
+    { name: 'Ibuprofen', structure: 'ibuprofen', inchiKey: 'HEFNNWSXXWATRW-UHFFFAOYSA-N', formula: 'C13H18O2', mw: '206.28 g/mol', smiles: 'CC(C)Cc1ccc(cc1)C(C)C(=O)O', source: 'Description ¶ [0018]' },
 ];
 
 export function AnimatedPatentSearch() {
@@ -376,7 +374,7 @@ export function AnimatedPatentSearch() {
             role="img"
             className={`relative flex flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
         >
-            <BrowserMockupChrome url={browserUrl} />
+            <BrowserMockupChrome url={browserUrl} record="DEMO-PAS-001" screen="Patent search" />
             <div className="relative min-h-0 flex-1 overflow-hidden bg-white">
                 <AnimatePresence mode="wait">
                     {showSearch && (
@@ -437,16 +435,16 @@ export function AnimatedPatentSearch() {
 
 function getPatentBrowserUrl(phase: Phase) {
     if (phase === 'loadingDetail' || phase === 'overview') {
-        return 'search.designyourinvention.com/US20220017883A1/overview';
+        return 'search.designyourinvention.com/US-DEMO-2022-0042-A1/overview';
     }
     if (phase === 'claims') {
-        return 'search.designyourinvention.com/US20220017883A1/claims';
+        return 'search.designyourinvention.com/US-DEMO-2022-0042-A1/claims';
     }
     if (phase === 'compounds' || phase === 'rest') {
-        return 'search.designyourinvention.com/US20220017883A1/compounds';
+        return 'search.designyourinvention.com/US-DEMO-2022-0042-A1/compounds';
     }
     if (phase === 'submitted' || phase === 'loadingResults' || phase === 'results' || phase === 'hoverResult') {
-        return 'search.designyourinvention.com/?q=CRISPR%20diagnostics';
+        return 'search.designyourinvention.com/?q=aspirin%20AND%20caffeine';
     }
     return 'search.designyourinvention.com/';
 }
@@ -774,7 +772,7 @@ function OverviewWorkspace() {
                         >
                             <h3 className="text-[15px] font-bold text-text-primary">Abstract</h3>
                             <p className="mt-3 text-[11px] leading-relaxed text-slate-600 sm:text-[13px]">
-                                Engineered CRISPR from Prevotella and Francisella 1 (Cpf1) nucleases with altered and improved target specificity and their use in genomic engineering, epigenomic engineering, genome targeting, genome editing, and in vitro diagnostics.
+                                A fixed-dose analgesic tablet combines acetylsalicylic acid, acetaminophen, and caffeine with an excipient system that limits hydrolysis of acetylsalicylic acid to salicylic acid during storage.
                             </p>
                             <p className="mt-3 text-[11px] font-semibold text-primary">Show more</p>
                         </motion.div>
@@ -979,14 +977,14 @@ function CompoundsWorkspace() {
                                     transition={{ duration: 0.28, delay: index * 0.05, ease: EASE }}
                                 >
                                     <div className="flex h-16 items-center justify-center sm:h-20">
-                                        <Molecule variant={compound.variant} />
+                                        <Molecule structure={compound.structure} />
                                     </div>
                                     <p className="mt-2 truncate text-[8px] font-semibold text-primary" style={{ fontFamily: 'var(--font-mono)' }}>
                                         {compound.inchiKey}
                                     </p>
                                     <div className="mt-1 flex items-center gap-2">
                                         <p className="text-[9px] text-slate-600">{compound.mw}</p>
-                                        <Pill>Description</Pill>
+                                        <Pill>{compound.name}</Pill>
                                     </div>
                                     <p className="mt-1 truncate text-[8px] text-text-primary" style={{ fontFamily: 'var(--font-mono)' }}>{compound.smiles}</p>
                                     <p className="mt-1 text-[8px] text-slate-600" style={{ fontFamily: 'var(--font-mono)' }}>{compound.source}</p>
@@ -1001,12 +999,67 @@ function CompoundsWorkspace() {
     );
 }
 
+/* A still frame of the compounds view for the Drug-Discovery section: three
+   disclosed compounds and one linked trial, readable at every width. The
+   record is illustrative, like the rest of the mockup. */
+const STILL_COMPOUNDS = [COMPOUNDS[0], COMPOUNDS[1], COMPOUNDS[2]];
+
+export function CompoundsTrialsStill() {
+    return (
+        <div className="overflow-hidden rounded-xl border border-card-border bg-white shadow-sm [font-family:var(--font-body)]">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-card-border px-4 py-3 sm:px-5">
+                <p className="text-sm font-semibold text-text-primary">Disclosed compounds</p>
+                <p className="text-xs text-text-secondary">3 of {DETAIL.compounds} shown · from claims and description</p>
+            </div>
+            <ul className="grid grid-cols-1 divide-y divide-card-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                {STILL_COMPOUNDS.map((compound) => (
+                    <li key={compound.inchiKey} className="flex items-center gap-3 px-4 py-3 sm:flex-col sm:items-start sm:px-5 sm:py-4">
+                        <div className="flex h-16 w-20 shrink-0 items-center justify-center sm:h-20 sm:w-full">
+                            <Molecule structure={compound.structure} />
+                        </div>
+                        <div className="min-w-0">
+                            <p className="text-sm font-semibold text-text-primary">{compound.name}</p>
+                            <p className="mt-0.5 truncate text-xs font-semibold text-primary [font-family:var(--font-mono)]">{compound.inchiKey}</p>
+                            <p className="mt-1 text-xs text-text-secondary">{compound.formula} · {compound.mw} · {compound.source}</p>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+            <div className="border-t border-card-border px-4 py-3 sm:px-5">
+                <p className="text-sm font-semibold text-text-primary">Linked clinical trials</p>
+                <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-xs sm:grid-cols-5">
+                    <div className="min-w-0">
+                        <dt className="text-text-secondary">Trial</dt>
+                        <dd className="mt-0.5 truncate font-semibold text-primary [font-family:var(--font-mono)]">NCT-DEMO-0042</dd>
+                    </div>
+                    <div>
+                        <dt className="text-text-secondary">Phase</dt>
+                        <dd className="mt-0.5 text-text-primary">Phase 2</dd>
+                    </div>
+                    <div>
+                        <dt className="text-text-secondary">Status</dt>
+                        <dd className="mt-0.5 text-text-primary">Recruiting</dd>
+                    </div>
+                    <div className="min-w-0">
+                        <dt className="text-text-secondary">Sponsor</dt>
+                        <dd className="mt-0.5 truncate text-text-primary">Northstar Pharma</dd>
+                    </div>
+                    <div className="min-w-0">
+                        <dt className="text-text-secondary">Indication</dt>
+                        <dd className="mt-0.5 truncate text-text-primary">Migraine</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    );
+}
+
 function Breadcrumb() {
     return (
         <div className="flex items-center gap-2 text-[11px] text-text-primary">
             <span className="text-primary">Search</span>
             <span className="text-slate-400">/</span>
-            <span style={{ fontFamily: 'var(--font-mono)' }}>US20220017883A1</span>
+            <span style={{ fontFamily: 'var(--font-mono)' }}>US-DEMO-2022-0042-A1</span>
         </div>
     );
 }
@@ -1096,7 +1149,7 @@ function IntelligencePanel({ dimCompounds }: { dimCompounds?: boolean }) {
                     icon={<FlaskConical className="h-4 w-4" />}
                     label="Compounds detected"
                     sub="From claims and description"
-                    value={dimCompounds ? 0 : DETAIL.compounds}
+                    value={DETAIL.compounds}
                     muted={dimCompounds}
                 />
                 <IntelligenceRow
@@ -1116,7 +1169,7 @@ function IntelligencePanel({ dimCompounds }: { dimCompounds?: boolean }) {
                 </div>
             </div>
             <p className="mt-4 text-center text-[9px] leading-relaxed text-slate-500">
-                Full-text claims and CSV export are free with any account.
+                Full-text claims and CSV export are free with a work-email account.
             </p>
         </aside>
     );
@@ -1170,120 +1223,193 @@ function Skeleton({ className }: { className: string }) {
     return <span className={`patent-search-skeleton block ${className}`} />;
 }
 
-function Molecule({ variant }: { variant: number }) {
-    const bond = { stroke: '#111827', strokeWidth: 1.8, strokeLinecap: 'round' as const };
-    const blue = '#1017ff';
-    const red = '#ff0000';
-    const text = { fontSize: 16, fontFamily: 'Arial, sans-serif' } as const;
+type BondKind = 1 | 2 | 'r2' | 'r2p';
+type Atom = readonly [number, number, string?];
 
-    switch (variant % 9) {
-        case 0:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <text x="43" y="48" fill={blue} fontSize="22" fontFamily="Arial, sans-serif">43</text>
-                    <text x="64" y="52" fill={blue} fontSize="27" fontFamily="Arial, sans-serif">NH</text>
-                    <text x="106" y="64" fill={blue} fontSize="18" fontFamily="Arial, sans-serif">3</text>
-                </svg>
+interface Structure {
+    atoms: readonly Atom[];
+    bonds: readonly (readonly [number, number, BondKind])[];
+    rings: readonly (readonly [number, number])[];
+}
+
+/* Skeletal formulas drawn from each compound's real connectivity, laid out
+   with a 15-unit bond length in a 140 x 90 box. 'r2' is a ring double bond,
+   drawn with an inner line toward the nearest ring centre; 'r2p' points the
+   inner line at the last ring listed (the five-membered ring of caffeine). */
+const STRUCTURES: Record<StructureId, Structure> = {
+    aspirin: {
+        atoms: [
+            [72.0, 39.0],
+            [85.0, 46.5],
+            [85.0, 61.5],
+            [72.0, 69.0],
+            [59.0, 61.5],
+            [59.0, 46.5],
+            [72.0, 24.0],
+            [59.0, 16.5, 'O'],
+            [85.0, 16.5, 'OH'],
+            [46.0, 39.0, 'O'],
+            [33.0, 46.5],
+            [33.0, 61.5, 'O'],
+            [20.0, 39.0],
+        ],
+        bonds: [[0, 1, 'r2'], [1, 2, 1], [2, 3, 'r2'], [3, 4, 1], [4, 5, 'r2'], [5, 0, 1], [0, 6, 1], [6, 7, 2], [6, 8, 1], [5, 9, 1], [9, 10, 1], [10, 11, 2], [10, 12, 1]],
+        rings: [[72, 54]],
+    },
+    salicylic: {
+        atoms: [
+            [66.0, 39.0],
+            [79.0, 46.5],
+            [79.0, 61.5],
+            [66.0, 69.0],
+            [53.0, 61.5],
+            [53.0, 46.5],
+            [66.0, 24.0],
+            [53.0, 16.5, 'O'],
+            [79.0, 16.5, 'OH'],
+            [40.0, 39.0, 'OH'],
+        ],
+        bonds: [[0, 1, 'r2'], [1, 2, 1], [2, 3, 'r2'], [3, 4, 1], [4, 5, 'r2'], [5, 0, 1], [0, 6, 1], [6, 7, 2], [6, 8, 1], [5, 9, 1]],
+        rings: [[66, 54]],
+    },
+    paracetamol: {
+        atoms: [
+            [99.0, 48.0],
+            [91.5, 61.0],
+            [76.5, 61.0],
+            [69.0, 48.0],
+            [76.5, 35.0],
+            [91.5, 35.0],
+            [114.0, 48.0, 'OH'],
+            [54.0, 48.0, 'NH'],
+            [41.0, 40.5],
+            [41.0, 25.5, 'O'],
+            [28.0, 48.0],
+        ],
+        bonds: [[0, 1, 'r2'], [1, 2, 1], [2, 3, 'r2'], [3, 4, 1], [4, 5, 'r2'], [5, 0, 1], [0, 6, 1], [3, 7, 1], [7, 8, 1], [8, 9, 2], [8, 10, 1]],
+        rings: [[84, 48]],
+    },
+    ibuprofen: {
+        atoms: [
+            [79.0, 44.0],
+            [71.5, 57.0],
+            [56.5, 57.0],
+            [49.0, 44.0],
+            [56.5, 31.0],
+            [71.5, 31.0],
+            [92.0, 51.5],
+            [92.0, 66.5],
+            [105.0, 44.0],
+            [105.0, 29.0, 'O'],
+            [118.0, 51.5, 'OH'],
+            [36.0, 51.5],
+            [23.0, 44.0],
+            [10.0, 51.5],
+            [23.0, 29.0],
+        ],
+        bonds: [[0, 1, 'r2'], [1, 2, 1], [2, 3, 'r2'], [3, 4, 1], [4, 5, 'r2'], [5, 0, 1], [0, 6, 1], [6, 7, 1], [6, 8, 1], [8, 9, 2], [8, 10, 1], [3, 11, 1], [11, 12, 1], [12, 13, 1], [12, 14, 1]],
+        rings: [[64, 44]],
+    },
+    caffeine: {
+        atoms: [
+            [58.0, 31.0],
+            [71.0, 38.5],
+            [71.0, 53.5],
+            [58.0, 61.0, 'N'],
+            [45.0, 53.5],
+            [45.0, 38.5, 'N'],
+            [85.3, 33.9, 'N'],
+            [94.1, 46.0],
+            [85.3, 58.1, 'N'],
+            [58.0, 16.0, 'O'],
+            [32.0, 61.0, 'O'],
+            [32.0, 31.0],
+            [58.0, 76.0],
+            [89.9, 19.6],
+        ],
+        bonds: [[0, 1, 1], [1, 2, 'r2'], [2, 3, 1], [3, 4, 1], [4, 5, 1], [5, 0, 1], [1, 6, 1], [6, 7, 1], [7, 8, 'r2p'], [8, 2, 1], [0, 9, 2], [4, 10, 2], [5, 11, 1], [3, 12, 1], [6, 13, 1]],
+        rings: [[58, 46], [81.3, 46.0]],
+    },
+};
+
+const ATOM_COLOR: Record<string, string> = { O: '#dc2626', OH: '#dc2626', N: '#1d4ed8', NH: '#1d4ed8' };
+
+function Molecule({ structure }: { structure: StructureId }) {
+    const { atoms, bonds, rings } = STRUCTURES[structure];
+    const lines: ReactNode[] = [];
+
+    bonds.forEach(([i, j, kind], index) => {
+        const [x1, y1, l1] = atoms[i];
+        const [x2, y2, l2] = atoms[j];
+        const length = Math.hypot(x2 - x1, y2 - y1);
+        const ux = (x2 - x1) / length;
+        const uy = (y2 - y1) / length;
+        const ax = x1 + ux * (l1 ? 6.5 : 0);
+        const ay = y1 + uy * (l1 ? 6.5 : 0);
+        const bx = x2 - ux * (l2 ? 6.5 : 0);
+        const by = y2 - uy * (l2 ? 6.5 : 0);
+
+        if (kind === 2) {
+            for (const side of [1, -1]) {
+                const ox = -uy * 1.8 * side;
+                const oy = ux * 1.8 * side;
+                lines.push(<line key={`${index}${side}`} x1={ax + ox} y1={ay + oy} x2={bx + ox} y2={by + oy} />);
+            }
+            return;
+        }
+        lines.push(<line key={index} x1={ax} y1={ay} x2={bx} y2={by} />);
+        if (kind === 'r2' || kind === 'r2p') {
+            const mx = (ax + bx) / 2;
+            const my = (ay + by) / 2;
+            const centre =
+                kind === 'r2p'
+                    ? rings[rings.length - 1]
+                    : rings.reduce((best, ring) => (Math.hypot(ring[0] - mx, ring[1] - my) < Math.hypot(best[0] - mx, best[1] - my) ? ring : best));
+            let px = -uy;
+            let py = ux;
+            if ((centre[0] - mx) * px + (centre[1] - my) * py < 0) {
+                px = -px;
+                py = -py;
+            }
+            lines.push(
+                <line
+                    key={`${index}in`}
+                    x1={ax + px * 3.6 + ux * 2.6}
+                    y1={ay + py * 3.6 + uy * 2.6}
+                    x2={bx + px * 3.6 - ux * 2.6}
+                    y2={by + py * 3.6 - uy * 2.6}
+                />,
             );
-        case 1:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <text x="49" y="51" fill={blue} fontSize="27" fontFamily="Arial, sans-serif">NH</text>
-                    <text x="91" y="60" fill={blue} fontSize="16" fontFamily="Arial, sans-serif">2</text>
-                    <circle cx="105" cy="40" r="1.8" fill="#111827" />
-                </svg>
-            );
-        case 2:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <text x="13" y="49" fill={blue} {...text}>H</text>
-                    <text x="25" y="56" fill={blue} fontSize="10" fontFamily="Arial, sans-serif">2</text>
-                    <text x="33" y="49" fill={blue} {...text}>N</text>
-                    <line x1="51" y1="44" x2="72" y2="56" {...bond} />
-                    <line x1="72" y1="56" x2="100" y2="40" {...bond} />
-                    <line x1="100" y1="40" x2="125" y2="54" {...bond} />
-                    <line x1="98" y1="39" x2="98" y2="17" {...bond} />
-                    <line x1="104" y1="39" x2="104" y2="17" {...bond} />
-                    <text x="95" y="16" fill={red} {...text}>O</text>
-                    <text x="125" y="61" fill={red} {...text}>OH</text>
-                </svg>
-            );
-        case 3:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <text x="20" y="66" fill={red} fontSize="20" fontFamily="Arial, sans-serif">HO</text>
-                    <line x1="50" y1="54" x2="67" y2="24" {...bond} />
-                    <line x1="55" y1="54" x2="72" y2="24" {...bond} />
-                    <text x="58" y="20" fill={red} {...text}>O</text>
-                    <line x1="54" y1="55" x2="88" y2="55" {...bond} />
-                    <line x1="88" y1="55" x2="107" y2="23" {...bond} />
-                    <line x1="88" y1="55" x2="107" y2="79" {...bond} />
-                    <text x="105" y="77" fill={blue} fontSize="20" fontFamily="Arial, sans-serif">NH</text>
-                    <text x="133" y="84" fill={blue} fontSize="12" fontFamily="Arial, sans-serif">2</text>
-                </svg>
-            );
-        case 4:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <text x="16" y="59" fill={red} fontSize="18" fontFamily="Arial, sans-serif">HO</text>
-                    <line x1="44" y1="52" x2="62" y2="28" {...bond} />
-                    <line x1="49" y1="54" x2="67" y2="30" {...bond} />
-                    <text x="60" y="24" fill={red} fontSize="17" fontFamily="Arial, sans-serif">O</text>
-                    <line x1="47" y1="53" x2="78" y2="53" {...bond} />
-                    <line x1="78" y1="53" x2="100" y2="75" {...bond} />
-                    <text x="98" y="77" fill={blue} fontSize="18" fontFamily="Arial, sans-serif">NH</text>
-                    <text x="123" y="84" fill={blue} fontSize="11" fontFamily="Arial, sans-serif">2</text>
-                    <line x1="80" y1="51" x2="104" y2="25" {...bond} />
-                    <text x="104" y="24" fill="#111827" fontSize="15" fontFamily="Arial, sans-serif">CH</text>
-                    <text x="124" y="30" fill="#111827" fontSize="10" fontFamily="Arial, sans-serif">3</text>
-                </svg>
-            );
-        case 5:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <text x="26" y="58" fill={red} {...text}>HO</text>
-                    <line x1="50" y1="51" x2="71" y2="39" {...bond} />
-                    <line x1="71" y1="39" x2="98" y2="50" {...bond} />
-                    <line x1="98" y1="50" x2="122" y2="38" {...bond} />
-                    <text x="123" y="43" fill={red} {...text}>OH</text>
-                    <line x1="70" y1="39" x2="62" y2="17" {...bond} />
-                    <line x1="75" y1="40" x2="67" y2="18" {...bond} />
-                    <text x="56" y="17" fill={red} {...text}>O</text>
-                    <line x1="98" y1="50" x2="104" y2="73" {...bond} />
-                    <text x="100" y="82" fill={blue} {...text}>NH</text>
-                    <text x="125" y="88" fill={blue} fontSize="10" fontFamily="Arial, sans-serif">2</text>
-                </svg>
-            );
-        case 6:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <text x="52" y="52" fill={red} fontSize="28" fontFamily="Arial, sans-serif">H</text>
-                    <text x="72" y="60" fill={red} fontSize="16" fontFamily="Arial, sans-serif">2</text>
-                    <text x="82" y="52" fill={red} fontSize="28" fontFamily="Arial, sans-serif">O</text>
-                </svg>
-            );
-        case 7:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <polygon points="45,45 58,25 84,25 99,45 85,66 59,66" fill="none" {...bond} />
-                    <text x="66" y="22" fill={blue} fontSize="14" fontFamily="Arial, sans-serif">N</text>
-                    <line x1="99" y1="45" x2="116" y2="31" {...bond} />
-                    <text x="118" y="31" fill={red} fontSize="14" fontFamily="Arial, sans-serif">O</text>
-                    <line x1="99" y1="45" x2="113" y2="62" {...bond} />
-                    <text x="113" y="67" fill={blue} fontSize="14" fontFamily="Arial, sans-serif">NH</text>
-                </svg>
-            );
-        default:
-            return (
-                <svg viewBox="0 0 140 90" className="h-full w-full">
-                    <polygon points="30,50 44,29 69,29 84,50 69,71 44,71" fill="none" {...bond} />
-                    <line x1="84" y1="50" x2="105" y2="37" {...bond} />
-                    <text x="106" y="34" fill={red} {...text}>O</text>
-                    <line x1="84" y1="50" x2="109" y2="65" {...bond} />
-                    <text x="109" y="70" fill={red} {...text}>OH</text>
-                    <line x1="44" y1="29" x2="38" y2="12" {...bond} />
-                    <text x="25" y="16" fill={red} {...text}>O</text>
-                </svg>
-            );
-    }
+        }
+    });
+
+    const labels = atoms.flatMap(([x, y, label], index) => {
+        if (!label) return [];
+        const fill = ATOM_COLOR[label] ?? '#111827';
+        if (label === 'NH') {
+            return [
+                <text key={index} x={x} y={y} fill={fill} fontSize="12" textAnchor="middle" dominantBaseline="central">N</text>,
+                <text key={`${index}h`} x={x} y={y + 11} fill={fill} fontSize="10" textAnchor="middle" dominantBaseline="central">H</text>,
+            ];
+        }
+        if (label === 'OH') {
+            /* Keep the O on the atom and write the H away from its bond. */
+            const bond = bonds.find(([i, j]) => i === index || j === index);
+            const neighbour = bond ? atoms[bond[0] === index ? bond[1] : bond[0]] : undefined;
+            const fromRight = neighbour !== undefined && neighbour[0] > x + 1;
+            return [
+                <text key={index} x={fromRight ? x + 4.3 : x - 4.3} y={y} fill={fill} fontSize="12" textAnchor={fromRight ? 'end' : 'start'} dominantBaseline="central">
+                    {fromRight ? 'HO' : 'OH'}
+                </text>,
+            ];
+        }
+        return [<text key={index} x={x} y={y} fill={fill} fontSize="12" textAnchor="middle" dominantBaseline="central">{label}</text>];
+    });
+
+    return (
+        <svg viewBox="0 0 140 90" className="h-full w-full" aria-hidden="true">
+            <g stroke="#111827" strokeWidth="1.8" strokeLinecap="round">{lines}</g>
+            <g fontFamily="Arial, sans-serif">{labels}</g>
+        </svg>
+    );
 }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { MockupRecordLabel } from './BrowserMockupChrome';
 
 /* ── Animated audit trail table ──
    Fixed-height container. When rows expand, detail panels appear inline
@@ -46,7 +47,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(0, '15:11'),
         actor: 'demopatent3@designyourinvention.com',
         action: 'Updated',
-        entity: 'NPE Case Form: REPM24-0005-4637-855c-9ca12b20f6a1',
+        entity: 'National phase case · EP 2589123',
         changes: 'Changed Grant Date, Grant Number',
         reason: 'No longer active',
         expand: {
@@ -60,7 +61,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(0, '15:11'),
         actor: 'demopatent1@designyourinvention.com',
         action: 'Deleted',
-        entity: 'NPE Case: 2b53f0a4-63a4-4146-a487-07cde93b1f82',
+        entity: 'National phase case · JP 2028-519834',
         changes: 'Deleted',
         reason: 'Re-assign active',
     },
@@ -68,7 +69,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(0, '15:11'),
         actor: 'demopatent1@designyourinvention.com',
         action: 'Updated',
-        entity: 'NPE Case Form: REPM24-D006-4637-855c-9ca12b20f6a1',
+        entity: 'National phase case · IN 202847012345',
         changes: 'Changed Status',
         reason: 'No longer active',
         expand: {
@@ -82,7 +83,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(1, '14:07'),
         actor: 'demopatent2@designyourinvention.com',
         action: 'Created',
-        entity: 'PRV Application: 574a9f91-5dca-4a01-a415-8e3bc72d0a4f',
+        entity: 'Provisional · US 63/412,887',
         changes: 'Changed Application Number',
         reason: 'Updates fee accrual deadline',
     },
@@ -90,7 +91,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(4, '14:07'),
         actor: 'demopatent1@designyourinvention.com',
         action: 'Updated',
-        entity: 'PCT Filing: d7346b2e-de06-4fc3-81d2-55a543a478da',
+        entity: 'PCT filing · PCT/US2024/012345',
         changes: 'Changed Status',
         reason: 'Priority re-assessment',
     },
@@ -98,7 +99,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(5, '14:07'),
         actor: 'demopatent3@designyourinvention.com',
         action: 'Created',
-        entity: 'NPE Case: a1ae5737-4bd2-a5a9-c116-fa2b4ad9a5a0',
+        entity: 'National phase case · US 17/123,456',
         changes: 'Created',
         reason: 'Filed provisional',
     },
@@ -106,7 +107,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(7, '11:42'),
         actor: 'demopatent2@designyourinvention.com',
         action: 'Updated',
-        entity: 'PRV Application: 82beef14-5731-8f26-1a95-bb63a2c8e9d7',
+        entity: 'Provisional · US 63/398,201',
         changes: 'Partially modified',
         reason: 'Fee schedule update',
     },
@@ -114,7 +115,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(9, '09:18'),
         actor: 'demopatent1@designyourinvention.com',
         action: 'Created',
-        entity: 'NPE Case: ed714408-812a-494e-bk18-da5bbdce0f23',
+        entity: 'National phase case · CN 2028-10456789',
         changes: 'Created',
         reason: 'Portfolio migration',
     },
@@ -122,7 +123,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(10, '16:33'),
         actor: 'demopatent1@designyourinvention.com',
         action: 'Deleted',
-        entity: 'PCT Filing: 9a82cf61-1247-4e5b-b892-7c3fd9e10ba4',
+        entity: 'PCT filing · PCT/US2023/045678',
         changes: 'Deleted',
         reason: 'Duplicate entry removed',
     },
@@ -130,7 +131,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(11, '10:05'),
         actor: 'demopatent3@designyourinvention.com',
         action: 'Created',
-        entity: 'PRV Application: c4f29183-8832-49a1-ae67-2b5d6f0ec71a',
+        entity: 'Provisional · US 63/455,019',
         changes: 'Created',
         reason: 'New provisional filing',
     },
@@ -138,7 +139,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(12, '14:22'),
         actor: 'demopatent1@designyourinvention.com',
         action: 'Updated',
-        entity: 'NPE Case: 5e9d13a2-7fab-4c02-91ae-cc84b6d2f3e8',
+        entity: 'National phase case · KR 10-2028-0012345',
         changes: 'Changed Assignee',
         reason: 'Transfer of ownership recorded',
     },
@@ -146,7 +147,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(14, '08:47'),
         actor: 'demopatent2@designyourinvention.com',
         action: 'Updated',
-        entity: 'PRV Application: d87e42c5-3f15-4a89-b5c1-9ed4a7b08f62',
+        entity: 'Provisional · US 63/471,632',
         changes: 'Changed Priority Date',
         reason: 'Amended per examiner request',
     },
@@ -154,7 +155,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(15, '11:19'),
         actor: 'demopatent2@designyourinvention.com',
         action: 'Created',
-        entity: 'NPE Case: 7bc45a90-29d8-4f33-a612-48ef0c71d5b3',
+        entity: 'National phase case · AU 2028201234',
         changes: 'Created',
         reason: 'National phase entry - EP',
     },
@@ -162,7 +163,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(17, '15:50'),
         actor: 'demopatent2@designyourinvention.com',
         action: 'Deleted',
-        entity: 'PCT Filing: ab3c7714-6e41-4d90-8f2b-1a45de89c0a7',
+        entity: 'PCT filing · PCT/EP2024/067890',
         changes: 'Deleted',
         reason: 'Filing withdrawn by applicant',
     },
@@ -170,7 +171,7 @@ const AUDIT_ROWS: AuditRow[] = [
         timestamp: fmtTimestamp(19, '09:30'),
         actor: 'demopatent3@designyourinvention.com',
         action: 'Updated',
-        entity: 'NPE Case: f2a89106-cc54-4b17-9d63-87bfae02e4c9',
+        entity: 'National phase case · CA 3,245,678',
         changes: 'Changed Grant Number',
         reason: 'Grant certificate received',
     },
@@ -222,18 +223,13 @@ export function AnimatedAuditTable() {
         >
             {/* Chrome Bar */}
             <div className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-page-bg-alt border-b border-card-border shrink-0">
-                <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#FF5F57]" />
-                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#FFBD2E]" />
-                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#28C840]" />
-                </div>
-                <div className="flex-1 flex justify-center">
-                    <div className="flex items-center gap-1.5 px-2 sm:px-3 py-0.5 bg-white rounded-md text-[8px] sm:text-[9px] text-text-muted border border-card-border"
+                <MockupRecordLabel record="DEMO-AUD-001" screen="Audit log" />
+                <div className="hidden sm:flex flex-1 min-w-0 justify-end">
+                    <div className="flex items-center gap-1.5 px-2 sm:px-3 py-0.5 bg-white rounded-md text-[10px] sm:text-[9px] text-text-muted border border-card-border"
                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                         app.designyourinvention.com
                     </div>
                 </div>
-                <div className="w-6 sm:w-[40px]" />
             </div>
 
             {/* Filter Row — single row, all filters inline, matching audit.png */}
@@ -251,15 +247,15 @@ export function AnimatedAuditTable() {
                     { label: 'Date To', value: fmtDate(new Date()) },
                 ].map(f => (
                     <div key={f.label} className="shrink-0 flex-1 min-w-[60px]">
-                        <span className="text-[6px] sm:text-[8px] text-text-muted block mb-0.5" style={{ fontFamily: 'var(--font-dashboard)' }}>{f.label}</span>
-                        <span className="text-[7px] sm:text-[9px] font-medium px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg border border-card-border text-text-secondary bg-page-bg-alt flex items-center justify-between gap-1 w-full"
+                        <span className="text-[10px] sm:text-[8px] text-text-muted block mb-0.5" style={{ fontFamily: 'var(--font-dashboard)' }}>{f.label}</span>
+                        <span className="text-[10px] sm:text-[9px] font-medium px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg border border-card-border text-text-secondary bg-page-bg-alt flex items-center justify-between gap-1 w-full"
                             style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                             <span className="truncate text-text-secondary">{f.value}</span>
-                            <span className="opacity-40 text-[6px] shrink-0">▾</span>
+                            <span className="opacity-40 text-[10px] sm:text-[6px] shrink-0">▾</span>
                         </span>
                     </div>
                 ))}
-                <span className="text-[7px] sm:text-[9px] font-medium text-primary whitespace-nowrap shrink-0 pb-1.5"
+                <span className="text-[10px] sm:text-[9px] font-medium text-primary whitespace-nowrap shrink-0 pb-1.5"
                     style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                     Clear Filters
                 </span>
@@ -271,9 +267,9 @@ export function AnimatedAuditTable() {
             {/* Table Header */}
             <div className="shrink-0 border-b border-card-border">
                 <div className="grid px-3 sm:px-4 py-1.5 sm:py-2"
-                    style={{ gridTemplateColumns: 'minmax(90px,1fr) minmax(100px,1.5fr) 60px minmax(100px,1.8fr) minmax(80px,1fr) minmax(70px,1fr) 50px' }}>
+                    style={{ gridTemplateColumns: 'minmax(90px,1fr) minmax(100px,1.5fr) 72px minmax(100px,1.8fr) minmax(80px,1fr) minmax(70px,1fr) 50px' }}>
                     {['Timestamp', 'Actor', 'Action', 'Entity', 'Changes', 'Reason', ''].map(col => (
-                        <span key={col || 'action-col'} className="text-[7px] sm:text-[9px] font-semibold text-text-muted uppercase tracking-wider truncate pr-2"
+                        <span key={col || 'action-col'} className="text-[10px] sm:text-[9px] font-semibold text-text-muted uppercase tracking-wider truncate pr-2"
                             style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                             {col}
                         </span>
@@ -293,38 +289,38 @@ export function AnimatedAuditTable() {
                                     className={`grid px-3 sm:px-4 py-1.5 sm:py-2 border-b border-card-border/40 transition-colors duration-300 ${
                                         isExpanded ? 'bg-primary/[0.04]' : ''
                                     }`}
-                                    style={{ gridTemplateColumns: 'minmax(90px,1fr) minmax(100px,1.5fr) 60px minmax(100px,1.8fr) minmax(80px,1fr) minmax(70px,1fr) 50px' }}
+                                    style={{ gridTemplateColumns: 'minmax(90px,1fr) minmax(100px,1.5fr) 72px minmax(100px,1.8fr) minmax(80px,1fr) minmax(70px,1fr) 50px' }}
                                     initial={{ opacity: 0, x: -6 }}
                                     animate={inView ? { opacity: 1, x: 0 } : undefined}
                                     transition={{ duration: 0.3, delay: 0.5 + i * 0.06, ease: EASE }}
                                 >
-                                    <span className="text-[7px] sm:text-[9px] text-text-muted truncate pr-2"
+                                    <span className="text-[10px] sm:text-[9px] text-text-muted truncate pr-2"
                                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                         {row.timestamp}
                                     </span>
-                                    <span className="text-[7px] sm:text-[9px] text-primary truncate pr-2"
+                                    <span className="text-[10px] sm:text-[9px] text-primary truncate pr-2"
                                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                         {row.actor}
                                     </span>
                                     <span className="pr-2">
-                                        <span className={`text-[6px] sm:text-[8px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full ${ACTION_PILL[row.action] ?? 'bg-gray-100 text-gray-600'}`}
+                                        <span className={`inline-block shrink-0 whitespace-nowrap text-[10px] sm:text-[8px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full ${ACTION_PILL[row.action] ?? 'bg-gray-100 text-gray-600'}`}
                                             style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                             {row.action}
                                         </span>
                                     </span>
-                                    <span className="text-[7px] sm:text-[9px] text-text-secondary truncate pr-2"
+                                    <span className="text-[10px] sm:text-[9px] text-text-secondary truncate pr-2"
                                         style={{ fontFamily: 'var(--font-dashboard)' }}>
                                         {row.entity}
                                     </span>
-                                    <span className="text-[7px] sm:text-[9px] text-text-secondary truncate pr-2 hidden sm:block"
+                                    <span className="text-[10px] sm:text-[9px] text-text-secondary truncate pr-2 hidden sm:block"
                                         style={{ fontFamily: 'var(--font-dashboard)' }}>
                                         {row.changes}
                                     </span>
-                                    <span className="text-[7px] sm:text-[9px] text-text-muted truncate pr-2 hidden md:block"
+                                    <span className="text-[10px] sm:text-[9px] text-text-muted truncate pr-2 hidden md:block"
                                         style={{ fontFamily: 'var(--font-dashboard)' }}>
                                         {row.reason}
                                     </span>
-                                    <span className="text-[6px] sm:text-[8px] text-primary font-medium whitespace-nowrap"
+                                    <span className="text-[10px] sm:text-[8px] text-primary font-medium whitespace-nowrap"
                                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                         {row.expand ? (isExpanded ? '▾ Details' : '▸ Details') : ''}
                                     </span>
@@ -345,7 +341,7 @@ export function AnimatedAuditTable() {
                                                 <div className="mb-3">
                                                     <div className="grid grid-cols-3 gap-2 border-b border-card-border/60 pb-1 mb-1.5">
                                                         {['Field', 'Previous Value', 'New Value'].map(h => (
-                                                            <span key={h} className="text-[7px] sm:text-[9px] font-semibold text-text-muted"
+                                                            <span key={h} className="text-[10px] sm:text-[9px] font-semibold text-text-muted"
                                                                 style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                                                 {h}
                                                             </span>
@@ -353,15 +349,15 @@ export function AnimatedAuditTable() {
                                                     </div>
                                                     {row.expand.fields.map(f => (
                                                         <div key={f.field} className="grid grid-cols-3 gap-2 py-1.5 border-b border-card-border/30">
-                                                            <span className="text-[8px] sm:text-[10px] font-medium text-text-primary"
+                                                            <span className="text-[10px] sm:text-[10px] font-medium text-text-primary"
                                                                 style={{ fontFamily: 'var(--font-dashboard)' }}>
                                                                 {f.field}
                                                             </span>
-                                                            <span className="text-[8px] sm:text-[10px] text-red-600 bg-red-50 px-1.5 py-0.5 rounded w-fit"
+                                                            <span className="text-[10px] sm:text-[10px] text-text-secondary line-through decoration-text-secondary/60 bg-slate-50 px-1.5 py-0.5 rounded w-fit"
                                                                 style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                                                 {f.previous}
                                                             </span>
-                                                            <span className="text-[8px] sm:text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded w-fit"
+                                                            <span className="text-[10px] sm:text-[10px] font-medium text-text-primary bg-slate-100 px-1.5 py-0.5 rounded w-fit"
                                                                 style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                                                 {f.newValue}
                                                             </span>
@@ -371,11 +367,11 @@ export function AnimatedAuditTable() {
 
                                                 {/* Reason for change */}
                                                 <div>
-                                                    <p className="text-[7px] sm:text-[9px] font-semibold text-text-muted mb-1"
+                                                    <p className="text-[10px] sm:text-[9px] font-semibold text-text-muted mb-1"
                                                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                                         Reason for Change
                                                     </p>
-                                                    <p className="text-[8px] sm:text-[10px] text-text-secondary leading-relaxed"
+                                                    <p className="text-[10px] sm:text-[10px] text-text-secondary leading-relaxed"
                                                         style={{ fontFamily: 'var(--font-dashboard)' }}>
                                                         {row.expand.reasonText}
                                                     </p>

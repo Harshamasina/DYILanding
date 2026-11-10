@@ -20,8 +20,8 @@
 
     /* Text */
     --color-text-primary: #0f172a;
-    --color-text-secondary: #64748b;
-    --color-text-muted: #737f8d;
+    --color-text-secondary: #4f5b6a; /* 6.91:1 on white, 6.56:1 on #f8f9fa (was #64748b, 4.76:1) */
+    --color-text-muted: #687482; /* 4.76:1 on white, 4.5:1 on #f8f9fa (was #737f8d, 4.08:1) */
     --color-text-on-dark: #e2e8f0;
 
     /* Compliance accent: amber means regulated, on time, provable. It is
@@ -115,6 +115,17 @@ h1, h2, h3, h4, h5, h6 {
 @layer base {
     h1 {
         font-size: 2.25rem;
+    }
+
+    /* Even line lengths in headings and no single word stranded on the
+       last line of running text. Product mockups (inside .mockup-frame)
+       keep their own line breaking, since they imitate the app UI. */
+    :where(main, footer) :is(h1, h2, h3):not(:where(.mockup-frame *)) {
+        text-wrap: balance;
+    }
+
+    :where(main, footer) :is(p, li, dd):not(:where(.mockup-frame *)) {
+        text-wrap: pretty;
     }
 }
 

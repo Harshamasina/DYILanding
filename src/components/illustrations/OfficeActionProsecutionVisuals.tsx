@@ -12,16 +12,16 @@ const DOCUMENTS = [
 export function ProsecutionRecordVisual() {
     return (
         <figure>
-            <OfficeActionExampleLabel step="01">Establish the record</OfficeActionExampleLabel>
-            <div className="grid gap-6 lg:grid-cols-3">
-                {DOCUMENTS.map(({ icon: Icon, label, role, text, destination }, i) => (
-                    <article key={label} className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
-                        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-primary/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                        <div className="relative flex items-center justify-between"><span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-100 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 text-primary transition-all duration-300 group-hover:border-primary/20 group-hover:shadow-sm group-hover:shadow-primary/[0.06]"><Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" aria-hidden="true" /></span><span className="text-xs text-text-muted [font-family:var(--font-mono)]">0{i + 1}</span></div>
-                        <p className="relative mt-5 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary [font-family:var(--font-mono)]">{role}</p>
-                        <h3 className="relative mt-2 text-xl font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary">{label}</h3>
+            {/* Three ruled columns, one per document role, like the columns of a
+                docket record rather than three boxed cards. */}
+            <div className="grid border-y border-card-border lg:grid-cols-3">
+                {DOCUMENTS.map(({ icon: Icon, label, role, text, destination }) => (
+                    <article key={label} className="flex h-full flex-col border-b border-card-border py-6 last:border-b-0 lg:border-b-0 lg:border-l lg:px-7 lg:first:border-l-0 lg:first:pl-0 lg:last:pr-0">
+                        <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                        <h3 className="mt-4 text-xl font-semibold text-text-primary">{label}</h3>
+                        <p className="mt-1.5 text-base leading-none tracking-[0.06em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">{role}</p>
                         <p className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">{text}</p>
-                        <p className="mt-6 flex items-start gap-2 border-t border-card-border pt-4 text-xs leading-relaxed text-primary"><ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />{destination}</p>
+                        <p className="mt-6 flex items-start gap-2 border-t border-card-border pt-4 text-sm leading-relaxed text-primary"><ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />{destination}</p>
                     </article>
                 ))}
             </div>
@@ -30,7 +30,7 @@ export function ProsecutionRecordVisual() {
                 <GitBranch className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
                 <div><p className="text-sm font-semibold text-text-primary">Preserve the Prosecution Context</p><p className="mt-1 text-sm leading-relaxed text-text-secondary">The response retains its signed analysis, examined claims, as-filed disclosure, and file history as its source record.</p></div>
             </div>
-            <figcaption className="mt-4 text-center text-xs leading-relaxed text-text-muted">Distinct document roles, carried into one response record.</figcaption>
+            <OfficeActionExampleLabel step="01" note="Distinct document roles, carried into one response record · Illustrative matter, adaptive sensor system">Establish the record</OfficeActionExampleLabel>
         </figure>
     );
 }
@@ -42,8 +42,8 @@ const CHART = [
 ];
 
 function Reading({ value, pinpoint }: { value: string; pinpoint: string }) {
-    const tone = value === 'Full' ? 'border-primary/20 bg-primary/[0.06] text-primary' : value === 'Partial' ? 'border-compliance/20 bg-compliance/[0.06] text-compliance' : 'border-card-border bg-page-bg-alt text-text-muted';
-    return <div><span className={`inline-flex rounded-md border px-2.5 py-1 text-[11px] font-semibold [font-family:var(--font-mono)] ${tone}`}>{value}</span><span className="mt-2 block text-xs text-text-secondary">{pinpoint}</span></div>;
+    const tone = value === 'Full' ? 'border-primary/20 bg-primary/[0.06] text-primary' : value === 'Partial' ? 'border-compliance/20 bg-compliance/[0.06] text-compliance-ink' : 'border-card-border bg-page-bg-alt text-text-muted';
+    return <div><span className={`inline-flex rounded-md border px-2.5 py-1 text-xs font-semibold [font-family:var(--font-mono)] ${tone}`}>{value}</span><span className="mt-2 block text-xs text-text-secondary">{pinpoint}</span></div>;
 }
 
 const COVERAGE = [
@@ -56,20 +56,19 @@ const COVERAGE = [
 export function LimitationChartVisual({ className = '' }: { className?: string }) {
     return (
         <figure className={`min-w-0 ${className}`}>
-            <OfficeActionExampleLabel step="03">Review Claim 1 against Smith and Jones</OfficeActionExampleLabel>
             <div className="flex flex-col overflow-hidden rounded-2xl border border-primary/15 bg-white shadow-lg shadow-primary/[0.05] ring-1 ring-white/70">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-card-border px-5 py-5 sm:px-7"><h3 className="text-xl font-semibold text-text-primary sm:text-2xl">Claim 1 · Cited-Reference Chart</h3><span className="rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2 text-[10px] font-semibold uppercase tracking-wide text-primary [font-family:var(--font-mono)]">Illustrative § 103 Analysis</span></div>
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-card-border px-5 py-5 sm:px-7"><h3 className="text-xl font-semibold text-text-primary sm:text-2xl">Claim 1 · Cited-Reference Chart</h3><span className="rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-primary [font-family:var(--font-mono)]">Illustrative § 103 Analysis</span></div>
                 <div className="hidden flex-1 sm:flex">
                     <table className="h-full w-full table-fixed border-collapse text-left">
                         <caption className="sr-only">Illustrative mapping of three claim limitations against Smith and Jones</caption>
-                        <thead><tr className="border-b border-card-border bg-page-bg-alt"><th scope="col" className="w-[52%] px-7 py-3.5 text-[11px] font-semibold uppercase tracking-wide text-text-secondary [font-family:var(--font-mono)]">Claim Limitation</th>{COVERAGE.map(({ ref, readings }) => <th scope="col" key={ref} className="px-5 py-3.5 align-top"><span className="block text-[11px] font-semibold uppercase tracking-wide text-text-secondary [font-family:var(--font-mono)]">{ref}</span><span className="mt-1 block text-[11px] font-normal normal-case text-text-secondary">{readings}</span></th>)}</tr></thead>
+                        <thead><tr className="border-b border-card-border bg-page-bg-alt"><th scope="col" className="w-[52%] px-7 py-3.5 text-[11px] font-semibold uppercase tracking-wide text-text-secondary [font-family:var(--font-mono)]">Claim Limitation</th>{COVERAGE.map(({ ref, readings }) => <th scope="col" key={ref} className="px-5 py-3.5 align-top"><span className="block text-[11px] font-semibold uppercase tracking-wide text-text-secondary [font-family:var(--font-mono)]">{ref}</span><span className="mt-1 block text-xs font-normal normal-case text-text-secondary">{readings}</span></th>)}</tr></thead>
                         <tbody>{CHART.map(row => <tr key={row.limitation} className="border-b border-card-border/70 last:border-0"><th scope="row" className="px-7 py-5 align-middle text-sm font-normal leading-relaxed text-text-primary"><span className="mr-2 text-xs font-semibold text-primary [font-family:var(--font-mono)]">{row.limitation}</span>{row.text}</th><td className="px-5 py-5 align-middle"><Reading value={row.smith[0]} pinpoint={row.smith[1]} /></td><td className="px-5 py-5 align-middle"><Reading value={row.jones[0]} pinpoint={row.jones[1]} /></td></tr>)}</tbody>
                     </table>
                 </div>
                 <div className="divide-y divide-card-border sm:hidden">{CHART.map(row => <div key={row.limitation} className="p-5"><p className="text-sm leading-relaxed text-text-primary"><span className="mr-2 font-semibold text-primary">{row.limitation}</span>{row.text}</p><dl className="mt-4 grid grid-cols-2 gap-4">{[['Smith', row.smith], ['Jones', row.jones]].map(([ref, reading]) => <div key={ref as string}><dt className="mb-2 text-xs font-semibold text-text-secondary">{ref}</dt><dd><Reading value={reading[0]} pinpoint={reading[1]} /></dd></div>)}</dl></div>)}</div>
-                <div className="flex items-start gap-3 border-t border-card-border bg-primary/[0.025] p-5 sm:px-7"><Link2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" /><p className="text-xs leading-relaxed text-text-secondary">Full and partial readings describe the mapped disclosure. A passage not addressed in the chart is not a finding that the reference lacks it.</p></div>
+                <div className="flex items-start gap-3 border-t border-card-border bg-primary/[0.025] p-5 sm:px-7"><Link2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" /><p className="text-[13px] leading-relaxed text-text-secondary sm:text-xs">Full and partial readings describe the mapped disclosure. A passage not addressed in the chart is not a finding that the reference lacks it.</p></div>
             </div>
-            <figcaption className="mt-4 text-center text-xs leading-relaxed text-text-muted">Fictional references and pinpoints · Chart readings remain subject to attorney review.</figcaption>
+            <OfficeActionExampleLabel step="03" note="Fictional references and pinpoints · Chart readings remain subject to attorney review">Review Claim 1 against Smith and Jones</OfficeActionExampleLabel>
         </figure>
     );
 }
@@ -77,7 +76,6 @@ export function LimitationChartVisual({ className = '' }: { className?: string }
 export function ResponseStrategyVisual() {
     return (
         <figure>
-            <OfficeActionExampleLabel step="04">Record the response strategy</OfficeActionExampleLabel>
             <div className="overflow-hidden rounded-2xl border border-card-border bg-white shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-card-border bg-page-bg-alt px-5 py-5 sm:px-7"><h3 className="text-xl font-semibold text-text-primary">From Ground of Rejection to Response Section</h3><span className="inline-flex items-center gap-2 text-xs font-medium text-primary"><Fingerprint className="h-4 w-4" aria-hidden="true" />Selected by Counsel</span></div>
                 {[
@@ -85,7 +83,7 @@ export function ResponseStrategyVisual() {
                     { issue: 'Indefiniteness', basis: '§ 112(b) · Claim 4', choice: 'Amend', output: 'Claim amendment and supporting remarks', note: 'The revised language stays linked to its as-filed disclosure support.' },
                 ].map(item => <div key={item.issue} className="grid gap-5 border-b border-card-border p-5 last:border-0 sm:p-7 lg:grid-cols-[1fr_0.85fr_1.5fr] lg:items-center lg:gap-8"><div><p className="text-base font-semibold text-text-primary">{item.issue}</p><p className="mt-2 text-xs text-text-muted">{item.basis}</p></div><div className="flex items-center gap-3"><ArrowRight className="hidden h-4 w-4 shrink-0 text-primary/50 lg:block" aria-hidden="true" /><span className="rounded-lg border border-primary/20 bg-primary/[0.04] px-4 py-2 text-sm font-semibold text-primary">{item.choice}</span></div><div><p className="text-sm font-semibold text-text-primary">{item.output}</p><p className="mt-2 text-sm leading-relaxed text-text-secondary">{item.note}</p></div></div>)}
             </div>
-            <figcaption className="mt-4 text-center text-xs leading-relaxed text-text-muted">Illustrative attorney-selected strategies · Available choices depend on the issue type.</figcaption>
+            <OfficeActionExampleLabel step="04" note="Illustrative attorney-selected strategies · Available choices depend on the issue type">Record the response strategy</OfficeActionExampleLabel>
         </figure>
     );
 }

@@ -22,14 +22,16 @@ interface TraceDates {
     dueFull: string;
 }
 
+/* The same example as the docketing hero drawing: Aug 11 + 3 months lands on
+   Nov 11, 2026 (Veterans Day, a Wednesday), so the due date rolls to Thursday. */
 const STATIC_FALLBACK: TraceDates = {
     ruleVersion: '2026.08',
-    triggerFull: 'July 24, 2026',
-    calcAddition: 'July 24 + 3 calendar months',
-    nominalLine: 'October 24 falls on Saturday',
-    rollLine: 'Rolled to Monday, October 26',
-    dueIso: '2026-10-26',
-    dueFull: 'October 26, 2026',
+    triggerFull: 'August 11, 2026',
+    calcAddition: 'August 11 + 3 calendar months',
+    nominalLine: 'November 11 falls on a federal holiday',
+    rollLine: 'Rolled to Thursday, November 12',
+    dueIso: '2026-11-12',
+    dueFull: 'November 12, 2026',
 };
 
 const MONTHS = [
@@ -193,7 +195,7 @@ function DeadlineTraceStep({
             }`}
         >
             <span
-                className="relative z-10 row-span-2 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 text-primary shadow-sm sm:row-span-1"
+                className="relative z-10 row-span-2 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/15 bg-primary/[0.05] text-primary sm:row-span-1"
                 aria-hidden="true"
             >
                 <Icon className="h-4.5 w-4.5" />
@@ -234,7 +236,7 @@ export function ComputedDeadlineTrace() {
                 </h3>
                 <div className="flex flex-wrap gap-2.5">
                     <span
-                        className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.08em] text-red-600"
+                        className="inline-flex items-center gap-2 rounded-lg border border-compliance/30 bg-compliance/[0.06] px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] text-compliance-ink"
                         style={{ fontFamily: 'var(--font-mono)' }}
                     >
                         <Info className="h-3.5 w-3.5" aria-hidden="true" />
@@ -291,7 +293,7 @@ export function ComputedDeadlineTrace() {
                                     3-month shortened statutory period
                                 </p>
                                 <p className="text-xs text-text-muted">
-                                    35 U.S.C. 133 &middot; 37 CFR 1.113, 1.116, 1.136(a)
+                                    37 CFR 1.134, 1.113, 1.116 &middot; extendable under 1.136(a) to the 6-month maximum of 35 U.S.C. 133
                                 </p>
                             </DeadlineTraceStep>
                             <DeadlineTraceStep icon={Layers} label="Calculation">

@@ -3,21 +3,7 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import {
     Search,
-    Building2,
-    FlaskConical,
-    Network,
-    Activity,
-    Globe,
-    SlidersHorizontal,
-    Database,
-    Lock,
-    Download,
-    Mail,
-    ShieldCheck,
-    Bookmark,
     ChevronRight,
-    TrendingUp,
-    CheckCircle2,
     ArrowRight,
     FileSearch,
 } from 'lucide-react';
@@ -30,9 +16,12 @@ import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
+import { InlineList } from '@/components/ui/RuledList';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
-import { AnimatedPatentSearch } from '@/components/ui/AnimatedPatentSearch';
+import { AnimatedPatentSearch, CompoundsTrialsStill } from '@/components/ui/AnimatedPatentSearch';
+import { FigureCaption } from '@/components/ui/FigureCaption';
 import { PatentSearchHeroSvg } from '@/components/illustrations/PatentSearchHeroSvg';
+import { NoveltySearchFigure } from '@/components/illustrations/NoveltySearchFigure';
 import { PatentSearchJsonLd } from '@/components/seo/PatentSearchJsonLd';
 import { SEARCH_APP_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
@@ -40,7 +29,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'Free Patent Search With Chemical Structure and Clinical Trial Data',
     description:
-        'Free patent search across a corpus of 120M+ patent records from 100+ patent authorities. Detect disclosed compounds, run substructure search, and see linked clinical trials.',
+        'Free patent search across a corpus of 120M+ patent records from 100+ patent authorities. Detect disclosed compounds, run substructure search, see linked clinical trials, and run an automated novelty search from your invention brief.',
     path: '/patent-search/',
     ogKey: 'patent-search',
 });
@@ -87,29 +76,19 @@ const SEARCH_MODES: IconItem[] = [
     },
 ];
 
-const FILTERS = [
-    'Jurisdiction',
-    'Filing date',
-    'IPC / CPC',
-    'Assignee',
-    'Inventor',
-    'Scope',
-    'Legal status',
-    'Publication date',
-    'Priority date',
-    'Patent family',
-    'Cited by',
-    'Clinical trials',
-    'Compounds',
-    'Many more',
+/* The filters, grouped by kind so the list reads in three short lines. */
+const FILTER_GROUPS: { label: string; items: string[] }[] = [
+    { label: 'Bibliographic', items: ['Jurisdiction', 'Filing date', 'Publication date', 'Priority date', 'IPC / CPC', 'Assignee', 'Inventor', 'Scope'] },
+    { label: 'Legal and family', items: ['Legal status', 'Patent family', 'Cited by'] },
+    { label: 'Chemistry and trials', items: ['Compounds', 'Clinical trials'] },
 ];
 
-const WORKFLOW: { icon: React.ElementType; label: string }[] = [
-    { icon: FlaskConical, label: 'Molecule' },
-    { icon: Network, label: 'Patent Family' },
-    { icon: Building2, label: 'Assignee' },
-    { icon: Activity, label: 'Clinical Trial' },
-    { icon: TrendingUp, label: 'Competitive Landscape' },
+const WORKFLOW = [
+    'Molecule',
+    'Patent Family',
+    'Assignee',
+    'Clinical Trial',
+    'Competitive Landscape',
 ];
 
 const ENRICHMENT: IconItem[] = [
@@ -119,7 +98,7 @@ const ENRICHMENT: IconItem[] = [
     },
     {
         title: 'Substructure Search',
-        description: 'Pharma patents are back-linked to the compounds detected in them. See how many a patent covers, then find other patents in the corpus disclosing the same molecule or scaffold, the substructure-aware search premium tools charge a fortune for.',
+        description: 'Pharma patents are back-linked to the compounds detected in them. See how many a patent covers, then find other patents in the corpus disclosing the same molecule or scaffold with a substructure-aware search.',
     },
     {
         title: 'Clinical Trial Landscape',
@@ -131,7 +110,8 @@ const DATA_SOURCES = ['PubChem', 'SureChEMBL', 'UniChem', 'RDKit', 'ClinicalTria
 
 const FREE_FEATURES = [
     'Search 120M+ patent records across 100+ authorities',
-    'Titles and abstracts, six search modes',
+    'Titles and abstracts on every result',
+    'Six search modes; claims mode searches available claim text',
     'Disclosed compounds with 2D structures',
     'Linked clinical-trial data',
 ];
@@ -159,7 +139,37 @@ const PLATFORM_CAPS: IconItem[] = [
     },
     {
         title: 'Export and Workflow',
-        description: 'Save searches, export results, and share findings with IP or R&D teams.',
+        description: 'Save patents to a portfolio, export results, and share findings with IP or R&D teams.',
+    },
+];
+
+const NOVELTY_STEPS: IconItem[] = [
+    {
+        title: 'Features from the brief',
+        description: 'The invention brief becomes numbered features, F1 to F8, the same ones your attorney reviews.',
+    },
+    {
+        title: 'A search built for you',
+        description: 'Queries are written from each feature, run across the global patent corpus, and ranked against the whole invention.',
+    },
+    {
+        title: 'Read feature by feature',
+        description: 'The strongest candidates are read in their abstracts and claims, and every finding quotes the passage it rests on.',
+    },
+    {
+        title: 'Dated against your priority',
+        description: 'Each reference is placed against your priority date, including art filed earlier and published later.',
+    },
+];
+
+const NOVELTY_AFTER: IconItem[] = [
+    {
+        title: 'Your references, read the same way',
+        description: 'List up to 25 patents you already hold. They are read against the same features, beside the search results.',
+    },
+    {
+        title: 'Carried into AI drafting',
+        description: "Save a reference to the family and its findings travel with it into the drafting wizard's prior art step.",
     },
 ];
 
@@ -174,11 +184,11 @@ const USE_CASES: IconItem[] = [
     },
     {
         title: 'Startup Founders',
-        description: 'Understand the white space before investing in development or filing.',
+        description: 'Understand the white space before investing in development, and run a novelty search on the invention brief before paying for a draft.',
     },
     {
         title: 'Legal Teams',
-        description: 'Prepare export-ready patent evidence and family-level summaries.',
+        description: 'Prepare export-ready patent evidence and family-level summaries, with novelty findings tied to quoted claims.',
     },
 ];
 
@@ -192,6 +202,16 @@ const PATENT_SEARCH_FAQ: FaqItem[] = [
         question: 'Do I need an account to search?',
         answer:
             'No. Anonymous search covers titles and abstracts across the authorities in the corpus and shows detected compounds and linked clinical trials. You only need to sign in with a work email when you want full-text claims or to export results to CSV.',
+    },
+    {
+        question: 'How does the automated novelty search work?',
+        answer:
+            "Inside the platform, the novelty search starts from a patent family's invention brief rather than a query. The brief is broken into numbered features, a search is built from those features and run across the global patent corpus, and the strongest candidates are read against every feature in their abstracts and claims. Each finding is marked found, partially found, or not found in the reviewed text, with the quoted passage it rests on, and each reference is dated against your priority date. Your team marks what is relevant and saves it to the family.",
+    },
+    {
+        question: 'Can I add references I already have to a novelty search?',
+        answer:
+            "Yes. List up to 25 patent publications you already hold, and they are read against the same features as the search results. References you save keep their findings, so they arrive in the AI drafting prior art step already mapped to the invention's features.",
     },
     {
         question: 'Can I search by assignee, inventor, jurisdiction, and legal status?',
@@ -279,7 +299,7 @@ export default function PatentSearchPage() {
                         </ol>
                     </nav>
 
-                    <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(430px,1.05fr)] lg:gap-8 xl:gap-12">
+                    <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(430px,1.05fr)] lg:gap-8 xl:gap-12">
                         <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
                             <SectionMark numbered={false}>Patent Search</SectionMark>
                             <h1
@@ -289,13 +309,12 @@ export default function PatentSearchPage() {
                                 Search 120M+ Patents, From Keyword to{' '}
                                 <span className="text-primary italic">Chemical Structure</span>
                             </h1>
-                            <p
-                                className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                Search global patents, chemical structures, clinical-trial data, and
-                                ownership records from one intelligent workspace, built for invention
-                                teams, IP analysts, and R&D professionals.
+                            <p className="mt-5 text-base leading-relaxed text-text-secondary [font-family:var(--font-body)] sm:mt-6 sm:text-lg">
+                                Search 120M+ global patent records alongside chemical structures,
+                                clinical-trial data, and ownership records, from one intelligent
+                                workspace built for invention teams, IP analysts, and R&D
+                                professionals. Inside the platform, run an automated novelty search
+                                straight from your invention brief.
                             </p>
 
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
@@ -303,33 +322,31 @@ export default function PatentSearchPage() {
                                     <FileSearch className="h-5 w-5" />
                                     Try Patent Search Free
                                 </Button>
-                                <BookDemoButton variant="secondary" size="lg" className="justify-center">
+                                <BookDemoButton topic="patent search" variant="link" size="lg" className="justify-center">
                                     Book a Demo
+                                    <ArrowRight className="h-5 w-5" aria-hidden="true" />
                                 </BookDemoButton>
                             </div>
                         </div>
 
-                        <div className="pointer-events-none hidden lg:flex lg:w-full lg:justify-end">
+                        <div className="pointer-events-none hidden md:flex md:w-full md:justify-center lg:justify-end">
                             <PatentSearchHeroSvg />
                         </div>
                     </div>
                 </Container>
 
-                {/* Big animation (placeholder for now) */}
-                <Container className="relative z-10 mt-12 sm:mt-16">
+                {/* Product walkthrough: results, claims, and compounds for one patent. */}
+                <Container className="figure-group relative z-10 mt-12 sm:mt-16">
                     <MockupHalo>
                         <AnimatedPatentSearch />
                     </MockupHalo>
+                    <FigureCaption className="mt-5">Patent search workspace, from results to claims and compounds</FigureCaption>
                 </Container>
 
                 {/* Credibility strip */}
                 <Container className="relative z-10 mt-8 sm:mt-10">
                     <FadeIn delay={0.1}>
-                        <div className="flex flex-wrap justify-center gap-2">
-                            {TRUST_STRIP.map((item) => (
-                                <TrustPill key={item} label={item} />
-                            ))}
-                        </div>
+                        <InlineList label="Coverage" items={TRUST_STRIP} align="center" />
                     </FadeIn>
                 </Container>
             </section>
@@ -338,8 +355,8 @@ export default function PatentSearchPage() {
             <section className="relative overflow-hidden bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">
-                    <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
-                        <FadeIn>
+                    <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
+                        <FadeIn className="min-w-0">
                             <div className="lg:sticky lg:top-28">
                                 <SectionMark>Global Patent Search</SectionMark>
                                 <h2
@@ -359,35 +376,35 @@ export default function PatentSearchPage() {
                                     and full-text availability vary by source and publication delay.
                                 </p>
 
-                                <div className="mt-8 overflow-hidden rounded-2xl border border-card-border bg-white shadow-xl shadow-primary/[0.05]">
-                                    <div className="border-b border-card-border bg-linear-to-r from-primary/[0.08] via-white to-white p-4">
-                                        <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-white px-3 py-2.5 shadow-sm">
-                                            <Search className="h-4 w-4 shrink-0 text-primary" />
-                                            <span
-                                                className="min-w-0 flex-1 truncate text-sm font-semibold text-text-primary"
-                                                style={{ fontFamily: 'var(--font-body)' }}
-                                            >
-                                                antibody AND melanoma OR trial sponsor
-                                            </span>
-                                            <span
-                                                className="hidden rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white sm:inline-flex"
-                                                style={{ fontFamily: 'var(--font-mono)' }}
-                                            >
-                                                Search
-                                            </span>
+                                <div className="figure-group mt-8">
+                                    <div className="overflow-hidden rounded-2xl border border-card-border bg-white shadow-xl shadow-primary/[0.05]">
+                                        <div className="border-b border-card-border bg-linear-to-r from-primary/[0.08] via-white to-white p-4">
+                                            <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-white px-3 py-2.5 shadow-sm">
+                                                <Search className="h-4 w-4 shrink-0 text-primary" />
+                                                <span className="min-w-0 flex-1 truncate text-sm font-semibold text-text-primary [font-family:var(--font-body)]">
+                                                    aspirin AND caffeine
+                                                </span>
+                                                <span
+                                                    className="hidden rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white sm:inline-flex"
+                                                    style={{ fontFamily: 'var(--font-mono)' }}
+                                                >
+                                                    Search
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-3 divide-x divide-card-border">
+                                            <SearchMetric value="120M+" label="patent records" />
+                                            <SearchMetric value="100+" label="authorities" />
+                                            <SearchMetric value="6" label="search modes" />
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-3 divide-x divide-card-border">
-                                        <SearchMetric value="120M+" label="patent records" />
-                                        <SearchMetric value="100+" label="authorities" />
-                                        <SearchMetric value="6" label="search modes" />
-                                    </div>
+                                    <FigureCaption className="mt-4">One query across 100+ patent authorities</FigureCaption>
                                 </div>
                             </div>
                         </FadeIn>
 
-                        <div>
-                            <div className="grid items-stretch gap-3 sm:grid-cols-2">
+                        <div className="min-w-0">
+                            <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2">
                                 {SEARCH_MODES.map((mode, i) => (
                                     <FadeIn key={mode.title} delay={i * 0.04} className="h-full">
                                         <SearchModeCard {...mode} />
@@ -401,8 +418,7 @@ export default function PatentSearchPage() {
                         <div className="mt-8 rounded-2xl border border-card-border bg-white p-5 shadow-sm sm:p-6">
                             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                                 <div className="max-w-sm">
-                                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-text-primary">
-                                        <SlidersHorizontal className="h-4 w-4 text-primary" />
+                                    <span className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                                         Filter results by
                                     </span>
                                     <p
@@ -412,9 +428,9 @@ export default function PatentSearchPage() {
                                         Narrow broad searches without leaving the same workflow.
                                     </p>
                                 </div>
-                                <div className="flex flex-1 flex-wrap gap-2 lg:justify-end">
-                                    {FILTERS.map((f, i) => (
-                                        <FilterChip key={f} label={f} active={i === 0} />
+                                <div className="flex flex-1 flex-col gap-3 lg:max-w-[40rem]">
+                                    {FILTER_GROUPS.map((group) => (
+                                        <InlineList key={group.label} label={group.label} items={group.items} />
                                     ))}
                                 </div>
                             </div>
@@ -423,8 +439,63 @@ export default function PatentSearchPage() {
                 </Container>
             </section>
 
-            {/* ── 3. Drug-Discovery Intelligence (centerpiece) ── */}
-            <section className="py-20 sm:py-24 lg:py-28">
+            {/* ── 3. Novelty search (inside the platform) ── */}
+            <section id="novelty-search" className="scroll-mt-24 py-20 sm:py-24 lg:py-28">
+                <Container>
+                    <FadeIn>
+                        <div className="max-w-3xl">
+                            <SectionMark>Novelty Search</SectionMark>
+                            <h2 className="mt-5 text-3xl font-bold tracking-tight text-text-primary [font-family:var(--font-display)] sm:text-4xl lg:text-5xl">
+                                Automated Novelty Search, <span className="italic">From Your Invention Brief</span>
+                            </h2>
+                            <p className="mt-4 text-lg leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                Inside the platform, start from the invention brief instead of a query. The
+                                novelty search builds its own search from the invention&apos;s features, ranks
+                                candidates from the global patent corpus, and reads the strongest ones against
+                                every feature, with the quoted passage behind each finding.
+                            </p>
+                        </div>
+                    </FadeIn>
+
+                    <ol className="mt-10 grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
+                        {NOVELTY_STEPS.map((step, i) => (
+                            <li key={step.title} className="border-t border-card-border py-5">
+                                <FadeIn delay={i * 0.06}>
+                                    <SubsectionNumber size="sm" />
+                                    <h3 className="mt-3 text-base font-semibold text-text-primary [font-family:var(--font-display)]">{step.title}</h3>
+                                    <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">{step.description}</p>
+                                </FadeIn>
+                            </li>
+                        ))}
+                    </ol>
+
+                    <FadeIn delay={0.08}>
+                        <div className="figure-group relative mt-8 lg:mt-10">
+                            <div aria-hidden="true" className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-primary/[0.05] blur-3xl" />
+                            <NoveltySearchFigure className="relative" />
+                            <FigureCaption className="relative mt-5">Novelty search for one invention brief, four ranked references</FigureCaption>
+                        </div>
+                    </FadeIn>
+
+                    <div className="mt-12 grid grid-cols-1 items-end gap-x-10 gap-y-2 lg:mt-14 lg:grid-cols-[minmax(0,1fr)_auto]">
+                        <FadeIn>
+                            <NumberedRuledList items={NOVELTY_AFTER} columns={2} />
+                        </FadeIn>
+                        <FadeIn delay={0.06} className="pb-5">
+                            <Link
+                                href="/ai-patent-drafting/"
+                                className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary-dark [font-family:var(--font-body)]"
+                            >
+                                See how findings feed AI drafting
+                                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                            </Link>
+                        </FadeIn>
+                    </div>
+                </Container>
+            </section>
+
+            {/* ── 4. Drug-Discovery Intelligence (centerpiece) ── */}
+            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
                     <FadeIn>
                         <div className="max-w-3xl">
@@ -448,22 +519,31 @@ export default function PatentSearchPage() {
 
                     {/* Molecule -> clinic workflow */}
                     <FadeIn delay={0.05}>
-                        <div className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3 lg:mt-12">
+                        <ol className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 lg:mt-12">
                             {WORKFLOW.map((step, i) => (
-                                <Fragment key={step.label}>
+                                <Fragment key={step}>
                                     {i > 0 && (
-                                        <ChevronRight
-                                            aria-hidden="true"
-                                            className="h-4 w-4 shrink-0 text-primary/35"
-                                        />
+                                        <li aria-hidden="true">
+                                            <ChevronRight className="h-4 w-4 shrink-0 text-primary/35" />
+                                        </li>
                                     )}
-                                    <WorkflowStep icon={step.icon} label={step.label} delay={i * 140} />
+                                    <li className="text-base text-text-primary [font-family:var(--font-display)] sm:text-lg">
+                                        {step}
+                                    </li>
                                 </Fragment>
                             ))}
+                        </ol>
+                    </FadeIn>
+
+                    {/* The enrichment itself, shown rather than described. */}
+                    <FadeIn delay={0.08}>
+                        <div className="figure-group mx-auto mt-10 max-w-4xl lg:mt-12">
+                            <CompoundsTrialsStill />
+                            <FigureCaption className="mt-5">Disclosed compounds and linked trials for one patent</FigureCaption>
                         </div>
                     </FadeIn>
 
-                    <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
+                    <div className="mt-12 grid grid-cols-1 gap-6 lg:mt-14 lg:grid-cols-3">
                         {ENRICHMENT.map((item, i) => (
                             <FadeIn key={item.title} delay={i * 0.08}>
                                 <FeatureCard {...item} />
@@ -473,34 +553,16 @@ export default function PatentSearchPage() {
 
                     {/* Powered by */}
                     <FadeIn delay={0.1}>
-                        <div className="mt-12 flex flex-col gap-3 rounded-2xl border border-card-border bg-page-bg-alt px-6 py-5 shadow-sm transition-all duration-300 hover:border-primary/15 hover:shadow-md hover:shadow-primary/[0.04] sm:flex-row sm:items-center sm:gap-5">
-                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-text-primary">
-                                <Database className="h-4 w-4 text-primary" />
-                                Powered by
-                            </span>
-                            <div className="flex flex-wrap gap-2">
-                                {DATA_SOURCES.map((s) => (
-                                    <SourceBadge key={s} label={s} />
-                                ))}
-                            </div>
-                        </div>
+                        <InlineList label="Powered by" items={DATA_SOURCES} className="mt-12 border-t border-card-border pt-6" />
                     </FadeIn>
 
-                    {/* Enrichment is automated inference over third-party data, so the
-                        boundary between what the tool surfaces and what a professional
-                        must confirm is stated next to the claim, not in the footer. */}
+                    {/* Professional-use notice: hidden pending attorney review of its wording. */}
                     {/* <FadeIn delay={0.12}>
                         <div className="mt-6 rounded-2xl border border-compliance/25 bg-compliance/[0.04] px-6 py-5">
-                            <h3
-                                className="text-sm font-semibold text-text-primary"
-                                style={{ fontFamily: 'var(--font-display)' }}
-                            >
+                            <h3 className="text-sm font-semibold text-text-primary [font-family:var(--font-display)]">
                                 What to verify before you rely on a result
                             </h3>
-                            <ul
-                                className="mt-3 flex flex-col gap-2 text-[13px] leading-relaxed text-text-secondary"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
+                            <ul className="mt-3 flex flex-col gap-2 text-[13px] leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                                 <li>
                                     Compound detection and patent-to-trial links are automated
                                     enrichment. Check associations against the original patent and
@@ -521,8 +583,8 @@ export default function PatentSearchPage() {
                 </Container>
             </section>
 
-            {/* ── 4. Free vs work email ── */}
-            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
+            {/* ── 5. Free vs work email ── */}
+            <section className="py-20 sm:py-24 lg:py-28">
                 <Container>
                     <FadeIn>
                         <div className="mx-auto max-w-2xl text-center">
@@ -542,10 +604,9 @@ export default function PatentSearchPage() {
                         </div>
                     </FadeIn>
 
-                    <div className="mx-auto mt-12 grid max-w-4xl gap-6 lg:mt-16 lg:grid-cols-2">
+                    <div className="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-6 lg:mt-16 lg:grid-cols-2">
                         <FadeIn>
                             <AccessPlanCard
-                                icon={Search}
                                 title="Start Free"
                                 subtitle="No account required"
                                 features={FREE_FEATURES}
@@ -556,11 +617,10 @@ export default function PatentSearchPage() {
 
                         <FadeIn delay={0.08}>
                             <AccessPlanCard
-                                icon={Mail}
                                 title="Unlock Professional Access"
-                                subtitle="Free to create, unlocks the full tool"
+                                subtitle="Free work-email account"
                                 features={WORK_FEATURES}
-                                cta="Get Full Access"
+                                cta="Search, then sign in with a work email"
                                 variant="recommended"
                             />
                         </FadeIn>
@@ -568,11 +628,11 @@ export default function PatentSearchPage() {
                 </Container>
             </section>
 
-            {/* ── 5. Inside the platform ── */}
-            <section className="py-20 sm:py-24 lg:py-28">
+            {/* ── 6. Inside the platform ── */}
+            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
-                    <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-                        <FadeIn>
+                    <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+                        <FadeIn className="min-w-0">
                             <div>
                                 <SectionMark>Inside the platform</SectionMark>
                                 <h2
@@ -592,27 +652,19 @@ export default function PatentSearchPage() {
                                     and the in-app prior-art search use separate data sources, so
                                     result sets can differ.
                                 </p>
-                                <ul className="mt-6 flex flex-col gap-4">
-                                    <li className="flex items-start gap-3">
-                                        <Globe className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                                        <span
-                                            className="text-sm leading-relaxed text-text-secondary"
-                                            style={{ fontFamily: 'var(--font-body)' }}
-                                        >
-                                            Prior-art search across 100+ patent authorities, with
-                                            full-text claims, legal status, citations, and family
-                                            where the source provides them.
-                                        </span>
+                                <ul className="mt-6 border-t border-card-border text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                    <li className="border-b border-card-border py-3">
+                                        Prior-art search across 100+ patent authorities, with
+                                        full-text claims, legal status, citations, and family
+                                        where the source provides them.
                                     </li>
-                                    <li className="flex items-start gap-3">
-                                        <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-compliance" />
-                                        <span
-                                            className="text-sm leading-relaxed text-text-secondary"
-                                            style={{ fontFamily: 'var(--font-body)' }}
-                                        >
-                                            Save references with relevance scoring and a complete,
-                                            append-only audit trail.
-                                        </span>
+                                    <li className="border-b border-card-border py-3">
+                                        Automated novelty search from a family&apos;s invention brief,
+                                        read feature by feature.
+                                    </li>
+                                    <li className="border-b border-card-border py-3">
+                                        Save references with relevance scoring and a complete,
+                                        append-only audit trail.
                                     </li>
                                 </ul>
                                 <Link
@@ -626,19 +678,15 @@ export default function PatentSearchPage() {
                             </div>
                         </FadeIn>
 
-                        <FadeIn delay={0.1}>
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                {PLATFORM_CAPS.map((cap) => (
-                                    <MiniFeatureCard key={cap.title} {...cap} />
-                                ))}
-                            </div>
+                        <FadeIn delay={0.1} className="min-w-0">
+                            <NumberedRuledList items={PLATFORM_CAPS} />
                         </FadeIn>
                     </div>
                 </Container>
             </section>
 
-            {/* ── 6. Use cases ── */}
-            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
+            {/* ── 7. Use cases ── */}
+            <section className="py-20 sm:py-24 lg:py-28">
                 <Container>
                     <FadeIn>
                         <div className="mx-auto max-w-2xl text-center">
@@ -658,18 +706,14 @@ export default function PatentSearchPage() {
                         </div>
                     </FadeIn>
 
-                    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
-                        {USE_CASES.map((uc, i) => (
-                            <FadeIn key={uc.title} delay={i * 0.06}>
-                                <FeatureCard {...uc} />
-                            </FadeIn>
-                        ))}
-                    </div>
+                    <FadeIn delay={0.06}>
+                        <NumberedRuledList items={USE_CASES} columns={2} className="mx-auto mt-12 max-w-5xl lg:mt-16" />
+                    </FadeIn>
                 </Container>
             </section>
 
-            {/* ── 7. FAQ ── */}
-            <section className="py-20 sm:py-24 lg:py-28">
+            {/* ── 8. FAQ ── */}
+            <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
                     <FadeIn>
                         <div className="mx-auto mb-12 max-w-2xl text-center lg:mb-16">
@@ -688,12 +732,12 @@ export default function PatentSearchPage() {
                         </div>
                     </FadeIn>
                     <FadeIn delay={0.1}>
-                        <FaqAccordion items={PATENT_SEARCH_FAQ} />
+                        <FaqAccordion items={PATENT_SEARCH_FAQ} initialVisible={6} />
                     </FadeIn>
                 </Container>
             </section>
 
-            {/* ── 8. Final CTA ── */}
+            {/* ── 9. Final CTA ── */}
             <section className="py-16 sm:py-20 lg:py-24">
                 <Container>
                     <div className="mx-auto max-w-2xl text-center">
@@ -715,8 +759,9 @@ export default function PatentSearchPage() {
                                 <FileSearch className="h-5 w-5" />
                                 Try Patent Search Free
                             </Button>
-                            <BookDemoButton variant="secondary" size="lg" className="w-full justify-center sm:w-auto">
+                            <BookDemoButton topic="patent search" variant="link" size="lg" className="justify-center">
                                 Book a Demo
+                                <ArrowRight className="h-5 w-5" aria-hidden="true" />
                             </BookDemoButton>
                         </div>
                     </div>
@@ -730,47 +775,13 @@ export default function PatentSearchPage() {
 
 /* ── Helpers ── */
 
-function TrustPill({ label }: { label: string }) {
-    return (
-        <span
-            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05]"
-            style={{ fontFamily: 'var(--font-mono)' }}
-        >
-            <span className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary" />
-            {label}
-        </span>
-    );
-}
-
-function FilterChip({ label, active }: { label: string; active?: boolean }) {
-    return (
-        <span
-            className={`group inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-medium shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05] ${
-                active
-                    ? 'border-primary/25 bg-primary/[0.07] text-primary'
-                    : 'border-card-border bg-card-bg text-text-secondary'
-            }`}
-            style={{ fontFamily: 'var(--font-mono)' }}
-        >
-            <SlidersHorizontal className="h-3.5 w-3.5 text-primary/75 transition-transform duration-300 group-hover:scale-110" />
-            {label}
-        </span>
-    );
-}
-
 function SearchMetric({ value, label }: { value: string; label: string }) {
     return (
         <div className="p-4 text-center">
-            <p
-                className="text-lg font-bold text-text-primary sm:text-xl"
-                style={{ fontFamily: 'var(--font-display)' }}
-            >
+            <p className="text-lg font-bold text-text-primary [font-family:var(--font-display)] sm:text-xl">
                 {value}
             </p>
-            <p
-                className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted"
-                style={{ fontFamily: 'var(--font-mono)' }}
-            >
+            <p className="mt-1 text-sm leading-tight tracking-[0.06em] text-text-secondary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                 {label}
             </p>
         </div>
@@ -805,31 +816,6 @@ function SearchModeCard({ title, description }: IconItem) {
     );
 }
 
-function WorkflowStep({
-    icon: Icon,
-    label,
-    delay,
-}: {
-    icon: React.ElementType;
-    label: string;
-    delay: number;
-}) {
-    return (
-        <span
-            className="group inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05] sm:text-sm"
-            style={{ fontFamily: 'var(--font-body)' }}
-        >
-            <span
-                className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/[0.08] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:animate-pulse"
-                style={{ animationDelay: `${delay}ms` }}
-            >
-                <Icon className="h-3.5 w-3.5" />
-            </span>
-            {label}
-        </span>
-    );
-}
-
 function FeatureCard({ title, description }: IconItem) {
     return (
         <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
@@ -854,47 +840,31 @@ function FeatureCard({ title, description }: IconItem) {
     );
 }
 
-function MiniFeatureCard({ title, description }: IconItem) {
+/* Numbered items as ruled rows, the site's list form, in place of a grid of
+   small cards. Numbers come from the section's subsection counter. */
+function NumberedRuledList({ items, columns = 1, className = '' }: { items: readonly IconItem[]; columns?: 1 | 2; className?: string }) {
     return (
-        <article className="group rounded-2xl border border-card-border bg-page-bg-alt p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-card-bg hover:shadow-md hover:shadow-primary/[0.05]">
-            <SubsectionNumber />
-            <h3
-                className="mt-3 text-[15px] font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
-                style={{ fontFamily: 'var(--font-display)' }}
-            >
-                {title}
-            </h3>
-            <p
-                className="mt-1 text-[13px] leading-relaxed text-text-secondary"
-                style={{ fontFamily: 'var(--font-body)' }}
-            >
-                {description}
-            </p>
-        </article>
-    );
-}
-
-function SourceBadge({ label }: { label: string }) {
-    return (
-        <span
-            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05]"
-            style={{ fontFamily: 'var(--font-mono)' }}
-        >
-            <span className="h-1.5 w-1.5 rounded-full bg-success/80 transition-colors duration-300 group-hover:bg-success" />
-            {label}
-        </span>
+        <ol className={`grid grid-cols-1 gap-x-10 ${columns === 2 ? 'md:grid-cols-2' : ''} ${className}`}>
+            {items.map((item) => (
+                <li key={item.title} className="grid grid-cols-[2.75rem_1fr] gap-x-3 border-t border-card-border py-5">
+                    <SubsectionNumber size="sm" className="pt-1" />
+                    <div className="min-w-0">
+                        <h3 className="text-base font-semibold text-text-primary [font-family:var(--font-display)]">{item.title}</h3>
+                        <p className="mt-1 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">{item.description}</p>
+                    </div>
+                </li>
+            ))}
+        </ol>
     );
 }
 
 function AccessPlanCard({
-    icon: Icon,
     title,
     subtitle,
     features,
     cta,
     variant,
 }: {
-    icon: React.ElementType;
     title: string;
     subtitle: string;
     features: readonly string[];
@@ -905,53 +875,29 @@ function AccessPlanCard({
 
     return (
         <div
-            className={`group relative flex h-full flex-col overflow-hidden rounded-2xl bg-card-bg p-7 transition-all duration-300 hover:-translate-y-0.5 ${
-                recommended
-                    ? 'border-2 border-primary shadow-md shadow-primary/[0.06] hover:shadow-lg hover:shadow-primary/[0.06]'
-                    : 'border border-card-border shadow-sm hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]'
+            className={`relative flex h-full flex-col border-t-2 border-t-text-primary p-7 ${
+                recommended ? 'bg-primary/[0.03]' : 'bg-card-bg'
             }`}
         >
-            <div
-                aria-hidden="true"
-                className={`pointer-events-none absolute inset-x-0 top-0 h-22 bg-linear-to-b from-primary/[0.08] to-transparent transition-opacity duration-300 ${
-                    recommended ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                }`}
-            />
             {recommended && (
-                <span
-                    className="relative mb-4 inline-flex w-fit items-center rounded-full bg-primary px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                >
+                <span className="relative mb-4 text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-primary">
                     Recommended for IP and R&D teams
                 </span>
             )}
-            <div className="relative flex items-center gap-2.5">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/15 bg-primary/[0.08] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:shadow-sm group-hover:shadow-primary/15">
-                    <Icon className="h-5 w-5" />
-                </span>
-                <h3
-                    className="text-xl font-bold text-text-primary transition-colors duration-300 group-hover:text-primary"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                >
-                    {title}
-                </h3>
-            </div>
-            <p
-                className="relative mt-2 text-sm text-text-muted"
-                style={{ fontFamily: 'var(--font-body)' }}
-            >
+            <h3 className="relative text-xl font-bold text-text-primary [font-family:var(--font-display)]">
+                {title}
+            </h3>
+            <p className="relative mt-2 text-sm italic text-navy-light [font-family:var(--font-body)]">
                 {subtitle}
             </p>
-            <ul className="relative mt-6 flex flex-col gap-3">
+            {/* Ruled rows, like the pricing schedule: no tick icons. */}
+            <ul className="relative mt-6 border-t border-card-border">
                 {features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2.5">
-                        <AccessFeatureIcon feature={feature} />
-                        <span
-                            className="text-sm text-text-secondary"
-                            style={{ fontFamily: 'var(--font-body)' }}
-                        >
-                            {feature}
-                        </span>
+                    <li
+                        key={feature}
+                        className="border-b border-card-border py-2.5 text-sm text-text-primary [font-family:var(--font-body)]"
+                    >
+                        {feature}
                     </li>
                 ))}
             </ul>
@@ -969,17 +915,4 @@ function AccessPlanCard({
             </div>
         </div>
     );
-}
-
-function AccessFeatureIcon({ feature }: { feature: string }) {
-    if (feature.includes('claims')) {
-        return <Lock className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />;
-    }
-    if (feature.includes('CSV') || feature.includes('export')) {
-        return <Download className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />;
-    }
-    if (feature.includes('Save patents')) {
-        return <Bookmark className="mt-0.5 h-4.5 w-4.5 shrink-0 text-primary" />;
-    }
-    return <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 shrink-0 text-success" />;
 }

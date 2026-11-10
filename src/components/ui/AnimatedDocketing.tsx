@@ -222,7 +222,7 @@ export function AnimatedDocketing() {
             role="img"
             className={`relative flex select-none flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 ${MOCKUP_HEIGHT}`}
         >
-            <BrowserMockupChrome url={frame.url} />
+            <BrowserMockupChrome url={frame.url} record="DEMO-DKT-001" screen="Deadlines" />
 
             {/* ── Workspace header ── */}
             <div className="flex shrink-0 items-center justify-between gap-2 border-b border-card-border bg-white px-2.5 py-1.5 sm:px-3 sm:py-2">

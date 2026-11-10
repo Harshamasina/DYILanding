@@ -72,7 +72,7 @@ export function StickyWatchDemo() {
                             type="button"
                             onClick={() => open()}
                             aria-label="Watch the product demo"
-                            className="group hidden lg:flex fixed bottom-6 left-6 z-40 h-14 items-center overflow-hidden rounded-2xl border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 pr-0 shadow-lg shadow-primary/20 backdrop-blur-sm transition-[padding,box-shadow] duration-300 cursor-pointer hover:pr-5 hover:shadow-xl hover:shadow-primary/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                            className="group hidden lg:flex fixed bottom-6 left-6 z-40 h-14 items-center overflow-hidden rounded-2xl border border-primary/15 bg-white pr-0 shadow-lg shadow-primary/20 backdrop-blur-sm transition-[padding,box-shadow] duration-300 cursor-pointer hover:pr-5 hover:shadow-xl hover:shadow-primary/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                             initial={
                                 reduce
                                     ? { opacity: 0 }

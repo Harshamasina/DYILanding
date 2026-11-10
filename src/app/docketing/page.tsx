@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
-    TrendingUp,
     ArrowRight,
+    ChevronDown,
     Play,
 } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
@@ -15,6 +15,8 @@ import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
+import { InlineList, RuledList, RuledItem } from '@/components/ui/RuledList';
+import { FigureCaption } from '@/components/ui/FigureCaption';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedDocketingWorkflow } from '@/components/ui/AnimatedDocketingWorkflow';
 import { ComputedDeadlineTrace } from '@/components/ui/ComputedDeadlineTrace';
@@ -41,9 +43,9 @@ interface CardItem {
 
 const TRACKS = [
     'Application Families',
-    'PRV Applications',
+    'Provisional (PRV) Applications',
     'PCT Filings',
-    'NPE Cases',
+    'National-Phase (NPE) Cases',
     'Office Actions',
     'Annuity Fees',
     'Patent Fees',
@@ -68,23 +70,23 @@ const TRACE_CAPABILITIES: CardItem[] = [
 
 interface RiskSignal {
     weight: string;
+    /* Bar width class matching the weight (Tailwind needs the literal). */
+    bar: string;
     title: string;
     description: string;
-    accent: string;
-    tint: string;
 }
 
 const RISK_SIGNALS: RiskSignal[] = [
-    { weight: '40%', title: 'Time pressure', description: 'How close, or how far past, the deadline is. Overdue items spike toward 100.', accent: '#dc2626', tint: 'rgba(220,38,38,0.10)' },
-    { weight: '25%', title: 'Type severity', description: 'Office actions (90) and annuities (80) outrank routine reminders (20).', accent: '#d97706', tint: 'rgba(217,119,6,0.12)' },
-    { weight: '25%', title: 'Overdue cascade', description: 'Already-overdue or open past-due items escalate sharply rather than plateauing.', accent: '#4f46e5', tint: 'rgba(79,70,229,0.10)' },
-    { weight: '10%', title: 'Assignment gap', description: 'Unassigned deadlines are penalized. An orphaned deadline is a dangerous deadline.', accent: '#059669', tint: 'rgba(5,150,105,0.10)' },
+    { weight: '40%', bar: 'w-[40%]', title: 'Time pressure', description: 'How close, or how far past, the deadline is. Overdue items spike toward 100.' },
+    { weight: '25%', bar: 'w-1/4', title: 'Type severity', description: 'Office actions (90) and annuities (80) outrank routine reminders (20).' },
+    { weight: '25%', bar: 'w-1/4', title: 'Overdue cascade', description: 'Already-overdue or open past-due items escalate sharply rather than plateauing.' },
+    { weight: '10%', bar: 'w-[10%]', title: 'Assignment gap', description: 'Unassigned deadlines are penalized. An orphaned deadline is a dangerous deadline.' },
 ];
 
 const DIGESTS: CardItem[] = [
     {
         title: 'Daily Deadline Digest',
-        description: 'Every morning at 8 AM in each tenant local timezone, every user gets the deadlines coming due within a configurable window, pre-sorted by risk.',
+        description: "Every morning at 8 AM in your workspace's local time zone, every user gets the deadlines coming due within a configurable window, pre-sorted by risk.",
     },
     {
         title: 'Reminder-Due Email',
@@ -98,7 +100,7 @@ const DIGESTS: CardItem[] = [
 
 const STALE_BUCKETS: CardItem[] = [
     { title: 'Families with no filings', description: 'A docket opened but never built out, sitting empty and forgotten.' },
-    { title: 'Stale records', description: 'PRV, PCT, or NPE entities untouched past a threshold (default 90 days).' },
+    { title: 'Stale records', description: 'Provisional, PCT, or national-phase records untouched past a threshold (default 90 days).' },
     { title: 'Overdue open office actions', description: 'Past due and still not responded, the single most expensive thing to miss.' },
     { title: 'Unpaid overdue fees', description: 'Annuities past due, surfaced with grace-period and amount context.' },
     { title: 'Expired reminders', description: 'Pending reminders whose date has already passed without action.' },
@@ -112,7 +114,7 @@ const OPS: CardItem[] = [
     },
     {
         title: 'Outside-counsel directory',
-        description: 'A searchable, tenant-scoped roster of firms and agents, with per-case assignments by role (lead counsel, local agent, foreign associate, annuity provider) and duplicate-assignment protection.',
+        description: 'A searchable roster of firms and agents, private to your workspace, with per-case assignments by role (lead counsel, local agent, foreign associate, annuity provider) and duplicate-assignment protection.',
     },
     {
         title: 'Family completeness scoring',
@@ -140,7 +142,7 @@ const OPS: CardItem[] = [
     },
     {
         title: 'Data portability, no lock-in',
-        description: 'Export the whole account, not just a view. Families, filings, cases, fees, reminders, and audit history come out as structured NDJSON with schemas and CSV renderings, on every plan. Each user can also export their own personal data from their profile.',
+        description: 'Export the whole account, not just a view. Families, filings, cases, fees, reminders, and audit history come out as structured, machine-readable files (NDJSON) with schemas, plus CSV copies, on every plan. Each user can also export their own personal data from their profile.',
     },
 ];
 
@@ -154,12 +156,12 @@ const SECURITY: CardItem[] = [
         description: 'Edits to sensitive fields such as dates and statuses require a typed reason, and deletions always do. The field is required rather than optional, following 21 CFR Part 11 patterns.',
     },
     {
-        title: 'Tenant isolation',
-        description: 'Every query runs under PostgreSQL Row-Level Security inside a tenant-scoped transaction. Defense-in-depth tenant isolation is designed to prevent one firm from reaching another firm docket.',
+        title: 'Firm-level data isolation',
+        description: "Each firm's data is walled off in the database: every query runs under PostgreSQL Row-Level Security, inside a transaction scoped to your workspace. This defense-in-depth isolation is designed to prevent one firm from reaching another firm's docket.",
     },
     {
         title: 'Role-based access',
-        description: 'Read versus write is enforced server-side per module (prv, pct, npe, and the rest). "View all reminders" versus "only mine" is a permission, not a UI toggle.',
+        description: 'Read versus write is enforced server-side per module (provisional, PCT, national-phase, and the rest). "View all reminders" versus "only mine" is a permission, not a UI toggle.',
     },
 ];
 
@@ -167,7 +169,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Is this a calendar I have to keep up to date by hand?',
         answer:
-            'No. Supported deadlines are computed on read from the underlying case records, not entered manually. The moment you set a filing date or a publication date, every dependent statutory and procedural deadline the engine supports appears automatically and recalculates when those source fields change. Dates the engine does not derive stay under your control as custom reminders, and all dates should be verified by a qualified patent professional.',
+            'No. Supported deadlines are computed automatically from the underlying case records every time you open them, not entered manually. The moment you set a filing date or a publication date, every dependent statutory and procedural deadline the engine supports appears automatically and recalculates when those source fields change. Dates the engine does not derive stay under your control as custom reminders, and all dates should be verified by a qualified patent professional.',
     },
     {
         question: 'Which deadlines are computed, and which are tracked?',
@@ -182,32 +184,32 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Will deadlines look overdue a day early for international teams?',
         answer:
-            'No. "Today" is computed in each tenant local timezone, so a deadline is not miscolored for a team in another part of the world. Annuity fees also track a grace-period end date, so the system separates "overdue but still payable in grace" from "truly lapsed."',
+            'No. "Today" is computed in your workspace\'s local time zone, so a deadline is not miscolored for a team in another part of the world. Annuity fees also track a grace-period end date, so the system separates "overdue but still payable in grace" from "truly lapsed."',
     },
     {
         question: 'What are the email digests, and can users control them?',
         answer:
-            'Three automated jobs push deadlines out: a daily deadline digest (8 AM local, pre-sorted by risk), a reminder-due email the same morning, and a weekly stale-alert hygiene report on Mondays at 9 AM local. Sends respect each user notification preferences, are throttled to provider limits, and fail gracefully per user so one bad address does not block the batch.',
+            'Three automated jobs push deadlines out: a daily deadline digest (8 AM local, pre-sorted by risk), a reminder-due email the same morning, and a weekly stale-alert hygiene report on Mondays at 9 AM local. Sends respect each user\'s notification preferences, are throttled to provider limits, and fail gracefully per user so one bad address does not block the batch.',
     },
     {
         question: 'What is the stale-alert report for?',
         answer:
-            'It surfaces silent risks that no hard deadline would catch: families with no filings, stale PRV/PCT/NPE records, overdue open office actions, unpaid overdue fees, expired reminders, and stale families. It is the "what is slipping through the cracks?" view that date-only docketing misses.',
+            'It surfaces silent risks that no hard deadline would catch: families with no filings, stale provisional, PCT, or national-phase records, overdue open office actions, unpaid overdue fees, expired reminders, and stale families. It is the "what is slipping through the cracks?" view that date-only docketing misses.',
     },
     {
         question: 'Can it handle a multi-currency, multi-jurisdiction portfolio?',
         answer:
-            'Yes. Fees and annuities carry an amount and currency, and analytics roll up spend across the portfolio with date-accurate FX conversion into a single chosen reporting currency. Fees attach polymorphically to families, PRV, PCT, NPE cases, or office actions, so renewal exposure is visible at every level.',
+            'Yes. Fees and annuities carry an amount and currency, and analytics roll up spend across the portfolio with date-accurate FX conversion into a single chosen reporting currency. A fee can be attached to a family, a provisional, PCT, or national-phase case, or an office action, so renewal exposure is visible at every level.',
     },
     {
         question: 'How is the docket defensible in an audit?',
         answer:
-            'Every create, update, and delete on reminders, fees, and cases is logged with actor, before and after state, timestamp, IP, and request ID. Edits to sensitive fields require a typed reason, deletions always do, and tenant data is isolated with PostgreSQL Row-Level Security. Read versus write is enforced server-side per module.',
+            'Every create, update, and delete on reminders, fees, and cases is logged with actor, before and after state, timestamp, IP, and request ID. Edits to sensitive fields require a typed reason, deletions always do, and each firm\'s data is isolated with PostgreSQL Row-Level Security. Read versus write is enforced server-side per module.',
     },
     {
         question: 'Can I hand a client or an auditor a report straight from the docket?',
         answer:
-            'Yes. The portfolio health report turns the live docket into a branded PDF in one click. It carries your organization logo and name, only the sections you select, and an optional as-of date, and it covers portfolio stats, family analytics, deadlines ranked by risk, annuity and patent fees grouped per currency, and stale-record alerts. Every report is stamped with a unique Report ID and a SHA-256 checksum written to your audit log, so a document you handed over months ago can still be verified against the record.',
+            'Yes. The portfolio health report turns the live docket into a branded PDF in one click. It carries your organization\'s logo and name, only the sections you select, and an optional as-of date, and it covers portfolio stats, family analytics, deadlines ranked by risk, annuity and patent fees grouped per currency, and stale-record alerts. Every report is stamped with a unique Report ID and a SHA-256 checksum written to your audit log, so a document you handed over months ago can still be verified against the record.',
     },
     {
         question: 'Can I see when a drug product actually loses exclusivity?',
@@ -222,7 +224,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'How does it reduce the risk of a missed deadline or human error?',
         answer:
-            'Supported deadlines are computed on read from the case records rather than typed into a calendar, so they do not depend on someone remembering to add them. Unassigned deadlines are penalized in the risk score, abandoned or paid items drop out automatically, and three automated digests push what is due to the responsible owner. The weekly stale-alert report catches cases that are silently going wrong without generating a hard deadline. Accuracy still depends on the case data you record, and calculated dates should be verified by a qualified patent professional.',
+            'Supported deadlines are computed automatically from the case records rather than typed into a calendar, so they do not depend on someone remembering to add them. Unassigned deadlines are penalized in the risk score, abandoned or paid items drop out automatically, and three automated digests push what is due to the responsible owner. The weekly stale-alert report catches cases that are silently going wrong without generating a hard deadline. Accuracy still depends on the case data you record, and calculated dates should be verified by a qualified patent professional.',
     },
     {
         question: 'How hard is it to migrate our existing docket from spreadsheets or another tool?',
@@ -232,7 +234,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'If we ever leave, can we take our data with us?',
         answer:
-            'Yes, on every plan, and without a support ticket. A tenant admin can export the entire account in one click: families, filings, PRV, PCT and NPE cases, office actions, fees, reminders, prior-art references, team roles, and the audit trail. The bundle ships as structured NDJSON with a JSON Schema for every dataset, plus CSV renderings of the common docket views, so it stays readable in Excel and parseable by another system. Each dataset carries a SHA-256 checksum, the whole export is a consistent point-in-time snapshot, and the export itself is audited and emailed to every admin. Individual users can export their own personal data from their profile.',
+            'Yes, on every plan, and without a support ticket. A workspace admin can export the entire account in one click: families, filings, PRV, PCT and NPE cases, office actions, fees, reminders, prior-art references, team roles, and the audit trail. The bundle ships as structured, machine-readable files (NDJSON) with a JSON Schema for every dataset, plus CSV renderings of the common docket views, so it stays readable in Excel and parseable by another system. Each dataset carries a SHA-256 checksum, the whole export is a consistent point-in-time snapshot, and the export itself is audited and emailed to every admin. Individual users can export their own personal data from their profile.',
     },
     {
         question: 'Does it integrate with our existing tools, and is it cloud-based?',
@@ -276,57 +278,53 @@ export default function DocketingPage() {
                                 <span className="text-primary italic">Reduces Deadline Risk</span>
                             </h1>
                             <p
-                                className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
+                                className="mt-5 max-w-[40rem] text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 One missed annuity payment or office-action response can cost a client an
                                 entire patent. Docketing is built as an audit-first engine that derives
                                 supported statutory and procedural deadlines from your case data, scores
                                 each one by risk, and pushes it to the responsible owner before it comes
-                                due. Every calculated date stays reviewable, and remains subject to
+                                due.
+                            </p>
+                            {/* The verification boundary sits under the pitch as a ruled note,
+                                the way the office actions hero states its scope. */}
+                            <p className="mt-5 max-w-[40rem] border-t border-card-border pt-4 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                Every calculated date stays reviewable, and remains subject to
                                 verification by a qualified patent professional.
                             </p>
 
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                                <BookDemoButton size="lg" className="justify-center">
+                                <BookDemoButton topic="patent docketing" size="lg" className="justify-center">
                                     Book a Demo
-                                    <ArrowRight className="h-5 w-5" />
                                 </BookDemoButton>
-                                <WatchDemoButton variant="secondary" size="lg" startTime={34} className="justify-center">
+                                <WatchDemoButton variant="outline" size="lg" startTime={34} className="justify-center">
                                     <Play className="h-5 w-5 fill-current" />
                                     Watch Demo
                                 </WatchDemoButton>
                             </div>
                         </div>
 
-                        <div className="pointer-events-none hidden lg:flex lg:w-full lg:justify-end">
+                        <div className="pointer-events-none hidden md:flex md:w-full md:justify-center lg:justify-end">
                             <DocketingHeroSvg />
                         </div>
                     </div>
                 </Container>
 
-                <Container className="relative z-10 mt-12 sm:mt-16">
+                <Container className="figure-group relative z-10 mt-12 sm:mt-16">
                     <MockupHalo>
                         <AnimatedDocketingWorkflow />
                     </MockupHalo>
+                    <FigureCaption className="mt-5">Docket workflow, from the dashboard and notifications to a status change with its required reason, then the audit log</FigureCaption>
                 </Container>
 
                 {/* Tracks across the case hierarchy */}
                 <Container className="relative z-10 mt-8 sm:mt-10">
                     <FadeIn delay={0.1}>
-                        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-3">
-                            <span
-                                className="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Tracks across your case hierarchy
-                            </span>
-                            <div className="flex flex-wrap justify-center gap-2">
-                                {TRACKS.map((t, i) => (
-                                    <TrackChip key={t} label={t} delay={i * 120} />
-                                ))}
-                            </div>
-                        </div>
+                        <p className="mb-4 text-center text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                            One docket covers every record type in a patent family, from the first filing to the drug product it protects.
+                        </p>
+                        <InlineList label="Tracks across your case hierarchy" items={TRACKS} align="center" />
                     </FadeIn>
                 </Container>
             </section>
@@ -349,7 +347,7 @@ export default function DocketingPage() {
                                 <span className="italic">Shows Its Work</span>
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Supported PCT and U.S. office-action deadlines are calculated from recorded
@@ -379,12 +377,15 @@ export default function DocketingPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.05}>
-                        <div className="relative mt-10 lg:mt-12">
+                        <div className="figure-group relative mt-10 lg:mt-12">
                             <div
                                 aria-hidden="true"
                                 className="pointer-events-none absolute -inset-8 rounded-[3rem] bg-primary/[0.06] blur-3xl"
                             />
-                            <ComputedDeadlineTrace />
+                            <div className="relative">
+                                <ComputedDeadlineTrace />
+                            </div>
+                            <FigureCaption className="relative mt-5">A computed deadline with its trigger, citation, and arithmetic</FigureCaption>
                         </div>
                     </FadeIn>
 
@@ -401,6 +402,8 @@ export default function DocketingPage() {
             {/* ── 3. Risk scoring ── */}
             <section className="py-20 sm:py-24 lg:py-28">
                 <Container>
+                    {/* The risk-level legend sits in the intro's empty right column from lg up. */}
+                    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:items-end lg:gap-12">
                     <FadeIn>
                         <div className="max-w-3xl">
                             <SectionMark>Risk scoring</SectionMark>
@@ -411,7 +414,7 @@ export default function DocketingPage() {
                                 Triage by Real Risk, Not Just Date Order
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Every deadline gets a 0 to 100 risk score and a traffic-light level, so
@@ -424,18 +427,13 @@ export default function DocketingPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.05}>
-                        <div className="mt-8 flex flex-wrap items-center gap-2.5">
-                            <RiskBadge level="red" />
-                            <RiskBadge level="amber" />
-                            <RiskBadge level="green" />
-                            <span
-                                className="text-sm text-text-muted"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                70+ red &middot; 40+ amber &middot; else green
-                            </span>
-                        </div>
+                        <RuledList label="Risk levels" className="mt-8 lg:mt-0 lg:mb-1">
+                            <RiskLevel dot="bg-danger">Red, a score of 70 or higher</RiskLevel>
+                            <RiskLevel dot="bg-compliance">Amber, 40 or higher</RiskLevel>
+                            <RiskLevel dot="bg-success">Green, anything lower</RiskLevel>
+                        </RuledList>
                     </FadeIn>
+                    </div>
 
                     <div className="mt-10 grid gap-6 lg:mt-12 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-stretch">
                         <div className="grid gap-6 sm:grid-cols-2">
@@ -465,11 +463,11 @@ export default function DocketingPage() {
                                 Deadlines Come to You, Not the Other Way Around
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Docketing does not wait for users to log in. Three automated digest jobs
-                                push deadlines out, each respecting user notification preferences, throttled
+                                push deadlines out, each respecting every user's notification preferences, throttled
                                 to provider limits, and failing gracefully per user. A fourth report goes
                                 further and catches what date-only docketing misses entirely.
                             </p>
@@ -479,7 +477,7 @@ export default function DocketingPage() {
                     <FadeIn delay={0.05}>
                         <GroupLabel
                             label="Automated digests"
-                            note="Pushed on a schedule, in each tenant local timezone."
+                            note="Pushed on a schedule, in your workspace's local time zone."
                         />
                     </FadeIn>
 
@@ -498,13 +496,7 @@ export default function DocketingPage() {
                         />
                     </FadeIn>
 
-                    <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        {STALE_BUCKETS.map((item, i) => (
-                            <FadeIn key={item.title} delay={i * 0.06}>
-                                <CapabilityCard {...item} />
-                            </FadeIn>
-                        ))}
-                    </div>
+                    <RuledRows items={STALE_BUCKETS} className="mt-6" />
                 </Container>
             </section>
 
@@ -521,7 +513,7 @@ export default function DocketingPage() {
                                 The Operating Layer Around Every Deadline
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Fees, outside counsel, family health, dashboards, and bulk operations all
@@ -533,23 +525,10 @@ export default function DocketingPage() {
                         </div>
                     </FadeIn>
 
-                    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
-                        {OPS.map((item, i) => (
-                            <FadeIn key={item.title} delay={i * 0.06}>
-                                <CapabilityCard {...item} />
-                            </FadeIn>
-                        ))}
-                    </div>
+                    <DisclosureRows items={OPS} className="mt-12 lg:mt-14" />
 
-                    <FadeIn delay={0.05}>
-                        <GroupLabel
-                            label="Loss of Exclusivity timeline"
-                            note="Where the docket meets the product it protects."
-                        />
-                    </FadeIn>
-
-                    <div className="mt-8">
-                        <LoeCard />
+                    <div className="mt-12 lg:mt-14">
+                        <LoeCard note="Where the docket meets the product it protects." />
                     </div>
                 </Container>
             </section>
@@ -567,10 +546,10 @@ export default function DocketingPage() {
                                 Audit-First, Tenant-Isolated, Built to Survive Review
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-on-dark"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-on-dark"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
-                                Docketing inherits the platform multi-tenant, audit-first architecture. The
+                                Docketing inherits the platform's multi-tenant, audit-first architecture. The
                                 same controls that make the platform defensible in enterprise procurement
                                 apply to every reminder, fee, and case.
                             </p>
@@ -599,7 +578,7 @@ export default function DocketingPage() {
                                 Docketing Questions
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 How deadlines are derived, scored, and surfaced before they come due.
@@ -607,7 +586,7 @@ export default function DocketingPage() {
                         </div>
                     </FadeIn>
                     <FadeIn delay={0.1}>
-                        <FaqAccordion items={PAGE_FAQ} />
+                        <FaqAccordion items={PAGE_FAQ} initialVisible={6} />
                     </FadeIn>
                 </Container>
             </section>
@@ -620,7 +599,7 @@ export default function DocketingPage() {
                             className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl lg:text-4xl"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
-                            See Your Docket Score Itself by Risk
+                            See Your Docket Ranked by Risk
                         </h2>
                         <p
                             className="mt-4 text-base leading-relaxed text-text-secondary sm:text-lg"
@@ -630,16 +609,16 @@ export default function DocketingPage() {
                             building families that feed the deadline engine.
                         </p>
                         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-                            <BookDemoButton size="lg" className="w-full justify-center sm:w-auto">
+                            <BookDemoButton topic="patent docketing" size="lg" className="w-full justify-center sm:w-auto">
                                 Book a Demo
-                                <ArrowRight className="h-5 w-5" />
                             </BookDemoButton>
-                            <Button href={PATENT_SEARCH_PAGE_URL} variant="secondary" size="lg" className="w-full justify-center sm:w-auto">
+                            <Button href={PATENT_SEARCH_PAGE_URL} variant="link" size="lg" className="justify-center">
                                 Explore Patent Search
+                                <ArrowRight className="h-5 w-5" aria-hidden="true" />
                             </Button>
                         </div>
                         <p
-                            className="mt-8 text-xs leading-relaxed text-text-muted sm:text-[13px]"
+                            className="mx-auto mt-8 max-w-[31rem] text-xs leading-relaxed text-text-muted sm:text-[13px]"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             Calculated dates are workflow aids, not legal advice. Coverage depends on the
@@ -657,28 +636,10 @@ export default function DocketingPage() {
 
 /* ── Helpers ── */
 
-function TrackChip({ label, delay }: { label: string; delay: number }) {
-    return (
-        <span
-            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05]"
-            style={{ fontFamily: 'var(--font-mono)' }}
-        >
-            <span
-                className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary group-hover:animate-pulse"
-                style={{ animationDelay: `${delay}ms` }}
-            />
-            {label}
-        </span>
-    );
-}
-
 function GroupLabel({ label, note }: { label: string; note: string }) {
     return (
         <div className="mt-12 flex flex-col gap-1.5 border-t border-card-border pt-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 lg:mt-14">
-            <span
-                className="text-xs font-bold uppercase tracking-[0.15em] text-text-primary"
-                style={{ fontFamily: 'var(--font-mono)' }}
-            >
+            <span className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                 {label}
             </span>
             <span
@@ -718,29 +679,18 @@ function CapabilityCard({ title, description }: CardItem) {
 function RiskSignalCard({ signal }: { signal: RiskSignal }) {
     return (
         <article className="group flex h-full flex-col rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
-            <div className="flex items-start justify-between gap-4">
-                <span
-                    className="text-2xl font-bold"
-                    style={{ color: signal.accent, fontFamily: 'var(--font-mono)' }}
-                >
+            {/* Weight is shown by bar length, all in indigo, so red, amber
+                and green stay reserved for the risk levels themselves. */}
+            <div className="flex items-baseline justify-between gap-4">
+                <span className="text-2xl font-bold tabular-nums text-primary [font-family:var(--font-mono)]">
                     {signal.weight}
                 </span>
-                <span
-                    className="rounded-full px-2 py-0.5 text-[11px] font-semibold"
-                    style={{
-                        color: signal.accent,
-                        backgroundColor: signal.tint,
-                        fontFamily: 'var(--font-mono)',
-                    }}
-                >
-                    weighted
+                <span className="text-sm leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                    weight
                 </span>
             </div>
             <div className="mt-4 h-2 overflow-hidden rounded-full bg-page-bg-alt">
-                <div
-                    className="h-full rounded-full transition-all duration-500 group-hover:opacity-90"
-                    style={{ width: signal.weight, backgroundColor: signal.accent }}
-                />
+                <div className={`h-full rounded-full bg-primary transition-all duration-500 group-hover:opacity-90 ${signal.bar}`} />
             </div>
             <h3
                 className="mt-4 text-base font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
@@ -759,20 +709,19 @@ function RiskSignalCard({ signal }: { signal: RiskSignal }) {
 }
 
 function RiskScorePanel() {
+    /* 4 + 9 + 31 = 44 deadlines. Bar widths and the donut stops are each
+       level's share of that total: 9.1%, 20.5%, and 70.5%. */
     const rows = [
-        { label: 'Red', count: 4, width: '18%', color: '#dc2626' },
-        { label: 'Amber', count: 9, width: '38%', color: '#d97706' },
-        { label: 'Green', count: 31, width: '88%', color: '#059669' },
+        { label: 'Red', count: 4, bar: 'w-[9.1%] bg-danger', ink: 'text-red-700' },
+        { label: 'Amber', count: 9, bar: 'w-[20.5%] bg-compliance', ink: 'text-compliance-ink' },
+        { label: 'Green', count: 31, bar: 'w-[70.5%] bg-success', ink: 'text-emerald-700' },
     ];
 
     return (
         <aside className="group flex h-full flex-col rounded-2xl border border-primary/15 bg-linear-to-br from-white via-white to-indigo-50/60 p-6 shadow-md shadow-primary/[0.05] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.06]">
-            <div className="flex items-center justify-between gap-4">
+            <div>
                 <div>
-                    <p
-                        className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
+                    <p className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                         Portfolio rollup
                     </p>
                     <h3
@@ -782,19 +731,10 @@ function RiskScorePanel() {
                         Risk health at a glance
                     </h3>
                 </div>
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/15 bg-white text-primary shadow-sm">
-                    <TrendingUp className="h-5 w-5" />
-                </span>
             </div>
 
             <div className="mt-7 flex justify-center">
-                <div
-                    className="relative flex h-38 w-38 items-center justify-center rounded-full p-3 shadow-inner"
-                    style={{
-                        background:
-                            'conic-gradient(#dc2626 0 18%, #d97706 18% 56%, #059669 56% 100%)',
-                    }}
-                >
+                <div className="relative flex h-38 w-38 items-center justify-center rounded-full bg-[conic-gradient(#dc2626_0_9.1%,#d97706_9.1%_29.6%,#059669_29.6%_100%)] p-3 shadow-inner">
                     <div className="flex h-full w-full flex-col items-center justify-center rounded-full bg-white shadow-sm">
                         <span
                             className="text-3xl font-bold text-text-primary"
@@ -803,7 +743,7 @@ function RiskScorePanel() {
                             41
                         </span>
                         <span
-                            className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted"
+                            className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-text-muted"
                             style={{ fontFamily: 'var(--font-mono)' }}
                         >
                             avg score
@@ -822,18 +762,12 @@ function RiskScorePanel() {
                             >
                                 {row.label}
                             </span>
-                            <span
-                                className="text-xs font-bold"
-                                style={{ color: row.color, fontFamily: 'var(--font-mono)' }}
-                            >
+                            <span className={`text-xs font-bold tabular-nums [font-family:var(--font-mono)] ${row.ink}`}>
                                 {row.count}
                             </span>
                         </div>
                         <div className="h-2 overflow-hidden rounded-full bg-white shadow-inner">
-                            <div
-                                className="h-full rounded-full transition-all duration-500 group-hover:opacity-90"
-                                style={{ width: row.width, backgroundColor: row.color }}
-                            />
+                            <div className={`h-full rounded-full transition-all duration-500 group-hover:opacity-90 ${row.bar}`} />
                         </div>
                     </div>
                 ))}
@@ -866,19 +800,74 @@ function SecurityCard({ title, description }: CardItem) {
     );
 }
 
-function RiskBadge({ level }: { level: 'red' | 'amber' | 'green' }) {
-    const map = {
-        red: { label: 'Red', bg: 'bg-danger/10', text: 'text-danger', dot: 'bg-danger' },
-        amber: { label: 'Amber', bg: 'bg-compliance/10', text: 'text-compliance', dot: 'bg-compliance' },
-        green: { label: 'Green', bg: 'bg-success/10', text: 'text-success', dot: 'bg-success' },
-    }[level];
+/* One item of the risk-level line: a colour dot (the level's colour) and the
+   rule in words, so the meaning never rests on colour alone. */
+function RiskLevel({ dot, children }: { dot: string; children: React.ReactNode }) {
     return (
-        <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${map.bg} ${map.text}`}
-            style={{ fontFamily: 'var(--font-mono)' }}
-        >
-            <span className={`h-1.5 w-1.5 rounded-full ${map.dot}`} />
-            {map.label}
-        </span>
+        <RuledItem>
+            <span className="inline-flex items-baseline gap-2">
+                <span aria-hidden="true" className={`inline-block h-2 w-2 -translate-y-px rounded-full ${dot}`} />
+                {children}
+            </span>
+        </RuledItem>
+    );
+}
+
+/* A numbered ruled list for long runs of short items (stale-alert buckets,
+   operations features): subsection number, title, description, and a
+   hairline between rows. Two columns from lg; reading order runs across. */
+/* A compact numbered list whose rows open to their description. Every
+   description stays in the page (and in search results); the list just takes
+   less room, so the LOE timeline that follows arrives sooner. Native details
+   and summary give keyboard support without any script. */
+function DisclosureRows({ items, className = '' }: { items: CardItem[]; className?: string }) {
+    return (
+        <ol className={`grid border-t border-card-border lg:grid-cols-2 lg:gap-x-12 ${className}`}>
+            {items.map((item, i) => (
+                <li key={item.title} className="border-b border-card-border">
+                    <FadeIn delay={(i % 2) * 0.06}>
+                        <details className="group">
+                            <summary className="grid cursor-pointer list-none grid-cols-[2.75rem_1fr_auto] items-baseline gap-x-3 rounded-sm py-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
+                                <SubsectionNumber size="sm" />
+                                <h3 className="text-base font-semibold text-text-primary transition-colors group-hover:text-primary [font-family:var(--font-display)]">
+                                    {item.title}
+                                </h3>
+                                <ChevronDown
+                                    aria-hidden="true"
+                                    className="h-4 w-4 self-center text-text-secondary transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+                                />
+                            </summary>
+                            <p className="-mt-1 pb-5 pl-[3.5rem] pr-7 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                {item.description}
+                            </p>
+                        </details>
+                    </FadeIn>
+                </li>
+            ))}
+        </ol>
+    );
+}
+
+function RuledRows({ items, className = '' }: { items: CardItem[]; className?: string }) {
+    return (
+        <ol className={`grid border-t border-card-border lg:grid-cols-2 lg:gap-x-12 ${className}`}>
+            {items.map((item, i) => (
+                <li key={item.title} className="border-b border-card-border">
+                    <FadeIn delay={(i % 2) * 0.06}>
+                        <div className="grid grid-cols-[2.75rem_1fr] gap-x-3 py-5">
+                            <SubsectionNumber size="sm" className="mt-0.5" />
+                            <div className="min-w-0">
+                                <h3 className="text-base font-semibold text-text-primary [font-family:var(--font-display)]">
+                                    {item.title}
+                                </h3>
+                                <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                    {item.description}
+                                </p>
+                            </div>
+                        </div>
+                    </FadeIn>
+                </li>
+            ))}
+        </ol>
     );
 }

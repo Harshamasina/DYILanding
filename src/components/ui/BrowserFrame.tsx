@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { MockupRecordLabel } from './BrowserMockupChrome';
 
 interface BrowserFrameProps {
     src: string;
@@ -6,6 +7,9 @@ interface BrowserFrameProps {
     width: number;
     height: number;
     url?: string;
+    /** Record reference and screen name for the title bar. */
+    record?: string;
+    screen?: string;
     className?: string;
     priority?: boolean;
 }
@@ -16,6 +20,8 @@ export function BrowserFrame({
     width,
     height,
     url = 'app.designyourinvention.com',
+    record = 'DEMO-2024-011',
+    screen = 'Docket',
     className = '',
     priority = false,
 }: BrowserFrameProps) {
@@ -24,16 +30,12 @@ export function BrowserFrame({
             {/* Browser Window */}
             <div className="rounded-xl border border-card-border bg-white shadow-2xl shadow-black/10 overflow-hidden">
                 {/* Chrome Bar */}
-                <div className="flex items-center gap-2 px-4 py-3 bg-page-bg-alt border-b border-card-border">
-                    {/* Traffic Light Dots */}
-                    <div className="flex items-center gap-1.5">
-                        <span className="w-3 h-3 rounded-full bg-[#FF5F57]" />
-                        <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-                        <span className="w-3 h-3 rounded-full bg-[#28C840]" />
-                    </div>
+                <div className="flex items-center gap-3 px-4 py-3 bg-page-bg-alt border-b border-card-border">
+                    {/* Record reference, as the app heads its pages */}
+                    <MockupRecordLabel record={record} screen={screen} />
 
                     {/* URL Bar */}
-                    <div className="flex-1 flex justify-center">
+                    <div className="flex-1 min-w-0 flex justify-end">
                         <div className="flex items-center gap-2 px-4 py-1 bg-white rounded-md text-xs text-text-muted border border-card-border max-w-xs w-full justify-center">
                             <svg
                                 className="w-3 h-3 text-success flex-shrink-0"
@@ -48,17 +50,11 @@ export function BrowserFrame({
                                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                                 />
                             </svg>
-                            <span
-                                className="truncate"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
+                            <span className="truncate [font-family:var(--font-mono)]">
                                 {url}
                             </span>
                         </div>
                     </div>
-
-                    {/* Spacer to balance the dots */}
-                    <div className="w-[52px]" />
                 </div>
 
                 {/* Screenshot */}
@@ -72,7 +68,7 @@ export function BrowserFrame({
                 />
             </div>
 
-            {/* Bottom Gradient Fade — shorter on mobile so image stays visible */}
+            {/* Bottom gradient fade, shorter on mobile so the image stays visible */}
             <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-24 lg:h-48 bg-gradient-to-t from-page-bg to-transparent pointer-events-none rounded-b-xl" />
         </div>
     );

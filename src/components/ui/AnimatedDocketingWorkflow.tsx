@@ -362,7 +362,7 @@ export function AnimatedDocketingWorkflow() {
             role="img"
             className={`relative flex flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
         >
-            <BrowserMockupChrome url={browserUrl} />
+            <BrowserMockupChrome url={browserUrl} record="DEMO-DKT-001" screen="Docket" />
             <motion.div
                 className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,1fr)] overflow-hidden sm:grid-cols-[170px_minmax(0,1fr)] lg:grid-cols-[190px_minmax(0,1fr)]"
                 initial={false}

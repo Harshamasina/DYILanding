@@ -31,6 +31,8 @@ export function validateContactForm(v: ContactFormValues): FieldErrors {
 
     if (!v.email.trim()) {
         errors.work_email = ['Please enter your work email.'];
+    } else if (!v.email.includes('@')) {
+        errors.work_email = ['Include an @ in the email address, like jane@acmelaw.com.'];
     } else if (!isEmail(v.email)) {
         errors.work_email = ['Enter a valid email address.'];
     }

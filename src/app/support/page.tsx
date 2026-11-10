@@ -1,9 +1,11 @@
+import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
-import { Mail, Clock, MessageSquare, FileText, ShieldCheck, BookOpen } from 'lucide-react';
 import { SITE_URL, SITE_NAME } from '@/lib/constants';
 import { ogImageEntry, ogImageUrl } from '@/lib/og';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
 
 export const metadata: Metadata = {
     title: `Support - ${SITE_NAME} | IP Management Software Help & Resources`,
@@ -39,7 +41,6 @@ export const metadata: Metadata = {
 
 const SUPPORT_CHANNELS = [
     {
-        icon: Mail,
         title: 'Email Support',
         description: 'Send us a detailed message and our team will respond within 1 business day.',
         action: 'support@designyourinvention.com',
@@ -47,7 +48,6 @@ const SUPPORT_CHANNELS = [
         linkText: 'Send Email',
     },
     {
-        icon: MessageSquare,
         title: 'Request a Demo',
         description: 'See the platform in action with a personalized walkthrough from our team.',
         action: 'Book a session',
@@ -55,7 +55,6 @@ const SUPPORT_CHANNELS = [
         linkText: 'Book a Demo',
     },
     {
-        icon: Clock,
         title: 'Response Time',
         description: 'Our support team is available Monday through Friday, 9 AM - 6 PM EST.',
         action: 'Within 1 business day',
@@ -66,19 +65,16 @@ const SUPPORT_CHANNELS = [
 
 const RESOURCES = [
     {
-        icon: BookOpen,
         title: 'Frequently Asked Questions',
         description: 'Answers to common questions about IP management, compliance, importing, and more.',
         href: '/#faq',
     },
     {
-        icon: FileText,
         title: 'Portfolio Import Guide',
         description: 'Step-by-step guide for migrating your patent portfolio from spreadsheets.',
         href: '/#import',
     },
     {
-        icon: ShieldCheck,
         title: 'Compliance & Security',
         description: 'Learn about FDA 21 CFR Part 11-aligned controls, audit trails, and data security.',
         href: '/#compliance',
@@ -96,7 +92,7 @@ const COMMON_QUESTIONS = [
     },
     {
         q: 'How do I add users to my organization?',
-        a: 'Tenant Admins can invite users from Settings. Assign roles (Attorney, Paralegal, Viewer) with granular permissions enforced at the server level.',
+        a: 'Tenant Admins can invite users from Settings. Assign roles (Attorney, Paralegal, Viewer, Inventor) with granular permissions enforced at the server level.',
     },
     {
         q: 'Can I export my data?',
@@ -119,8 +115,9 @@ export default function SupportPage() {
             <section className="pt-32 pb-16 lg:pt-40 lg:pb-20">
                 <Container>
                     <div className="max-w-3xl mx-auto text-center">
+                        <SectionMark numbered={false} className="justify-center">Support</SectionMark>
                         <h1
-                            className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                            className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             How can we{' '}
@@ -146,9 +143,6 @@ export default function SupportPage() {
                                 key={channel.title}
                                 className="rounded-2xl border border-card-border bg-card-bg p-6 sm:p-8 text-center"
                             >
-                                <div className="mx-auto w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                                    <channel.icon className="w-6 h-6 text-primary" />
-                                </div>
                                 <h2
                                     className="text-lg font-bold text-text-primary mb-2"
                                     style={{ fontFamily: 'var(--font-display)' }}
@@ -183,6 +177,7 @@ export default function SupportPage() {
             <section className="py-20 lg:py-24 bg-page-bg-alt">
                 <Container>
                     <div className="max-w-5xl mx-auto">
+                        <SectionMark className="mb-5">Resources</SectionMark>
                         <h2
                             className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl mb-10"
                             style={{ fontFamily: 'var(--font-display)' }}
@@ -196,9 +191,7 @@ export default function SupportPage() {
                                     href={resource.href}
                                     className="group rounded-xl border border-card-border bg-card-bg p-6 transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 no-underline"
                                 >
-                                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
-                                        <resource.icon className="w-5 h-5 text-primary" />
-                                    </div>
+                                    <SubsectionNumber className="mb-4" />
                                     <h3
                                         className="text-base font-semibold text-text-primary mb-1.5 group-hover:text-primary transition-colors"
                                         style={{ fontFamily: 'var(--font-display)' }}
@@ -222,6 +215,7 @@ export default function SupportPage() {
             <section className="py-20 lg:py-24">
                 <Container>
                     <div className="max-w-3xl mx-auto">
+                        <SectionMark className="mb-5">Questions</SectionMark>
                         <h2
                             className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl mb-10"
                             style={{ fontFamily: 'var(--font-display)' }}
@@ -274,8 +268,9 @@ export default function SupportPage() {
                             <Button href="mailto:support@designyourinvention.com" variant="primary" size="lg">
                                 Email Support
                             </Button>
-                            <Button href="/#contact" variant="secondary" size="lg">
+                            <Button href="/#contact" variant="link" size="lg">
                                 Contact Us
+                                <ArrowRight className="h-5 w-5" aria-hidden="true" />
                             </Button>
                         </div>
                     </div>

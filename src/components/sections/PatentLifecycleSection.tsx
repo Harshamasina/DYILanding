@@ -30,6 +30,7 @@ import {
     type LucideIcon,
 } from 'lucide-react';
 import { FadeIn } from '@/components/motion/FadeIn';
+import { SectionMark } from '@/components/ui/SectionMark';
 import { WatchDemoButton } from '@/components/ui/WatchDemoModal';
 
 /* Patent lifecycle.
@@ -713,12 +714,14 @@ export function PatentLifecycleSection() {
             </FadeIn>
 
             <FadeIn delay={0.1} className="mx-auto mt-5 max-w-3xl text-center">
-                <p className="text-xs font-bold uppercase tracking-[0.15em] text-primary [font-family:var(--font-mono)]">
+                {/* Unnumbered, like the hero marks, so the home page's
+                    numbered sections still start at the Features section. */}
+                <SectionMark numbered={false} className="justify-center">
                     The Patent Lifecycle, In One App
-                </p>
+                </SectionMark>
                 <h2
                     id="patent-lifecycle-heading"
-                    className="mt-2 text-balance text-2xl font-bold tracking-tight text-text-primary [font-family:var(--font-display)] sm:text-3xl lg:text-4xl"
+                    className="mt-4 text-balance text-2xl font-bold tracking-tight text-text-primary [font-family:var(--font-display)] sm:text-3xl lg:text-4xl"
                 >
                     Take every invention from first search to final archive.
                 </h2>
@@ -727,7 +730,7 @@ export function PatentLifecycleSection() {
                     filing, prosecution, and maintenance fees. No re-keying between tools, and every change
                     is <span className="whitespace-nowrap">audit-trailed.</span>
                 </p>
-                <p className="mt-3 text-xs text-text-secondary [font-family:var(--font-mono)] lg:hidden">
+                <p className="mt-3 text-xs italic text-text-secondary [font-family:var(--font-body)] lg:hidden">
                     Scroll to follow one record through the app.
                 </p>
             </FadeIn>
@@ -802,7 +805,7 @@ function StageCard({
                         {String(index + 1).padStart(2, '0')} / {String(STAGES.length).padStart(2, '0')}
                     </span>
                 </div>
-                <p className="mt-2.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-primary [font-family:var(--font-mono)]">
+                <p className="mt-2.5 text-sm leading-none tracking-[0.08em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                     {stage.meta}
                 </p>
                 <p className="mt-1 text-[13px] leading-relaxed text-text-secondary [font-family:var(--font-body)]">
@@ -916,7 +919,7 @@ function MobileLifecycle({ enabled, reduceMotion }: { enabled: boolean; reduceMo
                                         <h3 className="text-lg font-bold text-text-primary [font-family:var(--font-display)]">
                                             {stage.label}
                                         </h3>
-                                        <p className="mt-0.5 text-xs font-semibold uppercase tracking-[0.1em] text-primary [font-family:var(--font-mono)]">
+                                        <p className="mt-1 text-sm leading-none tracking-[0.08em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                             {stage.meta}
                                         </p>
                                         <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">

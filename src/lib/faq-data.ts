@@ -57,7 +57,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'How does role-based access control work?',
         answer:
-            'The platform supports four roles: Tenant Admin, Attorney, Paralegal, and Viewer. Each role has granular permissions. For example, Viewers can browse and search but cannot create, edit, or delete records. Permissions are enforced both in the UI and on the server, so access control cannot be bypassed.',
+            'The platform supports five roles: Tenant Admin, Attorney, Paralegal, Viewer, and Inventor. Each role has granular permissions, and an Inventor is limited to the patent families they are assigned to. For example, Viewers can browse and search but cannot create, edit, or delete records. Permissions are enforced both in the UI and on the server, so access control cannot be bypassed.',
     },
     {
         question: 'Can I export my data?',

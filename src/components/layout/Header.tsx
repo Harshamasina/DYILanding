@@ -33,7 +33,7 @@ const FEATURE_MENU = [
     {
         label: 'Patent Search',
         href: PATENT_SEARCH_PAGE_URL,
-        description: 'Search 120M+ patents free, with compound and clinical-trial intelligence.',
+        description: 'Search 120M+ patents free, and run automated novelty search from your brief.',
         icon: Search,
     },
     {
@@ -137,7 +137,8 @@ export function Header() {
                     <nav
                         className={`flex items-center h-14 xl:h-16 gap-4 px-3 sm:px-4 xl:pl-6 xl:pr-3 rounded-lg border backdrop-blur-xl transition-all duration-300 ${
                             isScrolled
-                                ? 'bg-white/80 shadow-lg shadow-black/5 border-card-border'
+                                ? /* Near-opaque once scrolled, so it stays white over the navy Security band and footer instead of turning grey. */
+                                  'bg-white/95 shadow-lg shadow-black/5 border-card-border'
                                 : 'bg-white/60 shadow-sm border-card-border/50'
                         }`}
                         aria-label="Main navigation"
@@ -153,7 +154,7 @@ export function Header() {
                                 width={320}
                                 height={36}
                                 priority
-                                className="h-6 w-auto opacity-95 transition-opacity duration-400 ease-out group-hover:opacity-100 sm:h-7 xl:h-8"
+                                className="h-5 w-auto opacity-95 transition-opacity duration-400 ease-out group-hover:opacity-100 min-[400px]:h-6 sm:h-7 xl:h-8"
                             />
                         </BrandLogoLink>
 
@@ -221,7 +222,7 @@ export function Header() {
                                                         onClick={() => setFeaturesOpen(false)}
                                                         className="flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-page-bg-alt focus:outline-none focus-visible:bg-page-bg-alt"
                                                     >
-                                                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
+                                                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/5">
                                                             <item.icon className="h-4.5 w-4.5 text-primary" />
                                                         </span>
                                                         <span className="min-w-0">
@@ -310,7 +311,7 @@ export function Header() {
                                                         onClick={() => setCompanyOpen(false)}
                                                         className="flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-page-bg-alt focus:outline-none focus-visible:bg-page-bg-alt"
                                                     >
-                                                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40">
+                                                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/5">
                                                             <item.icon className="h-4.5 w-4.5 text-primary" />
                                                         </span>
                                                         <span className="min-w-0">
@@ -351,17 +352,27 @@ export function Header() {
                             <BookDemoButton size="sm" />
                         </div>
 
-                        {/* Mobile Menu Toggle */}
-                        <button
-                            type="button"
-                            className="xl:hidden p-2 text-text-primary hover:text-primary transition-colors cursor-pointer rounded-lg"
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            aria-expanded={isMobileMenuOpen}
-                            aria-controls="mobile-menu"
-                            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-                        >
-                            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                        </button>
+                        {/* Phone and tablet: keep the demo one tap away instead of
+                            only inside the menu. The label shortens on the
+                            narrowest phones so it sits beside the logo. */}
+                        <div className="flex shrink-0 items-center gap-1 xl:hidden">
+                            <BookDemoButton size="sm" className="whitespace-nowrap px-3! py-2! text-xs! max-[359px]:hidden sm:text-sm!">
+                                <span className="min-[430px]:hidden"><span className="sr-only">Book a </span>Demo</span>
+                                <span className="hidden min-[430px]:inline">Book a Demo</span>
+                            </BookDemoButton>
+
+                            {/* Mobile Menu Toggle */}
+                            <button
+                                type="button"
+                                className="xl:hidden p-2.5 text-text-primary hover:text-primary transition-colors cursor-pointer rounded-lg"
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                aria-expanded={isMobileMenuOpen}
+                                aria-controls="mobile-menu"
+                                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                            >
+                                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                            </button>
+                        </div>
                     </nav>
                 </div>
             </header>
@@ -409,8 +420,7 @@ export function Header() {
                                 <Link
                                     href={FEATURES_SECTION_URL}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-text-muted transition-colors hover:text-primary"
-                                    style={{ fontFamily: 'var(--font-mono)' }}
+                                    className="text-base text-navy-light transition-colors hover:text-primary leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]"
                                 >
                                     Features
                                 </Link>
@@ -446,10 +456,7 @@ export function Header() {
 
                             {/* Company group */}
                             <div className="flex flex-col items-center gap-4">
-                                <span
-                                    className="text-xs font-bold uppercase tracking-[0.15em] text-text-muted"
-                                    style={{ fontFamily: 'var(--font-mono)' }}
-                                >
+                                <span className="text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                     Company
                                 </span>
                                 {COMPANY_MENU.map((item) => (

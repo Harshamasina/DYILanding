@@ -57,6 +57,9 @@ const LEAD_IN = 56;
 interface ComputedNode {
     elementId: string;
     top: number;
+    /* Branch length in px, so the line ends just before the section mark at
+       any viewport width. */
+    branch: number;
     label: string;
     isDark: boolean;
     isAccent: boolean;
@@ -92,6 +95,8 @@ export function TreeSpine() {
         const startY = dashRect.bottom + window.scrollY - 40;
 
         const positions: ComputedNode[] = [];
+        // Mirrors the spine's CSS left below; the branch starts 15px into it.
+        const spineLeft = Math.max(16, (window.innerWidth - 1280) / 2 - 72);
 
         TREE_NODE_IDS.forEach((node) => {
             const el = document.getElementById(node.elementId);
@@ -99,7 +104,11 @@ export function TreeSpine() {
                 const rect = el.getBoundingClientRect();
                 positions.push({
                     elementId: node.elementId,
-                    top: rect.top + window.scrollY - startY,
+                    // Aim the branch at the vertical centre of the section
+                    // mark (the dot is 14px and the line sits at its middle,
+                    // 9px below the wrapper's top once the +2 offset applies).
+                    top: rect.top + rect.height / 2 + window.scrollY - startY - 9,
+                    branch: Math.max(24, rect.left - (spineLeft + 15) - 4),
                     label: node.label,
                     isDark: node.isDark ?? false,
                     isAccent: node.isAccent ?? false,
@@ -203,9 +212,11 @@ export function TreeSpine() {
 
     if (!ready || nodes.length === 0) return null;
 
+    // Shown from 1360px: below that the content edge sits within about 40px of
+    // the spine, so the rail would run into the section marks.
     return (
         <div
-            className="hidden xl:block absolute pointer-events-none z-10"
+            className="hidden min-[1360px]:block absolute pointer-events-none z-10"
             style={{
                 top: treeStart,
                 left: 'max(16px, calc((100vw - 80rem) / 2 - 72px))',
@@ -253,7 +264,7 @@ export function TreeSpine() {
                     <motion.div
                         className="absolute top-1.5 left-4 h-px origin-left"
                         style={{
-                            width: 'calc(2rem + 40px)',
+                            width: node.branch,
                             backgroundColor: branchColor(node),
                             opacity: node.isDark ? 0.5 : node.isAccent ? 0.45 : 0.3,
                         }}

@@ -1,13 +1,6 @@
 'use client';
 
-import {
-    Play,
-    Search,
-    FileText,
-    FolderClock,
-    FileCheck2,
-    ArrowRight,
-} from 'lucide-react';
+import { Play, ArrowRight } from 'lucide-react';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { MockupHalo } from '@/components/ui/MockupHalo';
 import { Button } from '@/components/ui/Button';
@@ -15,7 +8,6 @@ import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { WatchDemoLauncher } from '@/components/ui/WatchDemoModal';
 
 interface Chapter {
-    icon: React.ElementType;
     title: string;
     description: string;
     /** Start offset into the demo (/dyi_film.mp4), in seconds. Offsets past the
@@ -27,7 +19,6 @@ interface Chapter {
 
 const CHAPTERS: Chapter[] = [
     {
-        icon: FolderClock,
         title: 'Patent Docketing',
         description:
             'Track every filing, fee, and deadline on one audit-trailed timeline.',
@@ -35,7 +26,6 @@ const CHAPTERS: Chapter[] = [
         time: '00:28',
     },
     {
-        icon: Search,
         title: 'Prior Art Search',
         description:
             'Search 100+ jurisdictions and save references to a patent family.',
@@ -43,7 +33,6 @@ const CHAPTERS: Chapter[] = [
         time: '00:50',
     },
     {
-        icon: FileText,
         title: 'AI Drafting',
         description:
             'Turn selected prior art into a structured first draft for attorney review.',
@@ -51,10 +40,9 @@ const CHAPTERS: Chapter[] = [
         time: '01:08',
     },
     {
-        icon: FileCheck2,
         title: 'Office Actions',
         description:
-            'Map every USPTO rejection to your claims, sign the analysis, and approve the response with a second attorney.',
+            'Map every USPTO rejection to your claims, sign the analysis, and have the response approved by an attorney who did not last revise it.',
         start: 99,
         time: '01:39',
     },
@@ -65,36 +53,33 @@ export function DemoVideoShowcase() {
         <WatchDemoLauncher>
             {(open) => (
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    {/* ── Left: chapter list (text) ── */}
+                    {/* Left: chapter list (text) */}
                     <FadeIn treeNode="tree-demo" delay={0.1}>
                         <div>
-                            <p
-                                className="text-xs font-bold uppercase tracking-[0.15em] text-text-muted"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
+                            <p className="text-base leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                 What is inside the demo
                             </p>
 
-                            <ul className="mt-4 flex flex-col gap-2">
+                            {/* Chapters read like a table of contents: the
+                                number swaps to a play glyph on hover. */}
+                            <ol className="mt-4 flex flex-col">
                                 {CHAPTERS.map((chapter, i) => (
-                                    <li key={chapter.title}>
+                                    <li key={chapter.title} className="border-t border-card-border first:border-t-0">
                                         <button
                                             type="button"
                                             onClick={() => open(chapter.start)}
-                                            className="group w-full text-left flex gap-4 items-start rounded-xl border border-transparent p-3 transition-all duration-200 hover:border-card-border hover:bg-card-bg hover:shadow-md hover:shadow-black/3 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                            className="group grid w-full grid-cols-[3rem_1fr] gap-x-3 rounded-md px-2 py-3.5 text-left transition-colors duration-200 hover:bg-card-bg cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                                         >
-                                            {/* Icon tile, swaps to a play glyph on hover */}
-                                            <span className="relative shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(99,102,241,0.08)]">
-                                                <chapter.icon className="w-5 h-5 text-primary transition-opacity duration-200 group-hover:opacity-0" />
-                                                <Play className="absolute left-1/2 top-1/2 w-4 h-4 -translate-x-1/2 -translate-y-1/2 text-primary fill-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                                            <span className="relative text-base font-semibold leading-snug tabular-nums text-primary [font-family:var(--font-display)]">
+                                                <span className="transition-opacity duration-200 group-hover:opacity-0">{`0${i + 1}`}</span>
+                                                <Play aria-hidden="true" className="absolute left-0 top-1 w-4 h-4 text-primary fill-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
                                             </span>
-                                            <span className="flex-1 min-w-0">
+                                            <span className="min-w-0">
                                                 <span className="flex items-center justify-between gap-3">
                                                     <span
                                                         className="text-[15px] font-semibold text-text-primary leading-snug"
                                                         style={{ fontFamily: 'var(--font-display)' }}
                                                     >
-                                                        <span className="text-text-muted">{`0${i + 1} `}</span>
                                                         {chapter.title}
                                                     </span>
                                                     <span
@@ -114,7 +99,7 @@ export function DemoVideoShowcase() {
                                         </button>
                                     </li>
                                 ))}
-                            </ul>
+                            </ol>
 
                             <div className="mt-8 flex flex-col sm:flex-row gap-3">
                                 <Button
@@ -127,7 +112,7 @@ export function DemoVideoShowcase() {
                                     Watch Full Demo
                                 </Button>
                                 <BookDemoButton
-                                    variant="outline"
+                                    variant="link"
                                     size="md"
                                     className="justify-center"
                                 >
@@ -190,10 +175,10 @@ export function DemoVideoShowcase() {
 
                                     {/* Duration badge */}
                                     <span
-                                        className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-card-border px-2.5 py-0.5 text-xs text-text-muted tabular-nums shadow-sm"
+                                        className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-white border border-card-border px-2.5 py-0.5 text-xs text-text-secondary tabular-nums shadow-sm"
                                         style={{ fontFamily: 'var(--font-mono)' }}
                                     >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                                         02:35
                                     </span>
                                 </div>

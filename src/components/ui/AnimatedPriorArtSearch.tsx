@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { MockupRecordLabel } from './BrowserMockupChrome';
 
 /* ── Animated Prior Art Search mockup — fixed height, loops infinitely ──
    Fixed height container. Timeline per cycle:
@@ -172,34 +173,36 @@ const STATUS_TONES: Record<StatusTone, { bg: string; color: string }> = {
     warning: { bg: '#fef3c7', color: '#b45309' },
 };
 
-/* ── Timing ── */
-const TYPE_START = 800;
+/* ── Timing ──
+   The loop starts and rests on populated results, so the figure is never an
+   empty pane under a result count. It ends by retyping the query over the
+   visible results, then the next cycle opens on the same results again. */
 const TYPE_SPEED = 50;
-const SEARCH_DONE = TYPE_START + SEARCH_QUERY.length * TYPE_SPEED + 400;
-const RESULTS_IN = SEARCH_DONE + 600;
-const HOVER_IN = RESULTS_IN + 1600;
+const HOVER_IN = 1600;
 const EXPAND_IN = HOVER_IN + 800;
 const BIBLIO_OPEN = EXPAND_IN + 700;
 const BIBLIO_CLOSE = BIBLIO_OPEN + 2200;
 const ABSTRACT_OPEN = BIBLIO_CLOSE + 600;
 const ABSTRACT_CLOSE = ABSTRACT_OPEN + 2200;
-const FADE_OUT = ABSTRACT_CLOSE + 900;
-const RESET_TIME = FADE_OUT + 700;
-const LOOP_TIME = RESET_TIME + 500;
+const RETYPE_START = ABSTRACT_CLOSE + 900;
+const SEARCH_DONE = RETYPE_START + SEARCH_QUERY.length * TYPE_SPEED + 300;
+const LOOP_TIME = SEARCH_DONE + 600;
 
 const MOCKUP_HEIGHT = 'h-[440px] sm:h-[480px] lg:h-[520px]';
 
 type Phase =
-    | 'idle' | 'typing' | 'searched' | 'results'
+    | 'typing' | 'searched' | 'results'
     | 'hover' | 'expanded'
-    | 'biblio' | 'between' | 'abstract' | 'rest'
-    | 'fadeout';
+    | 'biblio' | 'between' | 'abstract' | 'rest';
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export function AnimatedPriorArtSearch() {
-    const [typedText, setTypedText] = useState('');
-    const [phase, setPhase] = useState<Phase>('idle');
+    /* First frame (and the reduced-motion frame): the query typed and its
+       results showing. */
+    const [typedText, setTypedText] = useState(SEARCH_QUERY);
+    const [phase, setPhase] = useState<Phase>('results');
+    const reduceMotion = useReducedMotion();
 
     const [mounted, setMounted] = useState(false);
     useEffect(() => { setMounted(true); }, []);
@@ -215,13 +218,21 @@ export function AnimatedPriorArtSearch() {
     }, [mounted]);
 
     const runCycle = useCallback(() => {
-        setTypedText('');
-        setPhase('idle');
+        setTypedText(SEARCH_QUERY);
+        setPhase('results');
 
         const timers: ReturnType<typeof setTimeout>[] = [];
 
+        timers.push(setTimeout(() => setPhase('hover'), HOVER_IN));
+        timers.push(setTimeout(() => setPhase('expanded'), EXPAND_IN));
+        timers.push(setTimeout(() => setPhase('biblio'), BIBLIO_OPEN));
+        timers.push(setTimeout(() => setPhase('between'), BIBLIO_CLOSE));
+        timers.push(setTimeout(() => setPhase('abstract'), ABSTRACT_OPEN));
+        timers.push(setTimeout(() => setPhase('rest'), ABSTRACT_CLOSE));
+
         let charIndex = 0;
         timers.push(setTimeout(() => {
+            setTypedText('');
             setPhase('typing');
             const interval = setInterval(() => {
                 charIndex++;
@@ -229,36 +240,31 @@ export function AnimatedPriorArtSearch() {
                 if (charIndex >= SEARCH_QUERY.length) clearInterval(interval);
             }, TYPE_SPEED);
             timers.push(interval as unknown as ReturnType<typeof setTimeout>);
-        }, TYPE_START));
+        }, RETYPE_START));
 
         timers.push(setTimeout(() => setPhase('searched'), SEARCH_DONE));
-        timers.push(setTimeout(() => setPhase('results'), RESULTS_IN));
-        timers.push(setTimeout(() => setPhase('hover'), HOVER_IN));
-        timers.push(setTimeout(() => setPhase('expanded'), EXPAND_IN));
-        timers.push(setTimeout(() => setPhase('biblio'), BIBLIO_OPEN));
-        timers.push(setTimeout(() => setPhase('between'), BIBLIO_CLOSE));
-        timers.push(setTimeout(() => setPhase('abstract'), ABSTRACT_OPEN));
-        timers.push(setTimeout(() => setPhase('rest'), ABSTRACT_CLOSE));
-        timers.push(setTimeout(() => setPhase('fadeout'), FADE_OUT));
-        timers.push(setTimeout(() => { setTypedText(''); setPhase('idle'); }, RESET_TIME));
 
         return timers;
     }, []);
 
     useEffect(() => {
+        /* Reduced motion: keep the populated first frame, no loop. */
+        if (reduceMotion) return;
         let timers = runCycle();
         const interval = setInterval(() => {
             timers.forEach(clearTimeout);
             timers = runCycle();
         }, LOOP_TIME);
         return () => { timers.forEach(clearTimeout); clearInterval(interval); };
-    }, [runCycle]);
+    }, [runCycle, reduceMotion]);
 
     /* ── Derived ── */
     const isTyping = phase === 'typing';
-    const showCursor = phase === 'typing' || phase === 'idle';
-    const searchDone = !['idle', 'typing'].includes(phase) && phase !== 'fadeout';
-    const showResults = !['idle', 'typing', 'searched', 'fadeout'].includes(phase);
+    const showCursor = phase === 'typing';
+    /* The results stay on screen while the query is retyped, so the count
+       and filters never sit above an empty pane. */
+    const searchDone = true;
+    const showResults = true;
     const hoverHighlight = phase === 'hover';
     const isExpanded = ['expanded', 'biblio', 'between', 'abstract', 'rest'].includes(phase);
     const biblioOpen = phase === 'biblio';
@@ -272,18 +278,13 @@ export function AnimatedPriorArtSearch() {
         >
             {/* ── Chrome Bar ── */}
             <div className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-white border-b border-card-border">
-                <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#FF5F57]" />
-                    <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#FFBD2E]" />
-                    <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#28C840]" />
-                </div>
-                <div className="flex-1 flex justify-center">
-                    <div className="flex items-center gap-1.5 px-2 sm:px-4 py-0.5 sm:py-1 bg-page-bg-alt rounded-lg text-[8px] sm:text-[11px] text-text-muted border border-card-border" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                <MockupRecordLabel record="DEMO-PAS-001" screen="Patent search" />
+                <div className="hidden sm:flex flex-1 min-w-0 justify-end">
+                    <div className="flex items-center gap-1.5 px-2 sm:px-4 py-0.5 sm:py-1 bg-page-bg-alt rounded-lg text-[10px] sm:text-[11px] text-text-muted border border-card-border" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                         <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-success hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                         app.designyourinvention.com
                     </div>
                 </div>
-                <div className="w-6 sm:w-[52px]" />
             </div>
 
             {/* ── Patent Search Header ── */}
@@ -291,11 +292,11 @@ export function AnimatedPriorArtSearch() {
                 <div className="flex items-center justify-between mb-2 sm:mb-2.5">
                     <span className="text-[10px] sm:text-sm font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Patent Search</span>
                     <div className="hidden sm:flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 text-[9px] text-text-secondary border border-card-border rounded-md px-2 py-1 bg-white" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <span className="inline-flex items-center gap-1 text-[10px] sm:text-[9px] text-text-secondary border border-card-border rounded-md px-2 py-1 bg-white" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                             Add Manually
                         </span>
-                        <span className="inline-flex items-center gap-1 text-[9px] text-text-secondary border border-card-border rounded-md px-2 py-1 bg-white" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <span className="inline-flex items-center gap-1 text-[10px] sm:text-[9px] text-text-secondary border border-card-border rounded-md px-2 py-1 bg-white" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                             Hide Search
                         </span>
@@ -306,11 +307,11 @@ export function AnimatedPriorArtSearch() {
                 <div className="flex items-center gap-1.5 sm:gap-2">
                     <div className="flex items-center gap-1 px-2 py-1 sm:py-1.5 rounded-lg border border-card-border bg-page-bg-alt shrink-0">
                         <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M7 12h10M10 18h4" /></svg>
-                        <span className="text-[8px] sm:text-[10px] text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>Full Text</span>
+                        <span className="text-[10px] sm:text-[10px] text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>Full Text</span>
                         <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                     </div>
                     <div className="flex-1 flex items-center justify-between gap-1 px-2 py-1 sm:py-1.5 rounded-lg border bg-white min-w-0 h-[22px] sm:h-[28px] transition-colors" style={{ borderColor: isTyping || typedText ? '#6366f1' : 'var(--color-card-border, #e2e8f0)' }}>
-                        <span className="text-[8px] sm:text-[11px] text-text-primary truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <span className="text-[10px] sm:text-[11px] text-text-primary truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             {typedText}
                             {showCursor && (
                                 <span className="inline-block w-px h-[10px] sm:h-[13px] bg-text-primary ml-px align-middle" style={{ animation: 'blink-cursor 0.8s step-end infinite' }} />
@@ -323,7 +324,7 @@ export function AnimatedPriorArtSearch() {
                         )}
                     </div>
                     <motion.span
-                        className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg text-[8px] sm:text-[10px] font-semibold text-white shrink-0 cursor-default"
+                        className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-[10px] font-semibold text-white shrink-0 cursor-default"
                         style={{ fontFamily: 'var(--font-dashboard-mono)', backgroundColor: '#6366f1' }}
                         animate={
                             phase === 'searched'
@@ -341,16 +342,16 @@ export function AnimatedPriorArtSearch() {
                 style={{ opacity: searchDone ? 1 : 0 }}
             >
                 <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 text-[7px] sm:text-[9px] text-text-secondary border border-card-border rounded-md px-1.5 py-0.5 bg-white cursor-default" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                    <span className="inline-flex items-center gap-1 text-[10px] sm:text-[9px] text-text-secondary border border-card-border rounded-md px-1.5 py-0.5 bg-white cursor-default" style={{ fontFamily: 'var(--font-dashboard)' }}>
                         <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
                         Filters
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[7px] sm:text-[9px] font-medium cursor-default" style={{ fontFamily: 'var(--font-dashboard)', color: '#dc2626' }}>
+                    <span className="inline-flex items-center gap-1 text-[10px] sm:text-[9px] font-medium cursor-default" style={{ fontFamily: 'var(--font-dashboard)', color: '#dc2626' }}>
                         <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V4a1 1 0 011-1h6a1 1 0 011 1v3" /></svg>
                         Clear
                     </span>
                 </div>
-                <span className="inline-flex items-center gap-1 text-[7px] sm:text-[9px] text-text-secondary cursor-default" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                <span className="inline-flex items-center gap-1 text-[10px] sm:text-[9px] text-text-secondary cursor-default" style={{ fontFamily: 'var(--font-dashboard)' }}>
                     <svg className="w-2.5 h-2.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 21h6m-3-3v3m-5.636-5.636a7 7 0 119.9 0C14.936 16.21 14 17.46 14 18.75V19h-4v-.25c0-1.29-.936-2.54-1.636-3.386z" /></svg>
                     Tips
                 </span>
@@ -361,12 +362,12 @@ export function AnimatedPriorArtSearch() {
                 className="px-3 sm:px-5 py-1.5 sm:py-2 bg-white border-b border-card-border flex items-center justify-between gap-2 transition-opacity duration-200"
                 style={{ opacity: searchDone ? 1 : 0 }}
             >
-                <span className="text-[7px] sm:text-[9px] text-text-muted truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                <span className="text-[10px] sm:text-[9px] text-text-muted truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>
                     Showing <span className="text-text-primary font-medium">1&ndash;20</span> of <span className="text-text-primary font-medium">185,744</span> results
                     <span className="hidden sm:inline"> &middot; max score <span className="text-text-primary font-medium">25.9</span></span>
                 </span>
                 <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                    <span className="hidden sm:inline-flex items-center gap-1 text-[7px] sm:text-[9px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                    <span className="hidden sm:inline-flex items-center gap-1 text-[10px] sm:text-[9px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard)' }}>
                         Sort by
                         <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 border border-card-border rounded text-text-primary font-medium">
                             Relevance
@@ -377,7 +378,7 @@ export function AnimatedPriorArtSearch() {
                         {['1', '2', '3', '4', '5', '…', '500'].map((p) => (
                             <span
                                 key={p}
-                                className="text-[7px] sm:text-[9px] px-1 py-0.5 rounded border min-w-[14px] text-center"
+                                className="text-[10px] sm:text-[9px] px-1 py-0.5 rounded border min-w-[14px] text-center"
                                 style={{
                                     fontFamily: 'var(--font-dashboard)',
                                     borderColor: p === '1' ? '#6366f1' : 'var(--color-card-border, #e2e8f0)',
@@ -387,7 +388,7 @@ export function AnimatedPriorArtSearch() {
                             >{p}</span>
                         ))}
                     </div>
-                    <span className="inline-flex items-center gap-0.5 text-[7px] sm:text-[9px] px-1.5 py-0.5 border border-card-border rounded text-text-secondary" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                    <span className="inline-flex items-center gap-0.5 text-[10px] sm:text-[9px] px-1.5 py-0.5 border border-card-border rounded text-text-secondary" style={{ fontFamily: 'var(--font-dashboard)' }}>
                         20 / page
                         <svg className="w-2 h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                     </span>
@@ -402,7 +403,7 @@ export function AnimatedPriorArtSearch() {
                         <svg className="w-8 h-8 sm:w-10 sm:h-10 text-text-muted/20 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                        <p className="text-[8px] sm:text-[10px] text-text-muted/40 text-center" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <p className="text-[10px] sm:text-[10px] text-text-muted/40 text-center" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             Search across 100+ patent jurisdictions by keyword, inventor, applicant, or patent number
                         </p>
                     </div>
@@ -426,14 +427,14 @@ export function AnimatedPriorArtSearch() {
                         <div className="flex items-start justify-between gap-2 mb-1">
                             <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
                                 <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm border border-text-muted/40 bg-white shrink-0" />
-                                <span className="text-[8px] sm:text-[11px] font-bold text-text-primary shrink-0" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{result.patentNo}</span>
-                                <span className="text-[6px] sm:text-[8px] px-1.5 py-0.5 rounded-full font-semibold shrink-0" style={{ backgroundColor: result.jurisdictionBg, color: result.jurisdictionText }}>{result.jurisdiction}</span>
-                                <span className="text-[6px] sm:text-[8px] px-1.5 py-0.5 rounded-full font-semibold shrink-0" style={{ backgroundColor: '#fef3c7', color: '#b45309', fontFamily: 'var(--font-dashboard-mono)' }}>{result.publicationType}</span>
-                                <span className="text-[6px] sm:text-[8px] px-1.5 py-0.5 rounded-full font-semibold shrink-0" style={{ backgroundColor: tone.bg, color: tone.color }}>{result.legalStatus}</span>
+                                <span className="text-[10px] sm:text-[11px] font-bold text-text-primary shrink-0" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{result.patentNo}</span>
+                                <span className="text-[10px] sm:text-[8px] px-1.5 py-0.5 rounded-full font-semibold shrink-0" style={{ backgroundColor: result.jurisdictionBg, color: result.jurisdictionText }}>{result.jurisdiction}</span>
+                                <span className="text-[10px] sm:text-[8px] px-1.5 py-0.5 rounded-full font-semibold shrink-0" style={{ backgroundColor: '#fef3c7', color: '#b45309', fontFamily: 'var(--font-dashboard-mono)' }}>{result.publicationType}</span>
+                                <span className="text-[10px] sm:text-[8px] px-1.5 py-0.5 rounded-full font-semibold shrink-0" style={{ backgroundColor: tone.bg, color: tone.color }}>{result.legalStatus}</span>
                             </div>
                             <div className="flex items-center gap-1.5 shrink-0">
                                 <motion.span
-                                    className="hidden sm:inline-flex items-center gap-0.5 text-[7px] sm:text-[9px] rounded-md px-1.5 py-0.5 cursor-default"
+                                    className="hidden sm:inline-flex items-center gap-0.5 text-[10px] sm:text-[9px] rounded-md px-1.5 py-0.5 cursor-default"
                                     style={{ fontFamily: 'var(--font-dashboard)' }}
                                     animate={{
                                         backgroundColor: highlightThisDetails ? '#eef2ff' : '#ffffff',
@@ -452,12 +453,12 @@ export function AnimatedPriorArtSearch() {
                                     )}
                                 </motion.span>
                                 <svg className="hidden sm:block w-2.5 h-2.5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                <span className="text-[7px] sm:text-[9px] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md font-semibold text-white cursor-default" style={{ fontFamily: 'var(--font-dashboard-mono)', backgroundColor: '#6366f1' }}>+ Save</span>
+                                <span className="text-[10px] sm:text-[9px] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md font-semibold text-white cursor-default" style={{ fontFamily: 'var(--font-dashboard-mono)', backgroundColor: '#6366f1' }}>+ Save</span>
                             </div>
                         </div>
 
                         {/* Title */}
-                        <p className="text-[7px] sm:text-[10px] text-text-primary font-medium leading-snug mb-1" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <p className="text-[10px] sm:text-[10px] text-text-primary font-medium leading-snug mb-1" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             {result.title.map((part, pi) =>
                                 part.highlight
                                     ? <span key={pi} className="text-primary underline decoration-primary/30">{part.text}</span>
@@ -466,12 +467,12 @@ export function AnimatedPriorArtSearch() {
                         </p>
 
                         {/* Applicants + Inventors */}
-                        <p className="flex items-center gap-1 text-[6px] sm:text-[8px] text-text-muted leading-snug truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <p className="flex items-center gap-1 text-[10px] sm:text-[8px] text-text-muted leading-snug truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3" /></svg>
                             <span className="truncate">{result.applicants}</span>
                             <span className="text-text-muted/70 shrink-0">({result.applicantCount})</span>
                         </p>
-                        <p className="flex items-center gap-1 text-[6px] sm:text-[8px] text-text-muted leading-snug truncate mb-1.5" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <p className="flex items-center gap-1 text-[10px] sm:text-[8px] text-text-muted leading-snug truncate mb-1.5" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                             <span className="truncate">Inventors: {result.inventors}</span>
                             <span className="text-primary shrink-0">+{result.inventorExtra} more</span>
@@ -491,13 +492,13 @@ export function AnimatedPriorArtSearch() {
                             {result.ipcCodes.map((code) => (
                                 <span
                                     key={code}
-                                    className="text-[5px] sm:text-[7px] px-1 sm:px-1.5 py-0.5 rounded bg-page-bg-alt border border-card-border text-text-secondary"
+                                    className="text-[10px] sm:text-[7px] px-1 sm:px-1.5 py-0.5 rounded bg-page-bg-alt border border-card-border text-text-secondary"
                                     style={{ fontFamily: 'var(--font-dashboard-mono)' }}
                                 >{code}</span>
                             ))}
                             {result.extraCodes && (
                                 <span
-                                    className="text-[5px] sm:text-[7px] text-primary font-medium"
+                                    className="text-[10px] sm:text-[7px] text-primary font-medium"
                                     style={{ fontFamily: 'var(--font-dashboard-mono)' }}
                                 >+{result.extraCodes} more</span>
                             )}
@@ -505,11 +506,11 @@ export function AnimatedPriorArtSearch() {
 
                         {/* Why this matched */}
                         <div className="flex items-center gap-1 flex-wrap mt-1.5" style={{ fontFamily: 'var(--font-dashboard)' }}>
-                            <span className="text-[6px] sm:text-[8px] text-text-muted">Why this matched:</span>
+                            <span className="text-[10px] sm:text-[8px] text-text-muted">Why this matched:</span>
                             {result.matchedOn.map((match) => (
                                 <span
                                     key={match}
-                                    className="text-[5px] sm:text-[7px] px-1 sm:px-1.5 py-0.5 rounded"
+                                    className="text-[10px] sm:text-[7px] px-1 sm:px-1.5 py-0.5 rounded"
                                     style={{ backgroundColor: '#dcfce7', color: '#15803d' }}
                                 >{match}</span>
                             ))}
@@ -540,7 +541,7 @@ export function AnimatedPriorArtSearch() {
                                                     className="overflow-hidden"
                                                 >
                                                     <div className="py-1.5 sm:py-2 px-1">
-                                                        <div className="grid grid-cols-6 border border-card-border rounded overflow-hidden text-[5px] sm:text-[7px]">
+                                                        <div className="grid grid-cols-6 border border-card-border rounded overflow-hidden text-[10px] sm:text-[7px]">
                                                             {/* Row 1 */}
                                                             <BiblioLabel delay={0}>Title</BiblioLabel>
                                                             <BiblioValue delay={20} span={3}>{result.title.map(p => p.text).join('').toUpperCase()}</BiblioValue>
@@ -628,7 +629,7 @@ export function AnimatedPriorArtSearch() {
                                                             initial={{ opacity: 0 }}
                                                             animate={{ opacity: 1 }}
                                                             transition={{ duration: 0.5, delay: 0.15 }}
-                                                            className="text-[6px] sm:text-[8px] text-text-secondary leading-relaxed"
+                                                            className="text-[10px] sm:text-[8px] text-text-secondary leading-relaxed"
                                                             style={{ fontFamily: 'var(--font-dashboard)' }}
                                                         >
                                                             {ABSTRACT_TEXT}
@@ -673,7 +674,7 @@ const META_ICON_PATHS: Record<MetaIcon, string> = {
 
 function MetaPill({ icon, label, value }: { icon: MetaIcon; label: string; value: string }) {
     return (
-        <span className="inline-flex items-center gap-0.5 sm:gap-1 text-[6px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary">
+        <span className="inline-flex items-center gap-0.5 sm:gap-1 text-[10px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary">
             <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d={META_ICON_PATHS[icon]} />
             </svg>
@@ -695,7 +696,7 @@ function SectionRow({ label, open, bold, last }: { label: string; open: boolean;
             >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </motion.svg>
-            <span className={`text-[7px] sm:text-[9px] text-text-secondary ${bold ? 'font-semibold' : ''}`} style={{ fontFamily: 'var(--font-dashboard)' }}>{label}</span>
+            <span className={`text-[10px] sm:text-[9px] text-text-secondary ${bold ? 'font-semibold' : ''}`} style={{ fontFamily: 'var(--font-dashboard)' }}>{label}</span>
         </div>
     );
 }

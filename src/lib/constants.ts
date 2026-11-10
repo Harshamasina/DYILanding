@@ -1,7 +1,7 @@
 export const SITE_URL = 'https://designyourinvention.com';
 export const SITE_NAME = 'Design Your Invention';
 export const SITE_DESCRIPTION =
-    'IP management with AI-assisted prior art search, patent drafting, and office action response for attorney review. Patent docketing, PCT/PRV/NPE case management, and FDA 21 CFR Part 11-aligned workflow controls.';
+    'IP management with AI-assisted prior art search, patent drafting, and office action response for attorney review. Patent docketing, provisional, PCT, and national-phase case management, and FDA 21 CFR Part 11-aligned workflow controls.';
 
 /* ── Brand entity metadata used by Organization JSON-LD.
  * Keep these accurate. Google reads them to resolve the brand as a

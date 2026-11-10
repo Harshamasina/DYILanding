@@ -147,14 +147,14 @@ export function AnimatedOfficeActionFlow() {
             role="img"
             className={`relative flex select-none flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 [font-family:var(--font-dashboard)] ${MOCKUP_HEIGHT}`}
         >
-            <BrowserMockupChrome url={`app.designyourinvention.com/office-actions/${MATTER}`} />
+            <BrowserMockupChrome url={`app.designyourinvention.com/office-actions/${MATTER}`} record={MATTER} screen="Office action" />
 
             {/* Matter header */}
             <div className="flex shrink-0 items-center justify-between gap-2 border-b border-card-border bg-white px-2.5 py-2 sm:px-3">
                 <div className="flex min-w-0 items-center gap-1.5">
                     <FileText className="h-3 w-3 shrink-0 text-slate-500 sm:h-3.5 sm:w-3.5" />
-                    <span className="shrink-0 text-[9px] font-bold text-text-primary [font-family:var(--font-dashboard-mono)] sm:text-[10px]">{MATTER}</span>
-                    <span className="truncate text-[9px] text-slate-500 sm:text-[10px]">· Adaptive Sensor System</span>
+                    <span className="shrink-0 text-[10px] font-bold text-text-primary [font-family:var(--font-dashboard-mono)] sm:text-[10px]">{MATTER}</span>
+                    <span className="truncate text-[10px] text-slate-500 sm:text-[10px]">· Adaptive Sensor System</span>
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
                     <span className="hidden sm:inline-flex"><Tag tone="red">Non-final rejection</Tag></span>
@@ -169,10 +169,10 @@ export function AnimatedOfficeActionFlow() {
                     const active = i === activeIndex;
                     return (
                         <div key={s.key} className="flex min-w-0 flex-1 items-center gap-1.5 last:flex-none sm:gap-2">
-                            <span className={`inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full text-[7px] font-bold transition-colors duration-300 sm:h-4 sm:w-4 sm:text-[8px] ${done ? 'bg-emerald-600 text-white' : active ? 'bg-primary text-white ring-2 ring-primary/20' : 'border border-slate-300 bg-white text-slate-400'}`}>
+                            <span className={`inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold transition-colors duration-300 sm:h-4 sm:w-4 sm:text-[8px] ${done ? 'bg-emerald-600 text-white' : active ? 'bg-primary text-white ring-2 ring-primary/20' : 'border border-slate-300 bg-white text-slate-400'}`}>
                                 {done ? <Check className="h-2 w-2 sm:h-2.5 sm:w-2.5" strokeWidth={3} /> : i + 1}
                             </span>
-                            <span className={`shrink-0 text-[8px] transition-colors duration-300 sm:text-[9px] ${active ? 'font-semibold text-primary' : done ? 'text-text-primary' : 'text-slate-400'}`}>{s.label}</span>
+                            <span className={`shrink-0 text-[10px] transition-colors duration-300 sm:text-[9px] ${active ? 'font-semibold text-primary' : done ? 'text-text-primary' : 'text-slate-400'}`}>{s.label}</span>
                             {i < STAGES.length - 1 && <span className={`h-px min-w-1 flex-1 transition-colors duration-300 ${done ? 'bg-emerald-500/60' : 'bg-slate-200'}`} />}
                         </div>
                     );
@@ -247,13 +247,13 @@ function IssuesStage({ step }: { step: number }) {
                             >
                                 <div className="flex items-center justify-between gap-2">
                                     <p className="text-[10px] font-semibold text-text-primary">{i + 1}. {issue.title}</p>
-                                    <span className="shrink-0 text-[8px] text-slate-500 sm:text-[9px]">{issue.claims}</span>
+                                    <span className="shrink-0 text-[10px] text-slate-500 sm:text-[9px]">{issue.claims}</span>
                                 </div>
                                 <div className="mt-1 flex flex-wrap items-center gap-1">
                                     <Tag>{issue.basis}</Tag>
                                     {issue.refs.map(r => <Tag key={r} tone="blue">{r}</Tag>)}
                                 </div>
-                                <p className="mt-1 text-[9px] leading-snug text-slate-600">{issue.summary}</p>
+                                <p className="mt-1 text-[10px] sm:text-[9px] leading-snug text-slate-600">{issue.summary}</p>
                             </motion.div>
                         ))}
                         <motion.div
@@ -262,11 +262,11 @@ function IssuesStage({ step }: { step: number }) {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.3, delay: 0.75, ease: EASE }}
                         >
-                            <p className="border-b border-card-border px-2.5 py-1.5 text-[9px] font-semibold text-text-primary">Cited references</p>
+                            <p className="border-b border-card-border px-2.5 py-1.5 text-[10px] sm:text-[9px] font-semibold text-text-primary">Cited references</p>
                             {[['SMITH', 'US publication'], ['JONES', 'EP publication']].map(([label, kind]) => (
                                 <div key={label} className="flex items-center gap-1.5 px-2.5 py-1">
                                     <Tag tone="blue">{label}</Tag>
-                                    <span className="truncate text-[9px] text-slate-600">{kind}</span>
+                                    <span className="truncate text-[10px] sm:text-[9px] text-slate-600">{kind}</span>
                                     <span className="ml-auto"><Tag tone="green">Full text held</Tag></span>
                                 </div>
                             ))}
@@ -288,7 +288,7 @@ function ChartStage({ step, dates }: { step: number; dates: DemoDates }) {
                 <Tag>35 U.S.C. 103</Tag>
             </StageHeader>
             <div className="flex min-h-0 flex-1 flex-col p-2 sm:p-2.5">
-                <p className="hidden text-[9px] uppercase tracking-wide text-slate-400 sm:block">Claim 1 as examined · 3 limitations</p>
+                <p className="hidden text-[10px] sm:text-[9px] uppercase tracking-wide text-slate-400 sm:block">Claim 1 as examined · 3 limitations</p>
                 <div className="rounded-md border border-card-border sm:mt-1.5">
                     {LIMITATIONS.map((lim, i) => (
                         <motion.div
@@ -299,19 +299,19 @@ function ChartStage({ step, dates }: { step: number; dates: DemoDates }) {
                             transition={{ duration: 0.3, delay: i * 0.15, ease: EASE }}
                         >
                             <div className="flex items-start gap-1.5">
-                                <span className="shrink-0 text-[9px] font-bold text-primary [font-family:var(--font-dashboard-mono)]">{lim.label}</span>
-                                <p className="min-w-0 flex-1 text-[9px] leading-snug text-text-primary">{lim.text}</p>
+                                <span className="shrink-0 text-[10px] sm:text-[9px] font-bold text-primary [font-family:var(--font-dashboard-mono)]">{lim.label}</span>
+                                <p className="min-w-0 flex-1 text-[10px] sm:text-[9px] leading-snug text-text-primary">{lim.text}</p>
                             </div>
                             <div className="mt-1 flex flex-wrap items-center gap-1 pl-6">
                                 <Tag tone={lim.coverage === 'Fully disclosed' ? 'red' : 'orange'}>{lim.coverage}</Tag>
-                                <span className="text-[8px] text-slate-500 [font-family:var(--font-dashboard-mono)] sm:text-[9px]">{lim.cite}</span>
+                                <span className="text-[10px] text-slate-500 [font-family:var(--font-dashboard-mono)] sm:text-[9px]">{lim.cite}</span>
                             </div>
                             {i === 1 && (
-                                <p className="ml-6 mt-1 hidden text-[9px] leading-snug text-slate-600 sm:block"><span className="font-semibold text-text-primary">Examiner&apos;s reading:</span> Smith&apos;s processing unit is the claimed controller.</p>
+                                <p className="ml-6 mt-1 hidden text-[10px] sm:text-[9px] leading-snug text-slate-600 sm:block"><span className="font-semibold text-text-primary">Examiner&apos;s reading:</span> Smith&apos;s processing unit is the claimed controller.</p>
                             )}
                             {i === 1 && (
                                 <figure className={`ml-6 mt-1.5 rounded-r-md border-l-2 px-2 py-1.5 transition-all duration-500 ${matched ? 'border-primary bg-primary/5 ring-1 ring-primary/25' : 'border-slate-300 bg-slate-50'}`}>
-                                    <blockquote className="text-[9px] italic leading-snug text-slate-700">&ldquo;The processing unit adjusts the sampling interval based on a change in the measured temperature.&rdquo;</blockquote>
+                                    <blockquote className="text-[10px] sm:text-[9px] italic leading-snug text-slate-700">&ldquo;The processing unit adjusts the sampling interval based on a change in the measured temperature.&rdquo;</blockquote>
                                     <figcaption className="mt-1 flex h-4 items-center">
                                         <AnimatePresence mode="popLayout" initial={false}>
                                             <motion.span key={matched ? 'ok' : 'wait'} initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, transition: { duration: 0.1 } }} transition={{ duration: 0.25 }}>
@@ -329,12 +329,12 @@ function ChartStage({ step, dates }: { step: number; dates: DemoDates }) {
                         {signed ? (
                             <motion.div key="signed" className="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-2" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: EASE }}>
                                 <p className="flex items-center gap-1.5 text-[10px] font-semibold text-text-primary"><CircleCheck className="h-3.5 w-3.5 shrink-0 text-emerald-600" />Analysis signed by M. Chen</p>
-                                <p className="mt-0.5 hidden pl-5 text-[9px] text-slate-600 sm:block">Signed after attorney review, {dates.signedAt}.</p>
+                                <p className="mt-0.5 hidden pl-5 text-[10px] sm:text-[9px] text-slate-600 sm:block">Signed after attorney review, {dates.signedAt}.</p>
                             </motion.div>
                         ) : (
                             <motion.div key="unsigned" className="flex items-center gap-2 rounded-md border border-card-border bg-slate-50 px-2.5 py-2" exit={{ opacity: 0, transition: { duration: 0.12 } }}>
-                                <p className="min-w-0 flex-1 text-[9px] text-slate-600">Draft for attorney review.</p>
-                                <span className={`inline-flex shrink-0 items-center gap-1 rounded-md bg-primary px-2 py-1 text-[9px] font-semibold text-white transition-shadow duration-300 ${matched ? 'shadow-md shadow-primary/30 ring-2 ring-primary/25' : ''}`}><ShieldCheck className="h-3 w-3" />Sign analysis</span>
+                                <p className="min-w-0 flex-1 text-[10px] sm:text-[9px] text-slate-600">Draft for attorney review.</p>
+                                <span className={`inline-flex shrink-0 items-center gap-1 rounded-md bg-primary px-2 py-1 text-[10px] sm:text-[9px] font-semibold text-white transition-shadow duration-300 ${matched ? 'shadow-md shadow-primary/30 ring-2 ring-primary/25' : ''}`}><ShieldCheck className="h-3 w-3" />Sign analysis</span>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -365,7 +365,7 @@ function ResponseStage({ step }: { step: number }) {
                         const chosen = i < picked;
                         return (
                             <div key={issue.title} className="flex items-center justify-between gap-2 border-b border-card-border/70 px-2.5 py-1 last:border-0 sm:py-1.5">
-                                <p className="min-w-0 truncate text-[9px] font-semibold text-text-primary sm:text-[10px]">{i + 1}. {issue.title}</p>
+                                <p className="min-w-0 truncate text-[10px] font-semibold text-text-primary sm:text-[10px]">{i + 1}. {issue.title}</p>
                                 <AnimatePresence mode="popLayout" initial={false}>
                                     <motion.span key={chosen ? 'chosen' : 'none'} initial={{ opacity: 0, x: 6 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, transition: { duration: 0.1 } }} transition={{ duration: 0.25, ease: EASE }}>
                                         {chosen ? <Tag tone="blue">{STRATEGY_PICKS[i]}</Tag> : <Tag tone="gold">Select strategy</Tag>}
@@ -380,9 +380,9 @@ function ResponseStage({ step }: { step: number }) {
                     <div className="flex items-center gap-1.5">
                         <p className="text-[10px] font-semibold text-text-primary">{amended ? '1. (Currently amended)' : '1. (Original)'}</p>
                         {amended && <Tag tone="blue">Amended</Tag>}
-                        <span className="ml-auto hidden items-center gap-1 text-[8px] text-slate-500 xl:flex">Examined from <Tag>USPTO record</Tag></span>
+                        <span className="ml-auto hidden items-center gap-1 text-[10px] sm:text-[8px] text-slate-500 xl:flex">Examined from <Tag>USPTO record</Tag></span>
                     </div>
-                    <p className="mt-1 text-[9px] leading-relaxed text-text-primary sm:min-h-11">
+                    <p className="mt-1 text-[10px] sm:text-[9px] leading-relaxed text-text-primary sm:min-h-11">
                         A sensor system comprising: a temperature sensor; a controller that adjusts a sampling interval when the temperature changes; and a stored calibration profile
                         {amended && (
                             <motion.ins className="bg-primary/10 text-primary decoration-primary/60" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.45 }}>
@@ -393,7 +393,7 @@ function ResponseStage({ step }: { step: number }) {
                     </p>
                     <div className="mt-auto pt-1.5 sm:pt-2">
                         <div className="flex flex-wrap items-center gap-1">
-                            <span className="text-[9px] font-semibold text-text-primary"><span className="sm:hidden">Support as filed</span><span className="hidden sm:inline">Support in the application as filed</span></span>
+                            <span className="text-[10px] sm:text-[9px] font-semibold text-text-primary"><span className="sm:hidden">Support as filed</span><span className="hidden sm:inline">Support in the application as filed</span></span>
                             <AnimatePresence mode="popLayout" initial={false}>
                                 <motion.span key={supported ? 'ok' : amended ? 'need' : 'none'} initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, transition: { duration: 0.1 } }} transition={{ duration: 0.2 }}>
                                     {supported ? <Tag tone="green">Cites 1 passage</Tag> : amended ? <Tag tone="gold">Needs a passage</Tag> : <Tag>No inserted words</Tag>}
@@ -406,14 +406,14 @@ function ResponseStage({ step }: { step: number }) {
                             animate={{ opacity: supported ? 1 : 0.35 }}
                             transition={{ duration: 0.35, ease: EASE }}
                         >
-                            <p className="text-[9px] font-semibold text-text-primary">Specification ¶ [0036]</p>
-                            <p className="mt-0.5 text-[9px] leading-snug text-slate-600">The calibration profile maps each temperature band to its own sampling interval.</p>
+                            <p className="text-[10px] sm:text-[9px] font-semibold text-text-primary">Specification ¶ [0036]</p>
+                            <p className="mt-0.5 text-[10px] sm:text-[9px] leading-snug text-slate-600">The calibration profile maps each temperature band to its own sampling interval.</p>
                         </motion.div>
                     </div>
                 </div>
 
                 <div className="flex shrink-0 flex-wrap items-center gap-1 rounded-md border border-card-border bg-slate-50 px-2.5 py-1.5">
-                    <span className="mr-0.5 text-[9px] font-semibold text-text-primary">Claim listing</span>
+                    <span className="mr-0.5 text-[10px] sm:text-[9px] font-semibold text-text-primary">Claim listing</span>
                     {LISTING.map(row => (
                         <Tag key={row.claims} tone={amended ? row.tone : 'default'}>
                             <span className="mr-1 font-semibold [font-family:var(--font-dashboard-mono)]">{row.claims}</span>
@@ -438,21 +438,21 @@ function ApprovalStage({ step, dates }: { step: number; dates: DemoDates }) {
                 <div className="rounded-md border border-card-border bg-slate-50 px-2.5 py-2">
                     <div className="flex items-center justify-between gap-2">
                         <p className="text-[10px] font-bold text-text-primary">14 of 14 checks hold</p>
-                        <span className="text-[8px] text-slate-500 sm:text-[9px]">Draft version 7</span>
+                        <span className="text-[10px] text-slate-500 sm:text-[9px]">Draft version 7</span>
                     </div>
                     <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-200">
                         <motion.div className="h-full rounded-full bg-emerald-600" initial={{ width: '86%' }} animate={{ width: '100%' }} transition={{ duration: 0.6, delay: 0.15, ease: EASE }} />
                     </div>
                     <div className="mt-2 hidden grid-cols-2 gap-2 border-t border-card-border pt-1.5 sm:grid">
-                        <p className="text-[8px] text-slate-500">Last revised by<span className="block text-[9px] font-semibold text-text-primary">M. Chen</span></p>
-                        <p className="text-[8px] text-slate-500">Approver<span className="block text-[9px] font-semibold text-text-primary">R. Patel</span></p>
+                        <p className="text-[10px] sm:text-[8px] text-slate-500">Last revised by<span className="block text-[10px] sm:text-[9px] font-semibold text-text-primary">M. Chen</span></p>
+                        <p className="text-[10px] sm:text-[8px] text-slate-500">Approver<span className="block text-[10px] sm:text-[9px] font-semibold text-text-primary">R. Patel</span></p>
                     </div>
                 </div>
                 <div className="mt-1.5">
                     {CHECKS.map((c, i) => (
                         <motion.p
                             key={c}
-                            className={`items-center gap-1.5 border-b border-card-border/70 py-1 text-[9px] text-text-primary last:border-0 ${i < 5 ? 'flex' : 'hidden sm:flex'}`}
+                            className={`items-center gap-1.5 border-b border-card-border/70 py-1 text-[10px] sm:text-[9px] text-text-primary last:border-0 ${i < 5 ? 'flex' : 'hidden sm:flex'}`}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.25, delay: 0.1 + i * 0.08 }}
@@ -466,12 +466,12 @@ function ApprovalStage({ step, dates }: { step: number; dates: DemoDates }) {
                         {approved ? (
                             <motion.div key="approved" className="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-2" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: EASE }}>
                                 <p className="flex items-center gap-1.5 text-[10px] font-semibold text-text-primary"><LockKeyhole className="h-3.5 w-3.5 shrink-0 text-emerald-600" />Approved and locked</p>
-                                <p className="mt-0.5 pl-5 text-[9px] text-slate-600">Signed by R. Patel, {dates.approvedAt} · Meaning: Approval</p>
+                                <p className="mt-0.5 pl-5 text-[10px] sm:text-[9px] text-slate-600">Signed by R. Patel, {dates.approvedAt} · Meaning: Approval</p>
                             </motion.div>
                         ) : (
                             <motion.div key="ready" className="flex items-center gap-2 rounded-md border border-card-border px-2.5 py-2" exit={{ opacity: 0, transition: { duration: 0.12 } }}>
-                                <p className="min-w-0 flex-1 text-[9px] text-slate-600">Approver must not be the last reviser.</p>
-                                <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-primary px-2 py-1 text-[9px] font-semibold text-white shadow-md shadow-primary/30 ring-2 ring-primary/25"><ShieldCheck className="h-3 w-3" />Approve response</span>
+                                <p className="min-w-0 flex-1 text-[10px] sm:text-[9px] text-slate-600">Approver must not be the last reviser.</p>
+                                <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-primary px-2 py-1 text-[10px] sm:text-[9px] font-semibold text-white shadow-md shadow-primary/30 ring-2 ring-primary/25"><ShieldCheck className="h-3 w-3" />Approve response</span>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -483,8 +483,8 @@ function ApprovalStage({ step, dates }: { step: number; dates: DemoDates }) {
                     >
                         <FileText className="h-3.5 w-3.5 shrink-0 text-primary" />
                         <div className="min-w-0 flex-1">
-                            <p className="truncate text-[9px] font-semibold text-text-primary">Filing copy · Reply under 37 CFR 1.111</p>
-                            <p className="text-[8px] text-slate-500">Word document for attorney filing</p>
+                            <p className="truncate text-[10px] sm:text-[9px] font-semibold text-text-primary">Filing copy · Reply under 37 CFR 1.111</p>
+                            <p className="text-[10px] sm:text-[8px] text-slate-500">Word document for attorney filing</p>
                         </div>
                         <Download className="h-3 w-3 shrink-0 text-slate-500" />
                     </motion.div>
@@ -509,7 +509,7 @@ function ResponseRecord({ done, dates }: { done: number; dates: DemoDates }) {
         <aside className="hidden w-[150px] shrink-0 flex-col overflow-hidden rounded-lg border border-card-border bg-white shadow-sm md:flex lg:hidden xl:flex">
             <div className="border-b border-card-border px-2.5 py-2">
                 <p className="text-[10px] font-bold text-text-primary">Response record</p>
-                <p className="text-[8px] text-slate-500 [font-family:var(--font-dashboard-mono)]">{MATTER}</p>
+                <p className="text-[10px] sm:text-[8px] text-slate-500 [font-family:var(--font-dashboard-mono)]">{MATTER}</p>
             </div>
             <ol className="flex flex-1 flex-col px-2.5 py-2.5">
                 {acts.map((act, i) => {
@@ -523,17 +523,17 @@ function ResponseRecord({ done, dates }: { done: number; dates: DemoDates }) {
                                 {isNext && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />}
                             </span>
                             <div className="min-w-0">
-                                <p className={`text-[9px] font-semibold leading-tight transition-colors duration-300 ${isDone ? 'text-text-primary' : 'text-slate-400'}`}>{act.title}</p>
-                                <p className={`mt-0.5 truncate text-[8px] leading-tight transition-colors duration-300 ${isDone ? 'text-slate-500' : 'text-slate-300'}`}>{act.meta}</p>
+                                <p className={`text-[10px] sm:text-[9px] font-semibold leading-tight transition-colors duration-300 ${isDone ? 'text-text-primary' : 'text-slate-400'}`}>{act.title}</p>
+                                <p className={`mt-0.5 truncate text-[10px] sm:text-[8px] leading-tight transition-colors duration-300 ${isDone ? 'text-slate-500' : 'text-slate-300'}`}>{act.meta}</p>
                             </div>
                         </li>
                     );
                 })}
             </ol>
             <div className="m-2 mt-0 rounded-md border border-amber-200 bg-amber-50 px-2 py-1.5">
-                <p className="text-[8px] uppercase tracking-wide text-amber-700">Reply due</p>
+                <p className="text-[10px] sm:text-[8px] uppercase tracking-wide text-amber-700">Reply due</p>
                 <p className="text-[11px] font-bold text-text-primary">{dates.dueInDays} days</p>
-                <p className="text-[8px] text-slate-500 [font-family:var(--font-dashboard-mono)]">{dates.due}</p>
+                <p className="text-[10px] sm:text-[8px] text-slate-500 [font-family:var(--font-dashboard-mono)]">{dates.due}</p>
             </div>
         </aside>
     );
@@ -553,5 +553,5 @@ const TAG_TONES: Record<TagTone, string> = {
 };
 
 function Tag({ children, tone = 'default' }: { children: ReactNode; tone?: TagTone }) {
-    return <span className={`inline-flex shrink-0 items-center whitespace-nowrap rounded border px-1.5 py-px text-[8px] leading-4 sm:text-[9px] ${TAG_TONES[tone]}`}>{children}</span>;
+    return <span className={`inline-flex shrink-0 items-center whitespace-nowrap rounded border px-1.5 py-px text-[10px] leading-4 sm:text-[9px] ${TAG_TONES[tone]}`}>{children}</span>;
 }

@@ -49,7 +49,7 @@ export function DemoVideoSection() {
                             <span className="italic">Office Action Response</span>
                         </h2>
                         <p
-                            className="mt-4 text-lg text-text-secondary leading-relaxed"
+                            className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             See docketing, prior art search, AI drafting, and office

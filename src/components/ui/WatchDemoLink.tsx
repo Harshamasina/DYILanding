@@ -22,7 +22,7 @@ export function WatchDemoLink({
                 <button
                     type="button"
                     onClick={() => open()}
-                    className={`group inline-flex items-center gap-2.5 text-sm font-semibold text-primary transition-colors hover:text-primary-dark cursor-pointer ${className}`}
+                    className={`group inline-flex min-h-11 items-center gap-2.5 text-sm font-semibold text-primary transition-colors hover:text-primary-dark cursor-pointer ${className}`}
                     style={{ fontFamily: 'var(--font-body)' }}
                 >
                     <span className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/10 transition-colors group-hover:bg-primary/15">

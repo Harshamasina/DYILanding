@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { SelectField } from '@/components/ui/SelectField';
+import { SectionMark } from '@/components/ui/SectionMark';
 import {
     ROLE_OPTIONS,
     PORTFOLIO_SIZE_OPTIONS,
@@ -19,7 +20,7 @@ import {
     type TurnstileHandle,
 } from '@/components/ui/TurnstileWidget';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'link';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface BookDemoButtonProps {
@@ -27,6 +28,11 @@ interface BookDemoButtonProps {
     size?: ButtonSize;
     className?: string;
     children?: React.ReactNode;
+    /** The product area the button sits in, e.g. "AI patent drafting". When set,
+        the form opens with Inquiry Type on Product Question and a one-line
+        message naming the area, so the visitor does not restate what they
+        just clicked. Both stay editable. */
+    topic?: string;
 }
 
 interface DemoFormData {
@@ -58,6 +64,7 @@ export function BookDemoButton({
     size = 'md',
     className = '',
     children,
+    topic,
 }: BookDemoButtonProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -78,7 +85,7 @@ export function BookDemoButton({
             {mounted && createPortal(
                 <AnimatePresence>
                     {isOpen && (
-                        <DemoModal onClose={() => setIsOpen(false)} />
+                        <DemoModal topic={topic} onClose={() => setIsOpen(false)} />
                     )}
                 </AnimatePresence>,
                 document.body,
@@ -87,8 +94,12 @@ export function BookDemoButton({
     );
 }
 
-function DemoModal({ onClose }: { onClose: () => void }) {
-    const [form, setForm] = useState<DemoFormData>(INITIAL_FORM);
+function DemoModal({ onClose, topic }: { onClose: () => void; topic?: string }) {
+    const [form, setForm] = useState<DemoFormData>(() =>
+        topic
+            ? { ...INITIAL_FORM, inquiryType: 'Product Question', message: `I would like a walkthrough of ${topic}.` }
+            : INITIAL_FORM,
+    );
     const hpRef = useRef<HTMLInputElement>(null);
     const [status, setStatus] = useState<FormStatus>('idle');
     const [errorMessage, setErrorMessage] = useState('');
@@ -130,19 +141,35 @@ function DemoModal({ onClose }: { onClose: () => void }) {
         message: 'message',
     };
 
-    /* Shared by the native inputs and the custom SelectField, which reports
-       a plain value rather than a change event. */
-    function setField(name: string, value: string) {
-        setForm((prev) => ({ ...prev, [name]: value }));
-        // Clear field error on change (using backend field name)
+    /* Re-checks one field against the same rules submit uses, then shows or
+       clears its inline error. Phone has no client
+       rule, so a server error on it clears once the visitor edits it. */
+    function revalidate(name: string, values: DemoFormData) {
         const backendName = fieldMap[name] ?? name;
-        if (fieldErrors[backendName]) {
-            setFieldErrors((prev) => {
-                const next = { ...prev };
-                delete next[backendName];
-                return next;
-            });
-        }
+        const error = validateContactForm(values)[backendName];
+        setFieldErrors((prev) => {
+            if (error) return { ...prev, [backendName]: error };
+            if (!prev[backendName]) return prev;
+            const next = { ...prev };
+            delete next[backendName];
+            return next;
+        });
+    }
+
+    /* Shared by the native inputs and the custom SelectField, which reports
+       a plain value rather than a change event. While a field shows an
+       error it is re-checked on every change, so the message clears as soon
+       as the input is valid. */
+    function setField(name: string, value: string) {
+        const next = { ...form, [name]: value };
+        setForm(next);
+        if (fieldErrors[fieldMap[name] ?? name]) revalidate(name, next);
+    }
+
+    /* Leaving a field checks it, so a mistake shows before submit. Fields
+       the visitor never focused stay quiet until submit. */
+    function handleBlur(name: string) {
+        revalidate(name, form);
     }
 
     function handleChange(
@@ -276,12 +303,12 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                     <>
                         <header className="relative shrink-0 overflow-hidden border-b border-card-border px-6 pt-6 pb-5 pr-14 sm:px-8 sm:pt-7">
                             <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-primary/[0.06] to-transparent" />
-                            <p className="relative text-xs font-bold uppercase tracking-[0.15em] text-primary [font-family:var(--font-mono)]">
+                            <SectionMark numbered={false} className="relative">
                                 Personalized walkthrough
-                            </p>
+                            </SectionMark>
                             <h2
                                 id="demo-modal-title"
-                                className="relative mt-2 text-2xl font-bold text-text-primary [font-family:var(--font-display)]"
+                                className="relative mt-4 text-2xl font-bold text-text-primary [font-family:var(--font-display)]"
                             >
                                 Book a Demo
                             </h2>
@@ -313,6 +340,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                         autoComplete="name"
                                         value={form.name}
                                         onChange={handleChange}
+                                        onBlur={() => handleBlur('name')}
                                         required
                                         placeholder="Jane Smith"
                                         error={getFieldError('full_name')}
@@ -324,6 +352,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                         autoComplete="email"
                                         value={form.email}
                                         onChange={handleChange}
+                                        onBlur={() => handleBlur('email')}
                                         required
                                         placeholder="jane@acmelaw.com"
                                         error={getFieldError('work_email')}
@@ -335,6 +364,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                         autoComplete="organization"
                                         value={form.company}
                                         onChange={handleChange}
+                                        onBlur={() => handleBlur('company')}
                                         required
                                         placeholder="Acme Law LLP"
                                         error={getFieldError('company')}
@@ -347,6 +377,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                         autoComplete="tel"
                                         value={form.phone}
                                         onChange={handleChange}
+                                        onBlur={() => handleBlur('phone')}
                                         placeholder="+1 555 123 4567"
                                         error={getFieldError('phone')}
                                     />
@@ -358,6 +389,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                         name="role"
                                         value={form.role}
                                         onChange={(v) => setField('role', v)}
+                                        onBlur={() => handleBlur('role')}
                                         required
                                         size="sm"
                                         options={ROLE_OPTIONS}
@@ -368,6 +400,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                         name="portfolioSize"
                                         value={form.portfolioSize}
                                         onChange={(v) => setField('portfolioSize', v)}
+                                        onBlur={() => handleBlur('portfolioSize')}
                                         required
                                         size="sm"
                                         options={PORTFOLIO_SIZE_OPTIONS}
@@ -379,6 +412,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                             name="inquiryType"
                                             value={form.inquiryType}
                                             onChange={(v) => setField('inquiryType', v)}
+                                            onBlur={() => handleBlur('inquiryType')}
                                             required
                                             size="sm"
                                             options={INQUIRY_TYPE_OPTIONS}
@@ -397,6 +431,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
                                             name="message"
                                             value={form.message}
                                             onChange={handleChange}
+                                            onBlur={() => handleBlur('message')}
                                             aria-required="true"
                                             aria-invalid={!!getFieldError('message')}
                                             aria-describedby={getFieldError('message') ? 'demo-message-error' : undefined}
@@ -463,11 +498,11 @@ function DemoModal({ onClose }: { onClose: () => void }) {
     );
 }
 
-/* A titled group of fields: a small mono legend over a two-column grid. */
+/* A titled group of fields: a small-caps legend over a two-column grid. */
 function FieldGroup({ legend, children }: { legend: string; children: React.ReactNode }) {
     return (
         <fieldset>
-            <legend className="mb-3 flex w-full items-center gap-3 text-[11px] font-bold uppercase tracking-[0.14em] text-text-secondary [font-family:var(--font-mono)]">
+            <legend className="mb-3 flex w-full items-center gap-3 text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                 {legend}
                 <span aria-hidden="true" className="h-px flex-1 bg-card-border" />
             </legend>
@@ -484,6 +519,7 @@ function ModalField({
     autoComplete,
     value,
     onChange,
+    onBlur,
     required,
     placeholder,
     error,
@@ -495,6 +531,7 @@ function ModalField({
     autoComplete?: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: () => void;
     required?: boolean;
     placeholder?: string;
     error?: string;
@@ -515,6 +552,7 @@ function ModalField({
                 autoComplete={autoComplete}
                 value={value}
                 onChange={onChange}
+                onBlur={onBlur}
                 aria-required={required}
                 aria-invalid={!!error}
                 aria-describedby={error ? `demo-${name}-error` : undefined}

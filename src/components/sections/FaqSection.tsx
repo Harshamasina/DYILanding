@@ -49,7 +49,7 @@ export function FaqSection() {
                     <div className="mt-8 flex justify-center">
                         <Link
                             href="/faq/"
-                            className="group inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
+                            className="group inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             View all frequently asked questions

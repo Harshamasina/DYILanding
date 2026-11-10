@@ -52,7 +52,7 @@ const LAYERS: readonly Layer[] = [
     {
         title: 'Granular RBAC',
         description:
-            'Admin, Attorney, Paralegal, and Viewer roles control access by module and action.',
+            'Admin, Attorney, Paralegal, Viewer, and Inventor roles control access by module and action.',
         Icon: Users,
     },
     {
@@ -446,16 +446,13 @@ export function SecurityMoatDiagram() {
                                     : 'border-white/10 bg-white/4 hover:border-primary-light/30 hover:bg-primary/7'
                             }`}
                         >
+                            {/* Subsection number (8.1 to 8.6) from the page's CSS
+                                counters, in the same style as SubsectionNumber,
+                                so the cards follow the house numbering under § 08. */}
                             <span
-                                className={`absolute right-5 top-4 font-mono text-[10px] font-semibold tracking-[0.08em] transition-opacity duration-350 ${
-                                    isActive
-                                        ? 'text-primary-light opacity-100'
-                                        : 'text-primary-light opacity-50'
-                                }`}
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                {`0${i + 1}`}
-                            </span>
+                                aria-hidden="true"
+                                className="subsection-number absolute right-5 top-4 text-sm font-semibold leading-none tabular-nums text-compliance-on-dark [font-family:var(--font-display)]"
+                            />
                             <span
                                 className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border transition-all duration-350 ${
                                     isActive

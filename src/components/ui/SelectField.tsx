@@ -42,6 +42,8 @@ interface SelectFieldProps {
     /** First option with an empty value is treated as the placeholder. */
     options: ReadonlyArray<SelectOption>;
     onChange: (value: string) => void;
+    /** Called when the visitor leaves the field with its list closed. */
+    onBlur?: () => void;
     required?: boolean;
     error?: string;
     /** 'md' matches the contact card inputs, 'sm' the tighter modal inputs. */
@@ -74,6 +76,7 @@ export function SelectField({
     value,
     options,
     onChange,
+    onBlur,
     required,
     error,
     size = 'md',
@@ -91,7 +94,15 @@ export function SelectField({
     const listRef = useRef<HTMLUListElement>(null);
     const typeahead = useRef({ buffer: '', timer: 0 });
 
-    const [open, setOpen] = useState(false);
+    const [open, setOpenState] = useState(false);
+    /* Mirrors `open` synchronously. Picking an option with the pointer blurs
+       the trigger while the list is still open; the ref lets the blur
+       handler skip that and fire only when the visitor really leaves. */
+    const openRef = useRef(false);
+    const setOpen = useCallback((next: boolean) => {
+        openRef.current = next;
+        setOpenState(next);
+    }, []);
     const [placement, setPlacement] = useState<PanelPlacement | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [mounted, setMounted] = useState(false);
@@ -108,7 +119,7 @@ export function SelectField({
     const close = useCallback((refocus = true) => {
         setOpen(false);
         if (refocus) buttonRef.current?.focus();
-    }, []);
+    }, [setOpen]);
 
     const itemCount = items.length;
 
@@ -134,7 +145,7 @@ export function SelectField({
         place();
         setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
         setOpen(true);
-    }, [place, selectedIndex]);
+    }, [place, selectedIndex, setOpen]);
 
     /* Follow the trigger while the page or the modal body scrolls, and on
        resize. Capture catches scrolls on any ancestor, not just window. */
@@ -169,7 +180,7 @@ export function SelectField({
 
         document.addEventListener('pointerdown', onPointerDown);
         return () => document.removeEventListener('pointerdown', onPointerDown);
-    }, [open]);
+    }, [open, setOpen]);
 
     // Keep the active option in view while arrowing through a long list.
     useEffect(() => {
@@ -302,6 +313,9 @@ export function SelectField({
                 aria-describedby={error ? errorId : undefined}
                 onClick={() => (open ? close(false) : openPanel())}
                 onKeyDown={handleKeyDown}
+                onBlur={() => {
+                    if (!openRef.current) onBlur?.();
+                }}
                 className={`group relative flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border bg-white/70 text-left text-sm backdrop-blur-md transition-[color,background-color,border-color,box-shadow] duration-200 [font-family:var(--font-body)] focus:outline-none ${triggerPadding} ${
                     error
                         ? 'border-danger hover:border-danger focus-visible:border-danger focus-visible:ring-2 focus-visible:ring-danger/20'

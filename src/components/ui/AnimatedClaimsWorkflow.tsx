@@ -32,12 +32,14 @@ import { BrowserMockupChrome } from './BrowserMockupChrome';
 const EASE = [0.21, 0.47, 0.32, 0.98] as const;
 const MOCKUP_HEIGHT = 'h-[520px] sm:h-[620px] lg:h-[700px]';
 
+/* Claims (the tree with dependencies and support bands) holds the screen
+   longest; the one-paragraph abstract frame is kept brief. */
 const T_REVIEW = 600;
-const T_REFINE_MENU = 3000;
-const T_REFINE_MODAL = 4800;
-const T_HISTORY = 7100;
-const T_ABSTRACT = 9700;
-const T_DESCRIPTION = 12300;
+const T_REFINE_MENU = 3800;
+const T_REFINE_MODAL = 5600;
+const T_HISTORY = 8000;
+const T_ABSTRACT = 10800;
+const T_DESCRIPTION = 12200;
 const T_NOVELTY_STALE = 15000;
 const T_STALE_MODAL = 17100;
 const T_NOVELTY_CLEAN = 19300;
@@ -335,7 +337,7 @@ export function AnimatedClaimsWorkflow() {
             role="img"
             className={`relative flex flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 select-none ${MOCKUP_HEIGHT}`}
         >
-            <BrowserMockupChrome url={browserUrl} />
+            <BrowserMockupChrome url={browserUrl} record="DEMO-AI-042" screen="AI drafting" />
             <motion.div
                 className="flex min-h-0 flex-1 flex-col"
                 initial={false}
@@ -577,7 +579,7 @@ function ClaimCard({ claim, selected, changed, delay = 0 }: { claim: ClaimItem; 
                     <ToolbarButton icon={<MoreVertical className="h-3 w-3" />} />
                 </div>
             </div>
-            <p className="mt-3 text-[10px] leading-relaxed text-slate-700 sm:text-[12px]">
+            <p className="mt-3 max-w-[32rem] text-[10px] leading-relaxed text-slate-700 sm:text-[12px]">
                 {claim.text}
             </p>
         </motion.article>
@@ -659,7 +661,7 @@ function AbstractWorkspace() {
             <UnitHeader title="Abstract" confidence="High" version="v1" menu />
             <div className="min-h-0 flex-1 overflow-hidden p-3 sm:p-4">
                 <div className="mx-auto max-w-2xl rounded-lg border border-card-border bg-slate-50 p-5 sm:p-7">
-                    <p className="text-[11px] leading-relaxed text-slate-700 sm:text-[13px]">
+                    <p className="max-w-[34rem] text-[11px] leading-relaxed text-slate-700 sm:text-[13px]">
                         A secure training coordination system assigns participant-specific privacy budgets, verifies trusted execution attestations, and applies reliability weighting to model updates before encrypted aggregation. The approach improves auditability and model utility while preserving enterprise data boundaries.
                     </p>
                 </div>
@@ -698,7 +700,7 @@ function DescriptionWorkspace() {
                             </div>
                             <div className="px-5 py-5 sm:px-8">
                                 <h4 className="text-[11px] font-bold text-text-primary sm:text-[12px]">{section.heading}</h4>
-                                <p className="mt-3 text-[10px] leading-relaxed text-slate-700 sm:text-[12px]">{section.text}</p>
+                                <p className="mt-3 max-w-[32rem] text-[10px] leading-relaxed text-slate-700 sm:text-[12px]">{section.text}</p>
                             </div>
                         </motion.section>
                     ))}
@@ -735,7 +737,7 @@ function NoveltyWorkspace({ clean, staleMenu }: { clean: boolean; staleMenu: boo
                                 transition={{ duration: 0.25, delay: index * 0.05, ease: EASE }}
                             >
                                 <h4 className="text-[11px] font-bold text-text-primary sm:text-[13px]">{section.heading}</h4>
-                                <p className="mt-2 text-[10px] leading-relaxed text-slate-700 sm:text-[12px]">{section.body}</p>
+                                <p className="mt-2 max-w-[32rem] text-[10px] leading-relaxed text-slate-700 sm:text-[12px]">{section.body}</p>
                             </motion.div>
                         ))}
                     </div>

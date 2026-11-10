@@ -73,16 +73,18 @@ interface InputCard {
     desc: [string, string];
     Icon: LucideIcon;
     tile: string;
+    /* A darker shade of the tile hue for the small tag text, so it reads at AA on white. */
+    label: string;
     preview: 'calendar' | 'list' | 'doc' | 'check';
     token: 'excel' | 'search' | 'word' | 'mail';
     flow: { ribbon: string; dot: string };
 }
 
 const INPUTS: InputCard[] = [
-    { id: 'docketing', tag: 'DOCKETING', desc: ['Spreadsheets', '& Calendars'], Icon: CalendarDays, tile: '#10b981', preview: 'calendar', token: 'excel', flow: { ribbon: '#6ee7b7', dot: '#10b981' } },
-    { id: 'search', tag: 'SEARCH', desc: ['Prior Art', 'Search Tools'], Icon: Search, tile: '#3b82f6', preview: 'list', token: 'search', flow: { ribbon: '#93c5fd', dot: '#3b82f6' } },
-    { id: 'drafting', tag: 'DRAFTING', desc: ['Word Docs', '& Templates'], Icon: FileText, tile: '#8b5cf6', preview: 'doc', token: 'word', flow: { ribbon: '#c4b5fd', dot: '#8b5cf6' } },
-    { id: 'prosecution', tag: 'PROSECUTION', desc: ['Emails & Office', 'Actions'], Icon: Mail, tile: '#f59e0b', preview: 'check', token: 'mail', flow: { ribbon: '#fcd34d', dot: '#f59e0b' } },
+    { id: 'docketing', tag: 'DOCKETING', desc: ['Spreadsheets', '& Calendars'], Icon: CalendarDays, tile: '#10b981', label: '#047857', preview: 'calendar', token: 'excel', flow: { ribbon: '#6ee7b7', dot: '#10b981' } },
+    { id: 'search', tag: 'SEARCH', desc: ['Prior Art', 'Search Tools'], Icon: Search, tile: '#3b82f6', label: '#1d4ed8', preview: 'list', token: 'search', flow: { ribbon: '#93c5fd', dot: '#3b82f6' } },
+    { id: 'drafting', tag: 'DRAFTING', desc: ['Word Docs', '& Templates'], Icon: FileText, tile: '#8b5cf6', label: '#6d28d9', preview: 'doc', token: 'word', flow: { ribbon: '#c4b5fd', dot: '#8b5cf6' } },
+    { id: 'prosecution', tag: 'PROSECUTION', desc: ['Emails & Office', 'Actions'], Icon: Mail, tile: '#f59e0b', label: '#b45309', preview: 'check', token: 'mail', flow: { ribbon: '#fcd34d', dot: '#f59e0b' } },
 ];
 
 interface OutputCard {
@@ -475,7 +477,7 @@ function InputCardView({ card }: { card: InputCard }) {
                 <Icon className="w-5 h-5 text-white" strokeWidth={2.2} />
             </span>
             <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color: card.tile, fontFamily: 'var(--font-mono)' }}>
+                <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color: card.label, fontFamily: 'var(--font-mono)' }}>
                     {card.tag}
                 </p>
                 <p className="mt-1 text-[13px] leading-tight font-semibold text-text-primary" style={{ fontFamily: 'var(--font-display)' }}>

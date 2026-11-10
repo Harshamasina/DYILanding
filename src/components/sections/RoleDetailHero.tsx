@@ -3,6 +3,7 @@ import { MapPin, Briefcase, BarChart3, ArrowRight, ChevronRight } from 'lucide-r
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import type { Role } from '@/types/careers';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 interface RoleDetailHeroProps {
     role: Role;
@@ -36,12 +37,7 @@ export function RoleDetailHero({ role }: RoleDetailHeroProps) {
                 </nav>
 
                 <div className="max-w-3xl">
-                    <span
-                        className="inline-block text-[10px] font-bold uppercase tracking-[0.18em] text-primary px-2.5 py-1 rounded bg-primary/5"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        {role.department}
-                    </span>
+                    <SectionMark numbered={false}>{role.department}</SectionMark>
                     <h1
                         className="mt-5 text-4xl font-bold tracking-tight text-text-primary sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]"
                         style={{ fontFamily: 'var(--font-display)' }}

@@ -1,5 +1,6 @@
-import { Users } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { RuledList, RuledItem } from '@/components/ui/RuledList';
 import { HexCubeIllustration } from '@/components/illustrations/HexCubeIllustration';
 import type { HeroCopy } from '@/types/careers';
 
@@ -14,12 +15,7 @@ export function CareersHero({ hero }: CareersHeroProps) {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
                     {/* Left column - copy */}
                     <div>
-                        <span
-                            className="inline-block text-[10px] font-bold uppercase tracking-[0.18em] text-primary px-2.5 py-1 rounded bg-primary/5"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
-                            {hero.eyebrow}
-                        </span>
+                        <SectionMark numbered={false}>{hero.eyebrow}</SectionMark>
                         <h1
                             className="mt-5 text-4xl font-bold tracking-tight text-text-primary sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]"
                             style={{ fontFamily: 'var(--font-display)' }}
@@ -32,17 +28,11 @@ export function CareersHero({ hero }: CareersHeroProps) {
                         >
                             {hero.description}
                         </p>
-                        <div className="mt-8 inline-flex items-center gap-3 rounded-full bg-page-bg-alt px-3 py-2 pr-5 border border-card-border">
-                            <span className="flex w-9 h-9 items-center justify-center rounded-full bg-primary/10 shrink-0">
-                                <Users className="w-4.5 h-4.5 text-primary" aria-hidden="true" />
-                            </span>
-                            <span
-                                className="text-sm text-text-secondary"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                {hero.tags.join(' • ')}
-                            </span>
-                        </div>
+                        <RuledList label="The team" className="mt-8">
+                            {hero.tags.map((tag) => (
+                                <RuledItem key={tag}>{tag}</RuledItem>
+                            ))}
+                        </RuledList>
                     </div>
 
                     {/* Right column - illustration (hidden on small screens) */}

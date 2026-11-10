@@ -99,7 +99,8 @@ export function LoeTimeline() {
         <div className="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-lg shadow-primary/[0.04] ring-1 ring-primary/[0.06] backdrop-blur-md sm:p-5">
             <Legend />
 
-            <div className="mt-4 overflow-x-auto rounded-xl border border-card-border bg-white/80">
+            <div className="relative mt-4">
+            <div className="overflow-x-auto rounded-xl border border-card-border bg-white/80">
                 <div className="min-w-[680px]">
                     {/* Product header */}
                     <div className="flex items-end justify-between gap-6 border-b border-card-border bg-page-bg-alt/70 px-4 py-3">
@@ -132,7 +133,7 @@ export function LoeTimeline() {
                                           })}
                                 >
                                     <p
-                                        className="text-[11px] text-text-muted"
+                                        className="text-xs text-text-muted"
                                         style={{ fontFamily: 'var(--font-body)' }}
                                     >
                                         {stat.label}
@@ -165,7 +166,7 @@ export function LoeTimeline() {
                                         {row.label}
                                     </p>
                                     <p
-                                        className="truncate text-[11px] text-text-muted"
+                                        className="truncate text-xs text-text-muted"
                                         style={{ fontFamily: 'var(--font-body)' }}
                                     >
                                         {row.sublabel}
@@ -235,6 +236,16 @@ export function LoeTimeline() {
                     </div>
                 </div>
             </div>
+            {/* The chart needs 680px; below lg it scrolls sideways. A fade on
+                the right edge and a short line say there is more to see. */}
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 right-0 w-12 rounded-r-xl bg-linear-to-l from-white to-transparent lg:hidden"
+            />
+            </div>
+            <p className="mt-2 text-xs italic text-text-secondary [font-family:var(--font-body)] lg:hidden">
+                Scroll sideways for the full timeline &rarr;
+            </p>
         </div>
     );
 }
@@ -323,7 +334,7 @@ const LEGEND: LegendItem[] = [
 
 function Legend() {
     return (
-        <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-card-border bg-white/80 px-3.5 py-2.5">
+        <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-card-border pt-2.5">
             {LEGEND.map((item) => (
                 <li
                     key={item.label}

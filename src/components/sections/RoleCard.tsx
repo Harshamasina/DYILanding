@@ -26,10 +26,7 @@ export function RoleCard({ role }: RoleCardProps) {
             <div className="grid grid-cols-1 lg:grid-cols-[5fr_6fr]">
                 {/* Left column */}
                 <div className="p-8 lg:p-10 lg:border-r lg:border-card-border">
-                    <span
-                        className="inline-block text-[10px] font-bold uppercase tracking-[0.18em] text-primary px-2.5 py-1 rounded bg-primary/5"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
+                    <span className="block text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                         {role.department}
                     </span>
                     <h2

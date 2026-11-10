@@ -10,6 +10,7 @@ import { FadeIn } from '@/components/motion/FadeIn';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { FaqPageJsonLd } from '@/components/seo/FaqPageJsonLd';
 import { FAQ_ITEMS } from '@/lib/faq-data';
+import { SectionMark } from '@/components/ui/SectionMark';
 
 export const metadata: Metadata = buildMetadata({
     title: 'IP Management Software FAQ',
@@ -42,14 +43,9 @@ export default function FaqPage() {
                     </nav>
 
                     <div className="max-w-3xl">
-                        <span
-                            className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
-                            Frequently Asked Questions
-                        </span>
+                        <SectionMark numbered={false}>Frequently Asked Questions</SectionMark>
                         <h1
-                            className="mt-4 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
+                            className="mt-5 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             IP Management Software,{' '}
@@ -100,10 +96,10 @@ export default function FaqPage() {
                         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
                             <BookDemoButton size="lg" className="w-full justify-center sm:w-auto">
                                 Book a Demo
-                                <ArrowRight className="h-5 w-5" />
                             </BookDemoButton>
-                            <Button href="/compare/" variant="secondary" size="lg" className="w-full justify-center sm:w-auto">
+                            <Button href="/compare/" variant="link" size="lg" className="w-full justify-center sm:w-auto">
                                 Compare vs Legacy IPMS
+                                <ArrowRight className="h-5 w-5" aria-hidden="true" />
                             </Button>
                         </div>
                     </div>

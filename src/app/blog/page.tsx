@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { BookOpen } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
+import { SectionMark } from '@/components/ui/SectionMark';
+import { RuledList, RuledItem } from '@/components/ui/RuledList';
 import { BlogPostsPaginated } from '@/components/blog/BlogPostsPaginated';
 import { BlogListJsonLd } from '@/components/blog/BlogJsonLd';
 import { HexCubeIllustration } from '@/components/illustrations/HexCubeIllustration';
@@ -54,12 +55,7 @@ export default function BlogPage() {
                 <Container>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
                         <div>
-                            <span
-                                className="inline-block text-[10px] font-bold uppercase tracking-[0.18em] text-primary px-2.5 py-1 rounded bg-primary/5"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Blog
-                            </span>
+                            <SectionMark numbered={false}>Blog</SectionMark>
                             <h1
                                 className="mt-5 text-4xl font-bold tracking-tight text-text-primary sm:text-5xl lg:text-[3.25rem] lg:leading-[1.1]"
                                 style={{ fontFamily: 'var(--font-display)' }}
@@ -73,17 +69,11 @@ export default function BlogPage() {
                                 Practical insights on patent docketing, FDA compliance, PCT filing
                                 management, and portfolio analytics for law firms and pharma IP teams.
                             </p>
-                            <div className="mt-8 inline-flex items-center gap-3 rounded-full bg-page-bg-alt px-3 py-2 pr-5 border border-card-border">
-                                <span className="flex w-9 h-9 items-center justify-center rounded-full bg-primary/10 shrink-0">
-                                    <BookOpen className="w-4.5 h-4.5 text-primary" aria-hidden="true" />
-                                </span>
-                                <span
-                                    className="text-sm text-text-secondary"
-                                    style={{ fontFamily: 'var(--font-body)' }}
-                                >
-                                    {BLOG_HERO_TAGS.join(' • ')}
-                                </span>
-                            </div>
+                            <RuledList label="Topics" className="mt-8">
+                                {BLOG_HERO_TAGS.map((tag) => (
+                                    <RuledItem key={tag}>{tag}</RuledItem>
+                                ))}
+                            </RuledList>
                         </div>
                         <div className="hidden lg:block">
                             <HexCubeIllustration className="max-w-xl ml-auto" />

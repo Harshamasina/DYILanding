@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { MockupRecordLabel } from './BrowserMockupChrome';
 
 /* ── Animated dashboard mockup — pixel-accurate replica of dashboard screenshot ──
    Responsive: stacks vertically on mobile, full layout on desktop.
@@ -36,16 +37,16 @@ const STATS = [
 ];
 
 const ACTIVITY_ITEMS = [
-    { id: 'DEMO-SGLT-002', appNo: '18/567,890', type: 'Prior Art Reference', action: 'CREATE', time: '3 hours ago' },
-    { id: 'DEMO-FREE-01', appNo: '17/234,567', type: 'Patent Draft', action: 'EXPORT', time: '4 hours ago' },
-    { id: 'DEMO-2025-007', appNo: '18/890,123', type: 'Prior Art Reference', action: 'CREATE', time: '14 hours ago' },
-    { id: 'DEMO-ADC-004', appNo: 'EP25801111.1', type: 'Npe Annuity Fee', action: 'UPDATE', time: '5 days ago' },
-    { id: 'DEMO-RNA-003', appNo: 'PCT/US25/044', type: 'Npe Case', action: 'UPDATE', time: '9 days ago' },
-    { id: 'DEMO-BIO-002', appNo: '18/345,678', type: 'Npe Case', action: 'UPDATE', time: '9 days ago' },
-    { id: 'DEMO-2025-004', appNo: 'FR2025/012', type: 'Prv Application', action: 'CREATE', time: '9 days ago' },
-    { id: 'DEMO-2024-003', appNo: 'EP25809876.3', type: 'Npe Office Action', action: 'CREATE', time: '18 days ago' },
-    { id: 'DEMO-CAR-006', appNo: '17/901,234', type: 'Prv Application', action: 'UPDATE', time: '19 days ago' },
-    { id: 'DEMO-2023-019', appNo: 'JP2025-56789', type: 'Application Family', action: 'CREATE', time: '19 days ago' },
+    { id: 'DEMO-SGLT-002', appNo: '18/567,890', type: 'Prior art', action: 'CREATE', time: '3 hours ago' },
+    { id: 'DEMO-FREE-01', appNo: '17/234,567', type: 'Patent draft', action: 'EXPORT', time: '4 hours ago' },
+    { id: 'DEMO-2025-007', appNo: '18/890,123', type: 'Prior art', action: 'CREATE', time: '14 hours ago' },
+    { id: 'DEMO-ADC-004', appNo: 'EP25801111.1', type: 'Annuity fee', action: 'UPDATE', time: '5 days ago' },
+    { id: 'DEMO-RNA-003', appNo: 'PCT/US25/044', type: 'National phase', action: 'UPDATE', time: '9 days ago' },
+    { id: 'DEMO-BIO-002', appNo: '18/345,678', type: 'National phase', action: 'UPDATE', time: '9 days ago' },
+    { id: 'DEMO-2025-004', appNo: 'FR2025/012', type: 'Provisional', action: 'CREATE', time: '9 days ago' },
+    { id: 'DEMO-2024-003', appNo: 'EP25809876.3', type: 'Office action', action: 'CREATE', time: '18 days ago' },
+    { id: 'DEMO-CAR-006', appNo: '17/901,234', type: 'Provisional', action: 'UPDATE', time: '19 days ago' },
+    { id: 'DEMO-2023-019', appNo: 'JP2025-56789', type: 'Family', action: 'CREATE', time: '19 days ago' },
 ];
 
 const ACTION_COLORS: Record<string, { bg: string; text: string }> = {
@@ -100,7 +101,9 @@ const REMINDER_ITEMS: NotifItem[] = [
 
 export function AnimatedDashboard() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const inView = useInView(containerRef, { once: true, margin: '-15% 0px -15% 0px' });
+    // Starts as soon as the top edge is on screen: the hero now ends above the
+    // fold, so the dashboard must reveal without the visitor scrolling.
+    const inView = useInView(containerRef, { once: true, margin: '0px 0px -2% 0px' });
 
     return (
         <motion.div
@@ -114,13 +117,9 @@ export function AnimatedDashboard() {
         >
             {/* ── Chrome Bar ── */}
             <div className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-white border-b border-card-border">
-                <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#FF5F57]" />
-                    <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#FFBD2E]" />
-                    <span className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-[#28C840]" />
-                </div>
-                <div className="flex-1 flex justify-center">
-                    <div className="flex items-center gap-1.5 px-2 sm:px-4 py-0.5 sm:py-1 bg-page-bg-alt rounded-lg text-[8px] sm:text-[11px] text-text-muted border border-card-border"
+                <MockupRecordLabel record="DEMO-WS-001" screen="Portfolio dashboard" />
+                <div className="hidden sm:flex flex-1 min-w-0 justify-end">
+                    <div className="flex items-center gap-1.5 px-2 sm:px-4 py-0.5 sm:py-1 bg-page-bg-alt rounded-lg text-[10px] sm:text-[11px] text-text-muted border border-card-border"
                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                         <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-success hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -128,7 +127,6 @@ export function AnimatedDashboard() {
                         app.designyourinvention.com
                     </div>
                 </div>
-                <div className="w-6 sm:w-[52px]" />
             </div>
 
             {/* ── Quick Actions ── */}
@@ -136,7 +134,7 @@ export function AnimatedDashboard() {
                 {ACTION_BUTTONS.map((btn, i) => (
                     <motion.span
                         key={btn.label}
-                        className={`text-[7px] sm:text-[10px] font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border whitespace-nowrap shrink-0 ${btn.primary ? 'text-primary' : 'text-text-secondary bg-white'}`}
+                        className={`text-[10px] sm:text-[10px] font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border whitespace-nowrap shrink-0 ${btn.primary ? 'text-primary' : 'text-text-secondary bg-white'}`}
                         style={{
                             fontFamily: 'var(--font-dashboard-mono)',
                             ...(btn.primary
@@ -148,7 +146,7 @@ export function AnimatedDashboard() {
                         transition={{ duration: 0.25, delay: 0.35 + i * 0.04, ease: EASE }}
                     >
                         {btn.label}
-                        {!btn.noArrow && <span className="text-[6px] sm:text-[8px] ml-0.5 opacity-60"> ›</span>}
+                        {!btn.noArrow && <span className="text-[10px] sm:text-[8px] ml-0.5 opacity-60"> ›</span>}
                     </motion.span>
                 ))}
             </div>
@@ -170,7 +168,7 @@ export function AnimatedDashboard() {
                                 transition={{ duration: 0.4, delay: 0.5 + i * 0.08, ease: EASE }}
                             >
                                 <div className="flex items-start justify-between">
-                                    <p className="text-[8px] sm:text-[10px] font-bold text-text-secondary leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>{s.label}</p>
+                                    <p className="text-[10px] sm:text-[10px] font-bold text-text-secondary leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>{s.label}</p>
                                     <div className="w-[18px] h-[18px] sm:w-[22px] sm:h-[22px] rounded-lg flex items-center justify-center shrink-0"
                                         style={{ backgroundColor: s.iconBg }}>
                                         <StatIcon type={s.icon} color={s.iconColor} />
@@ -178,7 +176,7 @@ export function AnimatedDashboard() {
                                 </div>
                                 <CountUp target={s.value} delay={0.6 + i * 0.08} color="#0f172a" size="text-lg sm:text-2xl" inView={inView} />
                                 {s.sub && (
-                                    <p className="text-[6px] sm:text-[7px] mt-0.5 hidden sm:block"
+                                    <p className="text-[10px] sm:text-[7px] mt-0.5 hidden sm:block"
                                         style={{ fontFamily: 'var(--font-dashboard)', color: s.subColor }}>
                                         {s.sub}
                                     </p>
@@ -197,10 +195,10 @@ export function AnimatedDashboard() {
                             transition={{ duration: 0.4, delay: 0.85 }}
                         >
                             <div className="flex items-center justify-between mb-2 sm:mb-3 shrink-0">
-                                <p className="text-[9px] sm:text-[11px] font-semibold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                                <p className="text-[10px] sm:text-[11px] font-semibold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                     Recent Family Activity
                                 </p>
-                                <span className="text-[7px] sm:text-[9px] text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>View all families</span>
+                                <span className="text-[10px] sm:text-[9px] text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>View all families</span>
                             </div>
                             <div className="flex-1 overflow-hidden">
                                 {ACTIVITY_ITEMS.map((item, i) => (
@@ -211,19 +209,19 @@ export function AnimatedDashboard() {
                                         animate={inView ? { opacity: 1, x: 0 } : undefined}
                                         transition={{ duration: 0.3, delay: 0.95 + i * 0.05, ease: EASE }}
                                     >
-                                        <span className="text-[7px] sm:text-[9px] font-semibold text-text-primary shrink-0 w-[70px] sm:w-[95px] truncate"
+                                        <span className="text-[10px] sm:text-[9px] font-semibold text-text-primary shrink-0 w-[70px] sm:w-[95px] truncate"
                                             style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                             {item.id}
                                         </span>
-                                        <span className="text-[6px] sm:text-[8px] text-text-muted shrink-0 w-13.75 sm:w-17.5 truncate"
+                                        <span className="text-[10px] sm:text-[8px] text-text-muted shrink-0 w-13.75 sm:w-17.5 truncate"
                                             style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                             {item.appNo}
                                         </span>
-                                        <span className="text-[6px] sm:text-[8px] text-text-muted truncate flex-1"
+                                        <span className="text-[10px] sm:text-[8px] text-text-muted truncate flex-1"
                                             style={{ fontFamily: 'var(--font-dashboard)' }}>
                                             {item.type}
                                         </span>
-                                        <span className="text-[5px] sm:text-[7px] font-bold px-1.5 sm:px-2 py-0.5 rounded shrink-0"
+                                        <span className="text-[10px] sm:text-[7px] font-bold px-1.5 sm:px-2 py-0.5 rounded shrink-0"
                                             style={{
                                                 backgroundColor: ACTION_COLORS[item.action]?.bg,
                                                 color: ACTION_COLORS[item.action]?.text,
@@ -231,7 +229,7 @@ export function AnimatedDashboard() {
                                             }}>
                                             {item.action}
                                         </span>
-                                        <span className="text-[5px] sm:text-[7px] text-text-muted shrink-0 w-[45px] sm:w-[60px] text-right"
+                                        <span className="text-[10px] sm:text-[7px] text-text-muted shrink-0 w-[45px] sm:w-[60px] text-right"
                                             style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                             {item.time}
                                         </span>
@@ -247,7 +245,7 @@ export function AnimatedDashboard() {
                             animate={inView ? { opacity: 1 } : undefined}
                             transition={{ duration: 0.4, delay: 0.9 }}
                         >
-                            <p className="text-[9px] sm:text-[11px] font-semibold text-text-primary mb-2 sm:mb-3 self-start shrink-0" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                            <p className="text-[10px] sm:text-[11px] font-semibold text-text-primary mb-2 sm:mb-3 self-start shrink-0" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                 Active NPE Cases by Country
                             </p>
                             <div className="flex-1 flex items-center justify-center min-h-0 py-2 sm:py-0">
@@ -257,7 +255,7 @@ export function AnimatedDashboard() {
                                 {DONUT_DATA.map(seg => (
                                     <div key={seg.label} className="flex items-center gap-1">
                                         <span className="w-[5px] h-[5px] sm:w-[6px] sm:h-[6px] rounded-full" style={{ backgroundColor: seg.color }} />
-                                        <span className="text-[7px] sm:text-[9px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{seg.label}</span>
+                                        <span className="text-[10px] sm:text-[9px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{seg.label}</span>
                                     </div>
                                 ))}
                             </div>
@@ -306,10 +304,10 @@ function NotifSection({ title, count, items, baseDelay, inView }: { title: strin
         <div className="mb-2 sm:mb-3">
             <div className="flex items-center justify-between mb-1.5 sm:mb-2">
                 <div className="flex items-center gap-1.5">
-                    <p className="text-[9px] sm:text-[10px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>{title}</p>
-                    <span className="text-[6px] sm:text-[8px] font-bold text-white bg-[#22c55e] rounded-full px-1.5 py-0.5 leading-none min-w-[14px] text-center">{count}</span>
+                    <p className="text-[10px] sm:text-[10px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>{title}</p>
+                    <span className="text-[10px] sm:text-[8px] font-bold text-white bg-[#22c55e] rounded-full px-1.5 py-0.5 leading-none min-w-[14px] text-center">{count}</span>
                 </div>
-                <span className="text-[7px] sm:text-[9px] text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>View All</span>
+                <span className="text-[10px] sm:text-[9px] text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>View All</span>
             </div>
             <div className="space-y-1 sm:space-y-1.5">
                 {items.map((item, i) => (
@@ -322,15 +320,15 @@ function NotifSection({ title, count, items, baseDelay, inView }: { title: strin
                     >
                         <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mt-[3px] shrink-0 bg-[#f59e0b]" />
                         <div className="min-w-0 flex-1">
-                            <p className="text-[8px] sm:text-[10px] text-text-primary leading-snug truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>{item.title}</p>
-                            <p className="text-[6px] sm:text-[8px] text-text-muted leading-snug mt-0.5 truncate" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{item.meta}</p>
+                            <p className="text-[10px] sm:text-[10px] text-text-primary leading-snug truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>{item.title}</p>
+                            <p className="text-[10px] sm:text-[8px] text-text-muted leading-snug mt-0.5 truncate" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{item.meta}</p>
                         </div>
                         <div className="flex flex-col items-end shrink-0">
-                            <span className="text-[7px] sm:text-[9px] font-bold leading-none"
+                            <span className="text-[10px] sm:text-[9px] font-bold leading-none"
                                 style={{ color: item.badgeColor, fontFamily: 'var(--font-dashboard-mono)' }}>
                                 {item.badge}
                             </span>
-                            <span className="text-[5px] sm:text-[7px] text-text-muted mt-0.5" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{item.days}</span>
+                            <span className="text-[10px] sm:text-[7px] text-text-muted mt-0.5" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{item.days}</span>
                         </div>
                     </motion.div>
                 ))}

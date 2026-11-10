@@ -18,14 +18,14 @@ const HERO_VISUAL: 'tree' | 'hub' = 'hub';
 export function HeroSection() {
     return (
         <>
-            {/* Hero: natural flow on mobile, min-viewport-height on desktop.
-                min-h-screen (not h-screen) so short viewports can GROW the
-                section to fit content instead of overflowing above the
-                padding into the fixed navbar. */}
+            {/* Hero: natural flow at every width, with fixed padding instead of
+                a full-viewport height. The top padding clears the fixed navbar;
+                the short bottom padding lets the dashboard below start inside
+                the first screen on desktop (about 750px down at 1440x900). */}
             <section
                 id="hero"
                 aria-label="Hero"
-                className="relative flex flex-col pt-24 sm:pt-28 pb-10 sm:pb-12 lg:min-h-screen lg:justify-center lg:pt-14 lg:pb-28 xl:pt-16 xl:pb-32 overflow-hidden"
+                className="relative flex flex-col pt-24 sm:pt-28 pb-10 sm:pb-12 lg:pt-28 lg:pb-10 xl:pt-32 xl:pb-12 overflow-hidden"
             >
                 <HeroAmbience edge="bottom" />
                 <Container size={HERO_VISUAL === 'hub' ? 'wide' : 'default'} className="relative z-10">
@@ -55,7 +55,7 @@ export function HeroSection() {
                                 >
                                     Patent docketing, prior art search, AI-assisted drafting, and
                                     office action response in one connected, audit-trailed
-                                    workspace, built for law firms and IP teams. Manage PCT/PRV/NPE cases, track fees and
+                                    workspace, built for law firms and IP teams. Manage provisional, PCT, and national-phase cases, track fees and
                                     deadlines, and run Part 11-aligned workflow controls for
                                     regulated teams.
                                 </p>
@@ -68,7 +68,7 @@ export function HeroSection() {
                                     slightly smaller xl size plus the wider xl column
                                     gap keep the two clear of each other. */}
                                 <div className="mt-6 flex flex-col items-stretch gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center">
-                                    <Button href={SEARCH_APP_URL} newTab size="lg" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-6 xl:py-3 xl:text-base">
+                                    <Button href={SEARCH_APP_URL} newTab hideExternalGlyph size="lg" className="w-full justify-center whitespace-nowrap sm:w-auto xl:px-6 xl:py-3 xl:text-base">
                                         <FileSearch className="w-5 h-5" />
                                         Try Patent Search Free
                                     </Button>
@@ -84,17 +84,13 @@ export function HeroSection() {
                             transformation (variant B), switched via HERO_VISUAL. The
                             hub variant gets extra width at xl for its source rail. */}
                         <div className="relative hidden lg:flex flex-1 min-w-0 items-center justify-center">
-                            {/* Soft purple/blue radial glow so the space around the
-                                workflow reads as designed rather than empty. */}
+                            {/* A very faint indigo wash so the space around the
+                                workflow reads as designed rather than empty;
+                                no violet, kept well below a visible glow. */}
                             {HERO_VISUAL === 'hub' && (
                                 <div
                                     aria-hidden="true"
-                                    className="pointer-events-none absolute inset-0"
-                                    style={{
-                                        background:
-                                            'radial-gradient(ellipse 78% 66% at 52% 46%, rgba(129,140,248,0.20), rgba(139,92,246,0.09) 45%, transparent 72%)',
-                                        filter: 'blur(36px)',
-                                    }}
+                                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_78%_66%_at_52%_46%,rgba(99,102,241,0.07),rgba(99,102,241,0.03)_45%,transparent_72%)] blur-[36px]"
                                 />
                             )}
                             <div className={`relative z-10 w-full ${HERO_VISUAL === 'hub' ? 'max-w-none' : 'max-w-105'}`}>

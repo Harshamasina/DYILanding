@@ -37,13 +37,15 @@ export function SectionMark({
         <div id={id} className={`flex items-center gap-3.5 ${className}`}>
             <span
                 aria-hidden="true"
-                className={`flex items-baseline gap-1 rounded-[3px] border px-2 pt-1.25 pb-1 leading-none [font-family:var(--font-display)] ${tab}`}
+                className={`flex shrink-0 rounded-[3px] border leading-none [font-family:var(--font-display)] ${numbered ? 'items-baseline gap-1 px-2 pt-1 pb-1.25' : 'h-8 w-8 items-center justify-center'} ${tab}`}
             >
-                <span className="text-[22px]">§</span>
+                {/* Playfair's section sign sits low in its line box; on the bare
+                    square tab it is nudged up so its ink is centred. */}
+                <span className={`text-[22px] ${numbered ? '' : '-translate-y-[2.5px]'}`}>§</span>
                 {numbered && <span className="section-mark-number text-lg font-semibold tabular-nums" />}
             </span>
             <span
-                className={`text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] ${label}`}
+                className={`text-base leading-snug tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] ${label}`}
             >
                 {children}
             </span>

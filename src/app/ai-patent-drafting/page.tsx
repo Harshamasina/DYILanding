@@ -1,20 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import {
-    Search,
-    GitBranch,
-    ShieldCheck,
-    ScrollText,
-    FolderPlus,
-    PenLine,
-    UserCheck,
-    FileCheck,
-    FileText,
-    Check,
-    Minus,
-    ArrowRight,
-    Play,
-} from 'lucide-react';
+import { Check, Minus, ArrowRight, Play } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -25,6 +11,8 @@ import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
+import { InlineList } from '@/components/ui/RuledList';
+import { FigureCaption } from '@/components/ui/FigureCaption';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedClaimsWorkflow } from '@/components/ui/AnimatedClaimsWorkflow';
 import { AiDraftingHeroSvg } from '@/components/illustrations/AiDraftingHeroSvg';
@@ -51,43 +39,42 @@ interface CardItem {
    versions change with task, availability, and customer requirements, and
    exact model identifiers belong in the security questionnaire and release
    notes, not in marketing copy that goes stale. */
-const GENERATION_MODEL = 'an enterprise Claude model';
+const GENERATION_MODEL = 'an enterprise Claude model from Anthropic';
 const REVIEW_MODEL = 'a separate, independent reviewer model';
 
 const POWERED_BY = [
-    'Enterprise AI providers (generation)',
+    'Enterprise Claude models from Anthropic (generation)',
     'Independent second-model review',
     'EPO Open Patent Services',
-    'PostgreSQL RLS',
-    'Append-only audit',
 ];
+
+const BUILT_ON = ['Tenant-isolated database', 'Append-only audit'];
 
 const CAPABILITIES: CardItem[] = [
     {
         title: 'Prior Art Search',
-        description: 'Worldwide patent search via EPO Open Patent Services, covering 100+ jurisdictions through INPADOC.',
+        description: 'Worldwide patent search via EPO Open Patent Services, covering 100+ jurisdictions through INPADOC, the EPO worldwide patent family database.',
     },
     {
         title: 'Prior Art Management',
-        description: 'Save, annotate, paste claim text, and track the relevance of references per patent family.',
+        description: "Save, annotate, paste claim text, and track the relevance of references per patent family. References from a novelty search arrive with their findings already mapped to the invention's features.",
     },
     {
         title: 'AI Draft Generation',
-        description: `Feed invention details and saved prior art to ${GENERATION_MODEL} to generate jurisdiction-specific claims, abstract, description, and novelty analysis, asynchronously.`,
+        description: `Feed invention details and saved prior art to ${GENERATION_MODEL} to generate jurisdiction-specific claims, abstract, description, and novelty analysis in the background.`,
     },
 ];
 
-const WORKFLOW: { icon: React.ElementType; label: string }[] = [
-    { icon: FolderPlus, label: 'Create family' },
-    { icon: Search, label: 'Research prior art' },
-    { icon: PenLine, label: 'Draft claims' },
-    { icon: UserCheck, label: 'Attorney review' },
-    { icon: FileCheck, label: 'File' },
+const WORKFLOW = [
+    'Create family',
+    'Research prior art',
+    'Draft claims',
+    'Attorney review',
+    'File',
 ];
 
 interface Jurisdiction {
     code: string;
-    color: string;
     authority: string;
     rules: string;
 }
@@ -95,25 +82,21 @@ interface Jurisdiction {
 const JURISDICTIONS: Jurisdiction[] = [
     {
         code: 'US',
-        color: '#dc2626',
         authority: 'USPTO',
-        rules: '35 USC 101 / 112 and obviousness-type double patenting addressed, with the full US section structure (Field, Background, Summary, Brief Description of Drawings, Detailed Description).',
+        rules: '35 USC 101 / 112 and obviousness-type double patenting issues flagged for attorney review, with the full US section structure (Field, Background, Summary, Brief Description of Drawings, Detailed Description).',
     },
     {
         code: 'EP',
-        color: '#6366f1',
         authority: 'EPO',
         rules: 'EPC Article 84 clarity, conciseness, and support, plus the EPC 2000 "compound for use" claim format.',
     },
     {
         code: 'IN',
-        color: '#d97706',
         authority: 'Indian Patent Office',
         rules: 'Section 3(d) enhanced-efficacy considerations flagged for attorney review on pharma claims, the single most important rule for Indian pharma patents.',
     },
     {
         code: 'WO',
-        color: '#0ea5e9',
         authority: 'WIPO (PCT)',
         rules: 'Jurisdiction-neutral claims compatible with USPTO and EPO conventions, with national-phase amendments flagged for entry.',
     },
@@ -139,7 +122,7 @@ const COVERAGE_ROWS: { label: string; us: string; in: string; ep: string; pct: s
 const VERSIONING: CardItem[] = [
     {
         title: 'Per-unit regeneration',
-        description: 'Refine claim 3 without burning tokens regenerating claims 1, 2, and 4 through N. Each claim and section is its own record.',
+        description: 'Refine claim 3 without paying to regenerate claims 1, 2, and 4 through N. Each claim and section is its own record.',
     },
     {
         title: 'Interactive refinement',
@@ -154,7 +137,7 @@ const VERSIONING: CardItem[] = [
         description: 'Restoring an earlier revision creates a new revision, never a deletion. History only grows.',
     },
     {
-        title: 'Cascade staleness',
+        title: 'Dependent sections flagged as stale',
         description: 'Editing claim 2 marks dependent claims, novelty analysis, and description sections stale. You decide what to regenerate, the system never does it for you.',
     },
     {
@@ -165,16 +148,16 @@ const VERSIONING: CardItem[] = [
 
 const CONFIDENCE: CardItem[] = [
     {
-        title: 'Three honest bands',
+        title: 'Three support bands',
         description: 'High, medium, or low per unit, describing how well the generated text is supported by the prior art on record, not a probability and not a legal opinion. The reviewer defaults to medium when uncertain; high must be affirmatively justified.',
     },
     {
         title: 'Evidence-grounded',
-        description: 'Every rating cites a specific claim number, quoted phrase, or publication number from the prior-art snapshot. No vague hand-waving.',
+        description: 'Every rating cites a specific claim number, quoted phrase, or publication number from the prior-art snapshot.',
     },
     {
         title: 'Progressive reveal',
-        description: 'The draft is readable the instant generation completes; scores backfill seconds later while you read. No single long spinner.',
+        description: 'The draft is readable the instant generation completes; scores fill in seconds later while you read. You never wait on one long loading screen.',
     },
     {
         title: 'Prioritization, not a determination',
@@ -245,7 +228,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'How does prior art work for US and Indian patents without a claims API?',
         answer:
-            'Bibliographic data is retrieved for all jurisdictions via EPO OPS. EP and PCT patents also return full-text claims directly from EPO. US and Indian patents have no reliable public claims API today, so a claims-retrieval helper guides the attorney to paste claim text from the source (USPTO ODP or InPASS). Pasted claims are stored on the reference and fed to the AI for novelty analysis.',
+            'Bibliographic data is retrieved for all jurisdictions via EPO Open Patent Services (OPS). EP and PCT patents also return full-text claims directly from EPO. US and Indian patents have no reliable public claims API today, so a claims-retrieval helper guides the attorney to paste claim text from the source (USPTO ODP or InPASS). Pasted claims are stored on the reference and fed to the AI for novelty analysis.',
     },
     {
         question: 'Is my data used to train the AI?',
@@ -265,7 +248,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Can paralegals trigger AI generation?',
         answer:
-            'No. The draft:generate permission (which costs tokens) is deliberately separated from draft:write. Paralegals can search, save prior art, fill invention details, view drafts, and export, but only attorneys and tenant admins can generate, refine, or approve.',
+            'No. Generating a draft uses paid AI capacity, so it is a separate permission from editing a draft. Paralegals can search, save prior art, fill invention details, view drafts, and export, but only attorneys and tenant admins can generate, refine, or approve.',
     },
     {
         question: 'Is it suitable for regulated and pharma teams?',
@@ -324,56 +307,45 @@ export default function AiPatentDraftingPage() {
                                 <span className="text-primary italic">Attorney Review Built In</span>
                             </h1>
                             <p
-                                className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
+                                className="mt-5 max-w-[40rem] text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 An attorney-in-the-loop drafting assistant that turns invention details and
                                 saved prior art into a structured first draft for attorney review: claims,
                                 abstract, description, and novelty analysis, prepared for the drafting
-                                conventions of the target jurisdiction. AI drafts are dramatically better
-                                when they know the art on record.
+                                conventions of the target jurisdiction. AI drafts are stronger when they
+                                are written against the art on record.
                             </p>
 
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                                <BookDemoButton size="lg" className="justify-center">
+                                <BookDemoButton topic="AI patent drafting" size="lg" className="justify-center">
                                     Book a Demo
-                                    <ArrowRight className="h-5 w-5" />
                                 </BookDemoButton>
-                                <WatchDemoButton variant="secondary" size="lg" startTime={72} className="justify-center">
+                                <WatchDemoButton variant="outline" size="lg" startTime={72} className="justify-center">
                                     <Play className="h-5 w-5 fill-current" />
                                     Watch Demo
                                 </WatchDemoButton>
                             </div>
                         </div>
 
-                        <div className="pointer-events-none hidden lg:flex lg:w-full lg:justify-end">
+                        <div className="pointer-events-none hidden md:flex md:w-full md:justify-center lg:justify-end">
                             <AiDraftingHeroSvg />
                         </div>
                     </div>
                 </Container>
 
-                <Container className="relative z-10 mt-12 sm:mt-16">
+                <Container className="figure-group relative z-10 mt-12 sm:mt-16">
                     <MockupHalo>
                         <AnimatedClaimsWorkflow />
                     </MockupHalo>
+                    <FigureCaption className="mt-5">Draft workspace</FigureCaption>
                 </Container>
 
                 {/* Powered by */}
                 <Container className="relative z-10 mt-8 sm:mt-10">
                     <FadeIn delay={0.1}>
-                        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-3">
-                            <span
-                                className="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted"
-                                style={{ fontFamily: 'var(--font-mono)' }}
-                            >
-                                Powered by
-                            </span>
-                            <div className="flex flex-wrap justify-center gap-2">
-                                {POWERED_BY.map((p, i) => (
-                                    <PoweredByChip key={p} label={p} delay={i * 120} />
-                                ))}
-                            </div>
-                        </div>
+                        <InlineList label="Powered by" items={POWERED_BY} align="center" />
+                        <InlineList label="Built on" items={BUILT_ON} align="center" className="mt-3" />
                     </FadeIn>
                 </Container>
             </section>
@@ -384,14 +356,15 @@ export default function AiPatentDraftingPage() {
                 <Container className="relative z-10">
                     <FadeIn>
                         <div className="max-w-3xl">
+                            <SectionMark>How it works</SectionMark>
                             <h2
-                                className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
+                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Drafts That Know the Prior Art
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Without prior-art context, a model writes generic claims. With the
@@ -403,18 +376,25 @@ export default function AiPatentDraftingPage() {
                         </div>
                     </FadeIn>
 
-                    {/* Workflow */}
+                    {/* Workflow: a numbered sequence set as text, not a row of pills */}
                     <FadeIn delay={0.05}>
-                        <div className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3 lg:mt-12">
+                        <ol className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-center sm:gap-x-3 lg:mt-12">
                             {WORKFLOW.map((step, i) => (
-                                <span key={step.label} className="flex items-center gap-2 sm:gap-3">
+                                <li key={step} className="flex items-baseline gap-3">
                                     {i > 0 && (
-                                        <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-text-muted/50" />
+                                        <ArrowRight aria-hidden="true" className="hidden h-4 w-4 shrink-0 self-center text-text-muted/50 sm:block" />
                                     )}
-                                    <WorkflowStep icon={step.icon} label={step.label} delay={i * 120} />
-                                </span>
+                                    <span className="flex items-baseline gap-2">
+                                        <span className="text-lg font-semibold leading-none tabular-nums text-primary [font-family:var(--font-display)]">
+                                            {i + 1}
+                                        </span>
+                                        <span className="text-sm text-text-primary [font-family:var(--font-body)] sm:text-base">
+                                            {step}
+                                        </span>
+                                    </span>
+                                </li>
                             ))}
-                        </div>
+                        </ol>
                     </FadeIn>
 
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
@@ -440,7 +420,7 @@ export default function AiPatentDraftingPage() {
                                 Claims Written to the Rules That Apply
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 The drafting engine applies jurisdiction-specific claim format, statutory
@@ -450,17 +430,19 @@ export default function AiPatentDraftingPage() {
                         </div>
                     </FadeIn>
 
-                    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16">
+                    <ul className="mt-12 grid gap-x-12 border-t border-card-border sm:grid-cols-2 lg:mt-16">
                         {JURISDICTIONS.map((j, i) => (
-                            <FadeIn key={j.code} delay={i * 0.06}>
-                                <JurisdictionCard jurisdiction={j} />
-                            </FadeIn>
+                            <li key={j.code} className="border-b border-card-border">
+                                <FadeIn delay={i * 0.06}>
+                                    <JurisdictionRow jurisdiction={j} />
+                                </FadeIn>
+                            </li>
                         ))}
-                    </div>
+                    </ul>
                 </Container>
             </section>
 
-            {/* ── 4. Prior art & references (honest coverage) ── */}
+            {/* ── 4. Prior art & references (coverage by jurisdiction) ── */}
             <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
                     <FadeIn>
@@ -473,19 +455,43 @@ export default function AiPatentDraftingPage() {
                                 Real Coverage, Stated Plainly
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
-                                Search runs through EPO OPS, returning bibliographic data and family
-                                links worldwide. Full-text claims coverage is exactly as honest as it
-                                should be for a legal audience.
+                                Search runs through EPO Open Patent Services (OPS), returning
+                                bibliographic data and family links worldwide. The table below states
+                                full-text claims coverage per jurisdiction, including where claim text has
+                                to be pasted.
                             </p>
                         </div>
                     </FadeIn>
 
                     {/* Coverage table */}
                     <FadeIn delay={0.05}>
-                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm ring-1 ring-white/70 lg:mt-12">
+                        {/* Phones: one ruled block per row, so no column hides off-screen */}
+                        <dl className="mt-10 border-t border-card-border sm:hidden">
+                            {COVERAGE_ROWS.map((row) => (
+                                <div key={row.label} className="border-b border-card-border py-4">
+                                    <dt className="text-sm font-semibold text-text-primary [font-family:var(--font-body)]">{row.label}</dt>
+                                    <dd className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5">
+                                        {(
+                                            [
+                                                ['US', row.us],
+                                                ['IN', row.in],
+                                                ['EP', row.ep],
+                                                ['PCT', row.pct],
+                                            ] as const
+                                        ).map(([code, value]) => (
+                                            <span key={code} className="flex items-center gap-2">
+                                                <span className="w-9 text-xs font-semibold text-primary [font-family:var(--font-mono)]">{code}</span>
+                                                <CoverageCell value={value} />
+                                            </span>
+                                        ))}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+                        <div className="mt-10 hidden overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm ring-1 ring-white/70 sm:block lg:mt-12">
                             <table className="w-full min-w-125 border-collapse text-left">
                                 <thead>
                                     <tr className="border-b border-card-border bg-white/60">
@@ -527,14 +533,21 @@ export default function AiPatentDraftingPage() {
                         </div>
                     </FadeIn>
 
+                    <FadeIn delay={0.08}>
+                        <InlineList
+                            label="Key"
+                            items={[
+                                'Paste: you paste the claim text from the source (USPTO ODP or InPASS)',
+                                'via EPO: fetched automatically from EPO Open Patent Services',
+                            ]}
+                            className="mt-5"
+                        />
+                    </FadeIn>
+
                     <FadeIn delay={0.1}>
-                        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/[0.03] p-5">
-                            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                            <p
-                                className="text-sm leading-relaxed text-text-secondary"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                <span className="font-semibold text-text-primary">Provenance you can defend.</span>{' '}
+                        <div className="mt-8 max-w-[36rem] border-l border-primary pl-5">
+                            <p className="text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                <span className="font-semibold text-text-primary">Provenance.</span>{' '}
                                 Every AI revision is generated against a frozen, immutable snapshot of the
                                 exact prior-art set used at that moment. What art the AI saw when it wrote
                                 a given claim is always answerable, even years later and even if the live
@@ -556,10 +569,10 @@ export default function AiPatentDraftingPage() {
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 A Draft Is a{' '}
-                                <span className="italic">Record</span>, Not a Blob of Text
+                                <span className="italic">Record</span>, Not a Block of Text
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Every claim is its own record with a real dependency tree. Abstract,
@@ -570,34 +583,20 @@ export default function AiPatentDraftingPage() {
                         </div>
                     </FadeIn>
 
-                    <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-3">
-                        {VERSIONING.map((item, i) => (
-                            <FadeIn key={item.title} delay={i * 0.06}>
-                                <CapabilityCard {...item} tone="compliance" />
-                            </FadeIn>
-                        ))}
-                    </div>
+                    <RuledItemList items={VERSIONING} tone="compliance" className="mt-12 lg:mt-16" />
 
                     <FadeIn delay={0.1}>
-                        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                            <div className="flex items-start gap-3 rounded-2xl border border-card-border bg-page-bg-alt p-5">
-                                <GitBranch className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                                <p
-                                    className="text-sm leading-relaxed text-text-secondary"
-                                    style={{ fontFamily: 'var(--font-body)' }}
-                                >
+                        <div className="mt-10 grid gap-x-12 gap-y-6 sm:grid-cols-2">
+                            <div className="border-l border-compliance-ink pl-5">
+                                <p className="text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                                     <span className="font-semibold text-text-primary">Approval lock and branching.</span>{' '}
                                     An approved draft is hard-locked. To change it, you branch a new version
                                     that carries forward all content with full lineage. "Approved" stays a
                                     strong signal, and a draft cannot be approved while any unit is stale.
                                 </p>
                             </div>
-                            <div className="flex items-start gap-3 rounded-2xl border border-card-border bg-page-bg-alt p-5">
-                                <ScrollText className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                                <p
-                                    className="text-sm leading-relaxed text-text-secondary"
-                                    style={{ fontFamily: 'var(--font-body)' }}
-                                >
+                            <div className="border-l border-compliance-ink pl-5">
+                                <p className="text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                                     <span className="font-semibold text-text-primary">Mandatory reason-for-change.</span>{' '}
                                     Every revision carries a reason, system-filled for AI revisions,
                                     attorney-supplied for manual edits and restores. The field is never null.
@@ -608,45 +607,31 @@ export default function AiPatentDraftingPage() {
                 </Container>
             </section>
 
-            {/* ── 6. Confidence scores ── */}
+            {/* ── 6. Confidence scores ──
+                Intro across the top, then two equal-height columns: the four
+                points on the left and the reviewer's report on the right. The
+                grid's first row holds both, so they start and end level; the
+                figure caption sits in a second row under the report only. */}
             <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
                     <FadeIn>
-                        <div className="max-w-3xl">
-                            <SectionMark>Second-opinion review</SectionMark>
-                            <h2
-                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
-                                style={{ fontFamily: 'var(--font-display)' }}
-                            >
-                                A Separate Model Reviews the Draft
-                            </h2>
-                            <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
-                                After {GENERATION_MODEL} generates the draft, a background review runs{' '}
-                                {REVIEW_MODEL} as a judge over the claims, abstract, description, and
-                                novelty analysis, banding how well each unit is supported by the prior
-                                art on record so you can spend review time where it matters. The bands
-                                guide attorney attention; they are not a legal determination.
-                            </p>
-                        </div>
+                        <SectionMark>Second-opinion review</SectionMark>
+                        <h2 className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl [font-family:var(--font-display)]">
+                            A Separate Model Reviews the Draft
+                        </h2>
+                        <p className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                            After {GENERATION_MODEL} generates the draft, a background review runs{' '}
+                            {REVIEW_MODEL} as a judge over the claims, abstract, description, and
+                            novelty analysis, banding how well each unit is supported by the prior
+                            art on record so you can spend review time where it matters. The bands
+                            guide attorney attention; they are not a legal determination.
+                        </p>
                     </FadeIn>
 
-                    <FadeIn delay={0.05}>
-                        <div className="mt-8 flex flex-wrap gap-2.5">
-                            <ConfidenceBadge level="high" />
-                            <ConfidenceBadge level="medium" />
-                            <ConfidenceBadge level="low" />
-                        </div>
-                    </FadeIn>
-
-                    <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:mt-12">
-                        {CONFIDENCE.map((item, i) => (
-                            <FadeIn key={item.title} delay={i * 0.06}>
-                                <CapabilityCard {...item} />
-                            </FadeIn>
-                        ))}
+                    <div className="figure-group mt-12 grid gap-y-8 lg:mt-14 lg:grid-cols-2 lg:grid-rows-[1fr_auto] lg:gap-x-16 lg:gap-y-5">
+                        <RuledItemList items={CONFIDENCE} columns={1} className="lg:col-start-1 lg:row-start-1 lg:h-full lg:auto-rows-fr" />
+                        <ReviewReportFigure className="lg:col-start-2 lg:row-start-1 lg:h-full" />
+                        <FigureCaption className="lg:col-start-2 lg:row-start-2">Reviewer bands per draft unit</FigureCaption>
                     </div>
                 </Container>
             </section>
@@ -709,21 +694,32 @@ export default function AiPatentDraftingPage() {
                                 className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
-                                Five Permissions, Server-Enforced
+                                Who Can Generate, Edit, and Approve
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
-                                Frontend gating is defense-in-depth only. The token-costing draft:generate
-                                permission is deliberately separate from draft:write, so admins control who
-                                can trigger paid AI calls.
+                                Every permission is enforced on the server, not only hidden in the
+                                interface. Generating a draft uses paid AI capacity, so it is a separate
+                                permission from editing, and admins decide who can trigger it.
                             </p>
                         </div>
                     </FadeIn>
 
                     <FadeIn delay={0.05}>
-                        <div className="mt-10 overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm ring-1 ring-white/70 lg:mt-12">
+                        {/* Phones: one ruled block per action, naming the roles allowed */}
+                        <dl className="mt-10 border-t border-card-border sm:hidden">
+                            {RBAC_ROWS.map((row) => (
+                                <div key={row.action} className="border-b border-card-border py-3.5">
+                                    <dt className="text-sm font-semibold text-text-primary [font-family:var(--font-body)]">{row.action}</dt>
+                                    <dd className="mt-1 text-sm text-text-secondary [font-family:var(--font-body)]">
+                                        {rolesAllowed(row)}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+                        <div className="mt-10 hidden overflow-x-auto rounded-2xl border border-card-border bg-card-bg shadow-sm ring-1 ring-white/70 sm:block lg:mt-12">
                             <table className="w-full min-w-150 border-collapse text-left">
                                 <thead>
                                     <tr className="border-b border-card-border bg-white/60">
@@ -770,19 +766,12 @@ export default function AiPatentDraftingPage() {
             {/* ── 9. Attorney-in-the-loop + export ── */}
             <section className="bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
-                    <div className="mx-auto max-w-3xl text-center">
+                    <div className="max-w-4xl border-l border-primary pl-6 sm:pl-10">
                         <FadeIn>
-                            <UserCheck className="mx-auto h-9 w-9 text-primary" />
-                            <h2
-                                className="mt-5 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl"
-                                style={{ fontFamily: 'var(--font-display)' }}
-                            >
+                            <h2 className="text-3xl font-bold leading-tight tracking-tight text-text-primary [font-family:var(--font-display)] sm:text-4xl lg:text-5xl">
                                 The Attorney Is the Author. The AI Is the Assistant.
                             </h2>
-                            <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
-                                style={{ fontFamily: 'var(--font-body)' }}
-                            >
+                            <p className="mt-5 max-w-[40rem] text-lg leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                                 Every draft starts in DRAFT status and requires review before filing. The
                                 novelty analysis flags potential overlaps with the prior art, and per-claim
                                 refinement lets attorneys tighten one claim without re-running the whole
@@ -791,12 +780,11 @@ export default function AiPatentDraftingPage() {
                             </p>
                         </FadeIn>
                         <FadeIn delay={0.1}>
-                            <div className="mx-auto mt-7 inline-flex items-center gap-2.5 rounded-xl border border-card-border bg-card-bg px-5 py-3 text-left shadow-sm">
-                                <FileText className="h-5 w-5 shrink-0 text-primary" />
-                                <span
-                                    className="text-sm text-text-secondary"
-                                    style={{ fontFamily: 'var(--font-body)' }}
-                                >
+                            <div className="mt-8 flex max-w-[40rem] flex-col gap-1.5 border-t border-card-border pt-4 sm:flex-row sm:items-baseline sm:gap-4">
+                                <span className="shrink-0 text-base leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                    Export
+                                </span>
+                                <span className="text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                                     Completed drafts render to a formatted{' '}
                                     <span className="font-semibold text-text-primary">DOCX</span> from the
                                     structured claim tree, even on locked drafts, and each export is logged
@@ -820,7 +808,7 @@ export default function AiPatentDraftingPage() {
                                 AI Drafting Questions
                             </h2>
                             <p
-                                className="mt-4 text-lg leading-relaxed text-text-secondary"
+                                className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 What the assistant does, and where the attorney stays in control.
@@ -828,7 +816,7 @@ export default function AiPatentDraftingPage() {
                         </div>
                     </FadeIn>
                     <FadeIn delay={0.1}>
-                        <FaqAccordion items={PAGE_FAQ} />
+                        <FaqAccordion items={PAGE_FAQ} initialVisible={6} />
                     </FadeIn>
                 </Container>
             </section>
@@ -851,12 +839,12 @@ export default function AiPatentDraftingPage() {
                             references into your draft.
                         </p>
                         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-                            <BookDemoButton size="lg" className="w-full justify-center sm:w-auto">
+                            <BookDemoButton topic="AI patent drafting" size="lg" className="w-full justify-center sm:w-auto">
                                 Book a Demo
-                                <ArrowRight className="h-5 w-5" />
                             </BookDemoButton>
-                            <Button href={PATENT_SEARCH_PAGE_URL} variant="secondary" size="lg" className="w-full justify-center sm:w-auto">
+                            <Button href={PATENT_SEARCH_PAGE_URL} variant="link" size="lg" className="justify-center">
                                 Explore Patent Search
+                                <ArrowRight className="h-5 w-5" aria-hidden="true" />
                             </Button>
                         </div>
                         <Link
@@ -869,20 +857,12 @@ export default function AiPatentDraftingPage() {
                         </Link>
                     </div>
 
-                    {/* Professional-use notice. Kept on the conversion path, not
-                        buried in the footer, because it governs how the output
-                        of this product may be used. */}
-                    {/* <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-compliance/25 bg-compliance/[0.04] p-6 sm:p-7">
-                        <h3
-                            className="text-sm font-semibold text-text-primary"
-                            style={{ fontFamily: 'var(--font-display)' }}
-                        >
+                    {/* Professional-use notice: hidden pending attorney review of its wording. */}
+                    {/* <div className="mx-auto mt-12 max-w-3xl border-l border-compliance-ink pl-5 text-left sm:pl-6">
+                        <h3 className="text-sm font-semibold text-text-primary [font-family:var(--font-display)]">
                             Before you use a generated draft
                         </h3>
-                        <ul
-                            className="mt-3 flex flex-col gap-2 text-[13px] leading-relaxed text-text-secondary"
-                            style={{ fontFamily: 'var(--font-body)' }}
-                        >
+                        <ul className="mt-3 flex max-w-[33rem] flex-col gap-2 text-[13px] leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                             <li>
                                 AI-generated content may be incomplete or inaccurate and is not legal
                                 advice. A qualified patent professional must independently review all
@@ -909,90 +889,68 @@ export default function AiPatentDraftingPage() {
 
 /* ── Helpers ── */
 
-function PoweredByChip({ label, delay }: { label: string; delay: number }) {
+function JurisdictionRow({ jurisdiction }: { jurisdiction: Jurisdiction }) {
     return (
-        <span
-            className="group inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05]"
-            style={{ fontFamily: 'var(--font-mono)' }}
-        >
-            <span
-                className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary group-hover:animate-pulse"
-                style={{ animationDelay: `${delay}ms` }}
-            />
-            {label}
-        </span>
-    );
-}
-
-function WorkflowStep({
-    icon: Icon,
-    label,
-    delay,
-}: {
-    icon: React.ElementType;
-    label: string;
-    delay: number;
-}) {
-    return (
-        <span
-            className="group inline-flex items-center gap-2 rounded-full border border-card-border bg-card-bg px-3.5 py-2 text-xs font-semibold text-text-primary shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:text-primary hover:shadow-sm hover:shadow-primary/[0.05] sm:text-sm"
-            style={{ fontFamily: 'var(--font-body)' }}
-        >
-            <span
-                className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/[0.08] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:animate-pulse"
-                style={{ animationDelay: `${delay}ms` }}
-            >
-                <Icon className="h-3.5 w-3.5" />
-            </span>
-            {label}
-        </span>
-    );
-}
-
-function JurisdictionCard({ jurisdiction }: { jurisdiction: Jurisdiction }) {
-    return (
-        <article className="group relative flex h-full gap-4 overflow-hidden rounded-2xl border border-card-border bg-card-bg p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.05]">
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-0 h-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{
-                    background: `linear-gradient(to bottom, ${jurisdiction.color}14, transparent)`,
-                }}
-            />
-            <span
-                className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow-sm transition-transform duration-300 group-hover:scale-105"
-                style={{ backgroundColor: jurisdiction.color, fontFamily: 'var(--font-mono)' }}
-            >
+        <article className="grid grid-cols-[3.25rem_1fr] gap-x-4 py-6">
+            <span className="pt-1 text-lg font-semibold leading-none text-primary [font-family:var(--font-mono)]">
                 {jurisdiction.code}
             </span>
-            <div className="relative min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
-                    <h3
-                        className="text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"
-                        style={{ fontFamily: 'var(--font-display)' }}
-                    >
-                        {jurisdiction.authority}
-                    </h3>
-                    <span
-                        className="rounded-md px-2 py-0.5 text-[11px] font-semibold"
-                        style={{
-                            color: jurisdiction.color,
-                            backgroundColor: `${jurisdiction.color}14`,
-                            fontFamily: 'var(--font-mono)',
-                        }}
-                    >
-                        Rules applied
-                    </span>
-                </div>
-                <p
-                    className="mt-1.5 text-sm leading-relaxed text-text-secondary"
-                    style={{ fontFamily: 'var(--font-body)' }}
-                >
+            <div className="min-w-0">
+                <h3 className="text-lg font-semibold text-text-primary [font-family:var(--font-display)]">
+                    {jurisdiction.authority}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                     {jurisdiction.rules}
                 </p>
             </div>
         </article>
     );
+}
+
+/* Numbered capabilities as ruled rows, two columns from lg: the subsection
+   number, the title in the display face, the description, a hairline rule. */
+function RuledItemList({
+    items,
+    tone = 'primary',
+    columns = 2,
+    className = '',
+}: {
+    items: CardItem[];
+    tone?: 'primary' | 'compliance';
+    columns?: 1 | 2;
+    className?: string;
+}) {
+    return (
+        <ol className={`grid gap-x-12 border-t border-card-border ${columns === 2 ? 'lg:grid-cols-2' : ''} ${className}`}>
+            {items.map((item, i) => (
+                <li key={item.title} className="border-b border-card-border">
+                    <FadeIn delay={i * 0.05}>
+                        <div className="flex gap-4 py-6">
+                            <SubsectionNumber tone={tone} size="sm" className="w-9 shrink-0 pt-1" />
+                            <div className="min-w-0">
+                                <h3 className="text-lg font-semibold text-text-primary [font-family:var(--font-display)]">
+                                    {item.title}
+                                </h3>
+                                <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                    {item.description}
+                                </p>
+                            </div>
+                        </div>
+                    </FadeIn>
+                </li>
+            ))}
+        </ol>
+    );
+}
+
+function rolesAllowed(row: RbacRow): string {
+    const roles = [
+        row.admin && 'Admin',
+        row.attorney && 'Attorney',
+        row.paralegal && 'Paralegal',
+        row.readOnly && 'Read-only',
+    ].filter(Boolean);
+    return roles.length === 4 ? 'All roles' : roles.join(', ');
 }
 
 function CapabilityCard({
@@ -1081,20 +1039,16 @@ function SecurityCard({ title, description }: CardItem) {
 function CoverageCell({ value }: { value: string }) {
     if (value === 'yes') {
         return (
-            <span className="mx-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-success/10 text-success transition-transform duration-200 group-hover:scale-105">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-success/10 text-success transition-transform duration-200 group-hover:scale-105">
                 <Check className="h-4.5 w-4.5" aria-label="Available" />
             </span>
         );
     }
+    /* Plain text, no pill: darker shades so the words pass 4.5:1. */
     const isEpo = value === 'EPO';
     return (
-        <span
-            className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold transition-transform duration-200 group-hover:scale-105 ${
-                isEpo ? 'bg-success/10 text-success' : 'bg-compliance/10 text-compliance'
-            }`}
-            style={{ fontFamily: 'var(--font-mono)' }}
-        >
-            {value === 'EPO' ? 'via EPO' : 'Paste'}
+        <span className={`text-xs font-semibold [font-family:var(--font-mono)] ${isEpo ? 'text-emerald-700' : 'text-compliance-ink'}`}>
+            {isEpo ? 'via EPO' : 'Paste'}
         </span>
     );
 }
@@ -1111,18 +1065,64 @@ function RbacCell({ ok }: { ok: boolean }) {
     );
 }
 
-function ConfidenceBadge({ level }: { level: 'high' | 'medium' | 'low' }) {
+/* A support band as small caps over a coloured rule, not a filled pill. */
+/* FIG. 2: the reviewer's report for one illustrative draft (the same
+   adaptive sensor matter as the hero drawing). Each row is a draft unit with
+   its band and the evidence the rating cites, which is what the four points
+   beside it describe. Bands key sits in the footer. */
+const REVIEW_ROWS: { unit: string; level: 'high' | 'medium' | 'low'; evidence: string }[] = [
+    { unit: 'Claim 1', level: 'high', evidence: 'Supported by Ref. A, Smith ¶ [0031]' },
+    { unit: 'Claim 2', level: 'medium', evidence: 'Quoted: "adjusts the sampling interval"; partial support' },
+    { unit: 'Claim 3', level: 'high', evidence: 'Supported by Ref. B, Jones ¶ [0042]' },
+    { unit: 'Abstract', level: 'high', evidence: 'Matches claim 1 scope' },
+    { unit: 'Description', level: 'medium', evidence: 'Embodiment 2 has no cited support' },
+    { unit: 'Novelty analysis', level: 'low', evidence: 'Ref. A ¶ [0031] reads on the controller step' },
+];
+
+function ReviewReportFigure({ className = '' }: { className?: string }) {
+    return (
+        <div className={`flex flex-col overflow-hidden rounded-2xl border border-card-border bg-card-bg shadow-sm ${className}`}>
+            <div className="flex items-baseline justify-between gap-4 border-b border-card-border px-6 py-4">
+                <span className="text-base leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                    Reviewer report
+                </span>
+                <span className="text-xs text-text-secondary [font-family:var(--font-mono)]">Adaptive sensor system · v2</span>
+            </div>
+            {/* Rows share the card's height evenly, so the card can stretch to
+                match the list beside it. */}
+            <ul className="grid flex-1 auto-rows-fr">
+                {REVIEW_ROWS.map((row) => (
+                    <li key={row.unit} className="grid grid-cols-[minmax(0,8.5rem)_5.5rem_minmax(0,1fr)] content-center items-baseline gap-x-4 border-b border-card-border px-6 py-4 max-sm:grid-cols-[minmax(0,1fr)_auto] max-sm:gap-y-2">
+                        <span className="text-sm font-semibold text-text-primary [font-family:var(--font-display)]">{row.unit}</span>
+                        <span className="justify-self-start max-sm:justify-self-end">
+                            <ConfidenceBand level={row.level} />
+                        </span>
+                        <span className="text-sm leading-snug text-text-secondary [font-family:var(--font-body)] max-sm:col-span-2">{row.evidence}</span>
+                    </li>
+                ))}
+            </ul>
+            <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2 px-6 py-4">
+                <span className="text-sm leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                    Bands
+                </span>
+                <ConfidenceBand level="high" />
+                <ConfidenceBand level="medium" />
+                <ConfidenceBand level="low" />
+            </div>
+        </div>
+    );
+}
+
+function ConfidenceBand({ level }: { level: 'high' | 'medium' | 'low' }) {
     const map = {
-        high: { label: 'High', bg: 'bg-success/10', text: 'text-success', dot: 'bg-success' },
-        medium: { label: 'Medium', bg: 'bg-compliance/10', text: 'text-compliance', dot: 'bg-compliance' },
-        low: { label: 'Low', bg: 'bg-danger/10', text: 'text-danger', dot: 'bg-danger' },
+        high: { label: 'High', text: 'text-emerald-700', rule: 'border-success' },
+        medium: { label: 'Medium', text: 'text-compliance-ink', rule: 'border-compliance' },
+        low: { label: 'Low', text: 'text-red-700', rule: 'border-danger' },
     }[level];
     return (
         <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${map.bg} ${map.text}`}
-            style={{ fontFamily: 'var(--font-mono)' }}
+            className={`border-b-2 pb-1 text-base font-semibold leading-none tracking-[0.06em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] ${map.text} ${map.rule}`}
         >
-            <span className={`h-1.5 w-1.5 rounded-full ${map.dot}`} />
             {map.label}
         </span>
     );

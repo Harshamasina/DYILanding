@@ -1,30 +1,28 @@
-import { Clock, ShieldCheck, Calendar, Mail, MapPin } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { ContactForm } from '@/components/sections/ContactForm';
 import { WatchDemoLink } from '@/components/ui/WatchDemoLink';
 import { SectionMark } from '@/components/ui/SectionMark';
+import { RuledList, RuledItem } from '@/components/ui/RuledList';
 
+/* The response time lives in the contact details below, so it is not
+   repeated here. */
 const TRUST_SIGNALS = [
-    { icon: Calendar, text: '15-minute guided walkthrough' },
-    { icon: Clock, text: 'Response within 1 business day' },
-    { icon: ShieldCheck, text: 'Demo tailored to your patent workflow' },
+    '15-minute guided walkthrough',
+    'Demo tailored to your patent workflow',
 ];
 
-const CONTACT_INFO = [
+const CONTACT_INFO: { label: string; value: string; href?: string }[] = [
     {
-        icon: Mail,
         label: 'Email',
         value: 'sales@designyourinvention.com',
         href: 'mailto:sales@designyourinvention.com',
     },
     {
-        icon: MapPin,
         label: 'Headquarters',
         value: 'United States',
     },
     {
-        icon: Clock,
         label: 'Response Time',
         value: 'Within 1 business day',
     },
@@ -34,10 +32,11 @@ export function CtaSection() {
     return (
         <section id="contact" className="py-24 lg:py-32">
             <Container>
-                <div className="grid gap-16 lg:grid-cols-5 lg:gap-20">
-                    {/* Left Column — CTA copy + contact info */}
-                    <div className="lg:col-span-2">
-                        {/* Section Heading — tree branch anchor */}
+                <div className="grid grid-cols-1 gap-16 lg:grid-cols-5 lg:gap-20">
+                    {/* Left column: CTA copy and contact details. min-w-0 lets the
+                        grid track shrink below its content on phones. */}
+                    <div className="min-w-0 lg:col-span-2">
+                        {/* Section heading, tree branch anchor */}
                         <SectionMark id="tree-contact" className="mb-6">
                             Contact
                         </SectionMark>
@@ -67,79 +66,46 @@ export function CtaSection() {
                                 fold where the sticky pill is hidden, so it is
                                 the bottom-funnel watch-demo entry point. */}
                             <WatchDemoLink className="mt-6">
-                                Prefer to watch first? See the 2-minute demo
+                                Prefer to watch first? See the short demo (2:35)
                             </WatchDemoLink>
 
-                            {/* Trust Signals */}
-                            <div className="mt-8 flex flex-wrap gap-4">
+                            <RuledList label="The demo" className="mt-8">
                                 {TRUST_SIGNALS.map((signal) => (
-                                    <div
-                                        key={signal.text}
-                                        className="flex items-center gap-2 text-text-muted"
-                                    >
-                                        <signal.icon className="w-4 h-4" />
-                                        <span
-                                            className="text-sm"
-                                            style={{
-                                                fontFamily: 'var(--font-body)',
-                                            }}
-                                        >
-                                            {signal.text}
-                                        </span>
-                                    </div>
+                                    <RuledItem key={signal}>{signal}</RuledItem>
                                 ))}
-                            </div>
+                            </RuledList>
 
-                            {/* Contact Details */}
-                            <div className="mt-10 space-y-5">
+                            {/* Contact details: a plain definition list */}
+                            <dl className="mt-10 border-t border-card-border">
                                 {CONTACT_INFO.map((item) => (
                                     <div
                                         key={item.label}
-                                        className="flex items-start gap-4"
+                                        className="grid grid-cols-1 gap-y-1.5 border-b border-card-border py-3.5 sm:grid-cols-[8.5rem_1fr] sm:items-baseline sm:gap-x-4"
                                     >
-                                        <div className="shrink-0 w-10 h-10 rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 backdrop-blur-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(99,102,241,0.08)] flex items-center justify-center">
-                                            <item.icon className="w-5 h-5 text-primary" />
-                                        </div>
-                                        <div>
-                                            <p
-                                                className="text-xs font-bold uppercase tracking-widest text-text-muted mb-1"
-                                                style={{
-                                                    fontFamily:
-                                                        'var(--font-mono)',
-                                                }}
-                                            >
-                                                {item.label}
-                                            </p>
+                                        <dt className="text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                            {item.label}
+                                        </dt>
+                                        {/* Below sm the term sits above its value, so the email address keeps
+                                            the full column and never breaks mid-word. */}
+                                        <dd className="min-w-0 text-sm font-medium [font-family:var(--font-body)]">
                                             {item.href ? (
                                                 <a
                                                     href={item.href}
-                                                    className="text-sm font-medium text-primary hover:text-primary-dark transition-colors"
-                                                    style={{
-                                                        fontFamily:
-                                                            'var(--font-body)',
-                                                    }}
+                                                    className="-my-3 inline-block py-3 text-primary underline decoration-primary/30 underline-offset-4 transition-colors hover:text-primary-dark hover:decoration-primary"
                                                 >
                                                     {item.value}
                                                 </a>
                                             ) : (
-                                                <p
-                                                    className="text-sm font-medium text-text-primary"
-                                                    style={{
-                                                        fontFamily:
-                                                            'var(--font-body)',
-                                                    }}
-                                                >
-                                                    {item.value}
-                                                </p>
+                                                <span className="text-text-primary">{item.value}</span>
                                             )}
-                                        </div>
+                                        </dd>
                                     </div>
                                 ))}
-                            </div>
+                            </dl>
                         </FadeIn>
                     </div>
 
-                    {/* Right Column — Contact Form
+                    {/* Right column: contact form
                         h-full chain (column → FadeIn → card div) makes the
                         white card stretch to match the left column's height
                         instead of collapsing around the form content. */}
@@ -149,7 +115,7 @@ export function CtaSection() {
                             delay={0.15}
                             className="lg:h-full"
                         >
-                            <div className="rounded-2xl border border-card-border bg-card-bg p-8 lg:p-10 shadow-lg shadow-black/5 lg:h-full">
+                            <div className="rounded-2xl border border-card-border bg-card-bg p-5 sm:p-8 lg:p-10 shadow-lg shadow-black/5 lg:h-full">
                                 <ContactForm />
                             </div>
                         </FadeIn>

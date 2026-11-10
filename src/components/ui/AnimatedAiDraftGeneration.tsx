@@ -1,18 +1,18 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useReducedMotion } from 'framer-motion';
+import { MockupRecordLabel } from './BrowserMockupChrome';
 
 /* ── Animated AI Draft Generation mockup ──
    Three-column workspace: Draft Workspace sidebar | Main panel | Review panel.
-   Phase machine cycles:
-     idle (0)      everything hidden
-     sidebar (600) sidebar items stagger in
-     claims (1800) Claim 1 selected, claim tree + review populate
-     menu (5000)   3-dot menu opens on Claim 1
-     claims (6800) menu closes, back to claims view
-     desc (7800)   sidebar selection moves to Description, content swaps
-     fadeout (12000) everything fades
-     reset (13000) idle, loop at 13800ms.
+   Phase machine cycles, never through an empty workspace:
+     claims (0)      Claim 1 selected, claim tree + review populated
+     menu (3200)     3-dot menu opens on Claim 1
+     claims (5000)   menu closes, back to claims view
+     desc (6000)     sidebar selection moves to Description, content swaps
+     loop (10800)    back to claims, which is also the first and the
+                     reduced-motion frame.
 */
 
 interface SidebarItem {
@@ -179,14 +179,10 @@ const MENU_ITEMS: MenuItem[] = [
 const TOP_TABS = ['Review', 'History'];
 
 /* ── Timings (ms) ── */
-const T_SIDEBAR = 600;
-const T_CLAIMS = 1800;
-const T_MENU_OPEN = 5000;
-const T_MENU_CLOSE = 6800;
-const T_DESCRIPTION = 7800;
-const T_FADEOUT = 12000;
-const T_RESET = 13000;
-const T_LOOP = 13800;
+const T_MENU_OPEN = 3200;
+const T_MENU_CLOSE = 5000;
+const T_DESCRIPTION = 6000;
+const T_LOOP = 10800;
 
 const MOCKUP_HEIGHT = 'h-[440px] sm:h-[480px] lg:h-[520px]';
 
@@ -224,29 +220,28 @@ function SidebarIcon({ id, active }: { id: string; active: boolean }) {
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 export function AnimatedAiDraftGeneration() {
-    const [phase, setPhase] = useState<Phase>('idle');
+    /* Opens on the populated claims view; with reduced motion it stays there. */
+    const [phase, setPhase] = useState<Phase>('claims');
+    const reduceMotion = useReducedMotion();
 
     const runCycle = useCallback(() => {
-        setPhase('idle');
+        setPhase('claims');
         const timers: ReturnType<typeof setTimeout>[] = [];
-        timers.push(setTimeout(() => setPhase('sidebar'), T_SIDEBAR));
-        timers.push(setTimeout(() => setPhase('claims'), T_CLAIMS));
         timers.push(setTimeout(() => setPhase('menu'), T_MENU_OPEN));
         timers.push(setTimeout(() => setPhase('claims'), T_MENU_CLOSE));
         timers.push(setTimeout(() => setPhase('description'), T_DESCRIPTION));
-        timers.push(setTimeout(() => setPhase('fadeout'), T_FADEOUT));
-        timers.push(setTimeout(() => setPhase('idle'), T_RESET));
         return timers;
     }, []);
 
     useEffect(() => {
+        if (reduceMotion) return;
         let timers = runCycle();
         const interval = setInterval(() => {
             timers.forEach(clearTimeout);
             timers = runCycle();
         }, T_LOOP);
         return () => { timers.forEach(clearTimeout); clearInterval(interval); };
-    }, [runCycle]);
+    }, [runCycle, reduceMotion]);
 
     /* ── Derived ── */
     const visible = phase !== 'idle' && phase !== 'fadeout';
@@ -265,18 +260,13 @@ export function AnimatedAiDraftGeneration() {
         >
             {/* ── Chrome Bar ── */}
             <div className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-white border-b border-card-border shrink-0">
-                <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#FF5F57]" />
-                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#FFBD2E]" />
-                    <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#28C840]" />
-                </div>
-                <div className="flex-1 flex justify-center">
-                    <div className="flex items-center gap-1 px-2 sm:px-3 py-0.5 bg-page-bg-alt rounded-md text-[7px] sm:text-[10px] text-text-muted border border-card-border" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                <MockupRecordLabel record="DEMO-COMP-001" screen="AI draft" />
+                <div className="hidden sm:flex flex-1 min-w-0 justify-end">
+                    <div className="flex items-center gap-1 px-2 sm:px-3 py-0.5 bg-page-bg-alt rounded-md text-[10px] sm:text-[10px] text-text-muted border border-card-border" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                         <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-success hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                         app.designyourinvention.com
                     </div>
                 </div>
-                <div className="w-6 sm:w-10" />
             </div>
 
             {/* ── Workspace Header — single row with full action set ── */}
@@ -285,33 +275,33 @@ export function AnimatedAiDraftGeneration() {
                     <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-text-muted shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H18a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
                     </svg>
-                    <span className="text-[7px] sm:text-[10px] font-bold text-text-primary truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                    <span className="text-[10px] sm:text-[10px] font-bold text-text-primary truncate" style={{ fontFamily: 'var(--font-dashboard)' }}>
                         DEMO-COMP-001 &middot; Privacy-Preserving Federated Learning
                     </span>
                 </div>
                 <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
                     {/* v2 · US dropdown */}
-                    <span className="hidden sm:inline-flex items-center gap-0.5 text-[6px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 sm:py-1 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                    <span className="hidden sm:inline-flex items-center gap-0.5 text-[10px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 sm:py-1 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                         <svg className="w-1.5 h-1.5 sm:w-2 sm:h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7v10m0-10a3 3 0 100-6 3 3 0 000 6zm0 10a3 3 0 100 6 3 3 0 000-6zm8-7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                         v2 &middot; US
                         <svg className="w-1.5 h-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                     </span>
                     {/* + New Draft */}
-                    <span className="hidden lg:inline-flex items-center gap-0.5 text-[6px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 sm:py-1 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                    <span className="hidden lg:inline-flex items-center gap-0.5 text-[10px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 sm:py-1 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
                         <svg className="w-1.5 h-1.5 sm:w-2 sm:h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
                         New Draft
                     </span>
                     {/* Generate AI Draft (purple) */}
-                    <span className="inline-flex items-center gap-0.5 sm:gap-1 text-[6px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-semibold text-white shadow-sm" style={{ fontFamily: 'var(--font-dashboard)', background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' }}>
+                    <span className="inline-flex items-center gap-0.5 sm:gap-1 text-[10px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded font-semibold text-white shadow-sm" style={{ fontFamily: 'var(--font-dashboard)', background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' }}>
                         <svg className="w-1.5 h-1.5 sm:w-2 sm:h-2" fill="currentColor" viewBox="0 0 24 24"><path d="M11.3 1.046a1 1 0 011.4 0l1.42 1.42a1 1 0 00.7.293h2.013a1 1 0 011 1V5.77a1 1 0 00.293.707l1.42 1.42a1 1 0 010 1.414l-1.42 1.42a1 1 0 00-.293.707v2.013a1 1 0 01-1 1H14.82a1 1 0 00-.707.293l-1.42 1.42a1 1 0 01-1.414 0l-1.42-1.42a1 1 0 00-.707-.293H7.139a1 1 0 01-1-1V12.43a1 1 0 00-.293-.707l-1.42-1.42a1 1 0 010-1.414l1.42-1.42a1 1 0 00.293-.707V4.759a1 1 0 011-1h2.013a1 1 0 00.707-.293l1.44-1.42z" /></svg>
                         Generate AI Draft
                     </span>
                     {/* Submit for Review */}
-                    <span className="hidden lg:inline-flex items-center text-[6px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 sm:py-1 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                    <span className="hidden lg:inline-flex items-center text-[10px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 sm:py-1 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
                         Submit for Review
                     </span>
                     {/* Export DOCX */}
-                    <span className="hidden md:inline-flex items-center gap-0.5 text-[6px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 sm:py-1 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                    <span className="hidden md:inline-flex items-center gap-0.5 text-[10px] sm:text-[8px] px-1 sm:px-1.5 py-0.5 sm:py-1 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
                         <svg className="w-1.5 h-1.5 sm:w-2 sm:h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                         Export DOCX
                     </span>
@@ -326,10 +316,12 @@ export function AnimatedAiDraftGeneration() {
             <div className="flex flex-row flex-1 min-h-0 overflow-hidden gap-2 sm:gap-2.5 p-2 sm:p-2.5 bg-[#e9ecf1]">
 
                 {/* ─── Left Card — Draft Workspace ─── */}
-                <div className="flex flex-col bg-white border border-card-border rounded-lg shadow-md shadow-black/8 shrink-0 overflow-hidden w-20 sm:w-26 lg:w-32">
+                {/* Hidden on phones so the main panel gets the width and its
+                    text can stay readable; the unit list returns from sm. */}
+                <div className="hidden sm:flex flex-col bg-white border border-card-border rounded-lg shadow-md shadow-black/8 shrink-0 overflow-hidden w-20 sm:w-26 lg:w-32">
                     <div className="px-2 sm:px-2.5 py-2 border-b border-card-border/60 shrink-0">
-                        <p className="text-[8px] sm:text-[10px] font-bold text-text-primary leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>Draft Workspace</p>
-                        <p className="text-[6px] sm:text-[8px] text-text-muted mt-0.5 leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>Select a unit to review.</p>
+                        <p className="text-[10px] sm:text-[10px] font-bold text-text-primary leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>Draft Workspace</p>
+                        <p className="text-[10px] sm:text-[8px] text-text-muted mt-0.5 leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>Select a unit to review.</p>
                     </div>
                     <div className="flex-1 overflow-hidden py-1 relative">
                         {/* Idle placeholder */}
@@ -340,7 +332,7 @@ export function AnimatedAiDraftGeneration() {
                             <svg className="w-4 h-4 sm:w-5 sm:h-5 text-text-muted/30 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            <p className="text-[6px] sm:text-[8px] text-text-muted/50 text-center leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                            <p className="text-[10px] sm:text-[8px] text-text-muted/50 text-center leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                 Workspace
                             </p>
                         </div>
@@ -359,13 +351,13 @@ export function AnimatedAiDraftGeneration() {
                                 >
                                     <SidebarIcon id={item.id} active={isSelected} />
                                     <span
-                                        className={`text-[7px] sm:text-[9px] font-medium leading-none truncate flex-1 ${isSelected ? 'text-primary' : 'text-text-primary'}`}
+                                        className={`text-[10px] sm:text-[9px] font-medium leading-none truncate flex-1 ${isSelected ? 'text-primary' : 'text-text-primary'}`}
                                         style={{ fontFamily: 'var(--font-dashboard)' }}
                                     >
                                         {item.label}{item.count !== undefined ? ` · ${item.count}` : ''}
                                     </span>
                                     {item.badge && (
-                                        <span className="hidden sm:inline-block text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none shrink-0" style={{ backgroundColor: item.badgeBg, color: item.badgeColor }}>
+                                        <span className="hidden sm:inline-block text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none shrink-0" style={{ backgroundColor: item.badgeBg, color: item.badgeColor }}>
                                             {item.badge}
                                         </span>
                                     )}
@@ -381,10 +373,10 @@ export function AnimatedAiDraftGeneration() {
                     >
                         <div className="flex items-center gap-1 mb-1">
                             <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-primary shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M11.3 1.046a1 1 0 011.4 0l1.42 1.42a1 1 0 00.7.293h2.013a1 1 0 011 1V5.77a1 1 0 00.293.707l1.42 1.42a1 1 0 010 1.414l-1.42 1.42a1 1 0 00-.293.707v2.013a1 1 0 01-1 1H14.82a1 1 0 00-.707.293l-1.42 1.42a1 1 0 01-1.414 0l-1.42-1.42a1 1 0 00-.707-.293H7.139a1 1 0 01-1-1V12.43a1 1 0 00-.293-.707l-1.42-1.42a1 1 0 010-1.414l1.42-1.42a1 1 0 00.293-.707V4.759a1 1 0 011-1h2.013a1 1 0 00.707-.293l1.44-1.42z" /></svg>
-                            <span className="text-[6px] sm:text-[8px] font-bold text-text-primary leading-none" style={{ fontFamily: 'var(--font-dashboard)' }}>AI Review</span>
+                            <span className="text-[10px] sm:text-[8px] font-bold text-text-primary leading-none" style={{ fontFamily: 'var(--font-dashboard)' }}>AI Review</span>
                         </div>
-                        <p className="text-[5px] sm:text-[7px] text-text-muted leading-tight mb-1" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>Last run 2h ago</p>
-                        <span className="hidden sm:inline-flex items-center text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none" style={{ backgroundColor: '#fef3c7', color: '#d97706' }}>Medium</span>
+                        <p className="text-[10px] sm:text-[7px] text-text-muted leading-tight mb-1" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>Last run 2h ago</p>
+                        <span className="hidden sm:inline-flex items-center text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none" style={{ backgroundColor: '#fef3c7', color: '#d97706' }}>Medium</span>
                     </div>
                 </div>
 
@@ -399,10 +391,10 @@ export function AnimatedAiDraftGeneration() {
                         <svg className="w-10 h-10 sm:w-12 sm:h-12 text-primary/40 mb-2" fill="currentColor" viewBox="0 0 24 24">
                             <path fillRule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 008.279 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036a2.63 2.63 0 001.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258a2.63 2.63 0 00-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.63 2.63 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.63 2.63 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0116.5 15z" clipRule="evenodd" />
                         </svg>
-                        <p className="text-[9px] sm:text-[12px] font-semibold text-text-secondary/70 text-center" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <p className="text-[10px] sm:text-[12px] font-semibold text-text-secondary/70 text-center" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             AI Drafting Patent
                         </p>
-                        <p className="mt-0.5 text-[7px] sm:text-[9px] text-text-muted/50 text-center leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                        <p className="mt-0.5 text-[10px] sm:text-[9px] text-text-muted/50 text-center leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>
                             Generating draft workspace
                         </p>
                     </div>
@@ -416,16 +408,16 @@ export function AnimatedAiDraftGeneration() {
                             {/* Toolbar */}
                             <div className="px-2.5 sm:px-3 pt-2 pb-1.5 flex items-center justify-between gap-2 shrink-0">
                                 <div className="flex items-center gap-1">
-                                    <span className="inline-flex items-center gap-0.5 text-[6px] sm:text-[8px] px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                                    <span className="inline-flex items-center gap-0.5 text-[10px] sm:text-[8px] px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                         <svg className="w-1.5 h-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
                                         Add claim
                                     </span>
-                                    <span className="inline-flex items-center gap-0.5 text-[6px] sm:text-[8px] px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                                    <span className="inline-flex items-center gap-0.5 text-[10px] sm:text-[8px] px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                         <svg className="w-1.5 h-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
                                         Reorder
                                     </span>
                                 </div>
-                                <span className="inline-flex items-center gap-0.5 text-[6px] sm:text-[8px] px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                                <span className="inline-flex items-center gap-0.5 text-[10px] sm:text-[8px] px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                     All
                                     <svg className="w-1.5 h-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                                 </span>
@@ -502,11 +494,11 @@ export function AnimatedAiDraftGeneration() {
                         >
                             <div className="px-2.5 sm:px-3 pt-2 pb-1.5 flex items-center justify-between gap-2 shrink-0">
                                 <div className="flex items-center gap-1">
-                                    <span className="text-[8px] sm:text-[11px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Description</span>
-                                    <span className="text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold" style={{ backgroundColor: '#d1fae5', color: '#059669' }}>High</span>
-                                    <span className="text-[5px] sm:text-[7px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>v3</span>
+                                    <span className="text-[10px] sm:text-[11px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Description</span>
+                                    <span className="text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold" style={{ backgroundColor: '#d1fae5', color: '#059669' }}>High</span>
+                                    <span className="text-[10px] sm:text-[7px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>v3</span>
                                 </div>
-                                <span className="inline-flex items-center gap-0.5 text-[6px] sm:text-[8px] px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                                <span className="inline-flex items-center gap-0.5 text-[10px] sm:text-[8px] px-1.5 py-0.5 rounded border border-card-border bg-white text-text-secondary font-medium" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                     <svg className="w-2 h-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                                     Rescore all
                                 </span>
@@ -522,23 +514,23 @@ export function AnimatedAiDraftGeneration() {
                                         >
                                             <div className="flex items-center justify-between gap-1 mb-1 flex-wrap">
                                                 <div className="flex items-center gap-1 flex-wrap min-w-0">
-                                                    <span className="text-[6px] sm:text-[8px] font-bold uppercase tracking-wider text-text-primary leading-none" style={{ fontFamily: 'var(--font-dashboard)' }}>{sec.name}</span>
+                                                    <span className="text-[10px] sm:text-[8px] font-bold uppercase tracking-wider text-text-primary leading-none" style={{ fontFamily: 'var(--font-dashboard)' }}>{sec.name}</span>
                                                     {sec.confidence && (
-                                                        <span className="text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none" style={{ backgroundColor: sec.confBg, color: sec.confColor }}>{sec.confidence}</span>
+                                                        <span className="text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none" style={{ backgroundColor: sec.confBg, color: sec.confColor }}>{sec.confidence}</span>
                                                     )}
-                                                    <span className="text-[5px] sm:text-[7px] text-text-muted leading-none" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{sec.version}</span>
+                                                    <span className="text-[10px] sm:text-[7px] text-text-muted leading-none" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{sec.version}</span>
                                                 </div>
                                                 <div className="flex items-center gap-0.5 shrink-0">
-                                                    <span className="inline-flex items-center gap-0.5 text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold text-white" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' }}>
+                                                    <span className="inline-flex items-center gap-0.5 text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold text-white" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' }}>
                                                         <svg className="w-1.5 h-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                                                         Refine
                                                     </span>
                                                     <svg className="w-1.5 h-1.5 sm:w-2 sm:h-2 text-text-muted" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="12" cy="19" r="1.5" /></svg>
                                                 </div>
                                             </div>
-                                            <p className="text-[6px] sm:text-[8px] font-bold text-text-primary mb-0.5" style={{ fontFamily: 'var(--font-dashboard)' }}>{sec.heading}</p>
+                                            <p className="text-[10px] sm:text-[8px] font-bold text-text-primary mb-0.5" style={{ fontFamily: 'var(--font-dashboard)' }}>{sec.heading}</p>
                                             <p
-                                                className="text-[5px] sm:text-[7px] text-text-secondary leading-relaxed"
+                                                className="text-[10px] sm:text-[7px] text-text-secondary leading-relaxed"
                                                 style={{
                                                     fontFamily: 'var(--font-dashboard)',
                                                     display: '-webkit-box',
@@ -552,12 +544,12 @@ export function AnimatedAiDraftGeneration() {
                                 </div>
                                 {/* On This Section */}
                                 <div className="hidden lg:block w-22 shrink-0 pt-1">
-                                    <p className="text-[7px] font-bold uppercase tracking-wider text-text-muted mb-1" style={{ fontFamily: 'var(--font-dashboard)' }}>On This Section</p>
+                                    <p className="text-[10px] sm:text-[7px] font-bold uppercase tracking-wider text-text-muted mb-1" style={{ fontFamily: 'var(--font-dashboard)' }}>On This Section</p>
                                     <div className="space-y-1">
                                         {ON_THIS_SECTION.map((s, i) => (
                                             <p
                                                 key={s}
-                                                className={`text-[8px] leading-tight ${i < 2 ? 'text-primary font-medium' : 'text-text-muted'}`}
+                                                className={`text-[10px] sm:text-[8px] leading-tight ${i < 2 ? 'text-primary font-medium' : 'text-text-muted'}`}
                                                 style={{ fontFamily: 'var(--font-dashboard)' }}
                                             >{s}</p>
                                         ))}
@@ -580,7 +572,7 @@ export function AnimatedAiDraftGeneration() {
                         {TOP_TABS.map((t, i) => (
                             <span
                                 key={t}
-                                className={`text-[7px] sm:text-[9px] pb-1.5 border-b-2 ${i === 0 ? 'text-primary border-primary font-semibold' : 'text-text-muted border-transparent'}`}
+                                className={`text-[10px] sm:text-[9px] pb-1.5 border-b-2 ${i === 0 ? 'text-primary border-primary font-semibold' : 'text-text-muted border-transparent'}`}
                                 style={{ fontFamily: 'var(--font-dashboard)' }}
                             >{t}</span>
                         ))}
@@ -594,20 +586,20 @@ export function AnimatedAiDraftGeneration() {
                             <svg className="w-4 h-4 sm:w-5 sm:h-5 text-text-muted/30 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                             </svg>
-                            <p className="text-[6px] sm:text-[8px] text-text-muted/50 text-center leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                            <p className="text-[10px] sm:text-[8px] text-text-muted/50 text-center leading-tight" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                 AI Review
                             </p>
                         </div>
                         {phase !== 'idle' && (
                             <div className="absolute inset-0 p-2 sm:p-2.5 transition-opacity duration-500" style={{ opacity: (showClaims || showMenu) ? 1 : 0 }}>
                                 <div className="flex items-center gap-1 mb-1">
-                                    <span className="text-[7px] sm:text-[9px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Claim 1</span>
-                                    <span className="text-[5px] sm:text-[7px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>v1</span>
+                                    <span className="text-[10px] sm:text-[9px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Claim 1</span>
+                                    <span className="text-[10px] sm:text-[7px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>v1</span>
                                 </div>
-                                <span className="inline-block text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold" style={{ backgroundColor: '#fef3c7', color: '#d97706' }}>Medium</span>
-                                <p className="mt-1.5 text-[6px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Rationale</p>
+                                <span className="inline-block text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold" style={{ backgroundColor: '#fef3c7', color: '#d97706' }}>Medium</span>
+                                <p className="mt-1.5 text-[10px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Rationale</p>
                                 <p
-                                    className="mt-0.5 text-[5px] sm:text-[7px] text-text-secondary leading-relaxed"
+                                    className="mt-0.5 text-[10px] sm:text-[7px] text-text-secondary leading-relaxed"
                                     style={{
                                         fontFamily: 'var(--font-dashboard)',
                                         display: '-webkit-box',
@@ -616,10 +608,10 @@ export function AnimatedAiDraftGeneration() {
                                         overflow: 'hidden',
                                     }}
                                 >Recites the core distinguishing limitations (regulatory-regime noise floor, multiplicative trust weight, cross-campaign reliability) per the novelty analysis. Tightly constrained but resists Refs 1+2 combination.</p>
-                                <p className="mt-1.5 text-[6px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Concerns</p>
+                                <p className="mt-1.5 text-[10px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Concerns</p>
                                 <div className="mt-1 bg-page-bg-alt rounded border border-card-border p-1 sm:p-1.5">
                                     <p
-                                        className="text-[5px] sm:text-[7px] text-text-secondary leading-relaxed"
+                                        className="text-[10px] sm:text-[7px] text-text-secondary leading-relaxed"
                                         style={{
                                             fontFamily: 'var(--font-dashboard)',
                                             display: '-webkit-box',
@@ -629,8 +621,8 @@ export function AnimatedAiDraftGeneration() {
                                         }}
                                     >1. Length and integration of multiple novel features creates narrow scope; consider whether a narrower-element fallback independent claim is warranted.</p>
                                 </div>
-                                <p className="mt-1.5 text-[6px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Suggestions</p>
-                                <ul className="mt-1 space-y-0.5 text-[5px] sm:text-[7px] text-text-secondary leading-relaxed" style={{ fontFamily: 'var(--font-dashboard)' }}>
+                                <p className="mt-1.5 text-[10px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Suggestions</p>
+                                <ul className="mt-1 space-y-0.5 text-[10px] sm:text-[7px] text-text-secondary leading-relaxed" style={{ fontFamily: 'var(--font-dashboard)' }}>
                                     <li className="flex items-start gap-1"><span className="text-primary shrink-0">·</span><span>Add narrower fallback dependent claim limiting noise floor by jurisdiction.</span></li>
                                     <li className="flex items-start gap-1"><span className="text-primary shrink-0">·</span><span>Cite WO2025/048712 to distinguish trust-weighting approach.</span></li>
                                 </ul>
@@ -638,10 +630,10 @@ export function AnimatedAiDraftGeneration() {
                         )}
                         {phase !== 'idle' && (
                             <div className="absolute inset-0 p-2 sm:p-2.5 transition-opacity duration-500" style={{ opacity: showDescription ? 1 : 0 }}>
-                                <span className="inline-block text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold" style={{ backgroundColor: '#d1fae5', color: '#059669' }}>High</span>
-                                <p className="mt-1.5 text-[6px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Rationale</p>
+                                <span className="inline-block text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold" style={{ backgroundColor: '#d1fae5', color: '#059669' }}>High</span>
+                                <p className="mt-1.5 text-[10px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Rationale</p>
                                 <p
-                                    className="mt-0.5 text-[5px] sm:text-[7px] text-text-secondary leading-relaxed"
+                                    className="mt-0.5 text-[10px] sm:text-[7px] text-text-secondary leading-relaxed"
                                     style={{
                                         fontFamily: 'var(--font-dashboard)',
                                         display: '-webkit-box',
@@ -650,19 +642,19 @@ export function AnimatedAiDraftGeneration() {
                                         overflow: 'hidden',
                                     }}
                                 >Field statement is concise, properly scoped to distributed ML and federated learning, and identifies the specific technical problems (privacy budget, trust calibration, jurisdiction routing) addressed by the claims.</p>
-                                <p className="mt-1.5 text-[6px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Concerns</p>
-                                <p className="mt-1 text-[5px] sm:text-[7px] text-text-muted italic" style={{ fontFamily: 'var(--font-dashboard)' }}>No concerns recorded.</p>
-                                <p className="mt-1.5 text-[6px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Coverage</p>
+                                <p className="mt-1.5 text-[10px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Concerns</p>
+                                <p className="mt-1 text-[10px] sm:text-[7px] text-text-muted italic" style={{ fontFamily: 'var(--font-dashboard)' }}>No concerns recorded.</p>
+                                <p className="mt-1.5 text-[10px] sm:text-[8px] font-bold text-text-primary" style={{ fontFamily: 'var(--font-dashboard)' }}>Coverage</p>
                                 <div className="mt-1 space-y-1">
-                                    <div className="flex items-center justify-between text-[5px] sm:text-[7px]" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                                    <div className="flex items-center justify-between text-[10px] sm:text-[7px]" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                         <span className="text-text-muted">Word count</span>
                                         <span className="text-text-primary font-semibold">1,842</span>
                                     </div>
-                                    <div className="flex items-center justify-between text-[5px] sm:text-[7px]" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                                    <div className="flex items-center justify-between text-[10px] sm:text-[7px]" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                         <span className="text-text-muted">Sections</span>
                                         <span className="text-text-primary font-semibold">5 / 5</span>
                                     </div>
-                                    <div className="flex items-center justify-between text-[5px] sm:text-[7px]" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                                    <div className="flex items-center justify-between text-[10px] sm:text-[7px]" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                         <span className="text-text-muted">Last AI run</span>
                                         <span className="text-text-primary font-semibold">2h ago</span>
                                     </div>
@@ -686,16 +678,16 @@ function ClaimCard({ claim, selected = false }: { claim: ClaimData; selected?: b
         >
             <div className="flex items-start justify-between gap-1.5">
                 <div className="flex items-center gap-1 flex-wrap min-w-0">
-                    <span className="text-[6px] sm:text-[8px] font-bold text-text-primary leading-none" style={{ fontFamily: 'var(--font-dashboard)' }}>Claim {claim.number}</span>
-                    <span className="text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none" style={{ backgroundColor: claim.typeBg, color: claim.typeColor }}>{claim.type}</span>
+                    <span className="text-[10px] sm:text-[8px] font-bold text-text-primary leading-none" style={{ fontFamily: 'var(--font-dashboard)' }}>Claim {claim.number}</span>
+                    <span className="text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none" style={{ backgroundColor: claim.typeBg, color: claim.typeColor }}>{claim.type}</span>
                     {claim.dependsOn && (
-                        <span className="hidden sm:inline text-[7px] text-text-muted leading-none" style={{ fontFamily: 'var(--font-dashboard)' }}>depends on Claim {claim.dependsOn}</span>
+                        <span className="hidden sm:inline text-[10px] sm:text-[7px] text-text-muted leading-none" style={{ fontFamily: 'var(--font-dashboard)' }}>depends on Claim {claim.dependsOn}</span>
                     )}
-                    <span className="text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none" style={{ backgroundColor: claim.confBg, color: claim.confColor }}>{claim.confidence}</span>
-                    <span className="text-[5px] sm:text-[7px] text-text-muted leading-none" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>v1</span>
+                    <span className="text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold leading-none" style={{ backgroundColor: claim.confBg, color: claim.confColor }}>{claim.confidence}</span>
+                    <span className="text-[10px] sm:text-[7px] text-text-muted leading-none" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>v1</span>
                 </div>
                 <div className="flex items-center gap-0.5 shrink-0">
-                    <span className="inline-flex items-center gap-0.5 text-[5px] sm:text-[7px] px-1 py-0.5 rounded font-semibold text-white" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' }}>
+                    <span className="inline-flex items-center gap-0.5 text-[10px] sm:text-[7px] px-1 py-0.5 rounded font-semibold text-white" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' }}>
                         <svg className="w-1.5 h-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         Refine
                     </span>
@@ -704,7 +696,7 @@ function ClaimCard({ claim, selected = false }: { claim: ClaimData; selected?: b
                 </div>
             </div>
             <p
-                className="text-[6px] sm:text-[8px] text-text-secondary leading-relaxed mt-1"
+                className="text-[10px] sm:text-[8px] text-text-secondary leading-relaxed mt-1"
                 style={{
                     fontFamily: 'var(--font-dashboard)',
                     display: '-webkit-box',
@@ -726,7 +718,7 @@ function KebabMenu() {
             {MENU_ITEMS.map((m) => (
                 <div
                     key={m.label}
-                    className="flex items-center gap-1.5 px-1.5 sm:px-2 py-1 sm:py-1.5 text-[6px] sm:text-[8px] hover:bg-page-bg-alt"
+                    className="flex items-center gap-1.5 px-1.5 sm:px-2 py-1 sm:py-1.5 text-[10px] sm:text-[8px] hover:bg-page-bg-alt"
                     style={{ fontFamily: 'var(--font-dashboard)' }}
                 >
                     <span className={m.danger ? 'text-danger' : 'text-text-secondary'}>

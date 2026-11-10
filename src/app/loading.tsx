@@ -53,10 +53,7 @@ export default function Loading() {
             <Container>
                 <div className="flex min-h-[calc(100vh-9rem)] items-center justify-center">
                     <div className="w-full max-w-3xl text-center">
-                        <div
-                            className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
+                        <div className="inline-flex items-center gap-2 text-base text-primary leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                             <LoadingGlyph />
                             Loading
                         </div>

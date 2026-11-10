@@ -126,15 +126,15 @@ function FeatureRowBlock({ row, index }: { row: FeatureRow; index: number }) {
                 <DeferredMount
                     className={
                         row.mockup === 'families'
-                            ? 'w-full h-[440px] sm:h-[480px] lg:h-[520px]'
-                            : 'w-full h-[520px] sm:h-[540px] lg:h-[560px]'
+                            ? 'relative w-full h-[440px] sm:h-[480px] lg:h-[520px]'
+                            : 'relative w-full h-[520px] sm:h-[540px] lg:h-[560px]'
                     }
                 >
                     <MockupHalo>
                         {row.mockup === 'families' ? <AnimatedFamiliesTable /> : <AnimatedCalendar />}
                     </MockupHalo>
                 </DeferredMount>
-                <FigureCaption className="mt-5">{row.caption}</FigureCaption>
+                <FigureCaption references={row.features.length} className="mt-5">{row.caption}</FigureCaption>
             </div>
         </FadeIn>
     );
@@ -190,11 +190,11 @@ export function FeaturesSection() {
                             </span>
                         </h2>
                         <p
-                            className="mt-4 text-lg text-text-secondary leading-relaxed"
+                            className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             Design Your Invention covers the full patent lifecycle:
-                            docketing, application family management, PCT/PRV/NPE case
+                            docketing, application family management, provisional (PRV), PCT, and national-phase (NPE) case
                             management, fee and deadline tracking, prior art search, and
                             AI-assisted drafting. Patent attorneys, IP managers, and
                             pharma teams run their entire patent portfolio in one place,

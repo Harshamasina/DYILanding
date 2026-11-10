@@ -1,4 +1,3 @@
-import { Check, Star, Info } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { Button } from '@/components/ui/Button';
@@ -42,7 +41,7 @@ const PLANS: Plan[] = [
         cta: { label: 'Start Free', href: SIGNUP_HREF },
         features: [
             { text: 'Unlimited patent families' },
-            { text: 'PRV / PCT / NPE modules' },
+            { text: 'Provisional, PCT & national-phase modules' },
             { text: 'Office action & deadline tracking' },
             { text: 'Annuity & maintenance fees' },
             { text: 'Email deadline reminders' },
@@ -85,26 +84,6 @@ export function PricingSection() {
             id="pricing"
             className="relative overflow-hidden py-24 lg:py-32"
         >
-            {/* Soft indigo glow positioned behind the recommended
-                Compliance Pro tier to draw the eye to the upgrade
-                path. On lg+ where the cards sit side-by-side, the
-                glow shifts to the right (where the recommended card
-                renders). On smaller breakpoints where cards stack,
-                the glow shifts to the lower-mid area where the
-                recommended card sits below Starter. */}
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 overflow-hidden"
-            >
-                <div
-                    className="absolute top-[72%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-110 w-110 sm:h-130 sm:w-130 lg:top-1/2 lg:left-[65%] lg:h-150 lg:w-150"
-                    style={{
-                        background:
-                            'radial-gradient(circle at center, rgba(99,102,241,0.20) 0%, rgba(129,140,248,0.10) 35%, transparent 65%)',
-                        filter: 'blur(60px)',
-                    }}
-                />
-            </div>
             <Container className="relative">
                 {/* Section Heading */}
                 <SectionMark id="tree-pricing" className="mb-6">
@@ -129,137 +108,115 @@ export function PricingSection() {
                     </div>
                 </FadeIn>
 
-                {/* Plan Cards */}
-                <div className="grid gap-8 lg:grid-cols-2 max-w-5xl mx-auto">
+                {/* Plans set out like a fee schedule: a heavy top rule, the
+                    plans side by side under a hairline divider, and each
+                    plan's features as ruled rows with any note on the right. */}
+                <div className="mx-auto grid max-w-5xl grid-cols-1 border-t-2 border-b border-t-text-primary border-b-card-border lg:grid-cols-2">
                     {PLANS.map((plan, i) => (
-                        <FadeIn key={plan.name} treeNode="tree-pricing" delay={i * 0.15}>
-                            <div
-                                className={`relative rounded-2xl border p-6 sm:p-8 h-full flex flex-col ${
+                        <FadeIn
+                            key={plan.name}
+                            treeNode="tree-pricing"
+                            delay={i * 0.15}
+                            className={`h-full ${i > 0 ? 'border-t border-card-border lg:border-t-0 lg:border-l' : ''}`}
+                        >
+                            <article
+                                className={`flex h-full flex-col py-8 sm:py-10 ${
                                     plan.recommended
-                                        ? 'border-primary shadow-xl shadow-primary/10 ring-1 ring-primary'
-                                        : 'border-card-border'
+                                        ? 'bg-primary/[0.03] px-5 sm:px-8 lg:px-10'
+                                        : 'sm:px-2 lg:pr-10 lg:pl-0'
                                 }`}
                             >
-                                {/* Badge */}
-                                {plan.recommended && (
-                                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-full">
-                                            <Star className="w-3 h-3 fill-white" />
+                                {/* Plan header */}
+                                <div className="mb-6">
+                                    {plan.recommended ? (
+                                        <span className="mb-4 inline-block rounded-[3px] border border-primary/30 bg-primary/[0.04] px-2 pt-1 pb-0.5 text-[15px] leading-none tracking-[0.1em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                             For Regulated Teams
                                         </span>
-                                    </div>
-                                )}
-
-                                {/* Plan Header */}
-                                <div className="mb-6">
-                                    <h3
-                                        className="text-2xl font-bold text-text-primary"
-                                        style={{ fontFamily: 'var(--font-display)' }}
-                                    >
+                                    ) : (
+                                        <span aria-hidden="true" className="mb-4 hidden h-[21px] lg:block" />
+                                    )}
+                                    <h3 className="text-2xl font-bold text-text-primary [font-family:var(--font-display)]">
                                         {plan.name}
                                     </h3>
-                                    <div className="mt-3">
-                                        <span
-                                            className="text-xl font-bold text-primary"
-                                            style={{ fontFamily: 'var(--font-mono)' }}
-                                        >
-                                            {plan.price}
-                                        </span>
-                                        <p
-                                            className="text-xs text-text-muted mt-1"
-                                            style={{ fontFamily: 'var(--font-body)' }}
-                                        >
-                                            {plan.priceNote}
-                                        </p>
-                                    </div>
-                                    <p
-                                        className="mt-4 text-sm text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
+                                    <p className="mt-3 text-2xl font-semibold text-primary [font-family:var(--font-display)]">
+                                        {plan.price}
+                                    </p>
+                                    <p className="mt-1 text-xs text-text-muted [font-family:var(--font-body)]">
+                                        {plan.priceNote}
+                                    </p>
+                                    <p className="mt-4 text-sm text-text-secondary [font-family:var(--font-body)]">
                                         <span className="font-semibold text-text-primary">
                                             Best for:
                                         </span>{' '}
                                         {plan.target}
                                     </p>
-                                    <p
-                                        className="mt-2 text-sm text-text-secondary leading-relaxed"
-                                        style={{ fontFamily: 'var(--font-body)' }}
-                                    >
+                                    <p className="mt-2 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                                         {plan.description}
                                     </p>
                                 </div>
 
-                                {/* CTA Button: link for self-serve, modal for demo */}
-                                <div className="mb-6">
+                                {/* CTA: link for self-serve, modal for demo */}
+                                <div className="mb-8">
                                     {plan.cta.href ? (
                                         <Button
                                             href={plan.cta.href}
                                             variant={plan.recommended ? 'primary' : 'secondary'}
-                                            className="w-full justify-center"
+                                            className="w-full justify-center sm:w-auto"
                                         >
                                             {plan.cta.label}
                                         </Button>
                                     ) : (
                                         <BookDemoButton
+                                            topic={plan.name}
                                             variant={plan.recommended ? 'primary' : 'secondary'}
-                                            className="w-full justify-center"
+                                            className="w-full justify-center sm:w-auto"
                                         >
                                             {plan.cta.label}
                                         </BookDemoButton>
                                     )}
                                 </div>
 
-                                {/* Divider */}
-                                <div className="border-t border-card-border mb-6" />
-
-                                {/* Features */}
-                                <ul className="space-y-3 flex-1">
-                                    {plan.features.map((feature) => (
-                                        <li
-                                            key={feature.text}
-                                            className="flex items-start gap-3"
-                                        >
-                                            <Check className="w-4 h-4 text-success shrink-0 mt-0.5" />
-                                            <span
-                                                className="text-sm leading-snug text-text-primary"
-                                                style={{ fontFamily: 'var(--font-body)' }}
+                                {/* Features as ruled rows */}
+                                <div className="flex-1">
+                                    <div aria-hidden="true" className="flex items-baseline justify-between gap-4 border-b border-text-primary pb-2 text-[15px] leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                        <span>Feature</span>
+                                        <span>Notes</span>
+                                    </div>
+                                    <ul>
+                                        {plan.features.map((feature) => (
+                                            <li
+                                                key={feature.text}
+                                                className="flex items-baseline justify-between gap-4 border-b border-card-border py-2.5"
                                             >
-                                                {feature.text}
+                                                <span className="text-sm leading-snug text-text-primary [font-family:var(--font-body)]">
+                                                    {feature.text}
+                                                </span>
                                                 {feature.detail && (
                                                     <span
-                                                        className="ml-1.5 text-[11px] font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded"
-                                                        style={{ fontFamily: 'var(--font-mono)' }}
+                                                        className={`shrink-0 text-[15px] leading-none tracking-[0.06em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] ${
+                                                            feature.detail.includes('Part 11') ? 'text-compliance-ink' : 'text-primary'
+                                                        }`}
                                                     >
                                                         {feature.detail}
                                                     </span>
                                                 )}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
 
                                 {/* Optional advisory note: points to the higher
                                     tier instead of stacking X-marks for missing
                                     features. */}
                                 {plan.note && (
-                                    <div
-                                        className="mt-6 flex items-start gap-2.5 rounded-lg border border-primary/15 bg-primary/4 px-3.5 py-3"
+                                    <p
                                         role="note"
+                                        className="mt-6 border-l-2 border-primary/30 pl-3 text-xs italic leading-relaxed text-text-secondary [font-family:var(--font-body)]"
                                     >
-                                        <Info
-                                            className="w-4 h-4 text-primary shrink-0 mt-0.5"
-                                            strokeWidth={2}
-                                            aria-hidden="true"
-                                        />
-                                        <p
-                                            className="text-xs leading-relaxed text-text-secondary"
-                                            style={{ fontFamily: 'var(--font-body)' }}
-                                        >
-                                            {plan.note}
-                                        </p>
-                                    </div>
+                                        {plan.note}
+                                    </p>
                                 )}
-                            </div>
+                            </article>
                         </FadeIn>
                     ))}
                 </div>
@@ -269,7 +226,7 @@ export function PricingSection() {
                     boundary is visible at the point of the claim. */}
                 <FadeIn treeNode="tree-pricing" delay={0.25}>
                     <p
-                        className="mt-10 max-w-3xl mx-auto text-center text-xs sm:text-[13px] italic text-text-muted leading-relaxed"
+                        className="mt-10 max-w-[31rem] mx-auto text-center text-xs sm:text-[13px] italic text-text-muted leading-relaxed"
                         style={{ fontFamily: 'var(--font-body)' }}
                     >
                         Part 11-aligned controls are product capabilities, not a
@@ -289,7 +246,7 @@ export function PricingSection() {
                             Need a custom enterprise plan?{' '}
                             <a
                                 href="#contact"
-                                className="text-primary font-semibold hover:text-primary-dark transition-colors"
+                                className="-my-3 inline-block py-3 font-semibold text-primary underline decoration-primary/30 underline-offset-[6px] transition-colors hover:decoration-primary"
                             >
                                 Contact us
                             </a>

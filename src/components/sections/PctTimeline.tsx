@@ -149,10 +149,7 @@ export function PctTimeline() {
         <div ref={sectionRef} className="mt-24 lg:mt-32">
             {/* Sub-section Label */}
             <div id="timeline-flow" className="flex items-center gap-3 mb-4">
-                <h3
-                    className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                >
+                <h3 className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                     PCT Filing Timeline
                 </h3>
             </div>

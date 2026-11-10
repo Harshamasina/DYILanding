@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { Children, isValidElement } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'link';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonBaseProps {
@@ -24,6 +26,9 @@ interface ButtonAsLink extends ButtonBaseProps {
     onClick?: () => void;
     /** Open the link in a new tab (adds a secure rel). For external handoffs. */
     newTab?: boolean;
+    /** Skip the small visible external glyph where space is tight; the
+        screen-reader "opens in a new tab" text is always kept. */
+    hideExternalGlyph?: boolean;
     disabled?: undefined;
 }
 
@@ -38,12 +43,23 @@ const variantStyles: Record<ButtonVariant, string> = {
         'bg-transparent text-primary border-2 border-primary hover:bg-primary hover:text-white',
     ghost:
         'bg-transparent text-text-secondary hover:text-primary hover:bg-page-bg-alt',
+    /* The secondary action beside a primary button: a plain underlined link,
+       so each section has one button, not two competing ones. */
+    link:
+        'bg-transparent text-primary underline decoration-primary/30 decoration-1 underline-offset-[6px] hover:decoration-primary',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
     sm: 'px-4 py-2 text-sm',
     md: 'px-6 py-3 text-base',
     lg: 'px-8 py-4 text-lg',
+};
+
+/* Links keep the text size but drop the button padding. */
+const linkSizeStyles: Record<ButtonSize, string> = {
+    sm: 'py-2 text-sm',
+    md: 'py-3 text-base',
+    lg: 'py-4 text-lg',
 };
 
 export function Button({
@@ -56,10 +72,14 @@ export function Button({
     const baseStyles =
         'inline-flex items-center justify-center gap-2 font-semibold rounded-lg transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2';
 
-    const classes = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
+    const sizing = variant === 'link' ? linkSizeStyles[size] : sizeStyles[size];
+    const classes = `${baseStyles} ${variantStyles[variant]} ${sizing} ${className}`;
 
     if ('href' in props && props.href) {
-        const { href, onClick, newTab } = props as ButtonAsLink;
+        const { href, onClick, newTab, hideExternalGlyph } = props as ButtonAsLink;
+        /* A link that leaves the site gets a small external glyph, unless
+           its label already ends with an icon of its own. */
+        const endsWithIcon = isValidElement(Children.toArray(children).at(-1));
         return (
             <Link
                 href={href}
@@ -68,6 +88,8 @@ export function Button({
                 {...(newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
                 {children}
+                {newTab && !endsWithIcon && !hideExternalGlyph && <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden="true" />}
+                {newTab && <span className="sr-only">(opens in a new tab)</span>}
             </Link>
         );
     }

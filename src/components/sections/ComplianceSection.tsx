@@ -30,7 +30,7 @@ const COMPLIANCE_ITEMS: ReferenceItem[] = [
     {
         title: 'Role-Based Access Control',
         description:
-            'Admin, Attorney, Paralegal, Viewer: granular permissions enforced server-side.',
+            'Admin, Attorney, Paralegal, Viewer, Inventor: granular permissions enforced server-side.',
     },
     {
         title: 'Secure Document Management',
@@ -91,11 +91,11 @@ export function ComplianceSection() {
                             className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl lg:text-5xl"
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
-                            FDA 21 CFR Part 11-Aligned Controls,{' '}
+                            FDA 21 CFR Part 11‑Aligned Controls,{' '}
                             <span className="italic">Built In, Not Bolted On</span>
                         </h2>
                         <p
-                            className="mt-4 text-lg text-text-secondary leading-relaxed"
+                            className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             Every regulated workflow is built around traceability, approval control, and immutable records. Capture reasons for change, preserve audit history, require review checkpoints, and keep every edit tied to a user, timestamp, and record.
@@ -112,10 +112,13 @@ export function ComplianceSection() {
 
                         {/* Right: Animated Audit Table */}
                         <FadeIn treeNode="tree-compliance" delay={0.1}>
-                            <DeferredMount className="w-full h-120 sm:h-135 lg:h-150">
+                            <DeferredMount className="relative w-full h-120 sm:h-135 lg:h-150">
                                 <AnimatedAuditTable />
+                                {/* 602 the Reason column, 604 the Timestamp column, 608 the
+                                    log itself, 610 the Actor column. Rows expand and move,
+                                    so the numerals point at the fixed header. */}
                             </DeferredMount>
-                            <FigureCaption className="mt-5">Audit history with reasons for change</FigureCaption>
+                            <FigureCaption references={COMPLIANCE_ITEMS.length} className="mt-5">Audit history with reasons for change</FigureCaption>
                         </FadeIn>
                     </div>
 
@@ -126,7 +129,7 @@ export function ComplianceSection() {
                             <DeferredMount className="w-full h-120 sm:h-135 lg:h-150">
                                 <AnimatedAuditTable />
                             </DeferredMount>
-                            <FigureCaption className="mt-5">Audit history with reasons for change</FigureCaption>
+                            <FigureCaption references={COMPLIANCE_ITEMS.length} className="mt-5">Audit history with reasons for change</FigureCaption>
                         </FadeIn>
                     </div>
                 </div>
@@ -135,7 +138,7 @@ export function ComplianceSection() {
                     without overpromising compliance certification. */}
                 <FadeIn treeNode="tree-compliance" delay={0.3}>
                     <p
-                        className="mt-12 lg:mt-16 max-w-3xl mx-auto text-center text-xs sm:text-[13px] italic text-text-muted leading-relaxed"
+                        className="mt-12 lg:mt-16 max-w-[31rem] mx-auto text-center text-xs sm:text-[13px] italic text-text-muted leading-relaxed"
                         style={{ fontFamily: 'var(--font-body)' }}
                     >
                         Designed to support Part 11-aligned workflows through access controls, electronic approvals, reasons for change, and traceable audit history. Final compliance and validation depend on each customer&rsquo;s intended use, configuration, procedures, and quality system.

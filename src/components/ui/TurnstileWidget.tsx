@@ -106,7 +106,10 @@ export const TurnstileWidget = forwardRef<TurnstileHandle, TurnstileWidgetProps>
                         // only exposes theme/size/appearance — the widget interior
                         // is a locked cross-origin iframe and can't be restyled.
                         theme: 'light',
-                        size: 'flexible',
+                        // 'flexible' needs at least 300px; on the narrowest
+                        // phones the compact widget keeps the page from
+                        // scrolling sideways.
+                        size: containerRef.current.offsetWidth < 300 ? 'compact' : 'flexible',
                         callback: (token: string) => cbRef.current.onVerify(token),
                         'expired-callback': () => cbRef.current.onExpire?.(),
                         'error-callback': () => cbRef.current.onError?.(),

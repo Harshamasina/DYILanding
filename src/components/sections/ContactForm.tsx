@@ -60,19 +60,34 @@ export function ContactForm() {
         message: 'message',
     };
 
-    /* Shared by the native inputs and the custom SelectField, which reports
-       a plain value rather than a change event. */
-    function setField(name: string, value: string) {
-        setForm((prev) => ({ ...prev, [name]: value }));
-        // Clear field error on change (using backend field name)
+    /* Re-checks one field against the same rules submit uses, then shows or
+       clears its inline error. */
+    function revalidate(name: string, values: FormData) {
         const backendName = fieldMap[name] ?? name;
-        if (fieldErrors[backendName]) {
-            setFieldErrors((prev) => {
-                const next = { ...prev };
-                delete next[backendName];
-                return next;
-            });
-        }
+        const error = validateContactForm(values)[backendName];
+        setFieldErrors((prev) => {
+            if (error) return { ...prev, [backendName]: error };
+            if (!prev[backendName]) return prev;
+            const next = { ...prev };
+            delete next[backendName];
+            return next;
+        });
+    }
+
+    /* Shared by the native inputs and the custom SelectField, which reports
+       a plain value rather than a change event. While a field shows an
+       error it is re-checked on every change, so the message clears as soon
+       as the input is valid. */
+    function setField(name: string, value: string) {
+        const next = { ...form, [name]: value };
+        setForm(next);
+        if (fieldErrors[fieldMap[name] ?? name]) revalidate(name, next);
+    }
+
+    /* Leaving a field checks it, so a mistake shows before submit. Fields
+       the visitor never focused stay quiet until submit. */
+    function handleBlur(name: string) {
+        revalidate(name, form);
     }
 
     function handleChange(
@@ -210,6 +225,7 @@ export function ContactForm() {
                     type="text"
                     value={form.name}
                     onChange={handleChange}
+                    onBlur={() => handleBlur('name')}
                     required
                     placeholder="Jane Smith"
                     error={getFieldError('full_name')}
@@ -220,6 +236,7 @@ export function ContactForm() {
                     type="email"
                     value={form.email}
                     onChange={handleChange}
+                    onBlur={() => handleBlur('email')}
                     required
                     placeholder="jane@acmelaw.com"
                     error={getFieldError('work_email')}
@@ -234,6 +251,7 @@ export function ContactForm() {
                     type="text"
                     value={form.company}
                     onChange={handleChange}
+                    onBlur={() => handleBlur('company')}
                     required
                     placeholder="Acme Law LLP"
                     error={getFieldError('company')}
@@ -243,6 +261,7 @@ export function ContactForm() {
                     name="role"
                     value={form.role}
                     onChange={(v) => setField('role', v)}
+                    onBlur={() => handleBlur('role')}
                     required
                     options={ROLE_OPTIONS}
                     error={getFieldError('role')}
@@ -256,6 +275,7 @@ export function ContactForm() {
                     name="portfolioSize"
                     value={form.portfolioSize}
                     onChange={(v) => setField('portfolioSize', v)}
+                    onBlur={() => handleBlur('portfolioSize')}
                     required
                     options={PORTFOLIO_SIZE_OPTIONS}
                     error={getFieldError('portfolio_size')}
@@ -265,6 +285,7 @@ export function ContactForm() {
                     name="inquiryType"
                     value={form.inquiryType}
                     onChange={(v) => setField('inquiryType', v)}
+                    onBlur={() => handleBlur('inquiryType')}
                     required
                     options={INQUIRY_TYPE_OPTIONS}
                     error={getFieldError('inquiry_type')}
@@ -287,6 +308,7 @@ export function ContactForm() {
                     name="message"
                     value={form.message}
                     onChange={handleChange}
+                    onBlur={() => handleBlur('message')}
                     aria-required="true"
                     aria-invalid={!!getFieldError('message')}
                     aria-describedby={getFieldError('message') ? 'message-error' : undefined}
@@ -358,6 +380,7 @@ function FormField({
     type,
     value,
     onChange,
+    onBlur,
     required,
     placeholder,
     error,
@@ -367,6 +390,7 @@ function FormField({
     type: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: () => void;
     required?: boolean;
     placeholder?: string;
     error?: string;
@@ -386,6 +410,7 @@ function FormField({
                 type={type}
                 value={value}
                 onChange={onChange}
+                onBlur={onBlur}
                 aria-required={required}
                 aria-invalid={!!error}
                 aria-describedby={error ? `${name}-error` : undefined}

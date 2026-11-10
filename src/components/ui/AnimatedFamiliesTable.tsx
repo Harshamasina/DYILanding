@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MockupRecordLabel } from './BrowserMockupChrome';
 
 /* ── Choreographed patent families table mockup ──
    Matches the real product UI: stat cards, search bar, full table with
@@ -79,7 +80,7 @@ export function AnimatedFamiliesTable() {
     }, [runCycle]);
 
     const TH = ({ children, className = '' }: { children: string; className?: string }) => (
-        <th className={`py-2 pr-3 text-[9px] font-semibold text-text-muted uppercase tracking-wider whitespace-nowrap ${className}`}
+        <th className={`py-2 pr-3 text-[10px] sm:text-[9px] font-semibold text-text-muted uppercase tracking-wider whitespace-nowrap ${className}`}
             style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
             {children}
         </th>
@@ -99,7 +100,7 @@ export function AnimatedFamiliesTable() {
                     { label: 'Added Last 30d', value: '18', color: 'text-primary' },
                 ].map(stat => (
                     <div key={stat.label} className="flex-1 px-2.5 py-1.5 rounded-lg border border-card-border">
-                        <p className="text-[8px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard)' }}>{stat.label}</p>
+                        <p className="text-[10px] sm:text-[8px] text-text-muted" style={{ fontFamily: 'var(--font-dashboard)' }}>{stat.label}</p>
                         <p className={`text-base font-bold ${stat.color}`} style={{ fontFamily: 'var(--font-dashboard-mono)' }}>{stat.value}</p>
                     </div>
                 ))}
@@ -107,7 +108,7 @@ export function AnimatedFamiliesTable() {
 
             {/* Search Bar */}
             <div className="px-3 py-1.5 flex items-center gap-2">
-                <div className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-card-border bg-page-bg-alt/50 text-[9px] text-text-muted"
+                <div className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-card-border bg-page-bg-alt/50 text-[10px] sm:text-[9px] text-text-muted"
                     style={{ fontFamily: 'var(--font-dashboard)' }}>
                     <svg className="w-3 h-3 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -115,10 +116,10 @@ export function AnimatedFamiliesTable() {
                     Search by reference, title or technology area...
                 </div>
                 <div className="flex gap-1">
-                    <span className="text-[8px] px-2 py-1.5 rounded-lg border border-card-border text-text-muted font-medium" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                    <span className="text-[10px] sm:text-[8px] px-2 py-1.5 rounded-lg border border-card-border text-text-muted font-medium" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                         Layout ▾
                     </span>
-                    <span className="text-[8px] px-2 py-1.5 rounded-lg border border-card-border text-text-muted font-medium" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                    <span className="text-[10px] sm:text-[8px] px-2 py-1.5 rounded-lg border border-card-border text-text-muted font-medium" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                         Clear Filters
                     </span>
                 </div>
@@ -135,12 +136,12 @@ export function AnimatedFamiliesTable() {
                             exit={{ opacity: 0, y: -8 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <span className="text-[9px] font-semibold" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                            <span className="text-[10px] sm:text-[9px] font-semibold" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                 3 selected
                             </span>
                             <div className="flex gap-1.5 ml-auto">
                                 {['Export CSV', 'Change Status', 'Delete'].map(action => (
-                                    <span key={action} className="text-[8px] px-1.5 py-0.5 rounded bg-white/20 font-medium">
+                                    <span key={action} className="text-[10px] sm:text-[8px] px-1.5 py-0.5 rounded bg-white/20 font-medium">
                                         {action}
                                     </span>
                                 ))}
@@ -205,7 +206,7 @@ export function AnimatedFamiliesTable() {
                                         </span>
                                     </td>
                                     <td className="py-2 pr-3 hidden xl:table-cell">
-                                        <span className="text-[9px] text-text-secondary font-medium px-1.5 py-0.5 rounded bg-page-bg-alt" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
+                                        <span className="text-[10px] sm:text-[9px] text-text-secondary font-medium px-1.5 py-0.5 rounded bg-page-bg-alt" style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                             {row.jurisdiction}
                                         </span>
                                     </td>
@@ -235,13 +236,9 @@ export function AnimatedFamiliesTable() {
 function ChromeBar() {
     return (
         <div className="flex items-center gap-2 px-3 py-2 bg-page-bg-alt border-b border-card-border">
-            <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
-            </div>
-            <div className="flex-1 flex justify-center">
-                <div className="flex items-center gap-1.5 px-3 py-0.5 bg-white rounded-md text-[9px] text-text-muted border border-card-border"
+            <MockupRecordLabel record="DEMO-2024-011" screen="Patent families" />
+            <div className="hidden sm:flex flex-1 min-w-0 justify-end">
+                <div className="flex items-center gap-1.5 px-3 py-0.5 bg-white rounded-md text-[10px] sm:text-[9px] text-text-muted border border-card-border"
                     style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                     <svg className="w-2.5 h-2.5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -249,7 +246,6 @@ function ChromeBar() {
                     app.designyourinvention.com
                 </div>
             </div>
-            <div className="w-[40px]" />
         </div>
     );
 }

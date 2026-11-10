@@ -1,14 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-    ShieldCheck,
-    FileCheck,
-    Building2,
-    Lock,
-    Fingerprint,
-    Server,
-    Sparkles,
-} from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { BrandLogoLink } from '@/components/ui/BrandLogoLink';
 import { SectionMark } from '@/components/ui/SectionMark';
@@ -87,12 +79,12 @@ function GrokIcon({ className }: { className?: string }) {
    security assurance reports are not issued yet, so the strip carries a
    plain-language qualifier underneath. */
 const TRUST_BADGES = [
-    { icon: ShieldCheck, label: 'Tenant-Isolated Data' },
-    { icon: FileCheck, label: 'Part 11-Aligned Controls' },
-    { icon: Building2, label: 'Enterprise SSO' },
-    { icon: Lock, label: 'AES-256 Encryption' },
-    { icon: Fingerprint, label: 'MFA Support' },
-    { icon: Server, label: 'Role-Based Access Control' },
+    'Tenant-Isolated Data',
+    'Part 11-Aligned Controls',
+    'Enterprise SSO',
+    'AES-256 Encryption',
+    'MFA Support',
+    'Role-Based Access Control',
 ];
 
 const STATIC_FOOTER_LINKS = {
@@ -172,7 +164,7 @@ const ASK_AI_LINKS = [
 // single snap. Colours ease over a matching window. Closing reverses with no
 // delay so it feels responsive. motion-reduce disables all of it.
 const ASK_AI_BUTTON_CLASS =
-    'group inline-flex shrink-0 items-center rounded-full border border-white/10 bg-white/4 p-2.5 text-text-on-dark/70 no-underline transition-colors duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary-light/40 hover:bg-primary-light/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light';
+    'group inline-flex min-h-11 shrink-0 items-center rounded-full border border-white/10 bg-white/4 p-2.5 text-text-on-dark/70 no-underline transition-colors duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary-light/40 hover:bg-primary-light/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light';
 const ASK_AI_ICON_CLASS =
     'h-5 w-5 shrink-0 transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 motion-reduce:group-hover:scale-100';
 const ASK_AI_LABEL_CLASS =
@@ -206,7 +198,7 @@ export function Footer() {
 
     return (
         <div>
-            {/* ── Trust Card — sits on white bg, bottom half overlaps into footer ── */}
+            {/* Trust card: sits on white bg, bottom half overlaps into footer */}
             <div className="relative z-10 pb-0">
                 <Container>
                     <div className="rounded-2xl border border-primary/15 bg-navy-light p-8 sm:p-10 lg:p-12 shadow-2xl shadow-primary/10 mb-12 sm:-mb-35">
@@ -217,54 +209,48 @@ export function Footer() {
                                     Enterprise Trust
                                 </SectionMark>
                                 <h3
-                                    className="text-xl sm:text-2xl font-bold text-white mb-6"
+                                    className="text-xl sm:text-2xl font-bold text-balance text-white mb-6"
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
                                     Built for teams that can&apos;t afford to compromise on security
                                 </h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                    {TRUST_BADGES.map((badge) => (
-                                        <div
-                                            key={badge.label}
-                                            className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border border-white/10 bg-white/4"
-                                        >
-                                            <div className="w-8 h-8 rounded-lg bg-compliance-on-dark/10 flex items-center justify-center shrink-0">
-                                                <badge.icon className="w-4 h-4 text-compliance-on-dark" />
-                                            </div>
-                                            <span
-                                                className="text-[11px] sm:text-xs font-semibold text-white/80"
-                                                style={{ fontFamily: 'var(--font-mono)' }}
-                                            >
-                                                {badge.label}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                                <p
-                                    className="mt-5 max-w-xl text-[11px] leading-relaxed text-white/40"
-                                    style={{ fontFamily: 'var(--font-body)' }}
-                                >
+                                {/* The scope note sits under the heading, before the
+                                    controls, so the card ends on the controls and the
+                                    signed statement rather than on a caveat. */}
+                                <p className="-mt-3 mb-6 max-w-xl text-xs leading-relaxed text-white/65 [font-family:var(--font-body)]">
                                     Controls shown reflect the current product
                                     architecture during private beta. Independent
                                     security assurance reports have not been issued yet.
                                 </p>
+                                {/* Controls as a ruled table, not badge tiles */}
+                                <ul className="grid grid-cols-2 gap-x-6 border-t border-white/15 sm:grid-cols-3">
+                                    {TRUST_BADGES.map((badge) => (
+                                        <li
+                                            key={badge}
+                                            className="border-b border-white/15 py-3 text-xs leading-snug text-white/85 [font-family:var(--font-body)] sm:text-sm"
+                                        >
+                                            {badge}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
 
                             {/* Right: Positioning statement */}
                             <div className="flex-[2] flex flex-col justify-center">
-                                {/* A statement signed by the team, not a quotation: no
-                                    quote marks or avatar, which read as a testimonial. */}
-                                <div className="border-l-2 border-primary-light/30 pl-6">
-                                    <p className="text-base leading-relaxed text-white/90 [font-family:var(--font-body)] sm:text-lg">
+                                {/* A plain statement of purpose under a label, not a
+                                    quotation: no rule, quote styling or byline, which
+                                    read as a testimonial from the company itself. */}
+                                <div>
+                                    <p className="text-sm leading-none tracking-[0.1em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                        Our position
+                                    </p>
+                                    <p className="mt-4 text-pretty text-base leading-relaxed text-white/90 [font-family:var(--font-body)] sm:text-lg">
                                         Built for regulated patent teams handling
                                         confidential invention data, audit-sensitive
                                         workflows, and multi-jurisdiction portfolios.
                                     </p>
-                                    <p className="mt-5 text-sm font-semibold text-white [font-family:var(--font-display)]">
-                                        Design Your Invention Team
-                                        <span className="mt-0.5 block text-xs font-normal text-white/40 [font-family:var(--font-body)]">
-                                            IP Management Platform
-                                        </span>
+                                    <p className="mt-4 text-xs text-white/65 [font-family:var(--font-body)]">
+                                        Design Your Invention Team, IP Management Platform
                                     </p>
                                 </div>
                             </div>
@@ -313,12 +299,12 @@ export function Footer() {
                             </p>
 
                             {/* Social Icons */}
-                            <div className="mt-8 flex items-center gap-5">
+                            <div className="mt-6 -ml-[11px] flex items-center gap-1">
                                 {SOCIAL_LINKS.map((social) => (
                                     <a
                                         key={social.label}
                                         href={social.href}
-                                        className="text-text-on-dark/40 hover:text-primary-light transition-colors duration-200"
+                                        className="inline-flex h-11 w-11 items-center justify-center text-text-on-dark/60 hover:text-primary-light transition-colors duration-200"
                                         aria-label={`Follow us on ${social.label}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -370,12 +356,12 @@ export function Footer() {
                                 <h3 className="mb-5 text-base leading-none tracking-[0.1em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                     {category}
                                 </h3>
-                                <ul className="space-y-3.5">
+                                <ul className="space-y-0 lg:space-y-3.5">
                                     {links.map((link) => (
                                         <li key={link.href}>
                                             <Link
                                                 href={link.href}
-                                                className="text-sm text-text-on-dark/60 hover:text-white transition-colors duration-200 no-underline"
+                                                className="inline-flex min-h-11 items-center text-sm text-text-on-dark/60 hover:text-white transition-colors duration-200 no-underline lg:min-h-0"
                                                 style={{ fontFamily: 'var(--font-body)' }}
                                             >
                                                 {link.label}
@@ -390,7 +376,7 @@ export function Footer() {
                     {/* Copyright Bar */}
                     <div className="border-t border-white/10 mt-16 py-8">
                         <p
-                            className="text-xs text-text-on-dark/40 text-center"
+                            className="text-xs text-text-on-dark/60 text-center"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             &copy; {currentYear} {SITE_NAME}. All rights reserved.

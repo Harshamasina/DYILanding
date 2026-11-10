@@ -1,7 +1,8 @@
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { LoeTimeline } from '@/components/ui/LoeTimeline';
+import { FigureCaption } from '@/components/ui/FigureCaption';
 
 interface Pillar {
     label: string;
@@ -18,7 +19,7 @@ const PILLARS: Pillar[] = [
  * Loss of Exclusivity card: a glassmorphic panel carrying the in-app LOE
  * timeline. Rendered inside the operations section on /docketing/.
  */
-export function LoeCard() {
+export function LoeCard({ note }: { note?: string }) {
     return (
         <div className="relative">
             <div className="relative z-10">
@@ -37,17 +38,18 @@ export function LoeCard() {
                         <div className="relative">
                             {/* Copy */}
                             <div className="min-w-0 max-w-3xl">
-                                <span
-                                    className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/70 py-1 pl-1 pr-3 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md hover:shadow-primary/[0.08]"
-                                    style={{ fontFamily: 'var(--font-mono)' }}
-                                >
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
-                                        <Sparkles className="h-3 w-3" aria-hidden="true" />
+                                {/* A plain tab, drawn like the section mark, instead of a filled pill */}
+                                {/* Tab, label and note share one line, wrapping on phones. */}
+                                <span className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                                    <span className="rounded-[3px] border border-primary/30 bg-primary/[0.04] px-2 pt-1 pb-1.5 text-base leading-none tracking-[0.1em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                         New
                                     </span>
-                                    <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-primary">
+                                    <span className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                                         Loss of Exclusivity timeline
                                     </span>
+                                    {note && (
+                                        <span className="text-sm italic text-slate-600 [font-family:var(--font-body)]">{note}</span>
+                                    )}
                                 </span>
 
                                 <h2
@@ -60,7 +62,7 @@ export function LoeCard() {
                                 </h2>
 
                                 <p
-                                    className="mt-4 text-base leading-relaxed text-text-secondary sm:text-lg"
+                                    className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg"
                                     style={{ fontFamily: 'var(--font-body)' }}
                                 >
                                     Docketing tells you what is due. The LOE timeline tells you what it is
@@ -69,7 +71,7 @@ export function LoeCard() {
                                     jurisdiction and indication.
                                 </p>
                                 <p
-                                    className="mt-3 text-base leading-relaxed text-text-secondary"
+                                    className="mt-3 text-base leading-relaxed text-slate-600"
                                     style={{ fontFamily: 'var(--font-body)' }}
                                 >
                                     Before you let an annuity lapse, drop the family in the live what-if and
@@ -79,7 +81,7 @@ export function LoeCard() {
                             </div>
 
                             {/* Pillars */}
-                            <ul className="mt-8 grid gap-3 sm:grid-cols-3 sm:gap-4">
+                            <ul className="mt-8 grid border-t border-card-border sm:grid-cols-3 sm:gap-x-6">
                                 {PILLARS.map((pillar, i) => (
                                     <PillarChip key={pillar.label} pillar={pillar} index={i} />
                                 ))}
@@ -87,14 +89,15 @@ export function LoeCard() {
                         </div>
 
                         {/* In-app LOE timeline */}
-                        <div className="relative mt-8 lg:mt-10">
+                        <div className="figure-group relative mt-8 lg:mt-10">
                             <LoeTimeline />
+                            <FigureCaption className="mt-5">Protection horizon for one drug product, by jurisdiction</FigureCaption>
                         </div>
 
                         {/* Footer: disclaimer and CTA */}
                         <div className="relative mt-6 flex flex-col gap-5 border-t border-white/70 pt-6 sm:mt-7 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:pt-7">
                             <p
-                                className="max-w-md text-[11px] leading-relaxed text-text-muted"
+                                className="max-w-md text-xs leading-relaxed text-slate-600"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 Horizons are built from the dates your attorneys record. A portfolio
@@ -102,6 +105,7 @@ export function LoeCard() {
                             </p>
 
                             <BookDemoButton
+                                topic="the Loss of Exclusivity timeline"
                                 size="lg"
                                 className="w-full shrink-0 justify-center sm:w-auto"
                             >
@@ -120,7 +124,7 @@ function PillarChip({ pillar, index }: { pillar: Pillar; index: number }) {
     return (
         <li>
             <FadeIn delay={0.1 + index * 0.08} direction="up">
-                <div className="group flex h-full items-start gap-3 rounded-xl border border-white/80 bg-white/70 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:bg-white/90 hover:shadow-md hover:shadow-primary/[0.06]">
+                <div className="group flex h-full items-start gap-3 border-b border-card-border py-3.5">
                     <span className="min-w-0">
                         <span
                             className="block text-[13px] font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary"

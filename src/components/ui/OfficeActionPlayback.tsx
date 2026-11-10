@@ -92,7 +92,7 @@ export function OfficeActionPlaybackControls({ playback, chapters, screenId }: {
                             className={`group flex min-h-11 flex-col justify-between gap-2 rounded-lg px-2 pt-2 pb-1.5 text-left text-xs font-semibold transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:px-2.5 ${current ? 'bg-primary/[0.07] text-primary' : 'text-text-secondary hover:bg-page-bg-alt hover:text-text-primary'}`}
                         >
                             <span className="flex items-baseline gap-1.5">
-                                <span className={`text-[10px] tabular-nums [font-family:var(--font-dashboard-mono)] ${current ? 'text-primary/80' : 'text-text-secondary'}`}>{String(i + 1).padStart(2, '0')}</span>
+                                <span className={`text-[11px] tabular-nums [font-family:var(--font-dashboard-mono)] ${current ? 'text-primary' : 'text-text-secondary'}`}>{String(i + 1).padStart(2, '0')}</span>
                                 <span className="truncate">{chapter.label}</span>
                             </span>
                             <span aria-hidden="true" className="block h-0.5 w-full overflow-hidden rounded-full bg-card-border">
@@ -119,7 +119,7 @@ export function OfficeActionPlaybackControls({ playback, chapters, screenId }: {
                 ))}
             </div>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-card-border pt-2">
-                <span className="text-xs text-text-secondary">{playback.reducedMotion ? 'Static preview · Select any stage' : 'Illustrative walkthrough · Fictional matter'}</span>
+                <span className="text-sm italic text-slate-600 [font-family:var(--font-body)]">{playback.reducedMotion ? 'Static preview · Select any stage' : 'Illustrative walkthrough · Fictional matter'}</span>
                 <div className="flex items-center gap-1">
                     {!playback.reducedMotion && !playback.finished && (
                         <button type="button" onClick={playback.toggle} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold text-text-primary transition-colors hover:bg-page-bg-alt focus-visible:outline-2 focus-visible:outline-primary">

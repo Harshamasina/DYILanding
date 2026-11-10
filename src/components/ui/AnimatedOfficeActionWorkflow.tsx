@@ -134,7 +134,7 @@ export function AnimatedOfficeActionWorkflow() {
                     id={screenId}
                     className={`relative flex select-none flex-col overflow-hidden rounded-xl border border-card-border bg-[#f8f8fa] shadow-2xl shadow-black/10 [font-family:var(--font-dashboard)] ${MOCKUP_HEIGHT}`}
                 >
-                    <BrowserMockupChrome url={browserUrl(phase)} />
+                    <BrowserMockupChrome url={browserUrl(phase)} record={MATTER} screen="Office action" />
                     <WorkflowScreen phase={phase} step={step} reducedMotion={playback.reducedMotion} />
                 </div>
                 <OfficeActionPlaybackControls playback={playback} chapters={CHAPTERS} screenId={screenId} />
@@ -757,7 +757,7 @@ const PATH_STEPS = [
 const PATH_NOW: Record<number, { sentence: string; detail: string; actor?: string; button?: string }> = {
     3: { sentence: 'Choose a strategy for each issue (3 issues).', detail: 'For each issue, choose how the reply answers it and say why. The sections and arguments follow the strategy.', button: 'Open sections' },
     6: { sentence: 'Cite the support for the amended claims (1 claim).', detail: 'Cite where the application as filed shows each amended claim.', button: 'Open passages' },
-    11: { sentence: 'Approve the response.', detail: 'A second attorney, not the last person to revise the draft, signs the approval and confirms their identity in the dialog.', actor: 'A second attorney approves this draft.', button: 'Open approval' },
+    11: { sentence: 'Approve the response.', detail: 'An authorized attorney who did not last revise the draft signs the approval and confirms their identity in the dialog.', actor: 'An independent attorney approves this draft.', button: 'Open approval' },
     12: { sentence: 'Make the filing copy from the approved draft.', detail: 'The filing copy carries no watermark or notes and matches the approved content.', button: 'Open documents' },
     13: { sentence: 'File the paper with the Office, then record the filing here.', detail: 'File the paper with the Office outside the product, then record the date it was filed here.', button: 'Open filings' },
 };
@@ -803,7 +803,7 @@ function DraftBar({ status }: { status: 'drafting' | 'review' | 'approved' }) {
                 {status === 'approved' ? (
                     <span className="inline-flex items-center gap-1 text-[9px] text-slate-500"><LockKeyhole className="h-3 w-3" />Approved content locked</span>
                 ) : status === 'review' ? (
-                    <span className="inline-flex items-center gap-1 text-[9px] text-slate-500"><Clock3 className="h-3 w-3" />Awaiting a second attorney</span>
+                    <span className="inline-flex items-center gap-1 text-[9px] text-slate-500"><Clock3 className="h-3 w-3" />Awaiting independent approval</span>
                 ) : (
                     <>
                         <span className="hidden items-center gap-1 rounded-md border border-card-border bg-slate-50 px-2 py-1 text-[9px] text-slate-400 sm:inline-flex"><ShieldCheck className="h-3 w-3" />Approve response</span>

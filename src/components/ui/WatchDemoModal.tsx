@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'link';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface WatchDemoButtonProps {
@@ -136,7 +136,10 @@ function VideoModal({
     // Guards the one-shot autoplay attempt for chapter deep-links.
     const autoStartedRef = useRef(false);
 
-    const [videoState, setVideoState] = useState<VideoState>('idle');
+    /* Starts in loading: the video auto-plays on canplay, so the first thing
+       the visitor sees is the poster with a visible loading state, not a
+       still frame that looks broken. */
+    const [videoState, setVideoState] = useState<VideoState>('loading');
     const [isMuted, setIsMuted] = useState(false);
     const [captionsOn, setCaptionsOn] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -303,7 +306,7 @@ function VideoModal({
                                 type="button"
                                 onClick={togglePlay}
                                 aria-label={isPlaying ? 'Pause video' : 'Play video'}
-                                className="group flex items-center justify-center w-8 h-8 rounded-lg border border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(99,102,241,0.08)] transition-all duration-200 hover:border-indigo-200/80 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_2px_8px_rgba(99,102,241,0.18)] active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                                className="group flex items-center justify-center w-8 h-8 rounded-lg border border-primary/15 bg-primary/5 shadow-sm transition-all duration-200 hover:border-primary/30 hover:bg-primary/10 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_2px_8px_rgba(99,102,241,0.18)] active:scale-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
                             >
                                 <AnimatePresence mode="wait" initial={false}>
                                     {isPlaying ? (
@@ -448,8 +451,8 @@ function VideoModal({
                                 >
                                     <Loader2 className="w-10 h-10 text-primary animate-spin" />
                                     <span
-                                        className="text-sm text-white/60"
-                                        style={{ fontFamily: 'var(--font-body)' }}
+                                        role="status"
+                                        className="rounded-full bg-white/90 px-3 py-1 text-sm text-text-secondary shadow-sm [font-family:var(--font-body)]"
                                     >
                                         {videoState === 'buffering' ? 'Buffering...' : 'Loading video...'}
                                     </span>

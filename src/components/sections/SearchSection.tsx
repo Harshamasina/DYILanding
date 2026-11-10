@@ -1,4 +1,4 @@
-import { FileSearch } from 'lucide-react';
+import { FileSearch, ArrowRight } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { AnimatedPriorArtSearch } from '@/components/ui/AnimatedPriorArtSearch';
 import { MockupHalo } from '@/components/ui/MockupHalo';
@@ -34,6 +34,10 @@ const CAPABILITY_POINTS: ReferenceItem[] = [
         title: 'Full Patent Detail',
         description: 'Bibliographic data, abstracts, claims, citations, and patent family where the source provides them.',
     },
+    {
+        title: 'Automated Novelty Search',
+        description: 'Inside the platform, start from your invention brief: the strongest candidates are read against each feature, with a checked quote behind every finding.',
+    },
 ];
 
 export function SearchSection() {
@@ -58,7 +62,7 @@ export function SearchSection() {
                             <span className="italic">Your Patent Families</span>
                         </h2>
                         <p
-                            className="mt-4 text-lg text-text-secondary leading-relaxed"
+                            className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"
                             style={{ fontFamily: 'var(--font-body)' }}
                         >
                             Search across 100+ patent authorities by keyword, inventor, applicant,
@@ -70,17 +74,18 @@ export function SearchSection() {
                 </FadeIn>
 
                 {/* ── Mockup (left) + Copy (right) ── */}
-                <div className="figure-group grid lg:grid-cols-2 gap-12 items-center">
+                <div className="figure-group grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <FadeIn delay={0.1}>
-                        <DeferredMount className="w-full h-[440px] sm:h-[480px] lg:h-[520px]">
+                        <DeferredMount className="relative w-full h-[440px] sm:h-[480px] lg:h-[520px]">
                             <MockupHalo>
                                 <AnimatedPriorArtSearch />
                             </MockupHalo>
+                            {/* 302 the search bar, 304 the search mode menu, 306 the result list. */}
                         </DeferredMount>
                         {/* Honesty label: the mockup is the in-app search
                             (its chrome reads app.designyourinvention.com),
                             not the free public tool the CTA opens. */}
-                        <FigureCaption className="mt-5">Patent search, inside the platform</FigureCaption>
+                        <FigureCaption references={CAPABILITY_POINTS.length} className="mt-5">Patent search, inside the platform</FigureCaption>
                     </FadeIn>
                     <FadeIn delay={0.2}>
                         <div>
@@ -113,11 +118,12 @@ export function SearchSection() {
                                 </Button>
                                 <Button
                                     href={PATENT_SEARCH_PAGE_URL}
-                                    variant="secondary"
+                                    variant="link"
                                     size="md"
                                     className="justify-center"
                                 >
-                                    View More
+                                    Explore Patent Search
+                                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
                                 </Button>
                             </div>
                         </div>

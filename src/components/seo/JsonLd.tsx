@@ -93,7 +93,7 @@ const softwareSchema = {
     applicationSubCategory: 'Intellectual Property Management Software',
     operatingSystem: 'Web',
     description:
-        'Multi-tenant IP management software for patent docketing, PCT/PRV/NPE case management, and FDA 21 CFR Part 11-aligned workflow controls.',
+        'Multi-tenant IP management software for patent docketing, provisional, PCT, and national-phase case management, and FDA 21 CFR Part 11-aligned workflow controls.',
     featureList: [
         'Patent Docketing',
         'Application Family Management',
@@ -102,7 +102,7 @@ const softwareSchema = {
         'NPE Case Management',
         'Office Action Tracking',
         'USPTO Office Action Analysis with Source-Checked Claim Charts',
-        'Office Action Response Workspace with Two-Attorney Approval and DOCX Output',
+        'Office Action Response Workspace with Independent Attorney Approval and DOCX Output',
         'Computed Deadlines with Per-Date Derivation Traces (supported PCT and U.S. office-action rules)',
         'Patent Fee Management (42 fee types across 8 categories)',
         'Document Management with Version Control',

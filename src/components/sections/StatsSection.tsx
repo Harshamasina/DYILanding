@@ -1,16 +1,6 @@
 'use client';
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import {
-    Layers,
-    Users,
-    ShieldCheck,
-    ClipboardCheck,
-    Database,
-    DollarSign,
-    Globe,
-    type LucideIcon,
-} from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { FadeIn } from '@/components/motion/FadeIn';
 
@@ -20,15 +10,16 @@ interface Stat {
     suffix: string;
     label: string;
     sublabel: string;
-    icon?: LucideIcon;
     /** Override for non-numeric headlines (e.g. "21 CFR Part 11"). Renders
-     *  as a single chunk at a more compact size so longer phrases don't
-     *  wrap word-by-word and throw off card alignment. */
+     *  as a single chunk at a more compact size so longer phrases stay on
+     *  one line. */
     display?: string;
     /** The one compliance figure in a band, shown in amber. One per band at most. */
     accent?: boolean;
 }
 
+/* Both variants render the same ruled strip, like the summary line of a
+   docket report. 'minimal' centres each figure and drops the sublabel. */
 type StatsVariant = 'cards' | 'minimal';
 type NumberFont = 'mono' | 'display';
 
@@ -36,17 +27,17 @@ interface StatsSectionProps {
     stats: Stat[];
     variant?: StatsVariant;
     className?: string;
-    /** Eyebrow label rendered above the grid (e.g., "Platform at a Glance"). */
+    /** Label rendered above the strip (e.g., "Platform at a Glance"). */
     eyebrow?: string;
     /** Tree-spine anchor id used by the global page tree to track this section. */
     treeNode?: string;
-    /** Font family for the headline number — 'mono' (default) or 'display' (Playfair). */
+    /** Font family for the headline number: 'display' (Playfair, default) or 'mono'. */
     numberFont?: NumberFont;
 }
 
-const FONT_VAR: Record<NumberFont, string> = {
-    mono: 'var(--font-mono)',
-    display: 'var(--font-display)',
+const FONT_CLASS: Record<NumberFont, string> = {
+    mono: '[font-family:var(--font-mono)]',
+    display: '[font-family:var(--font-display)]',
 };
 
 /* useLayoutEffect warns during the static export prerender, so fall back to
@@ -99,128 +90,45 @@ function useCountUp(target: number, isVisible: boolean, duration = 1500) {
     return count;
 }
 
-function StatCard({
+function StatFigure({
     stat,
     isVisible,
-    numberFont = 'mono',
+    numberFont,
+    minimal,
 }: {
     stat: Stat;
     isVisible: boolean;
-    numberFont?: NumberFont;
+    numberFont: NumberFont;
+    minimal: boolean;
 }) {
     const count = useCountUp(stat.value, isVisible);
-    const Icon = stat.icon;
-    const fontFamily = FONT_VAR[numberFont];
-    const tone = stat.accent ? 'text-compliance' : 'text-primary';
-    const iconTile = stat.accent
-        ? 'border-amber-100/80 bg-linear-to-br from-amber-50 via-white to-amber-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(217,119,6,0.08)]'
-        : 'border-indigo-100/80 bg-linear-to-br from-indigo-50 via-white to-indigo-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(99,102,241,0.08)]';
+    const font = FONT_CLASS[numberFont];
+    const tone = stat.accent ? 'text-compliance' : 'text-text-primary';
 
     return (
-        <div className="h-full p-4 sm:p-5 lg:p-6 rounded-2xl border border-card-border bg-card-bg shadow-[0_1px_2px_rgba(15,23,42,0.04)] flex flex-col">
-            {/* Icon + headline row — items-start keeps icons aligned across cards
-                even if one card's headline renders at a different size. */}
-            <div className="flex items-start gap-3 sm:gap-4">
-                {Icon && (
-                    <div
-                        className={`shrink-0 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-xl border backdrop-blur-sm ${iconTile}`}
-                        aria-hidden="true"
-                    >
-                        <Icon
-                            className={`w-5 h-5 lg:w-6 lg:h-6 ${tone}`}
-                            strokeWidth={1.75}
-                        />
-                    </div>
-                )}
-                <div className="min-w-0 flex items-center h-11 sm:h-12 lg:h-14">
-                    {stat.display ? (
-                        <span
-                            className={`text-2xl sm:text-3xl lg:text-[2.25rem] font-bold ${tone} tracking-tight leading-none whitespace-nowrap`}
-                            style={{ fontFamily }}
-                        >
-                            {stat.display}
-                        </span>
-                    ) : (
-                        <div className="flex items-baseline gap-0.5">
-                            {stat.prefix && (
-                                <span
-                                    className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${tone}`}
-                                    style={{ fontFamily }}
-                                >
-                                    {stat.prefix}
-                                </span>
-                            )}
-                            <span
-                                className={`text-3xl sm:text-4xl lg:text-5xl font-bold ${tone} tracking-tight leading-none`}
-                                style={{ fontFamily }}
-                            >
-                                {count}
-                            </span>
-                            <span
-                                className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${tone}`}
-                                style={{ fontFamily }}
-                            >
-                                {stat.suffix}
-                            </span>
-                        </div>
+        <div className={`flex h-full flex-col ${minimal ? 'items-center text-center' : ''}`}>
+            {stat.display ? (
+                <span className={`text-2xl font-semibold leading-none tracking-tight whitespace-nowrap sm:text-3xl lg:text-[2.25rem] ${tone} ${font}`}>
+                    {stat.display}
+                </span>
+            ) : (
+                <span className={`flex items-baseline leading-none tabular-nums ${tone} ${font}`}>
+                    {stat.prefix && <span className="text-2xl font-semibold sm:text-3xl">{stat.prefix}</span>}
+                    <span className="text-4xl font-semibold tracking-tight lg:text-5xl">{count}</span>
+                    {stat.suffix && (
+                        /* A unit letter (the M in 120M+) is set at full size so it does not read as a small cap. */
+                        <span className={`font-semibold ${/[A-Za-z]/.test(stat.suffix) ? 'text-4xl tracking-tight lg:text-5xl' : 'text-2xl sm:text-3xl'}`}>{stat.suffix}</span>
                     )}
-                </div>
-            </div>
-            <p
-                className="mt-3 sm:mt-4 text-sm sm:text-base font-semibold text-text-primary"
-                style={{ fontFamily: 'var(--font-display)' }}
-            >
+                </span>
+            )}
+            <p className="mt-4 text-base leading-snug tracking-[0.06em] text-text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                 {stat.label}
             </p>
-            <p
-                className="mt-1 text-xs sm:text-sm text-text-muted"
-                style={{ fontFamily: 'var(--font-body)' }}
-            >
-                {stat.sublabel}
-            </p>
-        </div>
-    );
-}
-
-function StatMinimal({ stat, isVisible }: { stat: Stat; isVisible: boolean }) {
-    const count = useCountUp(stat.value, isVisible);
-
-    return (
-        <div className="text-center py-4">
-            <div className="flex items-baseline justify-center gap-0.5">
-                {stat.prefix && (
-                    <span
-                        className="text-3xl lg:text-4xl font-bold text-primary"
-                        style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                        {stat.prefix}
-                    </span>
-                )}
-                <span
-                    className="text-5xl lg:text-6xl font-bold text-text-primary tracking-tight"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                >
-                    {count}
-                </span>
-                <span
-                    className="text-3xl lg:text-4xl font-bold text-text-primary"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                >
-                    {stat.suffix}
-                </span>
-            </div>
-            <p
-                className="mt-2 text-sm font-semibold text-text-primary"
-                style={{ fontFamily: 'var(--font-display)' }}
-            >
-                {stat.label}
-            </p>
-            <p
-                className="mt-1 text-xs text-text-muted"
-                style={{ fontFamily: 'var(--font-body)' }}
-            >
-                {stat.sublabel}
-            </p>
+            {!minimal && (
+                <p className="mt-1 text-xs leading-relaxed text-text-secondary sm:text-sm [font-family:var(--font-body)]">
+                    {stat.sublabel}
+                </p>
+            )}
         </div>
     );
 }
@@ -231,7 +139,7 @@ export function StatsSection({
     className = '',
     eyebrow,
     treeNode,
-    numberFont = 'mono',
+    numberFont = 'display',
 }: StatsSectionProps) {
     const sectionRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -262,30 +170,28 @@ export function StatsSection({
         <section ref={sectionRef} className={`py-20 lg:py-24 ${className}`}>
             <Container>
                 {eyebrow && (
-                    <div
+                    <p
                         id={treeNode}
-                        className="flex items-center gap-3 mb-8 lg:mb-10"
+                        className="mb-6 text-base leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps] lg:mb-8"
                     >
-                        <span
-                            className="text-xs font-bold uppercase tracking-[0.15em] text-primary"
-                            style={{ fontFamily: 'var(--font-mono)' }}
-                        >
-                            {eyebrow}
-                        </span>
-                    </div>
+                        {eyebrow}
+                    </p>
                 )}
-                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
+                {/* One ruled strip: hairline dividers between figures, two
+                    columns on phones with a rule between the rows. */}
+                <div className="grid grid-cols-2 border-y border-card-border lg:grid-cols-4">
                     {stats.map((stat, i) => (
-                        <FadeIn key={stat.label} delay={i * 0.1} className="h-full">
-                            {variant === 'cards' ? (
-                                <StatCard
-                                    stat={stat}
-                                    isVisible={isVisible}
-                                    numberFont={numberFont}
-                                />
-                            ) : (
-                                <StatMinimal stat={stat} isVisible={isVisible} />
-                            )}
+                        <FadeIn
+                            key={stat.label}
+                            delay={i * 0.1}
+                            className="h-full border-card-border px-4 py-6 even:border-l nth-[n+3]:border-t sm:px-6 lg:border-l lg:px-8 lg:py-8 lg:first:border-l-0 lg:nth-[n+3]:border-t-0"
+                        >
+                            <StatFigure
+                                stat={stat}
+                                isVisible={isVisible}
+                                numberFont={numberFont}
+                                minimal={variant === 'minimal'}
+                            />
                         </FadeIn>
                     ))}
                 </div>
@@ -294,29 +200,29 @@ export function StatsSection({
     );
 }
 
-/* Pre-defined stat sets — all numbers are real product capabilities */
+/* Pre-defined stat sets: all numbers are real product capabilities */
 export const HERO_STATS: Stat[] = [
     {
         value: 7,
         suffix: '',
         label: 'Core Patent Modules',
-        sublabel: 'Families, PRV, PCT, NPE & more',
-        icon: Layers,
+        sublabel: 'Families, provisionals, PCT, national phase & more',
     },
     {
         value: 5,
         suffix: '',
         label: 'User Roles',
         sublabel: 'granular RBAC built in',
-        icon: Users,
     },
     {
-        value: 21,
+        /* 21 is the CFR title number, not a count, so it is set as a static
+           figure; a counting "21" read as twenty-one controls. */
+        value: 0,
+        display: 'Part 11',
         suffix: '',
         prefix: '',
-        label: 'CFR Part 11-Aligned Controls',
+        label: '21 CFR Part 11‑Aligned Controls',
         sublabel: 'Reason-for-change, e-signature, audit history',
-        icon: ShieldCheck,
         accent: true,
     },
     {
@@ -324,7 +230,6 @@ export const HERO_STATS: Stat[] = [
         suffix: '%',
         label: 'Critical Actions Logged',
         sublabel: 'append-only change history',
-        icon: ClipboardCheck,
     },
 ];
 
@@ -334,28 +239,24 @@ export const PRODUCT_STATS: Stat[] = [
         suffix: 'M+',
         label: 'Patent Records Searchable',
         sublabel: 'across 100+ patent authorities',
-        icon: Database,
     },
     {
         value: 42,
         suffix: '+',
         label: 'Fee Types Tracked',
         sublabel: 'across 8 categories',
-        icon: DollarSign,
     },
     {
         value: 4,
         suffix: '',
         label: 'Drafting Jurisdictions',
         sublabel: 'US, EP, IN, WO (JP and CN planned)',
-        icon: Globe,
     },
     {
         value: 100,
         suffix: '%',
-        label: 'Audit Coverage',
-        sublabel: 'critical actions fully traceable',
-        icon: ClipboardCheck,
+        label: 'Critical Edits with a Reason',
+        sublabel: 'reason-for-change required before saving',
         accent: true,
     },
 ];

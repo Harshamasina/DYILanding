@@ -83,6 +83,12 @@ const STRATEGIES = [
     { label: 'File a terminal disclaimer', text: 'Answer a nonstatutory double patenting rejection. Not offered against statutory double patenting.' },
     { label: 'Rewrite in independent form as indicated', text: 'Take up allowable subject matter in an objected-to claim. The rewrite is computed and previewed before you accept it.' },
 ];
+const RESPONSE_POINTS = [
+    { title: 'Compared With Your Patent Draft', text: 'Line up the examined claims against the linked patent draft, claim by claim, to see how prosecution has moved them.' },
+    { title: 'Consistent Claim Amendments', text: 'Claim statuses and amendment markup are computed from your edits, with numbering and dependencies checked.' },
+    { title: 'Support From the Disclosure', text: 'Link inserted language to specific passages in the application as filed for attorney confirmation. Inserted language without matching disclosure support is flagged for review before approval.' },
+    { title: 'A Structured Starting Point', text: 'Carry issues, claims, references, and examiner quotations into response sections for attorney drafting and review.' },
+];
 const CLAIM_STATUSES = ['Original', 'Currently amended', 'Previously presented', 'New', 'Canceled', 'Withdrawn'];
 const LISTING_CHECKS = [
     'Status identifiers and markings computed from your edits',
@@ -98,7 +104,7 @@ const ANALYSIS_BENEFITS = [
 ];
 const REVIEW_STEPS = [
     { title: 'Review the response', text: 'Resolve open issues, check citations, and confirm the support for amended claims.' },
-    { title: 'Record attorney approval', text: 'A second attorney approves the response with an electronic signature, locking the content.' },
+    { title: 'Record attorney approval', text: 'An authorized attorney who did not last revise the draft approves the response with an electronic signature, locking the content.' },
     { title: 'Export the approved copy', text: 'Download a Word document. The attorney handles filing and records what was submitted.' },
 ];
 const GOVERNANCE = [
@@ -129,30 +135,33 @@ export default function OfficeActionsPage() {
                             <p className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg">
                                 Turn a USPTO office action into a reviewed issue map, then build a response from the signed analysis. Connect rejections to claims and source passages, prepare supported amendments, and keep attorney decisions on the record.
                             </p>
+                            {/* The jurisdiction boundary sits with the promise it limits, at reading
+                                size, so EP and Indian prosecutors learn the scope before the CTAs. */}
+                            <p className="mt-5 border-t border-card-border pt-4 text-base leading-relaxed text-text-primary">
+                                Built for USPTO office actions today. Other jurisdictions are planned, starting with EP.
+                            </p>
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                                <BookDemoButton size="lg" className="justify-center">Book a Demo<ArrowRight className="h-5 w-5" aria-hidden="true" /></BookDemoButton>
+                                <BookDemoButton topic="office action analysis and response" size="lg" className="justify-center">Book a Demo</BookDemoButton>
                                 {/* 1:39 is where the film turns to office actions ("Then the USPTO pushes back"). */}
-                                <WatchDemoButton variant="secondary" size="lg" startTime={99} className="justify-center">
+                                <WatchDemoButton variant="outline" size="lg" startTime={99} className="justify-center">
                                     <Play className="h-5 w-5 fill-current" />
                                     Watch Demo
                                 </WatchDemoButton>
                             </div>
-                            <p className="mt-4 text-xs leading-relaxed text-text-muted">Built for USPTO office actions</p>
                         </div>
-                        <div className="pointer-events-none hidden lg:flex lg:w-full lg:justify-end"><OfficeActionHeroSvg /></div>
+                        <div className="pointer-events-none hidden md:flex md:w-full md:justify-center lg:justify-end"><OfficeActionHeroSvg /></div>
                     </div>
                 </Container>
                 <Container className="relative z-10 mt-12 sm:mt-16">
                     <MockupHalo><AnimatedOfficeActionWorkflow /></MockupHalo>
                 </Container>
                 <Container className="relative z-10 mt-8 sm:mt-10">
+                    {/* A quiet caption under the walkthrough, so the player's own stage
+                        tabs carry the sequence instead of a second labelled strip. */}
                     <FadeIn delay={0.1}>
-                        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                            <span className="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted [font-family:var(--font-mono)]">One connected matter</span>
-                            <div className="flex flex-wrap justify-center gap-2">
-                                {['Source Record', 'Issue Map', 'Signed Analysis', 'Response'].map(label => <span key={label} className="inline-flex items-center gap-2 rounded-lg border border-card-border bg-white/80 px-3 py-1.5 text-xs font-medium text-text-secondary shadow-sm [font-family:var(--font-mono)]"><span className="h-1.5 w-1.5 rounded-full bg-primary/60" />{label}</span>)}
-                            </div>
-                        </div>
+                        <p className="text-center text-sm italic leading-relaxed text-slate-600 [font-family:var(--font-body)]">
+                            One connected matter: source record, issue map, signed analysis, and response
+                        </p>
                     </FadeIn>
                 </Container>
             </section>
@@ -162,7 +171,7 @@ export default function OfficeActionsPage() {
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">
                     <SectionIntro eyebrow="The prosecution record" title="Start From the Record the Examiner Acted On">
-                        A response is only as strong as the record behind it. The analysis keeps <strong className="font-semibold text-text-primary">the office action, the examined claim set, and the application as filed in their own roles</strong>, so every later reading points back to the right paper.
+                        A response is only as strong as the record behind it. The analysis keeps the office action, the examined claim set, and the application as filed in their own roles, so every later reading points back to the right paper.
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><ProsecutionRecordVisual /></div></FadeIn>
                     <div className="mt-10 grid gap-x-8 gap-y-6 border-t border-card-border pt-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
@@ -184,7 +193,7 @@ export default function OfficeActionsPage() {
             <section id="issue-map" className="relative scroll-mt-24 overflow-hidden py-20 sm:py-24 lg:py-28">
                 <Container className="relative z-10">
                     <SectionIntro eyebrow="Source-linked analysis" title="Every Examiner Issue Connected to the Record">
-                        See each rejection, the claims it affects, and the passages behind it. The issue map brings <strong className="font-semibold text-text-primary">the examiner’s position and the supporting source text into one reviewable record.</strong>
+                        See each rejection, the claims it affects, and the passages behind it. The issue map brings the examiner’s position and the supporting source text into one reviewable record.
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><OfficeActionEvidenceTrace /></div></FadeIn>
                     <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3">
@@ -208,14 +217,14 @@ export default function OfficeActionsPage() {
                     <SectionIntro eyebrow="Claim charts" title="Read the Rejection Limitation by Limitation">
                         Each claim is broken into labeled limitations and charted against every reference the examiner relies on. See <strong className="font-semibold text-text-primary">where the examiner’s mapping holds, where it is partial, and where it says nothing.</strong>
                     </SectionIntro>
-                    {/* Rows: example label, card, caption. The chart sits on a subgrid so the
-                        rules beside it start and end with the card, not the label or caption. */}
-                    <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:grid-rows-[auto_1fr_auto] lg:gap-x-14 lg:gap-y-0">
-                        <FadeIn delay={0.1} className="relative lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:grid lg:grid-rows-subgrid">
+                    {/* Rows: card, caption. The chart sits on a subgrid so the rules beside
+                        it start and end with the card, not the caption below it. */}
+                    <div className="mt-10 grid grid-cols-1 gap-10 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:grid-rows-[1fr_auto] lg:gap-x-14 lg:gap-y-0">
+                        <FadeIn delay={0.1} className="relative lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:grid lg:grid-rows-subgrid">
                             <div aria-hidden="true" className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-primary/[0.05] blur-3xl" />
-                            <LimitationChartVisual className="relative lg:row-span-3 lg:grid lg:grid-rows-subgrid" />
+                            <LimitationChartVisual className="relative lg:row-span-2 lg:grid lg:grid-rows-subgrid" />
                         </FadeIn>
-                        <ol className="flex flex-col gap-6 lg:col-start-1 lg:row-start-2 lg:justify-between lg:gap-5 lg:py-1">
+                        <ol className="flex flex-col gap-6 lg:col-start-1 lg:row-start-1 lg:justify-between lg:gap-5 lg:py-1">
                             {CHART_RULES.map(({ title, text }, i) => (
                                 <li key={title}>
                                     <FadeIn delay={i * 0.06} className="group flex gap-4">
@@ -236,7 +245,7 @@ export default function OfficeActionsPage() {
             <section id="strategy" className="scroll-mt-24 py-20 sm:py-24 lg:py-28">
                 <Container>
                     <SectionIntro eyebrow="Response strategy" title="Choose a Strategy for Every Ground of Rejection">
-                        Every issue in the signed analysis gets <strong className="font-semibold text-text-primary">a recorded strategy before the drafting starts.</strong> The choice shapes the response sections, and the reasoning stays with the issue for the reviewing attorney.
+                        Every issue in the signed analysis gets a recorded strategy before the drafting starts. The choice shapes the response sections, and the reasoning stays with the issue for the reviewing attorney.
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><ResponseStrategyVisual /></div></FadeIn>
                     <div className="mt-10 grid items-start gap-8 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.6fr)] lg:gap-14">
@@ -244,7 +253,7 @@ export default function OfficeActionsPage() {
                             <aside className="rounded-2xl border border-primary/15 bg-primary/[0.04] p-6 sm:p-8">
                                 <Fingerprint className="h-7 w-7 text-primary" aria-hidden="true" />
                                 <h3 className="mt-5 text-2xl font-semibold text-text-primary">Counsel decides.</h3>
-                                <p className="mt-4 text-sm leading-relaxed text-text-secondary">Available response strategies reflect the issue type and supported U.S. procedures. An attorney selects the approach and records the reasoning before drafting begins.</p>
+                                <p className="mt-4 text-sm leading-relaxed text-slate-600">Available response strategies reflect the issue type and supported U.S. procedures. An attorney selects the approach and records the reasoning before drafting begins.</p>
                                 <p className="mt-6 border-t border-primary/15 pt-5 text-sm font-semibold leading-relaxed text-primary">Issue → Strategy → Response section</p>
                             </aside>
                         </FadeIn>
@@ -267,18 +276,28 @@ export default function OfficeActionsPage() {
             <section id="response" className="scroll-mt-24 bg-page-bg-alt py-20 sm:py-24 lg:py-28">
                 <Container>
                     <SectionIntro eyebrow="Structured response drafting" title="Build the Response From the Signed Analysis">
-                        Carry reviewed issues into a structured draft. Keep <strong className="font-semibold text-text-primary">your strategy, claim changes, and disclosure support connected</strong> as you prepare the reply.
+                        Carry reviewed issues into a structured draft. Keep your strategy, claim changes, and disclosure support connected as you prepare the reply.
                     </SectionIntro>
                     {/* Rows: example label, card. The four cards span both rows, so they run
                         from the top of the label to the bottom of the card. */}
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:grid-rows-[auto_1fr] lg:gap-y-0">
                         <FadeIn delay={0.1} className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:grid lg:grid-rows-subgrid"><OfficeActionResponsePreview className="lg:row-span-2 lg:grid lg:grid-rows-subgrid" /></FadeIn>
-                        <div className="grid gap-6 sm:grid-cols-2 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:grid-rows-2">
-                            <FadeIn className="h-full"><CapabilityCard title="Compared With Your Patent Draft" description="Line up the examined claims against the linked patent draft, claim by claim, to see how prosecution has moved them." /></FadeIn>
-                            <FadeIn delay={0.06} className="h-full"><CapabilityCard title="Consistent Claim Amendments" description="Claim statuses and amendment markup are computed from your edits, with numbering and dependencies checked." /></FadeIn>
-                            <FadeIn delay={0.12} className="h-full"><CapabilityCard title="Support From the Disclosure" description="Link inserted language to specific passages in the application as filed for attorney confirmation. Inserted language without matching disclosure support is flagged for review before approval." /></FadeIn>
-                            <FadeIn delay={0.18} className="h-full"><CapabilityCard title="A Structured Starting Point" description="Carry issues, claims, references, and examiner quotations into response sections for attorney drafting and review." /></FadeIn>
-                        </div>
+                        {/* The same numbered ruled list as the claim chart rules in section 03.
+                            On desktop it is one column whose rows share the figure's full
+                            height, closed by a bottom rule, so both sides end level. */}
+                        <ol className="grid content-start gap-x-8 sm:grid-cols-2 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:auto-rows-fr lg:grid-cols-1 lg:content-stretch lg:border-b lg:border-card-border">
+                            {RESPONSE_POINTS.map(({ title, text }, i) => (
+                                <li key={title} className="border-t border-card-border py-5">
+                                    <FadeIn delay={i * 0.06} className="flex gap-4">
+                                        <SubsectionNumber size="sm" className="mt-0.5 w-9 shrink-0" />
+                                        <div>
+                                            <h3 className="text-base font-semibold text-text-primary">{title}</h3>
+                                            <p className="mt-1 text-sm leading-relaxed text-text-secondary">{text}</p>
+                                        </div>
+                                    </FadeIn>
+                                </li>
+                            ))}
+                        </ol>
                     </div>
                     <FadeIn delay={0.05}>
                         <div className="mt-10 grid gap-8 rounded-2xl border border-primary/15 bg-white p-6 shadow-sm sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
@@ -302,7 +321,7 @@ export default function OfficeActionsPage() {
                     <FadeIn delay={0.1}>
                         <div className="mt-6 flex items-start gap-3 rounded-2xl border border-card-border bg-white p-5">
                             <SlidersHorizontal className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
-                            <p className="text-sm leading-relaxed text-text-secondary"><span className="font-semibold text-text-primary">Model assistance, under your control.</span> AI drafting aids depend on evaluated capabilities and workspace policy. Attorneys select strategies and accept amendments. <a href="#faq" className="font-semibold text-primary underline-offset-4 hover:underline">See Availability</a>.</p>
+                            <p className="text-sm leading-relaxed text-text-secondary"><span className="font-semibold text-text-primary">Model assistance, under your control.</span> AI drafting aids depend on evaluated capabilities and workspace policy. Attorneys select strategies and accept amendments. <a href="#faq" className="font-semibold text-primary underline-offset-4 hover:underline">See the FAQ on AI drafting aids</a>.</p>
                         </div>
                     </FadeIn>
                 </Container>
@@ -337,7 +356,7 @@ export default function OfficeActionsPage() {
             <section id="governance" className="scroll-mt-24 bg-navy py-20 sm:py-24 lg:py-28">
                 <Container>
                     <SectionIntro eyebrow="Audit, security, and control" title="Built for Privileged Prosecution Work" dark accent>
-                        The same <strong className="font-semibold text-white">access controls and audit history that protect your docket</strong> extend to every office action analysis and response.
+                        The same access controls and audit history that protect your docket extend to every office action analysis and response.
                     </SectionIntro>
                     <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
                         {GOVERNANCE.map(({ title, text }, i) => (
@@ -367,8 +386,8 @@ export default function OfficeActionsPage() {
                         <h2 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl lg:text-4xl">See It on Your Next Office Action</h2>
                         <p className="mt-4 text-base leading-relaxed text-text-secondary sm:text-lg">Explore the analysis and response workflow on a published US application of your choice.</p>
                         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-                            <BookDemoButton size="lg" className="w-full justify-center sm:w-auto">Book a Demo<ArrowRight className="h-5 w-5" aria-hidden="true" /></BookDemoButton>
-                            <Button href={DOCKETING_PAGE_URL} variant="secondary" size="lg" className="w-full justify-center sm:w-auto">Explore Patent Docketing</Button>
+                            <BookDemoButton topic="office action analysis and response" size="lg" className="w-full justify-center sm:w-auto">Book a Demo</BookDemoButton>
+                            <Button href={DOCKETING_PAGE_URL} variant="link" size="lg" className="justify-center">Explore Patent Docketing<ArrowRight className="h-5 w-5" aria-hidden="true" /></Button>
                         </div>
                     </div>
                 </Container>
@@ -383,7 +402,7 @@ export default function OfficeActionsPage() {
 function SectionIntro({ eyebrow, title, highlight, children, dark = false, accent = false }: { eyebrow: string; title: string; highlight?: string; children: ReactNode; dark?: boolean; accent?: boolean }) {
     const at = highlight ? title.indexOf(highlight) : -1;
     const heading = at >= 0 && highlight ? <>{title.slice(0, at)}<span className="pr-[0.12em] italic">{highlight}</span>{title.slice(at + highlight.length)}</> : title;
-    return <FadeIn><div className="max-w-3xl"><SectionMark tone={accent ? 'compliance' : 'primary'} dark={dark}>{eyebrow}</SectionMark><h2 className={`mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl ${dark ? 'text-white' : 'text-text-primary'}`}>{heading}</h2><p className={`mt-4 text-lg leading-relaxed ${dark ? 'text-text-on-dark' : 'text-text-secondary'}`}>{children}</p></div></FadeIn>;
+    return <FadeIn><div className="max-w-3xl"><SectionMark tone={accent ? 'compliance' : 'primary'} dark={dark}>{eyebrow}</SectionMark><h2 className={`mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl ${dark ? 'text-white' : 'text-text-primary'}`}>{heading}</h2><p className={`mt-4 max-w-[40rem] text-lg leading-relaxed ${dark ? 'text-text-on-dark' : 'text-text-secondary'}`}>{children}</p></div></FadeIn>;
 }
 
 function CapabilityCard({ title, description, surface = 'card', numbered = true }: { title: string; description: string; surface?: 'card' | 'open' | 'step'; numbered?: boolean }) {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MockupRecordLabel } from './BrowserMockupChrome';
 
 /* ── Choreographed deadline calendar mockup ──
    Dynamically uses the current month and next month so it always
@@ -130,13 +131,9 @@ export function AnimatedCalendar() {
         <div aria-hidden="true" role="img" className="relative rounded-xl border border-card-border bg-white shadow-2xl shadow-black/10 overflow-hidden select-none h-[520px] sm:h-[540px] lg:h-[560px] flex flex-col">
             {/* Chrome Bar */}
             <div className="shrink-0 flex items-center gap-2 px-3 py-2 bg-page-bg-alt border-b border-card-border">
-                <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
-                </div>
-                <div className="flex-1 flex justify-center">
-                    <div className="flex items-center gap-1.5 px-3 py-0.5 bg-white rounded-md text-[9px] text-text-muted border border-card-border"
+                <MockupRecordLabel record="DEMO-DKT-001" screen="Deadline calendar" />
+                <div className="hidden sm:flex flex-1 min-w-0 justify-end">
+                    <div className="flex items-center gap-1.5 px-3 py-0.5 bg-white rounded-md text-[10px] sm:text-[9px] text-text-muted border border-card-border"
                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                         <svg className="w-2.5 h-2.5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -144,17 +141,16 @@ export function AnimatedCalendar() {
                         app.designyourinvention.com
                     </div>
                 </div>
-                <div className="w-[40px]" />
             </div>
 
             {/* Filter row 1: Date range picker (left) + Showing text (right) */}
             <div className="shrink-0 px-3 pt-2 pb-1 flex items-center justify-between gap-2">
                 <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-card-border bg-white" style={{ fontFamily: 'var(--font-dashboard)' }}>
-                    <span className="text-[9px] text-text-muted/70">Start date</span>
+                    <span className="text-[10px] sm:text-[9px] text-text-muted/70">Start date</span>
                     <svg className="w-2.5 h-2.5 text-text-muted/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
-                    <span className="text-[9px] text-text-muted/70">End date</span>
+                    <span className="text-[10px] sm:text-[9px] text-text-muted/70">End date</span>
                     <svg className="w-3 h-3 text-text-muted ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -166,7 +162,7 @@ export function AnimatedCalendar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 3 }}
                         transition={{ duration: 0.25 }}
-                        className="text-[9px] text-text-muted"
+                        className="text-[10px] sm:text-[9px] text-text-muted"
                         style={{ fontFamily: 'var(--font-dashboard-mono)' }}
                     >
                         Showing {month.year}-{String(month.monthIndex + 1).padStart(2, '0')}-01 to {month.year}-{String(month.monthIndex + 1).padStart(2, '0')}-{String(month.totalDays).padStart(2, '0')}
@@ -219,7 +215,7 @@ export function AnimatedCalendar() {
                         {/* Day Headers */}
                         <div className="shrink-0 grid grid-cols-7 mb-1">
                             {DAYS.map(d => (
-                                <div key={d} className="text-center py-1.5 text-[9px] font-semibold text-text-muted uppercase tracking-wider"
+                                <div key={d} className="text-center py-1.5 text-[10px] sm:text-[9px] font-semibold text-text-muted uppercase tracking-wider"
                                     style={{ fontFamily: 'var(--font-dashboard-mono)' }}>
                                     {d}
                                 </div>
@@ -249,7 +245,7 @@ export function AnimatedCalendar() {
                                         {visibleEvents.map((event, ei) => (
                                             <motion.div
                                                 key={event.label}
-                                                className={`mt-0.5 px-1 py-0.5 rounded text-[7px] font-medium truncate ${event.color} ${event.textColor}`}
+                                                className={`mt-0.5 px-1 py-0.5 rounded text-[10px] sm:text-[7px] font-medium truncate ${event.color} ${event.textColor}`}
                                                 style={{ fontFamily: 'var(--font-dashboard-mono)' }}
                                                 initial={{ opacity: 0, scale: 0.8 }}
                                                 animate={{ opacity: 1, scale: 1 }}
@@ -260,7 +256,7 @@ export function AnimatedCalendar() {
                                         ))}
                                         {overflowCount > 0 && (
                                             <motion.span
-                                                className="block mt-0.5 pl-1 text-[7px] font-semibold text-text-muted"
+                                                className="block mt-0.5 pl-1 text-[10px] sm:text-[7px] font-semibold text-text-muted"
                                                 style={{ fontFamily: 'var(--font-dashboard-mono)' }}
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
