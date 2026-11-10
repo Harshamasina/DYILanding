@@ -92,7 +92,7 @@ export function ComplianceSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             FDA 21 CFR Part 11‑Aligned Controls,{' '}
-                            <span className="italic">Built In, Not Bolted On</span>
+                            <span className="accent-amend">Built In, Not Bolted On</span>
                         </h2>
                         <p
                             className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"

@@ -45,7 +45,7 @@ export function HeroSection() {
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
                                     Patent Operations That Replace Your{' '}
-                                    <span className="text-primary italic">
+                                    <span className="accent-amend text-primary">
                                         Spreadsheets, Scattered Searches, and Drafting Tools
                                     </span>
                                 </h1>

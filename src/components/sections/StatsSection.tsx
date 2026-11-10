@@ -121,7 +121,7 @@ function StatFigure({
                     )}
                 </span>
             )}
-            <p className="mt-4 text-base leading-snug tracking-[0.06em] text-text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+            <p className="mt-4 text-base leading-snug tracking-[0.04em] text-text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                 {stat.label}
             </p>
             {!minimal && (
@@ -172,7 +172,7 @@ export function StatsSection({
                 {eyebrow && (
                     <p
                         id={treeNode}
-                        className="mb-6 text-base leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps] lg:mb-8"
+                        className="mb-6 text-base leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps] lg:mb-8"
                     >
                         {eyebrow}
                     </p>

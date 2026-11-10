@@ -1081,3 +1081,33 @@ html {
     font-style: italic;
     color: var(--color-text-muted);
 }
+
+@layer components {
+    /* Heading accent, set the way a claim amendment marks inserted text:
+       upright and underlined, in place of the italic serif accent. The line
+       is thin, low and indigo, and skips descenders. */
+    .accent-amend {
+        font-style: normal;
+        text-decoration-line: underline;
+        text-decoration-thickness: 0.07em;
+        text-underline-offset: 0.17em;
+        text-decoration-color: color-mix(in srgb, var(--color-primary) 48%, transparent);
+        text-decoration-skip-ink: auto;
+    }
+
+    /* A page's main headline already sets its accent in indigo, so there the
+       colour carries it and the line is left off: three underlined lines at
+       hero size would read as links. */
+    .accent-amend.text-primary {
+        text-decoration-line: none;
+    }
+
+    /* Drafting-paper dot field behind a figure, in place of a blurred colour
+       pool: the same dot grid as the hero drawings' backdrop, faded at the
+       edges so it reads as paper under the figure, not as light. */
+    .drafting-dots {
+        background-image: radial-gradient(color-mix(in srgb, var(--color-primary) 30%, transparent) 1px, transparent 1.4px);
+        background-size: 14px 14px;
+        mask-image: radial-gradient(ellipse at center, #000 30%, transparent 72%);
+    }
+}

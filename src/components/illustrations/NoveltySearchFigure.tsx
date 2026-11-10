@@ -109,7 +109,7 @@ export function NoveltySearchFigure({ className = '' }: { className?: string }) 
             {/* Header: the brief and its assessment date */}
             <div className="flex flex-wrap items-start justify-between gap-4 border-b border-card-border bg-linear-to-r from-primary/[0.06] via-white to-white px-5 py-5 sm:px-7">
                 <div className="min-w-0">
-                    <p className="text-sm leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">Novelty search · Invention brief</p>
+                    <p className="text-sm leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">Novelty search · Invention brief</p>
                     <p className="mt-2 text-lg font-semibold text-text-primary [font-family:var(--font-display)] sm:text-xl">Fast-dissolving aspirin and caffeine tablet</p>
                 </div>
                 <div className="flex flex-col items-start gap-1 sm:items-end">

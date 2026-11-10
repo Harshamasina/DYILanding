@@ -15,7 +15,7 @@ export function MockupRecordLabel({ record, screen, className = '' }: MockupReco
             <span className="text-[10px] font-semibold tracking-[0.04em] text-navy-light sm:text-[10px] [font-family:var(--font-dashboard-mono)]">
                 {record}
             </span>
-            <span className="truncate text-[10px] sm:text-[9px] tracking-[0.08em] text-text-secondary sm:text-xs [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+            <span className="truncate text-[10px] sm:text-[9px] tracking-[0.04em] text-text-secondary sm:text-xs [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                 {screen}
             </span>
         </div>

@@ -59,7 +59,7 @@ export function SearchSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             Free Patent Search, Connected to{' '}
-                            <span className="italic">Your Patent Families</span>
+                            <span className="accent-amend">Your Patent Families</span>
                         </h2>
                         <p
                             className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"

@@ -61,7 +61,7 @@ export function OfficeActionSection() {
                 <FadeIn treeNode="tree-office-actions">
                     <div className="mb-16 max-w-3xl lg:mb-20">
                         <h2 className="text-3xl font-bold tracking-tight text-text-primary [font-family:var(--font-display)] sm:text-4xl lg:text-5xl">
-                            Office Action Analysis and <span className="italic">Response Drafting</span>
+                            Office Action Analysis and <span className="accent-amend">Response Drafting</span>
                         </h2>
                         <p className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                             Map every rejection in a USPTO office action to the claims, limitations, and cited passages behind it, then build the response on the signed analysis. Quotations are checked against the source text, amendments are linked to support in the application as filed, and the response is approved by an attorney before it is exported for filing.

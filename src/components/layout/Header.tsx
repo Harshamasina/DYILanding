@@ -420,7 +420,7 @@ export function Header() {
                                 <Link
                                     href={FEATURES_SECTION_URL}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-base text-navy-light transition-colors hover:text-primary leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]"
+                                    className="text-base text-navy-light transition-colors hover:text-primary leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]"
                                 >
                                     Features
                                 </Link>
@@ -456,7 +456,7 @@ export function Header() {
 
                             {/* Company group */}
                             <div className="flex flex-col items-center gap-4">
-                                <span className="text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                <span className="text-base text-navy-light leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                     Company
                                 </span>
                                 {COMPANY_MENU.map((item) => (

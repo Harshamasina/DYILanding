@@ -19,7 +19,7 @@ export function ProsecutionRecordVisual() {
                     <article key={label} className="flex h-full flex-col border-b border-card-border py-6 last:border-b-0 lg:border-b-0 lg:border-l lg:px-7 lg:first:border-l-0 lg:first:pl-0 lg:last:pr-0">
                         <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
                         <h3 className="mt-4 text-xl font-semibold text-text-primary">{label}</h3>
-                        <p className="mt-1.5 text-base leading-none tracking-[0.06em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">{role}</p>
+                        <p className="mt-1.5 text-base leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">{role}</p>
                         <p className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">{text}</p>
                         <p className="mt-6 flex items-start gap-2 border-t border-card-border pt-4 text-sm leading-relaxed text-primary"><ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />{destination}</p>
                     </article>

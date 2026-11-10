@@ -41,10 +41,10 @@ export function LoeCard({ note }: { note?: string }) {
                                 {/* A plain tab, drawn like the section mark, instead of a filled pill */}
                                 {/* Tab, label and note share one line, wrapping on phones. */}
                                 <span className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                                    <span className="rounded-[3px] border border-primary/30 bg-primary/[0.04] px-2 pt-1 pb-1.5 text-base leading-none tracking-[0.1em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                    <span className="rounded-[3px] border border-primary/30 bg-primary/[0.04] px-2 pt-1 pb-1.5 text-base leading-none tracking-[0.04em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                         New
                                     </span>
-                                    <span className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
+                                    <span className="text-base leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                                         Loss of Exclusivity timeline
                                     </span>
                                     {note && (
@@ -58,7 +58,7 @@ export function LoeCard({ note }: { note?: string }) {
                                     style={{ fontFamily: 'var(--font-display)' }}
                                 >
                                     See When Exclusivity{' '}
-                                    <span className="italic">Really Ends</span>
+                                    <span className="accent-amend">Really Ends</span>
                                 </h2>
 
                                 <p

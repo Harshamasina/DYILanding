@@ -45,7 +45,7 @@ export function SectionMark({
                 {numbered && <span className="section-mark-number text-lg font-semibold tabular-nums" />}
             </span>
             <span
-                className={`text-base leading-snug tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] ${label}`}
+                className={`text-base leading-snug tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] ${label}`}
             >
                 {children}
             </span>

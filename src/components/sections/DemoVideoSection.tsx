@@ -46,7 +46,7 @@ export function DemoVideoSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             From Docketing to{' '}
-                            <span className="italic">Office Action Response</span>
+                            <span className="accent-amend">Office Action Response</span>
                         </h2>
                         <p
                             className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"

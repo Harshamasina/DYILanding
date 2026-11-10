@@ -50,7 +50,7 @@ export function AiDraftingSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             AI-Powered{' '}
-                            <span className="italic">Patent Drafting</span>
+                            <span className="accent-amend">Patent Drafting</span>
                         </h2>
                         <p
                             className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"

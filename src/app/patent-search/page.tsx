@@ -15,8 +15,10 @@ import { MockupHalo } from '@/components/ui/MockupHalo';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
+import { IndexCard } from '@/components/ui/IndexCard';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
 import { InlineList } from '@/components/ui/RuledList';
+import { ProcessFlow } from '@/components/ui/ProcessFlow';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedPatentSearch, CompoundsTrialsStill } from '@/components/ui/AnimatedPatentSearch';
 import { FigureCaption } from '@/components/ui/FigureCaption';
@@ -40,14 +42,6 @@ interface IconItem {
     title: string;
     description: string;
 }
-
-const TRUST_STRIP = [
-    '120M+ patent records',
-    '100+ patent authorities',
-    'Chemical structure search',
-    'Clinical-trial intelligence',
-    'Export-ready results',
-];
 
 const SEARCH_MODES: IconItem[] = [
     {
@@ -105,8 +99,6 @@ const ENRICHMENT: IconItem[] = [
         description: 'Linked trials from ClinicalTrials.gov show phase, status, sponsor, and indication, so you can see what is in clinic for a molecule and who is running it, right beside the patent.',
     },
 ];
-
-const DATA_SOURCES = ['PubChem', 'SureChEMBL', 'UniChem', 'RDKit', 'ClinicalTrials.gov'];
 
 const FREE_FEATURES = [
     'Search 120M+ patent records across 100+ authorities',
@@ -307,7 +299,7 @@ export default function PatentSearchPage() {
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Search 120M+ Patents, From Keyword to{' '}
-                                <span className="text-primary italic">Chemical Structure</span>
+                                <span className="accent-amend text-primary">Chemical Structure</span>
                             </h1>
                             <p className="mt-5 text-base leading-relaxed text-text-secondary [font-family:var(--font-body)] sm:mt-6 sm:text-lg">
                                 Search 120M+ global patent records alongside chemical structures,
@@ -346,7 +338,11 @@ export default function PatentSearchPage() {
                 {/* Credibility strip */}
                 <Container className="relative z-10 mt-8 sm:mt-10">
                     <FadeIn delay={0.1}>
-                        <InlineList label="Coverage" items={TRUST_STRIP} align="center" />
+                        <p className="mx-auto max-w-3xl text-center text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                            <span className="font-semibold text-text-primary">120M+ patent records</span> from{' '}
+                            <span className="font-semibold text-text-primary">100+ patent authorities</span>, with chemical
+                            structure search, clinical-trial intelligence, and export-ready results.
+                        </p>
                     </FadeIn>
                 </Container>
             </section>
@@ -418,7 +414,7 @@ export default function PatentSearchPage() {
                         <div className="mt-8 rounded-2xl border border-card-border bg-white p-5 shadow-sm sm:p-6">
                             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                                 <div className="max-w-sm">
-                                    <span className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
+                                    <span className="text-base leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                                         Filter results by
                                     </span>
                                     <p
@@ -446,7 +442,7 @@ export default function PatentSearchPage() {
                         <div className="max-w-3xl">
                             <SectionMark>Novelty Search</SectionMark>
                             <h2 className="mt-5 text-3xl font-bold tracking-tight text-text-primary [font-family:var(--font-display)] sm:text-4xl lg:text-5xl">
-                                Automated Novelty Search, <span className="italic">From Your Invention Brief</span>
+                                Automated Novelty Search, <span className="accent-amend">From Your Invention Brief</span>
                             </h2>
                             <p className="mt-4 text-lg leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                                 Inside the platform, start from the invention brief instead of a query. The
@@ -457,21 +453,11 @@ export default function PatentSearchPage() {
                         </div>
                     </FadeIn>
 
-                    <ol className="mt-10 grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
-                        {NOVELTY_STEPS.map((step, i) => (
-                            <li key={step.title} className="border-t border-card-border py-5">
-                                <FadeIn delay={i * 0.06}>
-                                    <SubsectionNumber size="sm" />
-                                    <h3 className="mt-3 text-base font-semibold text-text-primary [font-family:var(--font-display)]">{step.title}</h3>
-                                    <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">{step.description}</p>
-                                </FadeIn>
-                            </li>
-                        ))}
-                    </ol>
+                    <ProcessFlow label="How the novelty search runs" steps={NOVELTY_STEPS} className="mt-10 lg:mt-12" />
 
                     <FadeIn delay={0.08}>
                         <div className="figure-group relative mt-8 lg:mt-10">
-                            <div aria-hidden="true" className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-primary/[0.05] blur-3xl" />
+                            <div aria-hidden="true" className="pointer-events-none absolute -inset-6 drafting-dots" />
                             <NoveltySearchFigure className="relative" />
                             <FigureCaption className="relative mt-5">Novelty search for one invention brief, four ranked references</FigureCaption>
                         </div>
@@ -479,7 +465,7 @@ export default function PatentSearchPage() {
 
                     <div className="mt-12 grid grid-cols-1 items-end gap-x-10 gap-y-2 lg:mt-14 lg:grid-cols-[minmax(0,1fr)_auto]">
                         <FadeIn>
-                            <NumberedRuledList items={NOVELTY_AFTER} columns={2} />
+                            <NumberedRuledList items={NOVELTY_AFTER} columns={2} plain />
                         </FadeIn>
                         <FadeIn delay={0.06} className="pb-5">
                             <Link
@@ -543,17 +529,19 @@ export default function PatentSearchPage() {
                         </div>
                     </FadeIn>
 
-                    <div className="mt-12 grid grid-cols-1 gap-6 lg:mt-14 lg:grid-cols-3">
+                    <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-8 lg:mt-14 lg:grid-cols-3">
                         {ENRICHMENT.map((item, i) => (
-                            <FadeIn key={item.title} delay={i * 0.08}>
-                                <FeatureCard {...item} />
+                            <FadeIn key={item.title} delay={i * 0.08} className="h-full">
+                                <IndexCard {...item} />
                             </FadeIn>
                         ))}
                     </div>
 
                     {/* Powered by */}
                     <FadeIn delay={0.1}>
-                        <InlineList label="Powered by" items={DATA_SOURCES} className="mt-12 border-t border-card-border pt-6" />
+                        <p className="mt-12 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                            Enrichment draws on PubChem, SureChEMBL, UniChem, RDKit, and ClinicalTrials.gov.
+                        </p>
                     </FadeIn>
 
                     {/* Professional-use notice: hidden pending attorney review of its wording. */}
@@ -652,17 +640,17 @@ export default function PatentSearchPage() {
                                     and the in-app prior-art search use separate data sources, so
                                     result sets can differ.
                                 </p>
-                                <ul className="mt-6 border-t border-card-border text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
-                                    <li className="border-b border-card-border py-3">
+                                <ul className="mt-6 flex flex-col gap-3 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                    <li>
                                         Prior-art search across 100+ patent authorities, with
                                         full-text claims, legal status, citations, and family
                                         where the source provides them.
                                     </li>
-                                    <li className="border-b border-card-border py-3">
+                                    <li>
                                         Automated novelty search from a family&apos;s invention brief,
                                         read feature by feature.
                                     </li>
-                                    <li className="border-b border-card-border py-3">
+                                    <li>
                                         Save references with relevance scoring and a complete,
                                         append-only audit trail.
                                     </li>
@@ -707,7 +695,7 @@ export default function PatentSearchPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.06}>
-                        <NumberedRuledList items={USE_CASES} columns={2} className="mx-auto mt-12 max-w-5xl lg:mt-16" />
+                        <NumberedRuledList items={USE_CASES} columns={2} plain className="mx-auto mt-12 max-w-5xl lg:mt-16" />
                     </FadeIn>
                 </Container>
             </section>
@@ -781,7 +769,7 @@ function SearchMetric({ value, label }: { value: string; label: string }) {
             <p className="text-lg font-bold text-text-primary [font-family:var(--font-display)] sm:text-xl">
                 {value}
             </p>
-            <p className="mt-1 text-sm leading-tight tracking-[0.06em] text-text-secondary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+            <p className="mt-1 text-sm leading-tight tracking-[0.04em] text-text-secondary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                 {label}
             </p>
         </div>
@@ -840,14 +828,15 @@ function FeatureCard({ title, description }: IconItem) {
     );
 }
 
-/* Numbered items as ruled rows, the site's list form, in place of a grid of
-   small cards. Numbers come from the section's subsection counter. */
-function NumberedRuledList({ items, columns = 1, className = '' }: { items: readonly IconItem[]; columns?: 1 | 2; className?: string }) {
+/* Numbered items with the number hanging in the margin, set apart by space
+   rather than rules. Numbers come from the section's subsection counter;
+   plain drops them for short closing lists that are not a numbered set. */
+function NumberedRuledList({ items, columns = 1, plain = false, className = '' }: { items: readonly IconItem[]; columns?: 1 | 2; plain?: boolean; className?: string }) {
     return (
-        <ol className={`grid grid-cols-1 gap-x-10 ${columns === 2 ? 'md:grid-cols-2' : ''} ${className}`}>
+        <ol className={`grid grid-cols-1 gap-x-12 ${columns === 2 ? 'md:grid-cols-2' : ''} ${className}`}>
             {items.map((item) => (
-                <li key={item.title} className="grid grid-cols-[2.75rem_1fr] gap-x-3 border-t border-card-border py-5">
-                    <SubsectionNumber size="sm" className="pt-1" />
+                <li key={item.title} className={`py-4 ${plain ? '' : 'grid grid-cols-[2.75rem_1fr] gap-x-3'}`}>
+                    {!plain && <SubsectionNumber size="sm" className="pt-1" />}
                     <div className="min-w-0">
                         <h3 className="text-base font-semibold text-text-primary [font-family:var(--font-display)]">{item.title}</h3>
                         <p className="mt-1 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">{item.description}</p>
@@ -880,7 +869,7 @@ function AccessPlanCard({
             }`}
         >
             {recommended && (
-                <span className="relative mb-4 text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-primary">
+                <span className="relative mb-4 text-base leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-primary">
                     Recommended for IP and R&D teams
                 </span>
             )}

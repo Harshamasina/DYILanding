@@ -11,6 +11,7 @@ import { MockupHalo } from '@/components/ui/MockupHalo';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
+import { IndexCard } from '@/components/ui/IndexCard';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { OfficeActionHeroSvg } from '@/components/illustrations/OfficeActionHeroSvg';
@@ -130,14 +131,14 @@ export default function OfficeActionsPage() {
                         <div className="relative z-10 max-w-3xl lg:max-w-[640px]">
                             <SectionMark numbered={false}>Office Action Analysis and Response</SectionMark>
                             <h1 className="mt-5 text-3xl font-bold leading-[1.1] tracking-tight text-text-primary sm:text-4xl md:text-5xl lg:text-[3.5rem]">
-                                Office Action Analysis With <span className="text-primary italic">Response Drafting Built In</span>
+                                Office Action Analysis With <span className="accent-amend text-primary">Response Drafting Built In</span>
                             </h1>
                             <p className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg">
                                 Turn a USPTO office action into a reviewed issue map, then build a response from the signed analysis. Connect rejections to claims and source passages, prepare supported amendments, and keep attorney decisions on the record.
                             </p>
                             {/* The jurisdiction boundary sits with the promise it limits, at reading
                                 size, so EP and Indian prosecutors learn the scope before the CTAs. */}
-                            <p className="mt-5 border-t border-card-border pt-4 text-base leading-relaxed text-text-primary">
+                            <p className="mt-5 text-base leading-relaxed text-text-primary">
                                 Built for USPTO office actions today. Other jurisdictions are planned, starting with EP.
                             </p>
                             <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
@@ -174,7 +175,7 @@ export default function OfficeActionsPage() {
                         A response is only as strong as the record behind it. The analysis keeps the office action, the examined claim set, and the application as filed in their own roles, so every later reading points back to the right paper.
                     </SectionIntro>
                     <FadeIn delay={0.05}><div className="mt-10 lg:mt-12"><ProsecutionRecordVisual /></div></FadeIn>
-                    <div className="mt-10 grid gap-x-8 gap-y-6 border-t border-card-border pt-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
+                    <div className="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4">
                         {INTAKE.map(({ title, text }, i) => (
                             <FadeIn key={title} delay={i * 0.06}>
                                 <div className="group -m-3 flex gap-3 rounded-xl p-3 transition-colors duration-300 hover:bg-white">
@@ -221,7 +222,7 @@ export default function OfficeActionsPage() {
                         it start and end with the card, not the caption below it. */}
                     <div className="mt-10 grid grid-cols-1 gap-10 lg:mt-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:grid-rows-[1fr_auto] lg:gap-x-14 lg:gap-y-0">
                         <FadeIn delay={0.1} className="relative lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:grid lg:grid-rows-subgrid">
-                            <div aria-hidden="true" className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-primary/[0.05] blur-3xl" />
+                            <div aria-hidden="true" className="pointer-events-none absolute -inset-6 drafting-dots" />
                             <LimitationChartVisual className="relative lg:row-span-2 lg:grid lg:grid-rows-subgrid" />
                         </FadeIn>
                         <ol className="flex flex-col gap-6 lg:col-start-1 lg:row-start-1 lg:justify-between lg:gap-5 lg:py-1">
@@ -285,9 +286,9 @@ export default function OfficeActionsPage() {
                         {/* The same numbered ruled list as the claim chart rules in section 03.
                             On desktop it is one column whose rows share the figure's full
                             height, closed by a bottom rule, so both sides end level. */}
-                        <ol className="grid content-start gap-x-8 sm:grid-cols-2 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:auto-rows-fr lg:grid-cols-1 lg:content-stretch lg:border-b lg:border-card-border">
+                        <ol className="grid content-start gap-x-8 sm:grid-cols-2 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:auto-rows-fr lg:grid-cols-1 lg:content-stretch">
                             {RESPONSE_POINTS.map(({ title, text }, i) => (
-                                <li key={title} className="border-t border-card-border py-5">
+                                <li key={title} className="py-5">
                                     <FadeIn delay={i * 0.06} className="flex gap-4">
                                         <SubsectionNumber size="sm" className="mt-0.5 w-9 shrink-0" />
                                         <div>
@@ -358,15 +359,10 @@ export default function OfficeActionsPage() {
                     <SectionIntro eyebrow="Audit, security, and control" title="Built for Privileged Prosecution Work" dark accent>
                         The same access controls and audit history that protect your docket extend to every office action analysis and response.
                     </SectionIntro>
-                    <div className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-3">
+                    <div className="mt-12 grid gap-x-6 gap-y-8 lg:mt-14 lg:grid-cols-3">
                         {GOVERNANCE.map(({ title, text }, i) => (
                             <FadeIn key={title} delay={i * 0.06} className="h-full">
-                                <article className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-navy-light/40 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-light/25 hover:bg-white/[0.05] hover:shadow-lg hover:shadow-primary/[0.05]">
-                                    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-primary-light/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                    <SubsectionNumber tone="compliance" dark className="relative" />
-                                    <h3 className="relative mt-4 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-primary-light">{title}</h3>
-                                    <p className="relative mt-2 text-sm leading-relaxed text-text-on-dark/80">{text}</p>
-                                </article>
+                                <IndexCard title={title} description={text} tone="compliance" dark />
                             </FadeIn>
                         ))}
                     </div>
@@ -401,14 +397,14 @@ export default function OfficeActionsPage() {
    highlight (a short phrase of the title) is set in italic, not colour. */
 function SectionIntro({ eyebrow, title, highlight, children, dark = false, accent = false }: { eyebrow: string; title: string; highlight?: string; children: ReactNode; dark?: boolean; accent?: boolean }) {
     const at = highlight ? title.indexOf(highlight) : -1;
-    const heading = at >= 0 && highlight ? <>{title.slice(0, at)}<span className="pr-[0.12em] italic">{highlight}</span>{title.slice(at + highlight.length)}</> : title;
+    const heading = at >= 0 && highlight ? <>{title.slice(0, at)}<span className="accent-amend">{highlight}</span>{title.slice(at + highlight.length)}</> : title;
     return <FadeIn><div className="max-w-3xl"><SectionMark tone={accent ? 'compliance' : 'primary'} dark={dark}>{eyebrow}</SectionMark><h2 className={`mt-5 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl ${dark ? 'text-white' : 'text-text-primary'}`}>{heading}</h2><p className={`mt-4 max-w-[40rem] text-lg leading-relaxed ${dark ? 'text-text-on-dark' : 'text-text-secondary'}`}>{children}</p></div></FadeIn>;
 }
 
 function CapabilityCard({ title, description, surface = 'card', numbered = true }: { title: string; description: string; surface?: 'card' | 'open' | 'step'; numbered?: boolean }) {
     const surfaceClasses = {
         card: 'rounded-2xl border border-card-border bg-card-bg shadow-sm',
-        open: 'rounded-none border-t border-primary/25 bg-transparent',
+        open: 'rounded-none bg-transparent',
         step: 'rounded-none border-b border-card-border bg-transparent',
     };
     return (

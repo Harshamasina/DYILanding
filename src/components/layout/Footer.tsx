@@ -222,12 +222,12 @@ export function Footer() {
                                     architecture during private beta. Independent
                                     security assurance reports have not been issued yet.
                                 </p>
-                                {/* Controls as a ruled table, not badge tiles */}
-                                <ul className="grid grid-cols-2 gap-x-6 border-t border-white/15 sm:grid-cols-3">
+                                {/* Controls as a plain list in columns, not badge tiles */}
+                                <ul className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
                                     {TRUST_BADGES.map((badge) => (
                                         <li
                                             key={badge}
-                                            className="border-b border-white/15 py-3 text-xs leading-snug text-white/85 [font-family:var(--font-body)] sm:text-sm"
+                                            className="text-xs leading-snug text-white/85 [font-family:var(--font-body)] sm:text-sm"
                                         >
                                             {badge}
                                         </li>
@@ -241,7 +241,7 @@ export function Footer() {
                                     quotation: no rule, quote styling or byline, which
                                     read as a testimonial from the company itself. */}
                                 <div>
-                                    <p className="text-sm leading-none tracking-[0.1em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                    <p className="text-sm leading-none tracking-[0.04em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                         Our position
                                     </p>
                                     <p className="mt-4 text-pretty text-base leading-relaxed text-white/90 [font-family:var(--font-body)] sm:text-lg">
@@ -322,7 +322,7 @@ export function Footer() {
                             <div className="mt-8">
                                 <div className="mb-3 flex items-center gap-2">
                                     <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary-light" />
-                                    <span className="text-base leading-none tracking-[0.1em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                    <span className="text-base leading-none tracking-[0.04em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                         Ask AI about us
                                     </span>
                                 </div>
@@ -353,7 +353,7 @@ export function Footer() {
                         {/* Link Columns */}
                         {footerColumns.map(({ category, links }) => (
                             <div key={category}>
-                                <h3 className="mb-5 text-base leading-none tracking-[0.1em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                <h3 className="mb-5 text-base leading-none tracking-[0.04em] text-white/75 [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                     {category}
                                 </h3>
                                 <ul className="space-y-0 lg:space-y-3.5">

@@ -180,7 +180,7 @@ export default function ComparePage() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             One IP Platform Instead of{' '}
-                            <span className="text-primary italic">Four Disconnected Tools</span>
+                            <span className="accent-amend text-primary">Four Disconnected Tools</span>
                         </h1>
                         <p className="mt-5 max-w-[40rem] text-base leading-relaxed text-text-secondary [font-family:var(--font-body)] sm:mt-6 sm:text-lg">
                             Most IP teams run a docketing system, a separate prior art search tool, a
@@ -213,7 +213,7 @@ export default function ComparePage() {
                     </figure>
                     <figure className="figure-group mt-10 md:hidden">
                         <div aria-hidden="true" className="rounded-2xl border border-card-border bg-card-bg px-5 py-4 shadow-sm">
-                            <p className="text-sm leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                            <p className="text-sm leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                 The usual stack
                             </p>
                             <ul className="mt-3 border-t border-card-border">
@@ -225,7 +225,7 @@ export default function ComparePage() {
                             </ul>
                             <ArrowDown className="mx-auto my-3 h-4 w-4 text-primary" />
                             <p className="rounded-lg border border-primary/40 bg-primary/[0.04] px-4 py-3 text-sm text-text-primary [font-family:var(--font-body)]">
-                                <span className="tracking-[0.1em] text-primary [font-variant-caps:all-small-caps]">One record</span>
+                                <span className="tracking-[0.04em] text-primary [font-variant-caps:all-small-caps]">One record</span>
                                 <span className="ml-2 font-semibold [font-family:var(--font-mono)]">DEMO-2024-011</span>
                             </p>
                         </div>

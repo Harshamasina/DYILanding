@@ -129,7 +129,7 @@ export function PricingSection() {
                                 {/* Plan header */}
                                 <div className="mb-6">
                                     {plan.recommended ? (
-                                        <span className="mb-4 inline-block rounded-[3px] border border-primary/30 bg-primary/[0.04] px-2 pt-1 pb-0.5 text-[15px] leading-none tracking-[0.1em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                        <span className="mb-4 inline-block rounded-[3px] border border-primary/30 bg-primary/[0.04] px-2 pt-1 pb-0.5 text-[15px] leading-none tracking-[0.04em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                             For Regulated Teams
                                         </span>
                                     ) : (
@@ -178,7 +178,7 @@ export function PricingSection() {
 
                                 {/* Features as ruled rows */}
                                 <div className="flex-1">
-                                    <div aria-hidden="true" className="flex items-baseline justify-between gap-4 border-b border-text-primary pb-2 text-[15px] leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                    <div aria-hidden="true" className="flex items-baseline justify-between gap-4 border-b border-text-primary pb-2 text-[15px] leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                         <span>Feature</span>
                                         <span>Notes</span>
                                     </div>
@@ -193,7 +193,7 @@ export function PricingSection() {
                                                 </span>
                                                 {feature.detail && (
                                                     <span
-                                                        className={`shrink-0 text-[15px] leading-none tracking-[0.06em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] ${
+                                                        className={`shrink-0 text-[15px] leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] ${
                                                             feature.detail.includes('Part 11') ? 'text-compliance-ink' : 'text-primary'
                                                         }`}
                                                     >

@@ -46,7 +46,7 @@ export function CtaSection() {
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Modernize Patent Operations With a{' '}
-                                <span className="italic">
+                                <span className="accent-amend">
                                     Guided Demo
                                 </span>
                             </h2>
@@ -82,7 +82,7 @@ export function CtaSection() {
                                         key={item.label}
                                         className="grid grid-cols-1 gap-y-1.5 border-b border-card-border py-3.5 sm:grid-cols-[8.5rem_1fr] sm:items-baseline sm:gap-x-4"
                                     >
-                                        <dt className="text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                        <dt className="text-base text-navy-light leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                             {item.label}
                                         </dt>
                                         {/* Below sm the term sits above its value, so the email address keeps

@@ -805,7 +805,7 @@ function StageCard({
                         {String(index + 1).padStart(2, '0')} / {String(STAGES.length).padStart(2, '0')}
                     </span>
                 </div>
-                <p className="mt-2.5 text-sm leading-none tracking-[0.08em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                <p className="mt-2.5 text-sm leading-none tracking-[0.04em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                     {stage.meta}
                 </p>
                 <p className="mt-1 text-[13px] leading-relaxed text-text-secondary [font-family:var(--font-body)]">
@@ -919,7 +919,7 @@ function MobileLifecycle({ enabled, reduceMotion }: { enabled: boolean; reduceMo
                                         <h3 className="text-lg font-bold text-text-primary [font-family:var(--font-display)]">
                                             {stage.label}
                                         </h3>
-                                        <p className="mt-1 text-sm leading-none tracking-[0.08em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                        <p className="mt-1 text-sm leading-none tracking-[0.04em] text-primary [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                             {stage.meta}
                                         </p>
                                         <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">

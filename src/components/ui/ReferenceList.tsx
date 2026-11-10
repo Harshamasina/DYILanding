@@ -19,6 +19,9 @@ interface ReferenceListProps {
 }
 
 /* A feature list in the manner of a patent specification: each item carries a
+   hanging numeral in the margin and is set apart by space alone, the way a
+   specification sets its numbered paragraphs, with no rules between rows. It
+   carries a
    reference numeral (102, 104, 106) tied to the figure it sits beside, in
    place of an icon tile. The numerals come from CSS counters in globals.css:
    the enclosing .figure-group sets the figure number, and FigureCaption
@@ -37,7 +40,7 @@ export function ReferenceList({
     return (
         <ol className={className}>
             {items.map((item, i) => (
-                <li key={item.title} className="border-t border-card-border first:border-t-0">
+                <li key={item.title}>
                     <FadeIn treeNode={treeNode} delay={baseDelay + i * 0.08}>
                         <div className="grid grid-cols-[3rem_1fr] gap-x-3 py-4">
                             <span

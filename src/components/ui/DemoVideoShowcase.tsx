@@ -56,7 +56,7 @@ export function DemoVideoShowcase() {
                     {/* Left: chapter list (text) */}
                     <FadeIn treeNode="tree-demo" delay={0.1}>
                         <div>
-                            <p className="text-base leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                            <p className="text-base leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                                 What is inside the demo
                             </p>
 

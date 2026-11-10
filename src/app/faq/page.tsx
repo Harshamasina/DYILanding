@@ -49,7 +49,7 @@ export default function FaqPage() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             IP Management Software,{' '}
-                            <span className="text-primary italic">Answered</span>
+                            <span className="accent-amend text-primary">Answered</span>
                         </h1>
                         <p
                             className="mt-5 text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"

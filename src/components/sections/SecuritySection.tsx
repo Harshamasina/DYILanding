@@ -18,7 +18,7 @@ export function SecuritySection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             Six Layers of{' '}
-                            <span className="italic">
+                            <span className="accent-amend decoration-primary-light/80">
                                 Compliance-Native Defense
                             </span>
                         </h2>

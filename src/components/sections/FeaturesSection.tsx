@@ -185,7 +185,7 @@ export function FeaturesSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             Everything Your Patent Team Needs,{' '}
-                            <span className="italic">
+                            <span className="accent-amend">
                                 From Filing to Grant
                             </span>
                         </h2>

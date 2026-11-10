@@ -502,7 +502,7 @@ function DemoModal({ onClose, topic }: { onClose: () => void; topic?: string }) 
 function FieldGroup({ legend, children }: { legend: string; children: React.ReactNode }) {
     return (
         <fieldset>
-            <legend className="mb-3 flex w-full items-center gap-3 text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+            <legend className="mb-3 flex w-full items-center gap-3 text-base text-navy-light leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                 {legend}
                 <span aria-hidden="true" className="h-px flex-1 bg-card-border" />
             </legend>

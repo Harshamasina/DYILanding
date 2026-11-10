@@ -442,7 +442,7 @@ export function SecurityMoatDiagram() {
                             aria-label={`${layer.title}, layer ${i + 1} of ${LAYERS.length}`}
                             className={`group relative cursor-pointer rounded-2xl border p-6 text-left transition-all duration-350 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-light focus-visible:ring-offset-2 focus-visible:ring-offset-navy ${
                                 isActive
-                                    ? '-translate-y-0.5 border-primary-light/55 bg-primary/14 shadow-[0_12px_40px_-12px_rgba(99,102,241,0.45),inset_0_1px_0_rgba(255,255,255,0.05)]'
+                                    ? '-translate-y-0.5 border-primary-light/55 bg-primary/14 shadow-[0_14px_32px_-16px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.05)]'
                                     : 'border-white/10 bg-white/4 hover:border-primary-light/30 hover:bg-primary/7'
                             }`}
                         >
@@ -453,24 +453,26 @@ export function SecurityMoatDiagram() {
                                 aria-hidden="true"
                                 className="subsection-number absolute right-5 top-4 text-sm font-semibold leading-none tabular-nums text-compliance-on-dark [font-family:var(--font-display)]"
                             />
-                            <span
-                                className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border transition-all duration-350 ${
-                                    isActive
-                                        ? 'scale-[1.05] border-primary-light/45 bg-linear-to-br from-primary-light/30 via-primary-light/15 to-transparent text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_2px_10px_rgba(165,180,252,0.28)]'
-                                        : 'border-white/15 bg-linear-to-br from-white/8 via-white/4 to-transparent text-primary-light shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]'
-                                }`}
-                                aria-hidden="true"
-                            >
-                                <Icon className="h-5 w-5" strokeWidth={1.75} />
+                            {/* The layer's mark sits beside its title in a thin seal ring,
+                                not in a tile above it. */}
+                            <span className="flex items-center gap-3 pr-8">
+                                <span
+                                    className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors duration-350 ${
+                                        isActive ? 'border-primary-light/70 text-white' : 'border-white/20 text-primary-light'
+                                    }`}
+                                    aria-hidden="true"
+                                >
+                                    <Icon className="h-[18px] w-[18px]" strokeWidth={1.6} />
+                                </span>
+                                <h3
+                                    className="text-[17px] font-bold leading-tight text-white"
+                                    style={{ fontFamily: 'var(--font-display)' }}
+                                >
+                                    {layer.title}
+                                </h3>
                             </span>
-                            <h3
-                                className="text-[17px] font-bold leading-tight text-white"
-                                style={{ fontFamily: 'var(--font-display)' }}
-                            >
-                                {layer.title}
-                            </h3>
                             <p
-                                className="mt-2 text-[13px] leading-relaxed text-text-on-dark/55"
+                                className="mt-3 text-[13px] leading-relaxed text-text-on-dark/55"
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 {layer.description}

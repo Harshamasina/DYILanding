@@ -14,6 +14,7 @@ import { MockupHalo } from '@/components/ui/MockupHalo';
 import { HeroAmbience } from '@/components/ui/HeroAmbience';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
+import { IndexCard } from '@/components/ui/IndexCard';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
 import { InlineList, RuledList, RuledItem } from '@/components/ui/RuledList';
 import { FigureCaption } from '@/components/ui/FigureCaption';
@@ -275,7 +276,7 @@ export default function DocketingPage() {
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Patent Docketing That{' '}
-                                <span className="text-primary italic">Reduces Deadline Risk</span>
+                                <span className="accent-amend text-primary">Reduces Deadline Risk</span>
                             </h1>
                             <p
                                 className="mt-5 max-w-[40rem] text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg"
@@ -289,7 +290,7 @@ export default function DocketingPage() {
                             </p>
                             {/* The verification boundary sits under the pitch as a ruled note,
                                 the way the office actions hero states its scope. */}
-                            <p className="mt-5 max-w-[40rem] border-t border-card-border pt-4 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                            <p className="mt-5 max-w-[40rem] text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
                                 Every calculated date stays reviewable, and remains subject to
                                 verification by a qualified patent professional.
                             </p>
@@ -344,7 +345,7 @@ export default function DocketingPage() {
                                 style={{ fontFamily: 'var(--font-display)' }}
                             >
                                 Every Computed Date{' '}
-                                <span className="italic">Shows Its Work</span>
+                                <span className="accent-amend">Shows Its Work</span>
                             </h2>
                             <p
                                 className="mt-4 max-w-[40rem] text-lg leading-relaxed text-text-secondary"
@@ -380,7 +381,7 @@ export default function DocketingPage() {
                         <div className="figure-group relative mt-10 lg:mt-12">
                             <div
                                 aria-hidden="true"
-                                className="pointer-events-none absolute -inset-8 rounded-[3rem] bg-primary/[0.06] blur-3xl"
+                                className="pointer-events-none absolute -inset-8 drafting-dots"
                             />
                             <div className="relative">
                                 <ComputedDeadlineTrace />
@@ -389,10 +390,10 @@ export default function DocketingPage() {
                         </div>
                     </FadeIn>
 
-                    <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-3">
+                    <div className="mt-8 grid gap-x-6 gap-y-8 lg:mt-10 lg:grid-cols-3">
                         {TRACE_CAPABILITIES.map((item, i) => (
-                            <FadeIn key={item.title} delay={i * 0.08}>
-                                <CapabilityCard {...item} />
+                            <FadeIn key={item.title} delay={i * 0.08} className="h-full">
+                                <IndexCard {...item} />
                             </FadeIn>
                         ))}
                     </div>
@@ -481,10 +482,10 @@ export default function DocketingPage() {
                         />
                     </FadeIn>
 
-                    <div className="mt-6 grid gap-6 lg:grid-cols-3">
+                    <div className="mt-6 grid gap-x-6 gap-y-8 lg:grid-cols-3">
                         {DIGESTS.map((item, i) => (
-                            <FadeIn key={item.title} delay={i * 0.08}>
-                                <CapabilityCard {...item} />
+                            <FadeIn key={item.title} delay={i * 0.08} className="h-full">
+                                <IndexCard {...item} />
                             </FadeIn>
                         ))}
                     </div>
@@ -638,8 +639,8 @@ export default function DocketingPage() {
 
 function GroupLabel({ label, note }: { label: string; note: string }) {
     return (
-        <div className="mt-12 flex flex-col gap-1.5 border-t border-card-border pt-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 lg:mt-14">
-            <span className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
+        <div className="mt-14 flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 lg:mt-16">
+            <span className="text-base leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                 {label}
             </span>
             <span
@@ -685,7 +686,7 @@ function RiskSignalCard({ signal }: { signal: RiskSignal }) {
                 <span className="text-2xl font-bold tabular-nums text-primary [font-family:var(--font-mono)]">
                     {signal.weight}
                 </span>
-                <span className="text-sm leading-none tracking-[0.1em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                <span className="text-sm leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                     weight
                 </span>
             </div>
@@ -721,7 +722,7 @@ function RiskScorePanel() {
         <aside className="group flex h-full flex-col rounded-2xl border border-primary/15 bg-linear-to-br from-white via-white to-indigo-50/60 p-6 shadow-md shadow-primary/[0.05] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.06]">
             <div>
                 <div>
-                    <p className="text-base leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
+                    <p className="text-base leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
                         Portfolio rollup
                     </p>
                     <h3
@@ -850,9 +851,9 @@ function DisclosureRows({ items, className = '' }: { items: CardItem[]; classNam
 
 function RuledRows({ items, className = '' }: { items: CardItem[]; className?: string }) {
     return (
-        <ol className={`grid border-t border-card-border lg:grid-cols-2 lg:gap-x-12 ${className}`}>
+        <ol className={`grid lg:grid-cols-2 lg:gap-x-12 ${className}`}>
             {items.map((item, i) => (
-                <li key={item.title} className="border-b border-card-border">
+                <li key={item.title}>
                     <FadeIn delay={(i % 2) * 0.06}>
                         <div className="grid grid-cols-[2.75rem_1fr] gap-x-3 py-5">
                             <SubsectionNumber size="sm" className="mt-0.5" />

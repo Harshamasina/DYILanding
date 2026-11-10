@@ -58,7 +58,7 @@ export function ImportSection() {
                             style={{ fontFamily: 'var(--font-display)' }}
                         >
                             Migrate your entire portfolio in{' '}
-                            <span className="italic">hours, not months</span>
+                            <span className="accent-amend">hours, not months</span>
                         </h2>
                         <p
                             className="mt-4 max-w-[40rem] text-lg text-text-secondary leading-relaxed"
@@ -92,11 +92,11 @@ export function ImportSection() {
                                 <p className="mt-2 text-sm italic text-text-secondary [font-family:var(--font-body)]">
                                     {step.subtitle}
                                 </p>
-                                <ul className="mt-5 border-t border-card-border">
+                                <ul className="mt-5 flex flex-col gap-2">
                                     {step.details.map((detail) => (
                                         <li
                                             key={detail}
-                                            className="border-b border-card-border py-2.5 text-[13px] leading-relaxed text-text-secondary [font-family:var(--font-body)]"
+                                            className="text-[13px] leading-relaxed text-text-secondary [font-family:var(--font-body)]"
                                         >
                                             {detail}
                                         </li>

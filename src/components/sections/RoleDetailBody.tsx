@@ -48,7 +48,7 @@ export function RoleDetailBody({ role }: RoleDetailBodyProps) {
                 <div className="max-w-3xl mx-auto">
                     {/* TLDR callout */}
                     <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 sm:p-7">
-                        <p className="mb-3 text-base text-navy-light leading-none tracking-[0.1em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                        <p className="mb-3 text-base text-navy-light leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
                             TL;DR
                         </p>
                         <SplitParagraphs
