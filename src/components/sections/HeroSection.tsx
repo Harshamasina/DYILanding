@@ -18,14 +18,14 @@ const HERO_VISUAL: 'tree' | 'hub' = 'hub';
 export function HeroSection() {
     return (
         <>
-            {/* Hero: natural flow at every width, with fixed padding instead of
-                a full-viewport height. The top padding clears the fixed navbar;
-                the short bottom padding lets the dashboard below start inside
-                the first screen on desktop (about 750px down at 1440x900). */}
+            {/* Hero: natural flow below lg. On lg+ it fills at least the first
+                screen with its content centred, so the dashboard below starts
+                after the fold and the hero keeps room around it. The top
+                padding clears the fixed navbar. */}
             <section
                 id="hero"
                 aria-label="Hero"
-                className="relative flex flex-col pt-24 sm:pt-28 pb-10 sm:pb-12 lg:pt-28 lg:pb-10 xl:pt-32 xl:pb-12 overflow-hidden"
+                className="relative flex flex-col pt-24 sm:pt-28 pb-10 sm:pb-12 lg:min-h-svh lg:justify-center lg:pt-28 lg:pb-16 xl:pt-32 xl:pb-20 overflow-hidden"
             >
                 <HeroAmbience edge="bottom" />
                 <Container size={HERO_VISUAL === 'hub' ? 'wide' : 'default'} className="relative z-10">
@@ -116,7 +116,7 @@ export function HeroSection() {
                 straddling the section boundary. */}
             <section
                 id="hero-dashboard"
-                className="relative overflow-hidden py-10 sm:py-14 lg:py-16"
+                className="relative overflow-hidden py-10 sm:py-14 lg:pt-20 lg:pb-16"
             >
                 <HeroAmbience edge="top" />
                 <Container className="relative z-10">

@@ -10,16 +10,16 @@ import { SectionMark } from '@/components/ui/SectionMark';
 import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
 import { RuledList, RuledItem } from '@/components/ui/RuledList';
 
-/* Production set first, planned jurisdictions marked. The AI drafting page
-   is the source of truth for this list: US, EP, IN, and PCT (WO) ship today,
-   JP and CN are planned. */
+/* The production set. The AI drafting page is the source of truth for this
+   list: US, EP, IN, PCT (WO), JP, and CN all ship today. A jurisdiction not
+   yet live can be marked planned. */
 const JURISDICTIONS: { code: string; label: string; planned?: boolean }[] = [
     { code: 'US', label: 'USPTO' },
     { code: 'EP', label: 'EPO' },
     { code: 'IN', label: 'IPO' },
     { code: 'WO', label: 'WIPO' },
-    { code: 'JP', label: 'JPO', planned: true },
-    { code: 'CN', label: 'CNIPA', planned: true },
+    { code: 'JP', label: 'JPO' },
+    { code: 'CN', label: 'CNIPA' },
 ];
 
 const TRUST_ITEMS = [
@@ -134,7 +134,7 @@ const DRAFTING_CARDS: ReferenceItem[] = [
     },
     {
         title: 'Jurisdiction-Specific Drafting Guidance',
-        description: 'Configurable drafting guidance and templates for the production set (US, EP, IN, and PCT/WO) are applied to every generation.',
+        description: 'Configurable drafting guidance and templates for the production set (US, EP, IN, PCT/WO, JP, and CN) are applied to every generation.',
     },
     {
         title: 'Mandatory Attorney Review',
@@ -170,7 +170,7 @@ function DraftingContent() {
                 className="mt-3 text-xs text-text-muted"
                 style={{ fontFamily: 'var(--font-body)' }}
             >
-                US, EP, IN, and PCT (WO) are the production set today. JP and CN are planned.
+                US, EP, IN, PCT (WO), JP, and CN are the production set today.
             </p>
         </div>
     );

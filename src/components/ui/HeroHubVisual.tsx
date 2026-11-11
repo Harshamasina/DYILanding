@@ -75,16 +75,15 @@ interface InputCard {
     tile: string;
     /* A darker shade of the tile hue for the small tag text, so it reads at AA on white. */
     label: string;
-    preview: 'calendar' | 'list' | 'doc' | 'check';
     token: 'excel' | 'search' | 'word' | 'mail';
     flow: { ribbon: string; dot: string };
 }
 
 const INPUTS: InputCard[] = [
-    { id: 'docketing', tag: 'DOCKETING', desc: ['Spreadsheets', '& Calendars'], Icon: CalendarDays, tile: '#10b981', label: '#047857', preview: 'calendar', token: 'excel', flow: { ribbon: '#6ee7b7', dot: '#10b981' } },
-    { id: 'search', tag: 'SEARCH', desc: ['Prior Art', 'Search Tools'], Icon: Search, tile: '#3b82f6', label: '#1d4ed8', preview: 'list', token: 'search', flow: { ribbon: '#93c5fd', dot: '#3b82f6' } },
-    { id: 'drafting', tag: 'DRAFTING', desc: ['Word Docs', '& Templates'], Icon: FileText, tile: '#8b5cf6', label: '#6d28d9', preview: 'doc', token: 'word', flow: { ribbon: '#c4b5fd', dot: '#8b5cf6' } },
-    { id: 'prosecution', tag: 'PROSECUTION', desc: ['Emails & Office', 'Actions'], Icon: Mail, tile: '#f59e0b', label: '#b45309', preview: 'check', token: 'mail', flow: { ribbon: '#fcd34d', dot: '#f59e0b' } },
+    { id: 'docketing', tag: 'DOCKETING', desc: ['Spreadsheets', '& Calendars'], Icon: CalendarDays, tile: '#10b981', label: '#047857', token: 'excel', flow: { ribbon: '#6ee7b7', dot: '#10b981' } },
+    { id: 'search', tag: 'SEARCH', desc: ['Prior Art', 'Search Tools'], Icon: Search, tile: '#3b82f6', label: '#1d4ed8', token: 'search', flow: { ribbon: '#93c5fd', dot: '#3b82f6' } },
+    { id: 'drafting', tag: 'DRAFTING', desc: ['Word Docs', '& Templates'], Icon: FileText, tile: '#8b5cf6', label: '#6d28d9', token: 'word', flow: { ribbon: '#c4b5fd', dot: '#8b5cf6' } },
+    { id: 'prosecution', tag: 'PROSECUTION', desc: ['Emails &', 'Office Actions'], Icon: Mail, tile: '#f59e0b', label: '#b45309', token: 'mail', flow: { ribbon: '#fcd34d', dot: '#f59e0b' } },
 ];
 
 interface OutputCard {
@@ -104,19 +103,39 @@ const OUTPUTS: OutputCard[] = [
     { id: 'others', flag: 'OTHERS', pill: 'OTHERS', title: 'Other Countries', sub: null, status: null, dot: null },
 ];
 
+/* A due date in a notification is counted from today, so the demo never
+   shows a date in the past. Until the browser sets today (the static HTML,
+   or the first render), it reads as a count of days instead. */
+type Meta = string | { dueInDays: number; prefix?: string };
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+function metaText(meta: Meta, today: Date | null): string {
+    if (typeof meta === 'string') return meta;
+    if (!today) return `In ${meta.dueInDays} days`;
+    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + meta.dueInDays);
+    return `${meta.prefix ?? ''}${String(d.getDate()).padStart(2, '0')} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function useToday() {
+    const [today, setToday] = useState<Date | null>(null);
+    useEffect(() => setToday(new Date()), []);
+    return today;
+}
+
 interface TopNotif {
     Icon: LucideIcon;
     iconColor: string;
     title: [string, string];
-    meta: string;
+    meta: Meta;
     cta: string;
     ctaColor: string;
 }
 
 const TOP_POOL: TopNotif[] = [
-    { Icon: AlertTriangle, iconColor: '#ef4444', title: ['PCT conversion', 'due in 90 days'], meta: '01 Jul 2025', cta: 'View Details', ctaColor: '#e11d48' },
+    { Icon: AlertTriangle, iconColor: '#ef4444', title: ['PCT conversion', 'due in 90 days'], meta: { dueInDays: 90 }, cta: 'View Details', ctaColor: '#e11d48' },
     { Icon: Sparkles, iconColor: '#10b981', title: ['AI claim insight', 'available'], meta: '3 suggestions', cta: 'Review Now', ctaColor: '#059669' },
-    { Icon: Globe, iconColor: '#f59e0b', title: ['JP translation', 'required'], meta: 'Due 15 Jul 2025', cta: 'Manage', ctaColor: '#d97706' },
+    { Icon: Globe, iconColor: '#f59e0b', title: ['JP translation', 'required'], meta: { dueInDays: 45, prefix: 'Due ' }, cta: 'Manage', ctaColor: '#d97706' },
     { Icon: AlertTriangle, iconColor: '#ef4444', title: ['Office action', 'response due'], meta: '30 days left', cta: 'Respond', ctaColor: '#e11d48' },
     { Icon: Clock, iconColor: '#f59e0b', title: ['Annuity payment', 'upcoming'], meta: 'EP4679899', cta: 'Pay Now', ctaColor: '#d97706' },
     { Icon: Search, iconColor: '#6366f1', title: ['Prior art match', 'found'], meta: '4 references', cta: 'View', ctaColor: '#4f46e5' },
@@ -130,11 +149,11 @@ interface RightAnnot {
     Icon: LucideIcon;
     color: string;
     title: string;
-    sub: string;
+    sub: Meta;
 }
 
 const RIGHT_POOL: RightAnnot[] = [
-    { card: 'jp', Icon: Globe, color: '#d97706', title: 'JP translation required', sub: 'Due 15 Jul 2025' },
+    { card: 'jp', Icon: Globe, color: '#d97706', title: 'JP translation required', sub: { dueInDays: 45, prefix: 'Due ' } },
     { card: 'ep', Icon: Clock, color: '#d97706', title: 'Annuity due', sub: '45 days to pay' },
     { card: 'us', Icon: AlertTriangle, color: '#e11d48', title: 'Office action', sub: '30 days to respond' },
     { card: 'us', Icon: Check, color: '#059669', title: 'Continuation active', sub: '18/291,034' },
@@ -249,6 +268,7 @@ export function HeroHubVisual() {
     const wrapRef = useRef<HTMLDivElement>(null);
     const [scale, setScale] = useState<number | null>(null);
 
+    const today = useToday();
     const slots = useTopRotation(animate);
     const dynamicRight = useRightAnnotations(animate);
     const rightActive = animate ? dynamicRight : STATIC_RIGHT;
@@ -419,7 +439,7 @@ export function HeroHubVisual() {
                                         exit={{ opacity: 0, y: -6 }}
                                         transition={{ duration: 0.35, ease: EASE }}
                                     >
-                                        <TopCardView notif={TOP_POOL[slots[i]]} />
+                                        <TopCardView notif={TOP_POOL[slots[i]]} today={today} />
                                     </motion.div>
                                 </AnimatePresence>
                             </Reveal>
@@ -437,7 +457,7 @@ export function HeroHubVisual() {
                                     exit={{ opacity: 0, scale: 0.9, y: 6 }}
                                     transition={{ duration: 0.35, ease: EASE }}
                                 >
-                                    <RightAnnotCard annot={a.annot} />
+                                    <RightAnnotCard annot={a.annot} today={today} />
                                 </motion.div>
                             ))}
                         </AnimatePresence>
@@ -480,12 +500,9 @@ function InputCardView({ card }: { card: InputCard }) {
                 <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color: card.label, fontFamily: 'var(--font-mono)' }}>
                     {card.tag}
                 </p>
-                <p className="mt-1 text-[13px] leading-tight font-semibold text-text-primary" style={{ fontFamily: 'var(--font-display)' }}>
+                <p className="mt-1 whitespace-nowrap text-[14px] leading-snug font-semibold text-text-primary" style={{ fontFamily: 'var(--font-display)' }}>
                     {card.desc[0]}<br />{card.desc[1]}
                 </p>
-            </div>
-            <div className="shrink-0 self-center opacity-60">
-                <MiniPreview kind={card.preview} />
             </div>
         </div>
     );
@@ -552,7 +569,7 @@ function OutputCardView({ card }: { card: OutputCard }) {
     );
 }
 
-function TopCardView({ notif }: { notif: TopNotif }) {
+function TopCardView({ notif, today }: { notif: TopNotif; today: Date | null }) {
     const Icon = notif.Icon;
     return (
         <div className="w-full h-full rounded-xl bg-white border border-card-border shadow-md shadow-black/6 px-3.5 py-3 flex flex-col">
@@ -562,7 +579,7 @@ function TopCardView({ notif }: { notif: TopNotif }) {
                     {notif.title[0]}<br />{notif.title[1]}
                 </p>
             </div>
-            <p className="mt-1 text-[11px] text-text-muted" style={{ fontFamily: 'var(--font-mono)' }}>{notif.meta}</p>
+            <p className="mt-1 text-[11px] text-text-muted" style={{ fontFamily: 'var(--font-mono)' }}>{metaText(notif.meta, today)}</p>
             <span className="mt-auto inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: notif.ctaColor, fontFamily: 'var(--font-mono)' }}>
                 {notif.cta}
                 <ArrowRight className="w-2.5 h-2.5" strokeWidth={2.5} />
@@ -571,7 +588,7 @@ function TopCardView({ notif }: { notif: TopNotif }) {
     );
 }
 
-function RightAnnotCard({ annot }: { annot: RightAnnot }) {
+function RightAnnotCard({ annot, today }: { annot: RightAnnot; today: Date | null }) {
     const Icon = annot.Icon;
     return (
         <div className="rounded-lg bg-white border border-card-border shadow-lg shadow-black/10 px-2.5 py-1.5 flex items-center gap-2">
@@ -580,7 +597,7 @@ function RightAnnotCard({ annot }: { annot: RightAnnot }) {
             </span>
             <div className="min-w-0">
                 <p className="text-[10px] font-semibold leading-tight text-text-primary truncate" style={{ fontFamily: 'var(--font-display)' }}>{annot.title}</p>
-                <p className="text-[9px] text-text-muted truncate" style={{ fontFamily: 'var(--font-mono)' }}>{annot.sub}</p>
+                <p className="text-[9px] text-text-muted truncate" style={{ fontFamily: 'var(--font-mono)' }}>{metaText(annot.sub, today)}</p>
             </div>
         </div>
     );
@@ -681,50 +698,6 @@ function HubLogo({ animate }: { animate: boolean }) {
                 className="absolute left-1/2 top-0 -translate-x-1/2"
             />
         </div>
-    );
-}
-
-function MiniPreview({ kind }: { kind: InputCard['preview'] }) {
-    const stroke = '#cbd5e1';
-    if (kind === 'calendar') {
-        return (
-            <svg width={34} height={30} viewBox="0 0 34 30" fill="none">
-                <rect x="1" y="3" width="32" height="26" rx="3" stroke={stroke} />
-                <line x1="1" y1="10" x2="33" y2="10" stroke={stroke} />
-                {[0, 1, 2, 3].map((c) => <line key={c} x1={1 + c * 8} y1="10" x2={1 + c * 8} y2="29" stroke={stroke} />)}
-                {[0, 1, 2].map((r) => <line key={r} x1="1" y1={16 + r * 5} x2="33" y2={16 + r * 5} stroke={stroke} />)}
-            </svg>
-        );
-    }
-    if (kind === 'list') {
-        return (
-            <svg width={34} height={30} viewBox="0 0 34 30" fill="none">
-                {[0, 1, 2, 3].map((r) => (
-                    <g key={r}>
-                        <rect x="1" y={2 + r * 7} width="4" height="4" rx="1" stroke={stroke} />
-                        <line x1="8" y1={4 + r * 7} x2="33" y2={4 + r * 7} stroke={stroke} />
-                    </g>
-                ))}
-            </svg>
-        );
-    }
-    if (kind === 'doc') {
-        return (
-            <svg width={30} height={32} viewBox="0 0 30 32" fill="none">
-                <rect x="2" y="1" width="26" height="30" rx="3" stroke={stroke} />
-                {[0, 1, 2, 3, 4].map((r) => <line key={r} x1="6" y1={7 + r * 5} x2={r === 4 ? 18 : 24} y2={7 + r * 5} stroke={stroke} />)}
-            </svg>
-        );
-    }
-    return (
-        <svg width={34} height={30} viewBox="0 0 34 30" fill="none">
-            {[0, 1, 2, 3].map((r) => (
-                <g key={r}>
-                    <path d={`M 1 ${4 + r * 7} l 2 2 l 3 -3`} stroke={r < 2 ? '#10b981' : stroke} strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                    <line x1="10" y1={4 + r * 7} x2="33" y2={4 + r * 7} stroke={stroke} />
-                </g>
-            ))}
-        </svg>
     );
 }
 

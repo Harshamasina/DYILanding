@@ -7,7 +7,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'What is Design Your Invention?',
         answer:
-            'Design Your Invention (DYI) is an intellectual property management software (IPMS) platform for pharma companies and IP boutique law firms. It brings multi-jurisdiction patent docketing, prior art search across 100+ patent authorities via the EPO, and AI-assisted patent drafting for US, EP, IN, and PCT (WO) into one connected, audit-trailed workspace. The architecture follows FDA 21 CFR Part 11 patterns, with tenant-scoped data isolation so each organization keeps its portfolio separate.',
+            'Design Your Invention (DYI) is an intellectual property management software (IPMS) platform for pharma companies and IP boutique law firms. It brings multi-jurisdiction patent docketing, prior art search across 100+ patent authorities via the EPO, and AI-assisted patent drafting for US, EP, IN, PCT (WO), JP, and CN into one connected, audit-trailed workspace. The architecture follows FDA 21 CFR Part 11 patterns, with tenant-scoped data isolation so each organization keeps its portfolio separate.',
     },
     {
         question: 'Is the platform generally available or in private beta?',
@@ -122,7 +122,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'How does Design Your Invention compare to legacy tools like Anaqua, Clarivate, or AppColl?',
         answer:
-            'Most IP teams run a docketing system plus separate tools for prior art search and drafting, with spreadsheets for chemistry and fees. Design Your Invention unifies multi-jurisdiction docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, and PCT, USPTO office action analysis and response, and chemistry enrichment in one connected, audit-trailed platform. The comparison page has a capability-by-capability breakdown against the typical legacy setup.',
+            'Most IP teams run a docketing system plus separate tools for prior art search and drafting, with spreadsheets for chemistry and fees. Design Your Invention unifies multi-jurisdiction docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, PCT, JP, and CN, USPTO office action analysis and response, and chemistry enrichment in one connected, audit-trailed platform. The comparison page has a capability-by-capability breakdown against the typical legacy setup.',
     },
     {
         question: 'Is my content used to train AI models?',

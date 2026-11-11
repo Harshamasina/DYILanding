@@ -117,7 +117,7 @@ const softwareSchema = {
         'Fee Analytics Dashboard',
         'Bulk Portfolio Import (XLSX/CSV)',
         'AI-Assisted Prior Art Search (100+ patent authorities via EPO)',
-        'AI Patent Draft Generation for Attorney Review (US, EP, IN, PCT)',
+        'AI Patent Draft Generation for Attorney Review (US, EP, IN, PCT, JP, CN)',
         'Jurisdiction-Specific Drafting Guidance',
         'Prior Art Snapshot & Version Control',
         'DOCX Export with Patent-Standard Formatting',

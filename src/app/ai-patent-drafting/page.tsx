@@ -25,7 +25,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'AI Patent Drafting Software With Attorney Review',
     description:
-        'Attorney-in-the-loop AI patent drafting: turn saved prior art into structured draft claims, abstract, and novelty analysis for attorney review across US, EP, IN, and PCT.',
+        'Attorney-in-the-loop AI patent drafting: turn saved prior art into structured draft claims, abstract, and novelty analysis for attorney review across US, EP, IN, PCT, JP, and CN.',
     path: '/ai-patent-drafting/',
     ogKey: 'ai-patent-drafting',
 });
@@ -93,6 +93,16 @@ const JURISDICTIONS: Jurisdiction[] = [
         code: 'WO',
         authority: 'WIPO (PCT)',
         rules: 'Jurisdiction-neutral claims compatible with USPTO and EPO conventions, with national-phase amendments flagged for entry.',
+    },
+    {
+        code: 'JP',
+        authority: 'JPO',
+        rules: 'The multi-multi dependency ban checked on every new draft, and medicinal use claimed as a pharmaceutical composition for a specific disease, with pharmacological test data called for in the description.',
+    },
+    {
+        code: 'CN',
+        authority: 'CNIPA',
+        rules: 'Medical use in the "use of X in the preparation of a medicament" form, multiple dependent claims in the alternative only, and sufficiency judged on the application as filed.',
     },
 ];
 
@@ -217,7 +227,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Which jurisdictions are supported?',
         answer:
-            'US, EP, IN, and PCT (WO) are the production set, each with jurisdiction-specific claim format, drafting rules, and mandatory section structure applied. A missing required section is flagged rather than silently omitted. JP and CN are planned and are not available yet.',
+            'US, EP, IN, PCT (WO), JP, and CN are the production set, each with jurisdiction-specific claim format, drafting rules, and mandatory section structure applied. A missing required section is flagged rather than silently omitted.',
     },
     {
         question: 'How does prior art work for US and Indian patents without a claims API?',
@@ -252,7 +262,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Can I just use ChatGPT to write my patent application?',
         answer:
-            'A general chatbot writes generic claims with no access to the prior art on record, no jurisdiction-specific statutory rules, no version history, and no audit trail. This assistant grounds every draft in the actual prior art saved to the family (including pasted claim text), applies US, EP, IN, and PCT rules and section structure, runs a second-model confidence review, and keeps an append-only audit trail with mandatory attorney review before filing. The attorney is the author; the AI is the assistant.',
+            'A general chatbot writes generic claims with no access to the prior art on record, no jurisdiction-specific statutory rules, no version history, and no audit trail. This assistant grounds every draft in the actual prior art saved to the family (including pasted claim text), applies US, EP, IN, PCT, JP, and CN rules and section structure, runs a second-model confidence review, and keeps an append-only audit trail with mandatory attorney review before filing. The attorney is the author; the AI is the assistant.',
     },
     {
         question: 'Can the AI spot claim-support issues or weaknesses before filing?',
@@ -262,7 +272,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Can it draft patent applications for India?',
         answer:
-            'Yes. India (IN) is in the production jurisdiction set. Drafts apply Indian Patent Office rules, including the Section 3(d) enhanced-efficacy requirement that is decisive for pharma claims, plus the mandatory section structure, with US, EP, and PCT supported alongside it. A missing required section is flagged rather than silently omitted.',
+            'Yes. India (IN) is in the production jurisdiction set. Drafts apply Indian Patent Office rules, including the Section 3(d) enhanced-efficacy requirement that is decisive for pharma claims, plus the mandatory section structure, with US, EP, PCT, JP, and CN supported alongside it. A missing required section is flagged rather than silently omitted.',
     },
 ];
 
@@ -391,8 +401,8 @@ export default function AiPatentDraftingPage() {
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 The drafting engine applies jurisdiction-specific claim format, statutory
-                                rules, and mandatory section structure. US, EP, IN, and PCT are the
-                                production set.
+                                rules, and mandatory section structure. US, EP, IN, PCT, JP, and CN
+                                are the production set.
                             </p>
                         </div>
                     </FadeIn>

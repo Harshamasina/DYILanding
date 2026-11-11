@@ -23,7 +23,7 @@ const softwareApplicationSchema = {
     featureList: [
         'Prior-art search across 100+ patent authorities via EPO Open Patent Services',
         'Prior-art management: save, annotate, paste claim text, track relevance per family',
-        'Jurisdiction-specific draft generation (US, EP, IN, PCT): claims, abstract, description, novelty analysis',
+        'Jurisdiction-specific draft generation (US, EP, IN, PCT, JP, CN): claims, abstract, description, novelty analysis',
         'Structured, versioned claim tree with per-unit, append-only revision history',
         'Per-claim and per-section regeneration and interactive refinement',
         'Second-opinion review by a separate, independent model',
