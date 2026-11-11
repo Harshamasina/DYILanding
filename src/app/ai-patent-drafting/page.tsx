@@ -18,6 +18,7 @@ import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedClaimsWorkflow } from '@/components/ui/AnimatedClaimsWorkflow';
 import { AiDraftingHeroSvg } from '@/components/illustrations/AiDraftingHeroSvg';
 import { AttorneyAuthorshipVisual } from '@/components/illustrations/AttorneyAuthorshipVisual';
+import { JurisdictionRuleExplorer, type DraftingOffice } from '@/components/ui/JurisdictionRuleExplorer';
 import { AiDraftingJsonLd } from '@/components/seo/AiDraftingJsonLd';
 import { OFFICE_ACTIONS_PAGE_URL, PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
@@ -25,7 +26,7 @@ import type { FaqItem } from '@/lib/faq-data';
 export const metadata: Metadata = buildMetadata({
     title: 'AI Patent Drafting Software With Attorney Review',
     description:
-        'Attorney-in-the-loop AI patent drafting: turn saved prior art into structured draft claims, abstract, and novelty analysis for attorney review across US, EP, IN, PCT, JP, and CN.',
+        'Attorney-in-the-loop AI patent drafting: turn saved prior art into structured draft claims, abstract, and novelty analysis for attorney review across US, EP, IN, PCT, JP, CN, GB, KR, CA, AU, and BR.',
     path: '/ai-patent-drafting/',
     ogKey: 'ai-patent-drafting',
 });
@@ -67,42 +68,121 @@ const WORKFLOW: ProcessStep[] = [
     { title: 'File' },
 ];
 
-interface Jurisdiction {
-    code: string;
-    authority: string;
-    rules: string;
-}
-
-const JURISDICTIONS: Jurisdiction[] = [
+/* One medical-use claim per office, in the form the drafter writes for it,
+   from the drafting rules (skill-v1.6). The board shows them in this order. */
+const JURISDICTIONS: DraftingOffice[] = [
     {
         code: 'US',
         authority: 'USPTO',
+        claim: ['', 'A method of treating', ' cancer in a subject in need thereof, comprising administering Compound X.'],
+        claimNote: 'Use claims are not drafted for the US, because a bare use claim fails 35 USC 101.',
+        treatmentDrafted: true,
+        fact: { label: 'Flagged for review', value: '101, 112 and ODP' },
+        abstractCap: '150 words',
         rules: '35 USC 101 / 112 and obviousness-type double patenting issues flagged for attorney review, with the full US section structure (Field, Background, Summary, Brief Description of Drawings, Detailed Description).',
     },
     {
         code: 'EP',
         authority: 'EPO',
+        claim: ['Compound X ', 'for use in treating', ' cancer.'],
+        claimNote: 'The EPC 2000 "for use" form. "Use of X for treating Y" is read as a method of treatment and is not drafted.',
+        treatmentDrafted: false,
+        fact: { label: 'Key check', value: 'Art. 84 clarity' },
+        abstractCap: '150 words',
         rules: 'EPC Article 84 clarity, conciseness, and support, plus the EPC 2000 "compound for use" claim format.',
     },
     {
         code: 'IN',
         authority: 'Indian Patent Office',
+        shortName: 'IPO',
+        claim: ['', 'A pharmaceutical composition comprising', ' Compound X and a pharmaceutically acceptable carrier.'],
+        claimNote: 'Product, composition and process claims only: a new use of a known substance is not an invention in India.',
+        treatmentDrafted: false,
+        fact: { label: 'Key check', value: 'Section 3(d)' },
+        abstractCap: '150 words',
         rules: 'Section 3(d) enhanced-efficacy considerations flagged for attorney review on pharma claims, the single most important rule for Indian pharma patents.',
     },
     {
         code: 'WO',
         authority: 'WIPO (PCT)',
+        shortName: 'WIPO',
+        claim: ['Compound X ', 'for use in treating', ' cancer.'],
+        claimNote: 'Added for the EP national phase, with each use described fully so national counsel can convert it to the local form.',
+        treatmentDrafted: false,
+        fact: { label: 'Key check', value: 'National-phase notes' },
+        abstractCap: '150 words',
         rules: 'Jurisdiction-neutral claims compatible with USPTO and EPO conventions, with national-phase amendments flagged for entry.',
     },
     {
         code: 'JP',
         authority: 'JPO',
+        claim: ['', 'A pharmaceutical composition for treating cancer', ', comprising Compound X as an active ingredient.'],
+        claimNote: 'A use claim is read as a method of using the substance, so the medical use is claimed as a composition for a specific disease.',
+        treatmentDrafted: false,
+        fact: { label: 'Key check', value: 'Multi-multi ban' },
+        abstractCap: '200 words',
         rules: 'The multi-multi dependency ban checked on every new draft, and medicinal use claimed as a pharmaceutical composition for a specific disease, with pharmacological test data called for in the description.',
     },
     {
         code: 'CN',
         authority: 'CNIPA',
+        claim: ['Use of Compound X ', 'in the preparation of a medicament', ' for treating cancer.'],
+        claimNote: '"Use of X for treating Y" is treated as a method of treatment; the pharmaceutical-use form is the one accepted.',
+        treatmentDrafted: false,
+        fact: { label: 'Key check', value: 'Alternative-only dependency' },
+        abstractCap: '150 words, 300 Chinese characters',
         rules: 'Medical use in the "use of X in the preparation of a medicament" form, multiple dependent claims in the alternative only, and sufficiency judged on the application as filed.',
+    },
+    {
+        code: 'GB',
+        authority: 'UKIPO',
+        claim: ['Compound X ', 'for use in the treatment of', ' cancer.'],
+        claimNote: 'Swiss-type claims are refused in every new or pending UK application, with no 2011 transition as at the EPO.',
+        treatmentDrafted: false,
+        fact: { label: 'Claims before the fee', value: '25' },
+        abstractCap: '200 words',
+        rules: 'Methods of treatment kept out of the claims, Swiss-type claims refused whatever the priority date, and omnibus "as herein described" claims flagged.',
+    },
+    {
+        code: 'KR',
+        authority: 'MOIP (formerly KIPO)',
+        shortName: 'MOIP',
+        claim: ['', 'A pharmaceutical composition for preventing or treating cancer', ', comprising Compound X as an active ingredient.'],
+        claimNote: 'A claim ending in "use" is neither a product nor a method in Korea, so the medical use is a composition claim.',
+        treatmentDrafted: false,
+        fact: { label: 'Claims before the fee', value: 'None, each is charged' },
+        abstractCap: '150 words, 400 Korean characters',
+        rules: 'The multi-multi dependency ban checked on every draft, use claims flagged, and the Korean translation due 1 year 2 months from the earliest priority date.',
+    },
+    {
+        code: 'CA',
+        authority: 'CIPO',
+        claim: ['', 'Use of Compound X for treating', ' cancer.'],
+        claimNote: 'Accepted without an administering step; adding one turns the use claim into a method of medical treatment.',
+        treatmentDrafted: false,
+        fact: { label: 'Claims before the fee', value: '20' },
+        abstractCap: '150 words',
+        rules: 'Use claims that recite administering flagged, multiple dependent claims in the alternative only, and incorporation by reference in the description blocked.',
+    },
+    {
+        code: 'AU',
+        authority: 'IP Australia',
+        claim: ['', 'A method of treating', ' cancer, comprising administering Compound X.'],
+        claimNote: 'Australia has no exclusion for methods of medical treatment, and Swiss-type claims are accepted alongside them.',
+        treatmentDrafted: true,
+        fact: { label: 'Claims before the fee', value: '20' },
+        abstractCap: '150 words',
+        rules: 'Methods of treatment drafted, Swiss-type claims accepted, multiple dependent claims free to depend on each other, and omnibus claims flagged.',
+    },
+    {
+        code: 'BR',
+        authority: 'INPI',
+        claim: ['Use of Compound X, ', 'characterized by', ' being for preparing a medicament for treating cancer.'],
+        claimNote: 'The Swiss form only, with "characterized by" once in every claim. Drafted in English for the Portuguese filing.',
+        treatmentDrafted: false,
+        fact: { label: 'Claims before the fee', value: '15' },
+        abstractCap: '200 words',
+        rules: '"Characterized by" counted in every claim, imprecise terms such as "about" flagged, and dependency wording held to "any one of the preceding claims".',
     },
 ];
 
@@ -227,7 +307,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Which jurisdictions are supported?',
         answer:
-            'US, EP, IN, PCT (WO), JP, and CN are the production set, each with jurisdiction-specific claim format, drafting rules, and mandatory section structure applied. A missing required section is flagged rather than silently omitted.',
+            'US, EP, IN, PCT (WO), JP, CN, GB, KR, CA, AU, and BR are the production set, each with jurisdiction-specific claim format, drafting rules, and mandatory section structure applied. A missing required section is flagged rather than silently omitted.',
     },
     {
         question: 'How does prior art work for US and Indian patents without a claims API?',
@@ -262,7 +342,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Can I just use ChatGPT to write my patent application?',
         answer:
-            'A general chatbot writes generic claims with no access to the prior art on record, no jurisdiction-specific statutory rules, no version history, and no audit trail. This assistant grounds every draft in the actual prior art saved to the family (including pasted claim text), applies US, EP, IN, PCT, JP, and CN rules and section structure, runs a second-model confidence review, and keeps an append-only audit trail with mandatory attorney review before filing. The attorney is the author; the AI is the assistant.',
+            'A general chatbot writes generic claims with no access to the prior art on record, no jurisdiction-specific statutory rules, no version history, and no audit trail. This assistant grounds every draft in the actual prior art saved to the family (including pasted claim text), applies US, EP, IN, PCT, JP, CN, GB, KR, CA, AU, and BR rules and section structure, runs a second-model confidence review, and keeps an append-only audit trail with mandatory attorney review before filing. The attorney is the author; the AI is the assistant.',
     },
     {
         question: 'Can the AI spot claim-support issues or weaknesses before filing?',
@@ -272,7 +352,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Can it draft patent applications for India?',
         answer:
-            'Yes. India (IN) is in the production jurisdiction set. Drafts apply Indian Patent Office rules, including the Section 3(d) enhanced-efficacy requirement that is decisive for pharma claims, plus the mandatory section structure, with US, EP, PCT, JP, and CN supported alongside it. A missing required section is flagged rather than silently omitted.',
+            'Yes. India (IN) is in the production jurisdiction set. Drafts apply Indian Patent Office rules, including the Section 3(d) enhanced-efficacy requirement that is decisive for pharma claims, plus the mandatory section structure, with US, EP, PCT, JP, CN, GB, KR, CA, AU, and BR supported alongside it. A missing required section is flagged rather than silently omitted.',
     },
 ];
 
@@ -401,21 +481,15 @@ export default function AiPatentDraftingPage() {
                                 style={{ fontFamily: 'var(--font-body)' }}
                             >
                                 The drafting engine applies jurisdiction-specific claim format, statutory
-                                rules, and mandatory section structure. US, EP, IN, PCT, JP, and CN
-                                are the production set.
+                                rules, and mandatory section structure for eleven offices. Pick one to see
+                                how the same medical use is claimed there.
                             </p>
                         </div>
                     </FadeIn>
 
-                    <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16">
-                        {JURISDICTIONS.map((j, i) => (
-                            <li key={j.code}>
-                                <FadeIn delay={i * 0.06} className="h-full">
-                                    <JurisdictionRow jurisdiction={j} />
-                                </FadeIn>
-                            </li>
-                        ))}
-                    </ul>
+                    <FadeIn delay={0.1} className="mt-12 lg:mt-16">
+                        <JurisdictionRuleExplorer offices={JURISDICTIONS} />
+                    </FadeIn>
                 </Container>
             </section>
 
@@ -863,24 +937,6 @@ export default function AiPatentDraftingPage() {
    stamp in the margin, the office and its rules beside it. On hover the card
    takes registration marks at its corners, the code inks in, and the office
    name is underlined as an amendment is. */
-function JurisdictionRow({ jurisdiction }: { jurisdiction: Jurisdiction }) {
-    return (
-        <article className="hover-crop group grid h-full grid-cols-[3.75rem_1fr] gap-x-4 rounded-xl border border-card-border bg-white p-5 shadow-sm transition-[translate,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md sm:p-6 motion-reduce:hover:translate-y-0">
-            <span className="inline-flex h-11 w-[3.25rem] items-center justify-center rounded-md border border-dashed border-primary/35 text-base font-semibold text-primary transition-colors duration-300 [font-family:var(--font-mono)] group-hover:border-solid group-hover:border-primary group-hover:bg-primary group-hover:text-white">
-                {jurisdiction.code}
-            </span>
-            <div className="min-w-0">
-                <h3 className="text-lg font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary [font-family:var(--font-display)]">
-                    <span className="hover-sweep">{jurisdiction.authority}</span>
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
-                    {jurisdiction.rules}
-                </p>
-            </div>
-        </article>
-    );
-}
-
 /* Numbered capabilities as ruled rows, two columns from lg: the subsection
    number, the title in the display face, the description, a hairline rule. */
 function RuledItemList({

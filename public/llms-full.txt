@@ -201,7 +201,7 @@ Every AI-generated draft includes a disclaimer and requires human sign-off befor
 
 Generate V1, review, add instructions, regenerate V2. Each version is kept as a separate, non-editable record.
 
-US, EP, IN, and PCT (WO) are the production set today. JP and CN are planned.
+All eleven offices are the production set today.
 
 ### From Prior Art to First Draft, With Attorney Review Built In
 
@@ -221,7 +221,7 @@ Every AI-generated draft includes a disclaimer and requires human sign-off befor
 
 Generate V1, review, add instructions, regenerate V2. Each version is kept as a separate, non-editable record.
 
-US, EP, IN, and PCT (WO) are the production set today. JP and CN are planned.
+All eleven offices are the production set today.
 
 ## Office Action Analysis and Response Drafting
 
@@ -311,7 +311,7 @@ across 8 categories
 
 Drafting Jurisdictions
 
-US, EP, IN, WO (JP and CN planned)
+from the USPTO to INPI Brazil
 
 Audit Coverage
 
@@ -1146,7 +1146,7 @@ No. This is a professional tool for attorneys: the attorney is the author and th
 
 Which jurisdictions are supported?
 
-US, EP, IN, and PCT (WO) are the production set, each with jurisdiction-specific claim format, drafting rules, and mandatory section structure applied. A missing required section is flagged rather than silently omitted. JP and CN are planned and are not available yet.
+US, EP, IN, PCT (WO), JP, CN, GB, KR, CA, AU, and BR are the production set, each with jurisdiction-specific claim format, drafting rules, and mandatory section structure applied. A missing required section is flagged rather than silently omitted.
 
 How does prior art work for US and Indian patents without a claims API?
 
@@ -1580,7 +1580,7 @@ Yes. IP boutique law firms are one of the two core audiences, alongside pharma c
 
 Does Design Your Invention include AI patent drafting that legacy tools usually lack?
 
-Yes. AI-assisted drafting is built in and generates a first draft for attorney review across US, EP, IN, and PCT (WO), each with jurisdiction-specific drafting rules, with JP and CN planned. Every draft carries a mandatory disclaimer and a draft to in-review to approved workflow, so no AI-generated content can be exported or filed without human sign-off. It is a starting point for attorneys, not filing-ready output.
+Yes. AI-assisted drafting is built in and generates a first draft for attorney review across US, EP, IN, PCT (WO), JP, CN, GB, KR, CA, AU, and BR, each with jurisdiction-specific drafting rules. Every draft carries a mandatory disclaimer and a draft to in-review to approved workflow, so no AI-generated content can be exported or filed without human sign-off. It is a starting point for attorneys, not filing-ready output.
 
 Does Design Your Invention handle office action responses?
 
@@ -1667,7 +1667,7 @@ AI-generated drafts are a starting point, not a final filing. AI-generated conte
 
 Which jurisdictions does AI patent drafting support?
 
-Four jurisdictions are in the production set: US (USPTO, 35 USC 101/112), EP (EPO, EPC Article 84 and the EPC 2000 compound-for-use format), IN (Indian Patent Office, Section 3(d)/(i)/(j)/(k) exclusions), and WO (WIPO/PCT, international-stage neutral drafting). JP and CN are planned and not available yet. Each supported jurisdiction has drafting guidance and mandatory section structure applied during generation, so claim format and section coverage follow local convention, with relevant statutory considerations flagged for attorney review.
+Eleven offices are in the production set: US (USPTO, 35 USC 101/112), EP (EPO, EPC Article 84 and the EPC 2000 compound-for-use format), IN (Indian Patent Office, Section 3(d)/(i)/(j)/(k) exclusions), WO (WIPO/PCT, international-stage neutral drafting), JP (JPO, the multi-multi dependency ban), CN (CNIPA, the pharmaceutical-use claim form), GB (UKIPO), KR (MOIP, formerly KIPO), CA (CIPO), AU (IP Australia), and BR (INPI). Each supported jurisdiction has drafting guidance and mandatory section structure applied during generation, so claim format and section coverage follow local convention, with relevant statutory considerations flagged for attorney review.
 
 How does prior art search work in the platform?
 

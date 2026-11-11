@@ -11,8 +11,8 @@ import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList
 import { RuledList, RuledItem } from '@/components/ui/RuledList';
 
 /* The production set. The AI drafting page is the source of truth for this
-   list: US, EP, IN, PCT (WO), JP, and CN all ship today. A jurisdiction not
-   yet live can be marked planned. */
+   list: all eleven offices below ship today. A jurisdiction not yet live can
+   be marked planned. */
 const JURISDICTIONS: { code: string; label: string; planned?: boolean }[] = [
     { code: 'US', label: 'USPTO' },
     { code: 'EP', label: 'EPO' },
@@ -20,6 +20,11 @@ const JURISDICTIONS: { code: string; label: string; planned?: boolean }[] = [
     { code: 'WO', label: 'WIPO' },
     { code: 'JP', label: 'JPO' },
     { code: 'CN', label: 'CNIPA' },
+    { code: 'GB', label: 'UKIPO' },
+    { code: 'KR', label: 'MOIP' },
+    { code: 'CA', label: 'CIPO' },
+    { code: 'AU', label: 'IP Australia' },
+    { code: 'BR', label: 'INPI' },
 ];
 
 const TRUST_ITEMS = [
@@ -134,7 +139,7 @@ const DRAFTING_CARDS: ReferenceItem[] = [
     },
     {
         title: 'Jurisdiction-Specific Drafting Guidance',
-        description: 'Configurable drafting guidance and templates for the production set (US, EP, IN, PCT/WO, JP, and CN) are applied to every generation.',
+        description: 'Configurable drafting guidance and templates for the production set (US, EP, IN, PCT/WO, JP, CN, GB, KR, CA, AU, and BR) are applied to every generation.',
     },
     {
         title: 'Mandatory Attorney Review',
@@ -170,7 +175,7 @@ function DraftingContent() {
                 className="mt-3 text-xs text-text-muted"
                 style={{ fontFamily: 'var(--font-body)' }}
             >
-                US, EP, IN, PCT (WO), JP, and CN are the production set today.
+                All eleven offices are the production set today.
             </p>
         </div>
     );

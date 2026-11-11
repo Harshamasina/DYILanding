@@ -122,7 +122,7 @@ const STAGES: LifecycleStage[] = [
         id: 'define',
         label: 'Define',
         meta: 'AI-assisted drafting',
-        detail: 'Turn your selected prior art and invention notes into a draft specification and claims with US, EP, IN, PCT/WO, JP, or CN templates.',
+        detail: 'Turn your selected prior art and invention notes into a draft specification and claims with templates for eleven offices, from US, EP, IN, and PCT/WO to JP, CN, GB, KR, CA, AU, and BR.',
         icon: Sparkles,
         window: [2600, 5300],
     },

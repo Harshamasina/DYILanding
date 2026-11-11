@@ -247,10 +247,10 @@ export const PRODUCT_STATS: Stat[] = [
         sublabel: 'across 8 categories',
     },
     {
-        value: 6,
+        value: 11,
         suffix: '',
         label: 'Drafting Jurisdictions',
-        sublabel: 'US, EP, IN, WO, JP, CN',
+        sublabel: 'from the USPTO to INPI Brazil',
     },
     {
         value: 100,

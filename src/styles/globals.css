@@ -1222,3 +1222,40 @@ html {
     inherits: true;
     initial-value: 0px;
 }
+
+/* Jurisdiction explorer: the bar under the active office fills over the
+   time it stays on screen, then hands over to the next; hovering or focusing
+   the explorer holds it. The sheet for a newly picked office eases in. */
+@keyframes explorer-progress {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes explorer-swap {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.explorer-progress {
+    animation: explorer-progress 6s linear both;
+}
+
+.explorer-paused .explorer-progress {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .explorer-swap {
+        animation: explorer-swap 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+}

@@ -66,7 +66,7 @@ const STATIC_CARDS: Record<string, OgCardContent> = {
         eyebrow: 'AI Drafting',
         title: 'AI Patent Drafting With Attorney Review',
         description:
-            'Turn saved prior art into a structured first draft of claims, abstract, and novelty analysis for attorney review across US, EP, IN, PCT, JP, and CN.',
+            'Turn saved prior art into a structured first draft of claims, abstract, and novelty analysis for attorney review across eleven patent offices.',
     },
     'office-actions': {
         variant: 'page',

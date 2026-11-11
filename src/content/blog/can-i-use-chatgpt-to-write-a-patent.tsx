@@ -84,7 +84,7 @@ function Content() {
             </p>
             <ol>
                 <li><strong>Grounded in your prior art</strong> - the draft is generated against the actual references you saved, including pasted claim text, not a vacuum.</li>
-                <li><strong>Jurisdiction-aware</strong> - it applies US, EP, IN, PCT, JP, and CN claim format, statutory rules, and section structure, and flags a missing required section rather than silently omitting it.</li>
+                <li><strong>Jurisdiction-aware</strong> - it applies US, EP, IN, PCT, JP, CN, GB, KR, CA, AU, and BR claim format, statutory rules, and section structure, and flags a missing required section rather than silently omitting it.</li>
                 <li><strong>Structured and versioned</strong> - every claim and section is its own record with append-only history, so you can see who changed what, when, and why, and what art the AI saw.</li>
                 <li><strong>Attorney-in-the-loop</strong> - every draft starts in a DRAFT state and requires attorney review before filing. The attorney is the author, the AI is the assistant.</li>
             </ol>

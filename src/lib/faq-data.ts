@@ -7,7 +7,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'What is Design Your Invention?',
         answer:
-            'Design Your Invention (DYI) is an intellectual property management software (IPMS) platform for pharma companies and IP boutique law firms. It brings multi-jurisdiction patent docketing, prior art search across 100+ patent authorities via the EPO, and AI-assisted patent drafting for US, EP, IN, PCT (WO), JP, and CN into one connected, audit-trailed workspace. The architecture follows FDA 21 CFR Part 11 patterns, with tenant-scoped data isolation so each organization keeps its portfolio separate.',
+            'Design Your Invention (DYI) is an intellectual property management software (IPMS) platform for pharma companies and IP boutique law firms. It brings multi-jurisdiction patent docketing, prior art search across 100+ patent authorities via the EPO, and AI-assisted patent drafting for US, EP, IN, PCT (WO), JP, CN, GB, KR, CA, AU, and BR into one connected, audit-trailed workspace. The architecture follows FDA 21 CFR Part 11 patterns, with tenant-scoped data isolation so each organization keeps its portfolio separate.',
     },
     {
         question: 'Is the platform generally available or in private beta?',
@@ -92,7 +92,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'Which jurisdictions does AI patent drafting support?',
         answer:
-            'Four jurisdictions are in the production set: US (USPTO, 35 USC 101/112), EP (EPO, EPC Article 84 and the EPC 2000 compound-for-use format), IN (Indian Patent Office, Section 3(d)/(i)/(j)/(k) exclusions), and WO (WIPO/PCT, international-stage neutral drafting). JP and CN are planned and not available yet. Each supported jurisdiction has drafting guidance and mandatory section structure applied during generation, so claim format and section coverage follow local convention, with relevant statutory considerations flagged for attorney review.',
+            'Eleven offices are in the production set: US (USPTO, 35 USC 101/112), EP (EPO, EPC Article 84 and the EPC 2000 compound-for-use format), IN (Indian Patent Office, Section 3(d)/(i)/(j)/(k) exclusions), WO (WIPO/PCT, international-stage neutral drafting), JP (JPO, the multi-multi dependency ban), CN (CNIPA, the pharmaceutical-use claim form), GB (UKIPO), KR (MOIP, formerly KIPO), CA (CIPO), AU (IP Australia), and BR (INPI). Each supported jurisdiction has drafting guidance and mandatory section structure applied during generation, so claim format and section coverage follow local convention, with relevant statutory considerations flagged for attorney review.',
     },
     {
         question: 'How does prior art search work in the platform?',
@@ -122,7 +122,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     {
         question: 'How does Design Your Invention compare to legacy tools like Anaqua, Clarivate, or AppColl?',
         answer:
-            'Most IP teams run a docketing system plus separate tools for prior art search and drafting, with spreadsheets for chemistry and fees. Design Your Invention unifies multi-jurisdiction docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, PCT, JP, and CN, USPTO office action analysis and response, and chemistry enrichment in one connected, audit-trailed platform. The comparison page has a capability-by-capability breakdown against the typical legacy setup.',
+            'Most IP teams run a docketing system plus separate tools for prior art search and drafting, with spreadsheets for chemistry and fees. Design Your Invention unifies multi-jurisdiction docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, PCT, JP, CN, GB, KR, CA, AU, and BR, USPTO office action analysis and response, and chemistry enrichment in one connected, audit-trailed platform. The comparison page has a capability-by-capability breakdown against the typical legacy setup.',
     },
     {
         question: 'Is my content used to train AI models?',

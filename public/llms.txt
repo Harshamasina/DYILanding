@@ -13,7 +13,7 @@
 - [What is DYI](https://designyourinvention.com/): Overview, category, and who it is for.
 - [Patent Docketing](https://designyourinvention.com/docketing/): Multi-jurisdiction docketing, PCT/PRV/NPE case management, fees, and deadlines.
 - [Patent Search](https://designyourinvention.com/patent-search/): Free public patent search over 120M+ records from 100+ patent authorities (Google Patents public dataset via BigQuery); the in-app prior art search uses EPO Open Patent Services.
-- [AI Patent Drafting](https://designyourinvention.com/ai-patent-drafting/): AI-assisted first drafts for attorney review across US, EP, IN, and PCT (WO). JP and CN are planned.
+- [AI Patent Drafting](https://designyourinvention.com/ai-patent-drafting/): AI-assisted first drafts for attorney review across US, EP, IN, PCT (WO), JP, CN, GB, KR, CA, AU, and BR.
 - [Office Action Analysis and Response](https://designyourinvention.com/office-actions/): USPTO office action analysis that maps each rejection to claims, limitations, and source-checked quotations, signed by an attorney, plus a response workspace with a claim listing computed to 37 CFR 1.121(c), two-attorney approval, and Word output. US only; other offices are planned. The product never files; model-assisted response drafting is enabled per capability after benchmark evaluation.
 - [DYI vs legacy IPMS](https://designyourinvention.com/compare/): Positioning against incumbent IP management platforms.
 - [FAQ](https://designyourinvention.com/faq/): Common questions about the platform, jurisdictions, and compliance.

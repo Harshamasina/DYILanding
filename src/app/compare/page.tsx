@@ -76,7 +76,7 @@ const COMPARE_ROWS: CompareRow[] = [
         href: '/ai-patent-drafting/',
         legacy: 'Drafting happens in Word or a separate drafting tool, outside the docket',
         legacyIncluded: false,
-        dyi: 'First-draft generation for attorney review across US, EP, IN, PCT (WO), JP, and CN, with a mandatory review workflow',
+        dyi: 'First-draft generation for attorney review across US, EP, IN, PCT (WO), JP, CN, GB, KR, CA, AU, and BR, with a mandatory review workflow',
     },
     {
         capability: 'Office action analysis and response',
@@ -118,7 +118,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'How is Design Your Invention different from legacy IP management software?',
         answer:
-            'The main difference is consolidation. Many IP teams run a docketing system, a separate prior art search tool, a drafting tool, and spreadsheets for chemistry and fees. Design Your Invention brings docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, PCT, JP, and CN, USPTO office action analysis and response, and chemistry enrichment into one connected, audit-trailed platform with a Part 11-aligned architecture and tenant-scoped data isolation.',
+            'The main difference is consolidation. Many IP teams run a docketing system, a separate prior art search tool, a drafting tool, and spreadsheets for chemistry and fees. Design Your Invention brings docketing, prior art search across 100+ patent authorities, AI-assisted drafting for US, EP, IN, PCT, JP, CN, GB, KR, CA, AU, and BR, USPTO office action analysis and response, and chemistry enrichment into one connected, audit-trailed platform with a Part 11-aligned architecture and tenant-scoped data isolation.',
     },
     {
         question: 'Does the platform replace a separate prior art search tool?',
@@ -133,7 +133,7 @@ const PAGE_FAQ: FaqItem[] = [
     {
         question: 'Does the platform include AI patent drafting that legacy tools usually lack?',
         answer:
-            'Yes. AI-assisted drafting is built in and generates a first draft for attorney review across US, EP, IN, PCT (WO), JP, and CN, each with jurisdiction-specific drafting rules. Every draft carries a mandatory disclaimer and a draft to in-review to approved workflow, so no AI-generated content can be exported or filed without human sign-off. It is a starting point for attorneys, not filing-ready output.',
+            'Yes. AI-assisted drafting is built in and generates a first draft for attorney review across US, EP, IN, PCT (WO), JP, CN, GB, KR, CA, AU, and BR, each with jurisdiction-specific drafting rules. Every draft carries a mandatory disclaimer and a draft to in-review to approved workflow, so no AI-generated content can be exported or filed without human sign-off. It is a starting point for attorneys, not filing-ready output.',
     },
     {
         question: 'Does the platform handle office action responses?',
