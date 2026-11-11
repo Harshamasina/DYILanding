@@ -18,7 +18,6 @@ import { PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import type { FaqItem } from '@/lib/faq-data';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 import { CompareStackSvg } from '@/components/illustrations/CompareStackSvg';
 
 export const metadata: Metadata = buildMetadata({
@@ -207,9 +206,7 @@ export default function ComparePage() {
                         counts it once. */}
                     <figure className="figure-group mx-auto mt-10 hidden w-full max-w-[560px] md:block lg:mx-0 lg:mt-0 lg:ml-auto">
                         <CompareStackSvg className="h-auto w-full" />
-                        <figcaption>
-                            <FigureCaption className="mt-4">The usual stack, and one record</FigureCaption>
-                        </figcaption>
+                        <figcaption className="sr-only">The usual stack, and one record</figcaption>
                     </figure>
                     <figure className="figure-group mt-10 md:hidden">
                         <div aria-hidden="true" className="rounded-2xl border border-card-border bg-card-bg px-5 py-4 shadow-sm">
@@ -229,9 +226,7 @@ export default function ComparePage() {
                                 <span className="ml-2 font-semibold [font-family:var(--font-mono)]">DEMO-2024-011</span>
                             </p>
                         </div>
-                        <figcaption>
-                            <FigureCaption className="mt-4">The usual stack, and one record</FigureCaption>
-                        </figcaption>
+                        <figcaption className="sr-only">The usual stack, and one record</figcaption>
                     </figure>
                     </div>
                 </Container>

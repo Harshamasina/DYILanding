@@ -9,7 +9,6 @@ import { FadeIn } from '@/components/motion/FadeIn';
 import { OFFICE_ACTIONS_PAGE_URL } from '@/lib/constants';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 import { RuledList, RuledItem } from '@/components/ui/RuledList';
 
 /* Same layout as the AI drafting section above it: heading, mockup beside a
@@ -82,7 +81,6 @@ export function OfficeActionSection() {
                             {/* 502 the Issues step, 504 the Claim chart step, 506 the
                                 working pane, 508 the Approval step. */}
                         </DeferredMount>
-                        <FigureCaption references={OA_CARDS.length} className="mt-5">Office action response, issue by issue</FigureCaption>
                     </FadeIn>
                 </div>
 

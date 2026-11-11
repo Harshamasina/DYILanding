@@ -8,7 +8,6 @@ import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 import { RuledList, RuledItem } from '@/components/ui/RuledList';
 
 /* Production set first, planned jurisdictions marked. The AI drafting page
@@ -78,7 +77,6 @@ export function AiDraftingSection() {
                                     {/* 402 Generate AI Draft, 404 the jurisdiction picker,
                                         406 the Review tab, 408 the History tab. */}
                                 </DeferredMount>
-                                <FigureCaption references={DRAFTING_CARDS.length} className="mt-5">AI draft workspace with claim review</FigureCaption>
                             </FadeIn>
                         </div>
                         {/* Mobile */}
@@ -92,7 +90,6 @@ export function AiDraftingSection() {
                                         <AnimatedAiDraftGeneration />
                                     </MockupHalo>
                                 </DeferredMount>
-                                <FigureCaption references={DRAFTING_CARDS.length} className="mt-5">AI draft workspace with claim review</FigureCaption>
                             </FadeIn>
                         </div>
                     </div>

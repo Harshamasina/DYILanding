@@ -357,3 +357,8 @@ export function Circled({ cx, cy, r = 17, dashed = false }: { cx: number; cy: nu
 export function Ink({ d, soft = false }: { d: string; soft?: boolean }) {
     return <path d={d} stroke={soft ? INK_SOFT : INK} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />;
 }
+
+/* A node on line art, such as a claim in a claim tree. */
+export function Dot({ cx, cy, r = 3, soft = false }: { cx: number; cy: number; r?: number; soft?: boolean }) {
+    return <circle cx={cx} cy={cy} r={r} fill={soft ? INK_SOFT : INK} />;
+}

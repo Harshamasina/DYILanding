@@ -24,8 +24,7 @@ interface ReferenceListProps {
    carries a
    reference numeral (102, 104, 106) tied to the figure it sits beside, in
    place of an icon tile. The numerals come from CSS counters in globals.css:
-   the enclosing .figure-group sets the figure number, and FigureCaption
-   prints it. The numerals are decoration, so they are hidden from screen
+   the enclosing .figure-group sets the figure number. The numerals are decoration, so they are hidden from screen
    readers. */
 export function ReferenceList({
     items,

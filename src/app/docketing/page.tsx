@@ -2,8 +2,18 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
     ArrowRight,
+    BadgeDollarSign,
+    BellRing,
     ChevronDown,
+    Coins,
+    FileClock,
+    FolderTree,
+    Gavel,
+    Globe,
+    MapPinned,
+    Pill,
     Play,
+    type LucideIcon,
 } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
 import { Container } from '@/components/ui/Container';
@@ -16,8 +26,6 @@ import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { IndexCard } from '@/components/ui/IndexCard';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
-import { InlineList, RuledList, RuledItem } from '@/components/ui/RuledList';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedDocketingWorkflow } from '@/components/ui/AnimatedDocketingWorkflow';
 import { ComputedDeadlineTrace } from '@/components/ui/ComputedDeadlineTrace';
@@ -42,16 +50,16 @@ interface CardItem {
     description: string;
 }
 
-const TRACKS = [
-    'Application Families',
-    'Provisional (PRV) Applications',
-    'PCT Filings',
-    'National-Phase (NPE) Cases',
-    'Office Actions',
-    'Annuity Fees',
-    'Patent Fees',
-    'Drug Products',
-    'Custom Reminders',
+const TRACKS: { label: string; icon: LucideIcon }[] = [
+    { label: 'Application Families', icon: FolderTree },
+    { label: 'Provisional (PRV) Applications', icon: FileClock },
+    { label: 'PCT Filings', icon: Globe },
+    { label: 'National-Phase (NPE) Cases', icon: MapPinned },
+    { label: 'Office Actions', icon: Gavel },
+    { label: 'Annuity Fees', icon: Coins },
+    { label: 'Patent Fees', icon: BadgeDollarSign },
+    { label: 'Drug Products', icon: Pill },
+    { label: 'Custom Reminders', icon: BellRing },
 ];
 
 const TRACE_CAPABILITIES: CardItem[] = [
@@ -316,16 +324,12 @@ export default function DocketingPage() {
                     <MockupHalo>
                         <AnimatedDocketingWorkflow />
                     </MockupHalo>
-                    <FigureCaption className="mt-5">Docket workflow, from the dashboard and notifications to a status change with its required reason, then the audit log</FigureCaption>
                 </Container>
 
                 {/* Tracks across the case hierarchy */}
                 <Container className="relative z-10 mt-8 sm:mt-10">
                     <FadeIn delay={0.1}>
-                        <p className="mb-4 text-center text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
-                            One docket covers every record type in a patent family, from the first filing to the drug product it protects.
-                        </p>
-                        <InlineList label="Tracks across your case hierarchy" items={TRACKS} align="center" />
+                        <TrackHierarchy />
                     </FadeIn>
                 </Container>
             </section>
@@ -386,7 +390,6 @@ export default function DocketingPage() {
                             <div className="relative">
                                 <ComputedDeadlineTrace />
                             </div>
-                            <FigureCaption className="relative mt-5">A computed deadline with its trigger, citation, and arithmetic</FigureCaption>
                         </div>
                     </FadeIn>
 
@@ -428,11 +431,16 @@ export default function DocketingPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.05}>
-                        <RuledList label="Risk levels" className="mt-8 lg:mt-0 lg:mb-1">
-                            <RiskLevel dot="bg-danger">Red, a score of 70 or higher</RiskLevel>
-                            <RiskLevel dot="bg-compliance">Amber, 40 or higher</RiskLevel>
-                            <RiskLevel dot="bg-success">Green, anything lower</RiskLevel>
-                        </RuledList>
+                        <div className="mt-8 lg:mt-0 lg:mb-1">
+                            <p className="text-base leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                                Risk levels
+                            </p>
+                            <ul aria-label="Risk levels" className="mt-3 flex flex-col gap-2 pl-1">
+                                <RiskLevel dot="bg-danger" ring="ring-danger/20">Red, a score of 70 or higher</RiskLevel>
+                                <RiskLevel dot="bg-compliance" ring="ring-compliance/20">Amber, 40 or higher</RiskLevel>
+                                <RiskLevel dot="bg-success" ring="ring-success/20">Green, anything lower</RiskLevel>
+                            </ul>
+                        </div>
                     </FadeIn>
                     </div>
 
@@ -801,16 +809,42 @@ function SecurityCard({ title, description }: CardItem) {
     );
 }
 
-/* One item of the risk-level line: a colour dot (the level's colour) and the
+/* One risk level: a colour dot with a soft halo (the level's colour) and the
    rule in words, so the meaning never rests on colour alone. */
-function RiskLevel({ dot, children }: { dot: string; children: React.ReactNode }) {
+function RiskLevel({ dot, ring, children }: { dot: string; ring: string; children: React.ReactNode }) {
     return (
-        <RuledItem>
-            <span className="inline-flex items-baseline gap-2">
-                <span aria-hidden="true" className={`inline-block h-2 w-2 -translate-y-px rounded-full ${dot}`} />
-                {children}
-            </span>
-        </RuledItem>
+        <li className="flex items-center gap-2.5 text-sm leading-snug text-text-primary [font-family:var(--font-body)]">
+            <span aria-hidden="true" className={`h-2.5 w-2.5 shrink-0 rounded-full ring-4 ${dot} ${ring}`} />
+            {children}
+        </li>
+    );
+}
+
+/* The record types one docket tracks, set as a hierarchy rail: a hairline
+   with a tick down to each record, the way a family tree hangs its members.
+   Each record is a small tab with its mark; on hover the tab lifts and takes
+   registration marks at its corners. */
+function TrackHierarchy() {
+    return (
+        <div className="mx-auto max-w-5xl">
+            <p className="text-center text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                One docket covers every record type in a patent family, from the first filing to the drug product it protects.
+            </p>
+            <p className="mt-6 text-center text-base leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                Tracks across your case hierarchy
+            </p>
+            <ul aria-label="Tracks across your case hierarchy" className="mt-4 flex flex-wrap justify-center gap-x-3 gap-y-4 border-t border-primary/15 pt-4 sm:gap-x-4">
+                {TRACKS.map(({ label, icon: Icon }) => (
+                    <li key={label} className="relative">
+                        <span aria-hidden="true" className="absolute -top-4 left-1/2 h-4 w-px -translate-x-1/2 bg-primary/20" />
+                        <span className="hover-crop group inline-flex items-center gap-2 rounded-md border border-card-border bg-white px-3 py-1.5 shadow-[0_1px_0_rgba(79,70,229,0.06)] transition-[translate,border-color] duration-300 hover:-translate-y-0.5 hover:border-primary/30 motion-reduce:hover:translate-y-0">
+                            <Icon aria-hidden="true" className="h-4 w-4 text-primary/70 transition-colors duration-300 group-hover:text-primary" strokeWidth={1.75} />
+                            <span className="text-sm text-text-primary [font-family:var(--font-body)]">{label}</span>
+                        </span>
+                    </li>
+                ))}
+            </ul>
+        </div>
     );
 }
 
@@ -822,30 +856,39 @@ function RiskLevel({ dot, children }: { dot: string; children: React.ReactNode }
    less room, so the LOE timeline that follows arrives sooner. Native details
    and summary give keyboard support without any script. */
 function DisclosureRows({ items, className = '' }: { items: CardItem[]; className?: string }) {
+    /* Two independent columns (not one grid), so opening a row only moves
+       the rows below it in its own column. Numbers run down the left column,
+       then the right, which is the order the counter assigns them. */
+    const half = Math.ceil(items.length / 2);
+    const columns = [items.slice(0, half), items.slice(half)];
     return (
-        <ol className={`grid border-t border-card-border lg:grid-cols-2 lg:gap-x-12 ${className}`}>
-            {items.map((item, i) => (
-                <li key={item.title} className="border-b border-card-border">
-                    <FadeIn delay={(i % 2) * 0.06}>
-                        <details className="group">
-                            <summary className="grid cursor-pointer list-none grid-cols-[2.75rem_1fr_auto] items-baseline gap-x-3 rounded-sm py-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
-                                <SubsectionNumber size="sm" />
-                                <h3 className="text-base font-semibold text-text-primary transition-colors group-hover:text-primary [font-family:var(--font-display)]">
-                                    {item.title}
-                                </h3>
-                                <ChevronDown
-                                    aria-hidden="true"
-                                    className="h-4 w-4 self-center text-text-secondary transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
-                                />
-                            </summary>
-                            <p className="-mt-1 pb-5 pl-[3.5rem] pr-7 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
-                                {item.description}
-                            </p>
-                        </details>
-                    </FadeIn>
-                </li>
+        <div className={`grid items-start lg:grid-cols-2 lg:gap-x-12 ${className}`}>
+            {columns.map((column, c) => (
+                <ol key={c} className={`border-card-border ${c === 0 ? 'border-t' : 'lg:border-t'}`}>
+                    {column.map((item, i) => (
+                        <li key={item.title} className="hover-changebar group border-b border-card-border">
+                            <FadeIn delay={i * 0.04}>
+                                <details className="group">
+                                    <summary className="grid cursor-pointer list-none grid-cols-[2.75rem_1fr_auto] items-baseline gap-x-3 rounded-sm py-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
+                                        <SubsectionNumber size="sm" className="changebar-shift" />
+                                        <h3 className="text-base font-semibold text-text-primary transition-colors group-hover:text-primary [font-family:var(--font-display)]">
+                                            <span className="hover-sweep">{item.title}</span>
+                                        </h3>
+                                        <ChevronDown
+                                            aria-hidden="true"
+                                            className="h-4 w-4 self-center text-text-secondary transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+                                        />
+                                    </summary>
+                                    <p className="-mt-1 pb-5 pl-[3.5rem] pr-7 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                        {item.description}
+                                    </p>
+                                </details>
+                            </FadeIn>
+                        </li>
+                    ))}
+                </ol>
             ))}
-        </ol>
+        </div>
     );
 }
 
@@ -855,13 +898,13 @@ function RuledRows({ items, className = '' }: { items: CardItem[]; className?: s
             {items.map((item, i) => (
                 <li key={item.title}>
                     <FadeIn delay={(i % 2) * 0.06}>
-                        <div className="grid grid-cols-[2.75rem_1fr] gap-x-3 py-5">
-                            <SubsectionNumber size="sm" className="mt-0.5" />
+                        <div className="hover-changebar group grid grid-cols-[2.75rem_1fr] gap-x-3 py-5">
+                            <SubsectionNumber size="sm" className="changebar-shift mt-0.5" />
                             <div className="min-w-0">
-                                <h3 className="text-base font-semibold text-text-primary [font-family:var(--font-display)]">
-                                    {item.title}
+                                <h3 className="text-base font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary [font-family:var(--font-display)]">
+                                    <span className="hover-sweep">{item.title}</span>
                                 </h3>
-                                <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                <p className="mt-1.5 text-sm leading-relaxed text-text-secondary transition-colors duration-300 group-hover:text-text-primary [font-family:var(--font-body)]">
                                     {item.description}
                                 </p>
                             </div>

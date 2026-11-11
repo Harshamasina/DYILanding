@@ -8,7 +8,6 @@ import { FadeIn } from '@/components/motion/FadeIn';
 import { SEARCH_APP_URL, PATENT_SEARCH_PAGE_URL } from '@/lib/constants';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    Patent Search section.
@@ -85,7 +84,6 @@ export function SearchSection() {
                         {/* Honesty label: the mockup is the in-app search
                             (its chrome reads app.designyourinvention.com),
                             not the free public tool the CTA opens. */}
-                        <FigureCaption references={CAPABILITY_POINTS.length} className="mt-5">Patent search, inside the platform</FigureCaption>
                     </FadeIn>
                     <FadeIn delay={0.2}>
                         <div>

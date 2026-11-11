@@ -8,7 +8,6 @@ import { DeferredMount } from '@/components/motion/DeferredMount';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 
 type MockupType = 'families' | 'calendar';
 
@@ -134,7 +133,6 @@ function FeatureRowBlock({ row, index }: { row: FeatureRow; index: number }) {
                         {row.mockup === 'families' ? <AnimatedFamiliesTable /> : <AnimatedCalendar />}
                     </MockupHalo>
                 </DeferredMount>
-                <FigureCaption references={row.features.length} className="mt-5">{row.caption}</FigureCaption>
             </div>
         </FadeIn>
     );

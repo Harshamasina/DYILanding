@@ -2,7 +2,6 @@ import { ArrowRight } from 'lucide-react';
 import { BookDemoButton } from '@/components/ui/BookDemoModal';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { LoeTimeline } from '@/components/ui/LoeTimeline';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 
 interface Pillar {
     label: string;
@@ -91,7 +90,6 @@ export function LoeCard({ note }: { note?: string }) {
                         {/* In-app LOE timeline */}
                         <div className="figure-group relative mt-8 lg:mt-10">
                             <LoeTimeline />
-                            <FigureCaption className="mt-5">Protection horizon for one drug product, by jurisdiction</FigureCaption>
                         </div>
 
                         {/* Footer: disclaimer and CTA */}

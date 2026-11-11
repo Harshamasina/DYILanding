@@ -4,7 +4,6 @@ import { AnimatedAuditTable } from '@/components/ui/AnimatedAuditTable';
 import { DeferredMount } from '@/components/motion/DeferredMount';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { ReferenceList, type ReferenceItem } from '@/components/ui/ReferenceList';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 
 const COMPLIANCE_ITEMS: ReferenceItem[] = [
     {
@@ -118,7 +117,6 @@ export function ComplianceSection() {
                                     log itself, 610 the Actor column. Rows expand and move,
                                     so the numerals point at the fixed header. */}
                             </DeferredMount>
-                            <FigureCaption references={COMPLIANCE_ITEMS.length} className="mt-5">Audit history with reasons for change</FigureCaption>
                         </FadeIn>
                     </div>
 
@@ -129,21 +127,10 @@ export function ComplianceSection() {
                             <DeferredMount className="w-full h-120 sm:h-135 lg:h-150">
                                 <AnimatedAuditTable />
                             </DeferredMount>
-                            <FigureCaption references={COMPLIANCE_ITEMS.length} className="mt-5">Audit history with reasons for change</FigureCaption>
                         </FadeIn>
                     </div>
                 </div>
 
-                {/* Trust disclaimer — signals regulatory maturity to pharma buyers
-                    without overpromising compliance certification. */}
-                <FadeIn treeNode="tree-compliance" delay={0.3}>
-                    <p
-                        className="mt-12 lg:mt-16 max-w-[31rem] mx-auto text-center text-xs sm:text-[13px] italic text-text-muted leading-relaxed"
-                        style={{ fontFamily: 'var(--font-body)' }}
-                    >
-                        Designed to support Part 11-aligned workflows through access controls, electronic approvals, reasons for change, and traceable audit history. Final compliance and validation depend on each customer&rsquo;s intended use, configuration, procedures, and quality system.
-                    </p>
-                </FadeIn>
             </Container>
         </section>
     );

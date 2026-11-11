@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Sparkles } from 'lucide-react';
+import { Building2, FileCheck2, Fingerprint, KeyRound, Lock, Sparkles, UsersRound } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { BrandLogoLink } from '@/components/ui/BrandLogoLink';
 import { SectionMark } from '@/components/ui/SectionMark';
@@ -79,13 +79,13 @@ function GrokIcon({ className }: { className?: string }) {
    security assurance reports are not issued yet, so the strip carries a
    plain-language qualifier underneath. */
 const TRUST_BADGES = [
-    'Tenant-Isolated Data',
-    'Part 11-Aligned Controls',
-    'Enterprise SSO',
-    'AES-256 Encryption',
-    'MFA Support',
-    'Role-Based Access Control',
-];
+    { label: 'Tenant-Isolated Data', icon: Building2 },
+    { label: 'Part 11-Aligned Controls', icon: FileCheck2 },
+    { label: 'Enterprise SSO', icon: KeyRound },
+    { label: 'AES-256 Encryption', icon: Lock },
+    { label: 'MFA Support', icon: Fingerprint },
+    { label: 'Role-Based Access Control', icon: UsersRound },
+] as const;
 
 const STATIC_FOOTER_LINKS = {
     Product: [
@@ -113,7 +113,7 @@ const STATIC_FOOTER_LINKS = {
 const SOCIAL_LINKS = [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/company/design-your-invention/', icon: LinkedInIcon },
     { label: 'X', href: '#', icon: XSocialIcon },
-    { label: 'YouTube', href: '#', icon: YouTubeIcon },
+    { label: 'YouTube', href: 'https://www.youtube.com/@designyourinventionllc', icon: YouTubeIcon },
 ] as const;
 
 // "Ask AI about us" deep links. Each button opens the AI chat with this query
@@ -222,14 +222,24 @@ export function Footer() {
                                     architecture during private beta. Independent
                                     security assurance reports have not been issued yet.
                                 </p>
-                                {/* Controls as a plain list in columns, not badge tiles */}
-                                <ul className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3">
-                                    {TRUST_BADGES.map((badge) => (
+                                {/* Each control carries its mark in a thin seal ring, as
+                                    in the Security section. On hover the tile's corners
+                                    take registration marks and the ring fills. */}
+                                <ul className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:grid-cols-3">
+                                    {TRUST_BADGES.map(({ label, icon: Icon }) => (
                                         <li
-                                            key={badge}
-                                            className="text-xs leading-snug text-white/85 [font-family:var(--font-body)] sm:text-sm"
+                                            key={label}
+                                            className="hover-crop crop-dark group flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 transition-colors duration-300 hover:border-primary-light/30 hover:bg-white/[0.06]"
                                         >
-                                            {badge}
+                                            <span
+                                                aria-hidden="true"
+                                                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 text-primary-light transition-colors duration-300 group-hover:border-primary-light/70 group-hover:bg-primary-light/15 group-hover:text-white"
+                                            >
+                                                <Icon className="h-4 w-4" strokeWidth={1.6} />
+                                            </span>
+                                            <span className="text-xs leading-snug text-white/85 [font-family:var(--font-body)] sm:text-[13px]">
+                                                {label}
+                                            </span>
                                         </li>
                                     ))}
                                 </ul>

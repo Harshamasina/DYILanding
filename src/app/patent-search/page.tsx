@@ -5,7 +5,13 @@ import {
     Search,
     ChevronRight,
     ArrowRight,
+    Check,
     FileSearch,
+    Filter,
+    FlaskConical,
+    Lightbulb,
+    Scale,
+    type LucideIcon,
 } from 'lucide-react';
 import { buildMetadata } from '@/lib/metadata';
 import { Container } from '@/components/ui/Container';
@@ -17,11 +23,9 @@ import { FadeIn } from '@/components/motion/FadeIn';
 import { SectionMark } from '@/components/ui/SectionMark';
 import { IndexCard } from '@/components/ui/IndexCard';
 import { SubsectionNumber } from '@/components/ui/SubsectionNumber';
-import { InlineList } from '@/components/ui/RuledList';
 import { ProcessFlow } from '@/components/ui/ProcessFlow';
 import { FaqAccordion } from '@/components/ui/FaqAccordion';
 import { AnimatedPatentSearch, CompoundsTrialsStill } from '@/components/ui/AnimatedPatentSearch';
-import { FigureCaption } from '@/components/ui/FigureCaption';
 import { PatentSearchHeroSvg } from '@/components/illustrations/PatentSearchHeroSvg';
 import { NoveltySearchFigure } from '@/components/illustrations/NoveltySearchFigure';
 import { PatentSearchJsonLd } from '@/components/seo/PatentSearchJsonLd';
@@ -165,20 +169,24 @@ const NOVELTY_AFTER: IconItem[] = [
     },
 ];
 
-const USE_CASES: IconItem[] = [
+const USE_CASES: (IconItem & { icon: LucideIcon })[] = [
     {
+        icon: Search,
         title: 'IP Analysts',
         description: 'Run prior-art, patentability, and competitive-landscape searches faster.',
     },
     {
+        icon: FlaskConical,
         title: 'Pharma R&D Teams',
         description: 'Connect compounds, indications, and clinical-trial activity to the patents that cover them.',
     },
     {
+        icon: Lightbulb,
         title: 'Startup Founders',
         description: 'Understand the white space before investing in development, and run a novelty search on the invention brief before paying for a draft.',
     },
     {
+        icon: Scale,
         title: 'Legal Teams',
         description: 'Prepare export-ready patent evidence and family-level summaries, with novelty findings tied to quoted claims.',
     },
@@ -332,7 +340,6 @@ export default function PatentSearchPage() {
                     <MockupHalo>
                         <AnimatedPatentSearch />
                     </MockupHalo>
-                    <FigureCaption className="mt-5">Patent search workspace, from results to claims and compounds</FigureCaption>
                 </Container>
 
                 {/* Credibility strip */}
@@ -394,7 +401,6 @@ export default function PatentSearchPage() {
                                             <SearchMetric value="6" label="search modes" />
                                         </div>
                                     </div>
-                                    <FigureCaption className="mt-4">One query across 100+ patent authorities</FigureCaption>
                                 </div>
                             </div>
                         </FadeIn>
@@ -411,24 +417,29 @@ export default function PatentSearchPage() {
                     </div>
 
                     <FadeIn delay={0.12}>
-                        <div className="mt-8 rounded-2xl border border-card-border bg-white p-5 shadow-sm sm:p-6">
-                            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                                <div className="max-w-sm">
-                                    <span className="text-base leading-none tracking-[0.04em] [font-family:var(--font-body)] [font-variant-caps:all-small-caps] text-navy-light">
-                                        Filter results by
-                                    </span>
-                                    <p
-                                        className="mt-1 text-[13px] leading-relaxed text-text-secondary"
-                                        style={{ fontFamily: 'var(--font-body)' }}
+                        <div className="mt-8 rounded-2xl border border-card-border bg-white p-5 shadow-sm sm:p-6 lg:p-7">
+                            <div className="grid gap-6 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] lg:gap-10">
+                                <div className="flex items-start gap-3.5">
+                                    <span
+                                        aria-hidden="true"
+                                        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-primary/[0.04] text-primary"
                                     >
-                                        Narrow broad searches without leaving the same workflow.
-                                    </p>
+                                        <Filter className="h-4.5 w-4.5" strokeWidth={1.6} />
+                                    </span>
+                                    <div>
+                                        <p className="text-lg font-semibold leading-snug text-text-primary [font-family:var(--font-display)]">
+                                            Filter results by
+                                        </p>
+                                        <p className="mt-1 text-[13px] leading-relaxed text-text-secondary [font-family:var(--font-body)]">
+                                            Narrow broad searches without leaving the same workflow.
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="flex flex-1 flex-col gap-3 lg:max-w-[40rem]">
+                                <dl className="flex flex-col gap-4 lg:border-l lg:border-card-border lg:pl-10">
                                     {FILTER_GROUPS.map((group) => (
-                                        <InlineList key={group.label} label={group.label} items={group.items} />
+                                        <FilterGroup key={group.label} label={group.label} items={group.items} />
                                     ))}
-                                </div>
+                                </dl>
                             </div>
                         </div>
                     </FadeIn>
@@ -459,7 +470,6 @@ export default function PatentSearchPage() {
                         <div className="figure-group relative mt-8 lg:mt-10">
                             <div aria-hidden="true" className="pointer-events-none absolute -inset-6 drafting-dots" />
                             <NoveltySearchFigure className="relative" />
-                            <FigureCaption className="relative mt-5">Novelty search for one invention brief, four ranked references</FigureCaption>
                         </div>
                     </FadeIn>
 
@@ -525,7 +535,6 @@ export default function PatentSearchPage() {
                     <FadeIn delay={0.08}>
                         <div className="figure-group mx-auto mt-10 max-w-4xl lg:mt-12">
                             <CompoundsTrialsStill />
-                            <FigureCaption className="mt-5">Disclosed compounds and linked trials for one patent</FigureCaption>
                         </div>
                     </FadeIn>
 
@@ -667,7 +676,7 @@ export default function PatentSearchPage() {
                         </FadeIn>
 
                         <FadeIn delay={0.1} className="min-w-0">
-                            <NumberedRuledList items={PLATFORM_CAPS} />
+                            <PlatformCapList items={PLATFORM_CAPS} />
                         </FadeIn>
                     </div>
                 </Container>
@@ -695,7 +704,7 @@ export default function PatentSearchPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.06}>
-                        <NumberedRuledList items={USE_CASES} columns={2} plain className="mx-auto mt-12 max-w-5xl lg:mt-16" />
+                        <UseCaseCards items={USE_CASES} className="mx-auto mt-12 max-w-5xl lg:mt-16" />
                     </FadeIn>
                 </Container>
             </section>
@@ -825,6 +834,91 @@ function FeatureCard({ title, description }: IconItem) {
                 {description}
             </p>
         </article>
+    );
+}
+
+/* One kind of filter: its name in small caps, then each filter as a facet
+   token with the box a search sidebar ticks. On hover the token's box takes
+   the tick and its edge turns indigo, the way a facet reads once applied. */
+function FilterGroup({ label, items }: { label: string; items: readonly string[] }) {
+    return (
+        <div className="grid gap-2 sm:grid-cols-[11.5rem_minmax(0,1fr)] sm:items-baseline sm:gap-4">
+            <dt className="text-base leading-none tracking-[0.04em] text-navy-light [font-family:var(--font-body)] [font-variant-caps:all-small-caps]">
+                {label}
+            </dt>
+            <dd>
+                <ul aria-label={label} className="flex flex-wrap gap-2">
+                    {items.map((item) => (
+                        <li
+                            key={item}
+                            className="group inline-flex items-center gap-2 rounded-md border border-card-border bg-page-bg-alt/70 py-1 pr-2.5 pl-2 text-[13px] text-text-primary transition-colors duration-200 [font-family:var(--font-body)] hover:border-primary/35 hover:bg-white"
+                        >
+                            <span
+                                aria-hidden="true"
+                                className="inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-[3px] border border-slate-300 bg-white text-white transition-colors duration-200 group-hover:border-primary group-hover:bg-primary"
+                            >
+                                <Check className="h-2.5 w-2.5 opacity-0 transition-opacity duration-200 group-hover:opacity-100" strokeWidth={3} />
+                            </span>
+                            {item}
+                        </li>
+                    ))}
+                </ul>
+            </dd>
+        </div>
+    );
+}
+
+/* The four platform capabilities as numbered slips: the subsection number
+   in the margin, the title and a line of description. On hover a slip takes
+   registration marks at its corners, its number steps in, and its title is
+   underlined as an amendment is. */
+function PlatformCapList({ items }: { items: readonly IconItem[] }) {
+    return (
+        <ol className="flex flex-col gap-4">
+            {items.map((item, i) => (
+                <li key={item.title}>
+                    <FadeIn delay={i * 0.06}>
+                        <article className="hover-crop group grid grid-cols-[2.75rem_1fr] gap-x-3 rounded-xl border border-card-border bg-white px-5 py-4 shadow-sm transition-[translate,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md motion-reduce:hover:translate-y-0">
+                            <SubsectionNumber size="sm" className="pt-1 transition-transform duration-300 group-hover:translate-x-1" />
+                            <div className="min-w-0">
+                                <h3 className="text-base font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary [font-family:var(--font-display)]">
+                                    <span className="hover-sweep">{item.title}</span>
+                                </h3>
+                                <p className="mt-1 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">{item.description}</p>
+                            </div>
+                        </article>
+                    </FadeIn>
+                </li>
+            ))}
+        </ol>
+    );
+}
+
+/* Who the search is for: four cards, each with the reader's mark in a thin
+   seal ring. On hover the card takes registration marks, the ring fills, and
+   the title is underlined. */
+function UseCaseCards({ items, className = '' }: { items: readonly (IconItem & { icon: LucideIcon })[]; className?: string }) {
+    return (
+        <ul className={`grid grid-cols-1 gap-5 md:grid-cols-2 ${className}`}>
+            {items.map(({ icon: Icon, title, description }) => (
+                <li key={title}>
+                    <article className="hover-crop group flex h-full gap-4 rounded-xl border border-card-border bg-white p-5 shadow-sm transition-[translate,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md sm:p-6 motion-reduce:hover:translate-y-0">
+                        <span
+                            aria-hidden="true"
+                            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/25 text-primary transition-colors duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-white"
+                        >
+                            <Icon className="h-4.5 w-4.5" strokeWidth={1.6} />
+                        </span>
+                        <div className="min-w-0">
+                            <h3 className="text-base font-semibold text-text-primary transition-colors duration-300 group-hover:text-primary [font-family:var(--font-display)]">
+                                <span className="hover-sweep">{title}</span>
+                            </h3>
+                            <p className="mt-1.5 text-sm leading-relaxed text-text-secondary [font-family:var(--font-body)]">{description}</p>
+                        </div>
+                    </article>
+                </li>
+            ))}
+        </ul>
     );
 }
 

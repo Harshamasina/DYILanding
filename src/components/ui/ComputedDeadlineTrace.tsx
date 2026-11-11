@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { CalendarX2, Check, Globe, Info, Layers, ScrollText } from 'lucide-react';
+import { DAYS, MONTHS, exampleDeadline, isFederalHoliday, sameDay } from '@/lib/deadline-example';
 
 /* ── Illustrative derivation trace with live dates ──
  *
@@ -34,84 +35,6 @@ const STATIC_FALLBACK: TraceDates = {
     dueFull: 'November 12, 2026',
 };
 
-const MONTHS = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
-];
-
-const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-function addDays(date: Date, days: number): Date {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
-}
-
-/** Same day number in the target month, clamped to that month's last day.
- * Mirrors the month-arithmetic convention shared by PCT R.80.2, EPC R.131(4),
- * and MPEP 710.01(a). */
-function addMonthsClamped(date: Date, months: number): Date {
-    const total = date.getFullYear() * 12 + date.getMonth() + months;
-    const year = Math.floor(total / 12);
-    const month = total - year * 12;
-    const lastDay = new Date(year, month + 1, 0).getDate();
-    return new Date(year, month, Math.min(date.getDate(), lastDay));
-}
-
-function sameDay(a: Date, b: Date): boolean {
-    return (
-        a.getFullYear() === b.getFullYear() &&
-        a.getMonth() === b.getMonth() &&
-        a.getDate() === b.getDate()
-    );
-}
-
-function nthWeekday(year: number, month: number, weekday: number, n: number): number {
-    const firstDow = new Date(year, month, 1).getDay();
-    return 1 + ((weekday - firstDow + 7) % 7) + (n - 1) * 7;
-}
-
-function lastWeekday(year: number, month: number, weekday: number): number {
-    const lastDay = new Date(year, month + 1, 0);
-    return lastDay.getDate() - ((lastDay.getDay() - weekday + 7) % 7);
-}
-
-/** U.S. federal holidays, including Friday/Monday observance of weekend dates. */
-function isFederalHoliday(date: Date): boolean {
-    const y = date.getFullYear();
-    const m = date.getMonth();
-    const d = date.getDate();
-    const dow = date.getDay();
-
-    const fixed: Array<[number, number]> = [
-        [0, 1],   // New Year's Day
-        [5, 19],  // Juneteenth
-        [6, 4],   // Independence Day
-        [10, 11], // Veterans Day
-        [11, 25], // Christmas Day
-    ];
-    for (const [fm, fd] of fixed) {
-        if (m === fm && d === fd) return true;
-        if (m === fm && d === fd + 1 && dow === 1) return true;
-        if (m === fm && d === fd - 1 && dow === 5) return true;
-    }
-    if (m === 11 && d === 31 && dow === 5) return true;
-
-    if (dow === 1) {
-        if (m === 0 && d === nthWeekday(y, 0, 1, 3)) return true;
-        if (m === 1 && d === nthWeekday(y, 1, 1, 3)) return true;
-        if (m === 4 && d === lastWeekday(y, 4, 1)) return true;
-        if (m === 8 && d === nthWeekday(y, 8, 1, 1)) return true;
-        if (m === 9 && d === nthWeekday(y, 9, 1, 2)) return true;
-    }
-    if (dow === 4 && m === 10 && d === nthWeekday(y, 10, 4, 4)) return true;
-
-    return false;
-}
-
-function isClosedDay(date: Date): boolean {
-    const dow = date.getDay();
-    return dow === 0 || dow === 6 || isFederalHoliday(date);
-}
-
 function monthDay(date: Date): string {
     return `${MONTHS[date.getMonth()]} ${date.getDate()}`;
 }
@@ -127,26 +50,7 @@ function isoDate(date: Date): string {
 }
 
 function buildTrace(now: Date): TraceDates {
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    // Aim the nominal date 2 days out, sliding forward only when the 3-month
-    // back-projection does not round-trip (day 29-31 against a shorter month).
-    let nominal = addDays(today, 2);
-    let trigger = addMonthsClamped(nominal, -3);
-    for (let offset = 2; offset <= 5; offset++) {
-        const candidate = addDays(today, offset);
-        const back = addMonthsClamped(candidate, -3);
-        if (sameDay(addMonthsClamped(back, 3), candidate)) {
-            nominal = candidate;
-            trigger = back;
-            break;
-        }
-    }
-
-    let due = new Date(nominal);
-    while (isClosedDay(due)) {
-        due = addDays(due, 1);
-    }
+    const { trigger, nominal, due } = exampleDeadline(now);
 
     const nominalDow = nominal.getDay();
     const nominalLine =
@@ -161,7 +65,7 @@ function buildTrace(now: Date): TraceDates {
         : `Rolled to ${DAYS[due.getDay()]}, ${monthDay(due)}`;
 
     return {
-        ruleVersion: `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}`,
+        ruleVersion: `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}`,
         triggerFull: fullDate(trigger),
         calcAddition: `${monthDay(trigger)} + 3 calendar months`,
         nominalLine,
@@ -195,7 +99,7 @@ function DeadlineTraceStep({
             }`}
         >
             <span
-                className="relative z-10 row-span-2 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/15 bg-primary/[0.05] text-primary sm:row-span-1"
+                className="relative z-10 row-span-2 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-[#f3f3fe] text-primary sm:row-span-1"
                 aria-hidden="true"
             >
                 <Icon className="h-4.5 w-4.5" />
@@ -278,9 +182,11 @@ export function ComputedDeadlineTrace() {
 
                 <div className="p-4 sm:p-6 lg:px-8">
                     <div className="relative">
+                        {/* The spine runs through the centre of the step icons, which
+                            are opaque so it passes behind them, not over them. */}
                         <div
                             aria-hidden="true"
-                            className="absolute top-7 bottom-8 left-5 w-px bg-linear-to-b from-primary/50 via-primary/25 to-primary/10"
+                            className="absolute top-7 bottom-8 left-[23.5px] w-px bg-linear-to-b from-primary/50 via-primary/25 to-primary/10"
                         />
                         <ol aria-label="Deadline derivation trace">
                             <DeadlineTraceStep icon={CalendarX2} label="Trigger">
